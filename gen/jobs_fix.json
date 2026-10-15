@@ -1,0 +1,142 @@
+[
+ {
+  "kind": "image",
+  "name": "enemy_sporecap_v1",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 7101,
+  "strength": 0,
+  "prompt": "a monstrous walking mushroom creature with a bioluminescent purple cap and a grinning fanged face, seen in full side profile walking and facing left, head turned to the left, glowing spore clouds, dark fantasy creature concept art, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background"
+ },
+ {
+  "kind": "image",
+  "name": "enemy_rootmother_v1",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 7201,
+  "strength": 0,
+  "prompt": "a colossal horrifying root mother, a compact twisted tree body with a glowing red heart in its chest and a woman-like hollow face, writhing roots spreading on the ground, short bare branches, dark fantasy creature concept art, full body entirely inside the frame with wide empty margins on all sides, nothing touching the image edges, single monster centered, painterly digital illustration, plain flat dark neutral background"
+ },
+ {
+  "kind": "image",
+  "name": "enemy_sporecap_v2",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 7102,
+  "strength": 0,
+  "prompt": "a monstrous walking mushroom creature with a bioluminescent purple cap and a grinning fanged face, seen in full side profile walking and facing left, head turned to the left, glowing spore clouds, dark fantasy creature concept art, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background"
+ },
+ {
+  "kind": "image",
+  "name": "enemy_rootmother_v2",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 7202,
+  "strength": 0,
+  "prompt": "a colossal horrifying root mother, a compact twisted tree body with a glowing red heart in its chest and a woman-like hollow face, writhing roots spreading on the ground, short bare branches, dark fantasy creature concept art, full body entirely inside the frame with wide empty margins on all sides, nothing touching the image edges, single monster centered, painterly digital illustration, plain flat dark neutral background"
+ },
+ {
+  "kind": "image",
+  "name": "enemy_sporecap_v3",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 7103,
+  "strength": 0,
+  "prompt": "a monstrous walking mushroom creature with a bioluminescent purple cap and a grinning fanged face, seen in full side profile walking and facing left, head turned to the left, glowing spore clouds, dark fantasy creature concept art, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background"
+ },
+ {
+  "kind": "image",
+  "name": "enemy_rootmother_v3",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 7203,
+  "strength": 0,
+  "prompt": "a colossal horrifying root mother, a compact twisted tree body with a glowing red heart in its chest and a woman-like hollow face, writhing roots spreading on the ground, short bare branches, dark fantasy creature concept art, full body entirely inside the frame with wide empty margins on all sides, nothing touching the image edges, single monster centered, painterly digital illustration, plain flat dark neutral background"
+ },
+ {
+  "kind": "image",
+  "name": "card_wound_v1",
+  "lora": "krea2_darkbrush.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 7301,
+  "strength": 0.6,
+  "prompt": "a deep bleeding gash wound across skin, dripping dark red blood, torn flesh, close up, grim, dark fantasy card art, painterly digital illustration, dramatic cinematic lighting, card illustration format, no text"
+ },
+ {
+  "kind": "image",
+  "name": "card_burn_v1",
+  "lora": "krea2_darkbrush.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 7401,
+  "strength": 0.6,
+  "prompt": "a hand scorched by magical fire, blistered burned skin, glowing embers and licking orange flames, smoke, dark fantasy card art, painterly digital illustration, dramatic cinematic lighting, card illustration format, no text"
+ },
+ {
+  "kind": "image",
+  "name": "card_slime_v1",
+  "lora": "krea2_darkbrush.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 7501,
+  "strength": 0.6,
+  "prompt": "thick sticky green slime goo dripping and covering a stone floor, glossy toxic ooze, bubbles, dark fantasy card art, painterly digital illustration, dramatic cinematic lighting, card illustration format, no text"
+ },
+ {
+  "kind": "image",
+  "name": "card_doubt_v1",
+  "lora": "krea2_darkbrush.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 7601,
+  "strength": 0.6,
+  "prompt": "a shadowy hooded silhouette surrounded by whispering ghostly faces and cracked mirror shards, anxiety, dread, dark purple mist, dark fantasy card art, painterly digital illustration, dramatic cinematic lighting, card illustration format, no text"
+ },
+ {
+  "kind": "image",
+  "name": "card_wound_v2",
+  "lora": "krea2_darkbrush.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 7302,
+  "strength": 0.6,
+  "prompt": "a deep bleeding gash wound across skin, dripping dark red blood, torn flesh, close up, grim, dark fantasy card art, painterly digital illustration, dramatic cinematic lighting, card illustration format, no text"
+ },
+ {
+  "kind": "image",
+  "name": "card_burn_v2",
+  "lora": "krea2_darkbrush.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 7402,
+  "strength": 0.6,
+  "prompt": "a hand scorched by magical fire, blistered burned skin, glowing embers and licking orange flames, smoke, dark fantasy card art, painterly digital illustration, dramatic cinematic lighting, card illustration format, no text"
+ },
+ {
+  "kind": "image",
+  "name": "card_slime_v2",
+  "lora": "krea2_darkbrush.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 7502,
+  "strength": 0.6,
+  "prompt": "thick sticky green slime goo dripping and covering a stone floor, glossy toxic ooze, bubbles, dark fantasy card art, painterly digital illustration, dramatic cinematic lighting, card illustration format, no text"
+ },
+ {
+  "kind": "image",
+  "name": "card_doubt_v2",
+  "lora": "krea2_darkbrush.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 7602,
+  "strength": 0.6,
+  "prompt": "a shadowy hooded silhouette surrounded by whispering ghostly faces and cracked mirror shards, anxiety, dread, dark purple mist, dark fantasy card art, painterly digital illustration, dramatic cinematic lighting, card illustration format, no text"
+ }
+]
