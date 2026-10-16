@@ -65,6 +65,20 @@ func _ready() -> void:
 			await shot("map_%d" % y)
 		get_tree().quit()
 		return
+	if scenario == "shop":
+		var Gs := Eng.new_run(args[2] if args.size() > 2 else "claudia", {"seed": 21})
+		Meta.run = Gs
+		Gs.gold = 400
+		Gs.map = RunGen.gen_map_game(Gs)
+		Nav.shop()
+		await wait(1.0)
+		await shot("shop")
+		var rew := Eng.combat_reward(Gs, "elite")
+		Nav.reward(rew, "elite")
+		await wait(1.0)
+		await shot("reward")
+		get_tree().quit()
+		return
 	if scenario == "keys":
 		await keys_test()
 		return

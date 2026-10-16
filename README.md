@@ -31,3 +31,8 @@ godot --headless --path . --script tests/run_traces.gd                # compara 
 - Carta / enemigo / reliquia: editar el JSON de `data/` (o el JS del web y volver a ejecutar `node tools/export_data.mjs`).
 - Mecánica nueva en una carta (`fx`): añadir su manejo en `Eng.run_fx` y su texto en `CardText.lines`; regenerar trazas.
 - Arte: `assets/cards/card_<id>.webp`, `assets/enemies/<id>.webp`, etc. (mismos nombres que el web, ver `../VersoDeMusas/AGENTS.md`).
+
+## Contenido nuevo (más allá del port)
+- `data/cards_extra.json` (generado por `tools/make_cards_w1.py`): Oleada 1 de cartas (+9/10 por musa y 23 neutrales). Las trazas de paridad con el web lo desactivan (`DB.extra = false`).
+- Arte de cartas: `gen/jobs_cards_w1.json` → `gen/comfy.py` (Krea2 + LoRA de cada musa), luego a `assets/cards/card_<id>.webp` (560×424).
+- Mapa del juego: `RunGen.gen_map_game` (el `gen_map` original se conserva para las trazas). Favor de las Musas: `scripts/engine/favors.gd`.

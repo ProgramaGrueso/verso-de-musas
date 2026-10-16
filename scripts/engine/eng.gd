@@ -1119,12 +1119,14 @@ static func use_potion(C, slot: int, target = null) -> bool:
 
 
 # ---------- Recompensas ----------
-static func reward_cards(G, n: int, bonus_rare: float = 0.0) -> Array:
-	var pl: Array = DB.pool[G.char]
+static func reward_cards(G, n: int, bonus_rare: float = 0.0, neutral_chance: float = 0.16) -> Array:
 	var out := []
 	for i in n:
 		var r := rnd(G)
 		var rar := "common" if r < 0.6 - bonus_rare else ("uncommon" if r < 0.97 - bonus_rare / 2 else "rare")
+		var pl: Array = DB.pool[G.char]
+		if DB.extra and neutral_chance > 0.0 and rnd(G) < neutral_chance:
+			pl = DB.neutral
 		var cands := pl.filter(func(id): return DB.cards[id].rarity == rar and not (id in out))
 		if cands.is_empty():
 			cands = pl.filter(func(id): return not (id in out))

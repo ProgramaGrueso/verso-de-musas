@@ -1,0 +1,1747 @@
+{
+ "cards": {
+  "zafiro_dragon_breath": {
+   "id": "zafiro_dragon_breath",
+   "name": "Aliento de Dragón",
+   "cls": "zafiro",
+   "type": "attack",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "dmg": 7,
+    "all": true,
+    "selfdmg": 2
+   },
+   "up": {
+    "fx": {
+     "dmg": 10
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "zafiro_shoulder": {
+   "id": "zafiro_shoulder",
+   "name": "Espaldarazo",
+   "cls": "zafiro",
+   "type": "attack",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "dmg": 6,
+    "block": 6
+   },
+   "up": {
+    "fx": {
+     "dmg": 8,
+     "block": 8
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "zafiro_warcry": {
+   "id": "zafiro_warcry",
+   "name": "Grito de Batalla",
+   "cls": "zafiro",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "tstr": 3,
+    "block": 5
+   },
+   "up": {
+    "fx": {
+     "tstr": 4,
+     "block": 7
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "zafiro_shatter": {
+   "id": "zafiro_shatter",
+   "name": "Sacudida de Coraza",
+   "cls": "zafiro",
+   "type": "attack",
+   "rarity": "uncommon",
+   "cost": 2,
+   "fx": {
+    "dmgBlock": true,
+    "all": true
+   },
+   "up": {
+    "fx": {
+     "vuln": 1
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "zafiro_old_blood": {
+   "id": "zafiro_old_blood",
+   "name": "Sangre Vieja",
+   "cls": "zafiro",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 0,
+   "fx": {
+    "selfdmg": 4,
+    "str": 1,
+    "draw": 1
+   },
+   "up": {
+    "fx": {
+     "str": 2
+    }
+   },
+   "flags": {
+    "exhaust": true
+   },
+   "ap": ""
+  },
+  "zafiro_quake": {
+   "id": "zafiro_quake",
+   "name": "Golpe Sísmico",
+   "cls": "zafiro",
+   "type": "attack",
+   "rarity": "uncommon",
+   "cost": 2,
+   "fx": {
+    "dmg": 11,
+    "strMul": 3,
+    "vuln": 2
+   },
+   "up": {
+    "fx": {
+     "dmg": 14,
+     "strMul": 4
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "zafiro_living_wall": {
+   "id": "zafiro_living_wall",
+   "name": "Muro Viviente",
+   "cls": "zafiro",
+   "type": "power",
+   "rarity": "uncommon",
+   "cost": 2,
+   "fx": {
+    "pw": {
+     "metallicize": 3,
+     "thorns": 1
+    }
+   },
+   "up": {
+    "fx": {
+     "pw": {
+      "metallicize": 4,
+      "thorns": 2
+     }
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "zafiro_ember_armor": {
+   "id": "zafiro_ember_armor",
+   "name": "Armadura de Brasas",
+   "cls": "zafiro",
+   "type": "power",
+   "rarity": "rare",
+   "cost": 2,
+   "fx": {
+    "pw": {
+     "metallicize": 4,
+     "combust": 5
+    }
+   },
+   "up": {
+    "fx": {
+     "pw": {
+      "metallicize": 5,
+      "combust": 7
+     }
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "zafiro_guillotine": {
+   "id": "zafiro_guillotine",
+   "name": "Guillotina Roja",
+   "cls": "zafiro",
+   "type": "attack",
+   "rarity": "rare",
+   "cost": 2,
+   "fx": {
+    "dmg": 18,
+    "strMul": 5
+   },
+   "up": {
+    "fx": {
+     "dmg": 22,
+     "strMul": 6
+    }
+   },
+   "flags": {
+    "exhaust": true
+   },
+   "ap": ""
+  },
+  "lia_hidden_knife": {
+   "id": "lia_hidden_knife",
+   "name": "Cuchillo Escondido",
+   "cls": "lia",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 0,
+   "fx": {
+    "add": {
+     "id": "lia_shiv",
+     "n": 1,
+     "to": "hand"
+    },
+    "draw": 1
+   },
+   "up": {
+    "fx": {
+     "add": {
+      "id": "lia_shiv",
+      "n": 2,
+      "to": "hand"
+     }
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "lia_ambush": {
+   "id": "lia_ambush",
+   "name": "Emboscada",
+   "cls": "lia",
+   "type": "attack",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "dmg": 9,
+    "vuln": 1
+   },
+   "up": {
+    "fx": {
+     "dmg": 12,
+     "vuln": 2
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "lia_toxic_dew": {
+   "id": "lia_toxic_dew",
+   "name": "Rocío Tóxico",
+   "cls": "lia",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "poison": 4,
+    "block": 5
+   },
+   "up": {
+    "fx": {
+     "poison": 6,
+     "block": 7
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "lia_blade_dance": {
+   "id": "lia_blade_dance",
+   "name": "Danza de Filos",
+   "cls": "lia",
+   "type": "attack",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "dmg": 3,
+    "hits": 3
+   },
+   "up": {
+    "fx": {
+     "dmg": 4
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "lia_steel_burst": {
+   "id": "lia_steel_burst",
+   "name": "Ráfaga de Acero",
+   "cls": "lia",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "add": {
+     "id": "lia_shiv",
+     "n": 2,
+     "to": "hand"
+    },
+    "block": 6
+   },
+   "up": {
+    "fx": {
+     "add": {
+      "id": "lia_shiv",
+      "n": 3,
+      "to": "hand"
+     },
+     "block": 8
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "lia_paralysis": {
+   "id": "lia_paralysis",
+   "name": "Aguja Paralizante",
+   "cls": "lia",
+   "type": "attack",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "dmg": 6,
+    "weak": 2,
+    "poison": 3
+   },
+   "up": {
+    "fx": {
+     "dmg": 8,
+     "weak": 3,
+     "poison": 4
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "lia_shadow_agile": {
+   "id": "lia_shadow_agile",
+   "name": "Sombra Ágil",
+   "cls": "lia",
+   "type": "power",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "dex": 1,
+    "pw": {
+     "accuracy": 3
+    }
+   },
+   "up": {
+    "fx": {
+     "dex": 2,
+     "pw": {
+      "accuracy": 4
+     }
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "lia_plague": {
+   "id": "lia_plague",
+   "name": "Plaga Total",
+   "cls": "lia",
+   "type": "skill",
+   "rarity": "rare",
+   "cost": 2,
+   "fx": {
+    "poison": 9,
+    "all": true
+   },
+   "up": {
+    "fx": {
+     "poison": 12
+    }
+   },
+   "flags": {
+    "exhaust": true
+   },
+   "ap": ""
+  },
+  "lia_blade_waltz": {
+   "id": "lia_blade_waltz",
+   "name": "Vals de Cuchillas",
+   "cls": "lia",
+   "type": "attack",
+   "rarity": "rare",
+   "cost": 3,
+   "fx": {
+    "dmg": 4,
+    "hits": 4,
+    "all": true
+   },
+   "up": {
+    "fx": {
+     "dmg": 5
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "claudia_osty_claw": {
+   "id": "claudia_osty_claw",
+   "name": "Zarpa de Osty",
+   "cls": "claudia",
+   "type": "attack",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "ostyHit": 6
+   },
+   "up": {
+    "fx": {
+     "ostyHit": 9
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "claudia_bone_whisper": {
+   "id": "claudia_bone_whisper",
+   "name": "Murmullo de Huesos",
+   "cls": "claudia",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "block": 7,
+    "ostyHeal": 4
+   },
+   "up": {
+    "fx": {
+     "block": 10,
+     "ostyHeal": 6
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "claudia_minor_harvest": {
+   "id": "claudia_minor_harvest",
+   "name": "Cosecha Menor",
+   "cls": "claudia",
+   "type": "attack",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "dmg": 7,
+    "exhaustPick": 1
+   },
+   "up": {
+    "fx": {
+     "dmg": 10
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "claudia_skeletal_guard": {
+   "id": "claudia_skeletal_guard",
+   "name": "Guardián Esquelético",
+   "cls": "claudia",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 2,
+   "fx": {
+    "summon": 8,
+    "block": 8
+   },
+   "up": {
+    "fx": {
+     "summon": 10,
+     "block": 11
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "claudia_twin_bite": {
+   "id": "claudia_twin_bite",
+   "name": "Mordida Doble",
+   "cls": "claudia",
+   "type": "attack",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "ostyHit": 4,
+    "hits": 2,
+    "weak": 1
+   },
+   "up": {
+    "fx": {
+     "ostyHit": 6
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "claudia_requiem": {
+   "id": "claudia_requiem",
+   "name": "Réquiem",
+   "cls": "claudia",
+   "type": "attack",
+   "rarity": "uncommon",
+   "cost": 2,
+   "fx": {
+    "dmg": 8,
+    "all": true,
+    "ostyHit": 4
+   },
+   "up": {
+    "fx": {
+     "dmg": 11,
+     "ostyHit": 6
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "claudia_blood_ritual": {
+   "id": "claudia_blood_ritual",
+   "name": "Ritual de Sangre",
+   "cls": "claudia",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 0,
+   "fx": {
+    "selfdmg": 3,
+    "ostyPow": 1,
+    "draw": 1
+   },
+   "up": {
+    "fx": {
+     "ostyPow": 2
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "claudia_bone_throne": {
+   "id": "claudia_bone_throne",
+   "name": "Trono de Huesos",
+   "cls": "claudia",
+   "type": "power",
+   "rarity": "rare",
+   "cost": 2,
+   "fx": {
+    "ostyPow": 2,
+    "pw": {
+     "ostyRegen": 4
+    }
+   },
+   "up": {
+    "fx": {
+     "ostyPow": 3,
+     "pw": {
+      "ostyRegen": 6
+     }
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "claudia_violet_eclipse": {
+   "id": "claudia_violet_eclipse",
+   "name": "Eclipse Violeta",
+   "cls": "claudia",
+   "type": "attack",
+   "rarity": "rare",
+   "cost": 3,
+   "fx": {
+    "dmg": 20,
+    "all": true,
+    "ostyHit": 8
+   },
+   "up": {
+    "fx": {
+     "dmg": 26,
+     "ostyHit": 10
+    }
+   },
+   "flags": {
+    "exhaust": true
+   },
+   "ap": ""
+  },
+  "aurora_ember_petal": {
+   "id": "aurora_ember_petal",
+   "name": "Pétalo Ardiente",
+   "cls": "aurora",
+   "type": "attack",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "dmg": 6,
+    "heat": 1
+   },
+   "up": {
+    "fx": {
+     "dmg": 9,
+     "heat": 2
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "aurora_gilded_veil": {
+   "id": "aurora_gilded_veil",
+   "name": "Velo Dorado",
+   "cls": "aurora",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "block": 7,
+    "glow": 1,
+    "all": true
+   },
+   "up": {
+    "fx": {
+     "block": 10
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "aurora_flame_spin": {
+   "id": "aurora_flame_spin",
+   "name": "Giro Ardiente",
+   "cls": "aurora",
+   "type": "attack",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "dmg": 5,
+    "hits": 2,
+    "heat": 1
+   },
+   "up": {
+    "fx": {
+     "dmg": 7
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "aurora_blinding_gleam": {
+   "id": "aurora_blinding_gleam",
+   "name": "Resplandor Cegador",
+   "cls": "aurora",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "weak": 2,
+    "vuln": 1,
+    "all": true
+   },
+   "up": {
+    "fx": {
+     "weak": 3,
+     "vuln": 2
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "aurora_dawn_dance": {
+   "id": "aurora_dawn_dance",
+   "name": "Danza del Amanecer",
+   "cls": "aurora",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 0,
+   "fx": {
+    "heat": 2,
+    "energyIfAttack": 1
+   },
+   "up": {
+    "fx": {
+     "heat": 3
+    }
+   },
+   "flags": {},
+   "ap": "",
+   "dance": true
+  },
+  "aurora_ray_rain": {
+   "id": "aurora_ray_rain",
+   "name": "Lluvia de Rayos",
+   "cls": "aurora",
+   "type": "attack",
+   "rarity": "uncommon",
+   "cost": 2,
+   "fx": {
+    "dmg": 4,
+    "hits": 3,
+    "all": true
+   },
+   "up": {
+    "fx": {
+     "dmg": 6
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "aurora_burning_mirror": {
+   "id": "aurora_burning_mirror",
+   "name": "Espejo Ardiente",
+   "cls": "aurora",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 2,
+   "fx": {
+    "block": 8,
+    "reflect": true,
+    "heat": 1
+   },
+   "up": {
+    "fx": {
+     "block": 11
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "aurora_golden_eclipse": {
+   "id": "aurora_golden_eclipse",
+   "name": "Eclipse Dorado",
+   "cls": "aurora",
+   "type": "attack",
+   "rarity": "rare",
+   "cost": 3,
+   "fx": {
+    "dmg": 14,
+    "heatDmg": 8,
+    "all": true
+   },
+   "up": {
+    "fx": {
+     "dmg": 18,
+     "heatDmg": 10
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "aurora_sun_hymn": {
+   "id": "aurora_sun_hymn",
+   "name": "Himno del Sol",
+   "cls": "aurora",
+   "type": "skill",
+   "rarity": "rare",
+   "cost": 0,
+   "fx": {
+    "heat": 4,
+    "energy": 1,
+    "draw": 2
+   },
+   "up": {
+    "fx": {
+     "heat": 6
+    }
+   },
+   "flags": {
+    "exhaust": true
+   },
+   "ap": "",
+   "dance": true
+  },
+  "irene_loose_gear": {
+   "id": "irene_loose_gear",
+   "name": "Engranaje Suelto",
+   "cls": "irene",
+   "type": "attack",
+   "rarity": "common",
+   "cost": 0,
+   "fx": {
+    "dmg": 4,
+    "wind": 1
+   },
+   "up": {
+    "fx": {
+     "dmg": 6
+    }
+   },
+   "flags": {},
+   "ap": "",
+   "gear": true
+  },
+  "irene_reinforced_spring": {
+   "id": "irene_reinforced_spring",
+   "name": "Muelle Reforzado",
+   "cls": "irene",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "block": 8,
+    "wind": 1
+   },
+   "up": {
+    "fx": {
+     "block": 11
+    }
+   },
+   "flags": {},
+   "ap": "",
+   "gear": true
+  },
+  "irene_pendulum_blow": {
+   "id": "irene_pendulum_blow",
+   "name": "Golpe de Péndulo",
+   "cls": "irene",
+   "type": "attack",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "dmg": 5,
+    "vuln": 1
+   },
+   "up": {
+    "fx": {
+     "dmg": 7,
+     "vuln": 2
+    }
+   },
+   "flags": {},
+   "ap": "",
+   "gear": true
+  },
+  "irene_quick_wind": {
+   "id": "irene_quick_wind",
+   "name": "Cuerda Rápida",
+   "cls": "irene",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 0,
+   "fx": {
+    "wind": 3,
+    "draw": 1,
+    "selfdmg": 1
+   },
+   "up": {
+    "fx": {
+     "wind": 4
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "irene_clockwork_chain": {
+   "id": "irene_clockwork_chain",
+   "name": "Cadena de Relojería",
+   "cls": "irene",
+   "type": "attack",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "dmg": 4,
+    "hits": 3
+   },
+   "up": {
+    "fx": {
+     "dmg": 5
+    }
+   },
+   "flags": {},
+   "ap": "",
+   "gear": true
+  },
+  "irene_clock_tower": {
+   "id": "irene_clock_tower",
+   "name": "Torre del Reloj",
+   "cls": "irene",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 2,
+   "fx": {
+    "block": 10,
+    "weak": 1,
+    "all": true
+   },
+   "up": {
+    "fx": {
+     "block": 14
+    }
+   },
+   "flags": {},
+   "ap": "",
+   "gear": true
+  },
+  "irene_spring_discharge": {
+   "id": "irene_spring_discharge",
+   "name": "Descarga de Muelle",
+   "cls": "irene",
+   "type": "attack",
+   "rarity": "uncommon",
+   "cost": 2,
+   "fx": {
+    "dmg": 8,
+    "all": true,
+    "windSpend": 2
+   },
+   "up": {
+    "fx": {
+     "windSpend": 3
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "irene_fine_clockwork": {
+   "id": "irene_fine_clockwork",
+   "name": "Relojería Fina",
+   "cls": "irene",
+   "type": "power",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "pw": {
+     "precision": 2,
+     "resorte": 1
+    }
+   },
+   "up": {
+    "fx": {
+     "pw": {
+      "precision": 3,
+      "resorte": 1
+     }
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "irene_colossal_automaton": {
+   "id": "irene_colossal_automaton",
+   "name": "Autómata Colosal",
+   "cls": "irene",
+   "type": "attack",
+   "rarity": "rare",
+   "cost": 3,
+   "fx": {
+    "dmg": 20,
+    "block": 20
+   },
+   "up": {
+    "fx": {
+     "dmg": 26,
+     "block": 26
+    }
+   },
+   "flags": {},
+   "ap": "",
+   "gear": true
+  },
+  "irene_clock_heart": {
+   "id": "irene_clock_heart",
+   "name": "Corazón de Reloj",
+   "cls": "irene",
+   "type": "power",
+   "rarity": "rare",
+   "cost": 2,
+   "fx": {
+    "pw": {
+     "tictac": 4,
+     "resorte": 2
+    }
+   },
+   "up": {
+    "fx": {
+     "pw": {
+      "tictac": 6,
+      "resorte": 2
+     }
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "selene_stray_drop": {
+   "id": "selene_stray_drop",
+   "name": "Gota Rebelde",
+   "cls": "selene",
+   "type": "attack",
+   "rarity": "common",
+   "cost": 0,
+   "fx": {
+    "dmg": 3,
+    "ch": [
+     "ola"
+    ]
+   },
+   "up": {
+    "fx": {
+     "dmg": 5
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "selene_mist_veil": {
+   "id": "selene_mist_veil",
+   "name": "Velo de Bruma",
+   "cls": "selene",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "block": 7,
+    "ch": [
+     "bruma"
+    ]
+   },
+   "up": {
+    "fx": {
+     "block": 10
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "selene_shining_conch": {
+   "id": "selene_shining_conch",
+   "name": "Caracola Brillante",
+   "cls": "selene",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "ch": [
+     "perla"
+    ],
+    "draw": 1
+   },
+   "up": {
+    "fx": {
+     "draw": 2
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "selene_rising_tide": {
+   "id": "selene_rising_tide",
+   "name": "Marea Creciente",
+   "cls": "selene",
+   "type": "attack",
+   "rarity": "uncommon",
+   "cost": 2,
+   "fx": {
+    "dmg": 8,
+    "ch": [
+     "ola",
+     "bruma"
+    ]
+   },
+   "up": {
+    "fx": {
+     "dmg": 11
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "selene_pearl_whirl": {
+   "id": "selene_pearl_whirl",
+   "name": "Torbellino de Perlas",
+   "cls": "selene",
+   "type": "attack",
+   "rarity": "uncommon",
+   "cost": 2,
+   "fx": {
+    "dmgPerOrb": 4,
+    "all": true,
+    "ch": [
+     "perla"
+    ]
+   },
+   "up": {
+    "fx": {
+     "dmgPerOrb": 5
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "selene_abyssal_echo": {
+   "id": "selene_abyssal_echo",
+   "name": "Eco Abismal",
+   "cls": "selene",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "ch": [
+     "abismo"
+    ],
+    "evoke": 1
+   },
+   "up": {
+    "fx": {
+     "draw": 1
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "selene_silver_current": {
+   "id": "selene_silver_current",
+   "name": "Corriente de Plata",
+   "cls": "selene",
+   "type": "power",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "focus": 1,
+    "slots": 1
+   },
+   "up": {
+    "fx": {
+     "focus": 2
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "selene_siren_song": {
+   "id": "selene_siren_song",
+   "name": "Canto de Sirena",
+   "cls": "selene",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "weak": 2,
+    "all": true,
+    "ch": [
+     "bruma"
+    ]
+   },
+   "up": {
+    "fx": {
+     "weak": 3
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "selene_colossal_wave": {
+   "id": "selene_colossal_wave",
+   "name": "Ola Colosal",
+   "cls": "selene",
+   "type": "attack",
+   "rarity": "rare",
+   "cost": 3,
+   "fx": {
+    "dmgPerOrb": 7,
+    "all": true,
+    "evoke": 1
+   },
+   "up": {
+    "fx": {
+     "dmgPerOrb": 9
+    }
+   },
+   "flags": {
+    "exhaust": true
+   },
+   "ap": ""
+  },
+  "selene_endless_tide": {
+   "id": "selene_endless_tide",
+   "name": "Marea Perpetua",
+   "cls": "selene",
+   "type": "power",
+   "rarity": "rare",
+   "cost": 2,
+   "fx": {
+    "pw": {
+     "marea_alta": 1,
+     "corriente": 3
+    }
+   },
+   "up": {
+    "fx": {
+     "pw": {
+      "marea_alta": 1,
+      "corriente": 4
+     }
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_second_wind": {
+   "id": "neu_second_wind",
+   "name": "Segundo Aliento",
+   "cls": "neutral",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "heal": 4,
+    "block": 6
+   },
+   "up": {
+    "fx": {
+     "heal": 6,
+     "block": 9
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_focus": {
+   "id": "neu_focus",
+   "name": "Concentración",
+   "cls": "neutral",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 0,
+   "fx": {
+    "draw": 2,
+    "discard": 1
+   },
+   "up": {
+    "fx": {
+     "draw": 3
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_improvised_guard": {
+   "id": "neu_improvised_guard",
+   "name": "Guardia Improvisada",
+   "cls": "neutral",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "block": 9
+   },
+   "up": {
+    "fx": {
+     "block": 12
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_sure_strike": {
+   "id": "neu_sure_strike",
+   "name": "Golpe Certero",
+   "cls": "neutral",
+   "type": "attack",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "dmg": 8
+   },
+   "up": {
+    "fx": {
+     "dmg": 11
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_trip": {
+   "id": "neu_trip",
+   "name": "Zancadilla",
+   "cls": "neutral",
+   "type": "attack",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "dmg": 5,
+    "weak": 1,
+    "vuln": 1
+   },
+   "up": {
+    "fx": {
+     "dmg": 7,
+     "weak": 2
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_ration": {
+   "id": "neu_ration",
+   "name": "Ración de Campaña",
+   "cls": "neutral",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "heal": 6
+   },
+   "up": {
+    "fx": {
+     "heal": 9
+    }
+   },
+   "flags": {
+    "exhaust": true
+   },
+   "ap": ""
+  },
+  "neu_scavenge": {
+   "id": "neu_scavenge",
+   "name": "Rebusca",
+   "cls": "neutral",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "draw": 2,
+    "exhaustPick": 1
+   },
+   "up": {
+    "fx": {
+     "draw": 3
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_purge": {
+   "id": "neu_purge",
+   "name": "Purga",
+   "cls": "neutral",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 0,
+   "fx": {
+    "exhaustPick": 1,
+    "block": 4,
+    "draw": 1
+   },
+   "up": {
+    "fx": {
+     "block": 7
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_lucky_blow": {
+   "id": "neu_lucky_blow",
+   "name": "Golpe de Suerte",
+   "cls": "neutral",
+   "type": "attack",
+   "rarity": "common",
+   "cost": 0,
+   "fx": {
+    "dmg": 4,
+    "draw": 1
+   },
+   "up": {
+    "fx": {
+     "dmg": 6
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_hunters_mark": {
+   "id": "neu_hunters_mark",
+   "name": "Marca del Cazador",
+   "cls": "neutral",
+   "type": "skill",
+   "rarity": "common",
+   "cost": 1,
+   "fx": {
+    "vuln": 2
+   },
+   "up": {
+    "fx": {
+     "vuln": 3
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_courage_rush": {
+   "id": "neu_courage_rush",
+   "name": "Descarga de Valor",
+   "cls": "neutral",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 0,
+   "fx": {
+    "energy": 1,
+    "draw": 1
+   },
+   "up": {
+    "fx": {
+     "draw": 2
+    }
+   },
+   "flags": {
+    "exhaust": true
+   },
+   "ap": ""
+  },
+  "neu_stand_firm": {
+   "id": "neu_stand_firm",
+   "name": "Plantar Cara",
+   "cls": "neutral",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "block": 7,
+    "tstr": 2
+   },
+   "up": {
+    "fx": {
+     "block": 10,
+     "tstr": 3
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_smoke_bomb": {
+   "id": "neu_smoke_bomb",
+   "name": "Bomba de Humo",
+   "cls": "neutral",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "weak": 2,
+    "block": 6,
+    "all": true
+   },
+   "up": {
+    "fx": {
+     "weak": 3,
+     "block": 9
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_camp_tonic": {
+   "id": "neu_camp_tonic",
+   "name": "Tónico de Campamento",
+   "cls": "neutral",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "heal": 8,
+    "draw": 1
+   },
+   "up": {
+    "fx": {
+     "heal": 11
+    }
+   },
+   "flags": {
+    "exhaust": true
+   },
+   "ap": ""
+  },
+  "neu_all_or_nothing": {
+   "id": "neu_all_or_nothing",
+   "name": "Todo o Nada",
+   "cls": "neutral",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 0,
+   "fx": {
+    "draw": 3,
+    "selfdmg": 2
+   },
+   "up": {
+    "fx": {
+     "draw": 4
+    }
+   },
+   "flags": {
+    "exhaust": true
+   },
+   "ap": ""
+  },
+  "neu_desperate_charge": {
+   "id": "neu_desperate_charge",
+   "name": "Carga Desesperada",
+   "cls": "neutral",
+   "type": "attack",
+   "rarity": "uncommon",
+   "cost": 2,
+   "fx": {
+    "dmg": 14,
+    "selfdmg": 3
+   },
+   "up": {
+    "fx": {
+     "dmg": 18
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_barrage": {
+   "id": "neu_barrage",
+   "name": "Andanada",
+   "cls": "neutral",
+   "type": "attack",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "dmg": 4,
+    "hits": 3
+   },
+   "up": {
+    "fx": {
+     "dmg": 5
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_shockwave": {
+   "id": "neu_shockwave",
+   "name": "Onda de Choque",
+   "cls": "neutral",
+   "type": "attack",
+   "rarity": "uncommon",
+   "cost": 2,
+   "fx": {
+    "dmg": 9,
+    "all": true,
+    "vuln": 1
+   },
+   "up": {
+    "fx": {
+     "dmg": 12
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_strategic_pause": {
+   "id": "neu_strategic_pause",
+   "name": "Pausa Estratégica",
+   "cls": "neutral",
+   "type": "skill",
+   "rarity": "uncommon",
+   "cost": 1,
+   "fx": {
+    "energy": 2
+   },
+   "up": {
+    "fx": {
+     "energy": 3
+    }
+   },
+   "flags": {
+    "exhaust": true
+   },
+   "ap": ""
+  },
+  "neu_second_chance": {
+   "id": "neu_second_chance",
+   "name": "Segunda Oportunidad",
+   "cls": "neutral",
+   "type": "skill",
+   "rarity": "rare",
+   "cost": 1,
+   "fx": {
+    "heal": 12,
+    "block": 12
+   },
+   "up": {
+    "fx": {
+     "heal": 16,
+     "block": 16
+    }
+   },
+   "flags": {
+    "exhaust": true
+   },
+   "ap": ""
+  },
+  "neu_destiny_blow": {
+   "id": "neu_destiny_blow",
+   "name": "Golpe del Destino",
+   "cls": "neutral",
+   "type": "attack",
+   "rarity": "rare",
+   "cost": 2,
+   "fx": {
+    "dmg": 24
+   },
+   "up": {
+    "fx": {
+     "dmg": 32
+    }
+   },
+   "flags": {
+    "exhaust": true
+   },
+   "ap": ""
+  },
+  "neu_vigil": {
+   "id": "neu_vigil",
+   "name": "Vigilia",
+   "cls": "neutral",
+   "type": "power",
+   "rarity": "rare",
+   "cost": 2,
+   "fx": {
+    "draw": 1,
+    "pw": {
+     "metallicize": 3
+    }
+   },
+   "up": {
+    "fx": {
+     "pw": {
+      "metallicize": 4
+     }
+    }
+   },
+   "flags": {},
+   "ap": ""
+  },
+  "neu_resolve": {
+   "id": "neu_resolve",
+   "name": "Resolución",
+   "cls": "neutral",
+   "type": "power",
+   "rarity": "rare",
+   "cost": 1,
+   "fx": {
+    "str": 1,
+    "dex": 1
+   },
+   "up": {
+    "fx": {
+     "str": 2,
+     "dex": 2
+    }
+   },
+   "flags": {},
+   "ap": ""
+  }
+ },
+ "pool": {
+  "zafiro": [
+   "zafiro_dragon_breath",
+   "zafiro_shoulder",
+   "zafiro_warcry",
+   "zafiro_shatter",
+   "zafiro_old_blood",
+   "zafiro_quake",
+   "zafiro_living_wall",
+   "zafiro_ember_armor",
+   "zafiro_guillotine"
+  ],
+  "lia": [
+   "lia_hidden_knife",
+   "lia_ambush",
+   "lia_toxic_dew",
+   "lia_blade_dance",
+   "lia_steel_burst",
+   "lia_paralysis",
+   "lia_shadow_agile",
+   "lia_plague",
+   "lia_blade_waltz"
+  ],
+  "claudia": [
+   "claudia_osty_claw",
+   "claudia_bone_whisper",
+   "claudia_minor_harvest",
+   "claudia_skeletal_guard",
+   "claudia_twin_bite",
+   "claudia_requiem",
+   "claudia_blood_ritual",
+   "claudia_bone_throne",
+   "claudia_violet_eclipse"
+  ],
+  "aurora": [
+   "aurora_ember_petal",
+   "aurora_gilded_veil",
+   "aurora_flame_spin",
+   "aurora_blinding_gleam",
+   "aurora_dawn_dance",
+   "aurora_ray_rain",
+   "aurora_burning_mirror",
+   "aurora_golden_eclipse",
+   "aurora_sun_hymn"
+  ],
+  "irene": [
+   "irene_loose_gear",
+   "irene_reinforced_spring",
+   "irene_pendulum_blow",
+   "irene_quick_wind",
+   "irene_clockwork_chain",
+   "irene_clock_tower",
+   "irene_spring_discharge",
+   "irene_fine_clockwork",
+   "irene_colossal_automaton",
+   "irene_clock_heart"
+  ],
+  "selene": [
+   "selene_stray_drop",
+   "selene_mist_veil",
+   "selene_shining_conch",
+   "selene_rising_tide",
+   "selene_pearl_whirl",
+   "selene_abyssal_echo",
+   "selene_silver_current",
+   "selene_siren_song",
+   "selene_colossal_wave",
+   "selene_endless_tide"
+  ],
+  "neutral": [
+   "neu_second_wind",
+   "neu_focus",
+   "neu_improvised_guard",
+   "neu_sure_strike",
+   "neu_trip",
+   "neu_ration",
+   "neu_scavenge",
+   "neu_purge",
+   "neu_lucky_blow",
+   "neu_hunters_mark",
+   "neu_courage_rush",
+   "neu_stand_firm",
+   "neu_smoke_bomb",
+   "neu_camp_tonic",
+   "neu_all_or_nothing",
+   "neu_desperate_charge",
+   "neu_barrage",
+   "neu_shockwave",
+   "neu_strategic_pause",
+   "neu_second_chance",
+   "neu_destiny_blow",
+   "neu_vigil",
+   "neu_resolve"
+  ]
+ }
+}

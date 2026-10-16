@@ -2,6 +2,9 @@ class_name DB
 extends RefCounted
 ## Carga de datos (JSON exportado del juego web). Todo en diccionarios, con enteros reales.
 
+## Contenido añadido tras el port (cartas de la Oleada 1). Las trazas de paridad con el web lo desactivan.
+static var extra := true
+static var neutral: Array = []
 static var loaded := false
 static var cards := {}
 static var pool := {}
@@ -53,6 +56,14 @@ static func load_all() -> void:
 	loaded = true
 	var c := _read("cards")
 	cards = c.cards; pool = c.pool; starters = c.starters
+	var ex := _read("cards_extra")
+	cards.merge(ex.cards)
+	if extra:
+		for k in ex.pool.keys():
+			if k == "neutral":
+				neutral = ex.pool[k]
+			else:
+				pool[k] = pool[k] + ex.pool[k]
 	var ch := _read("characters")
 	characters = ch.characters; sprites = ch.sprites
 	var en := _read("enemies")

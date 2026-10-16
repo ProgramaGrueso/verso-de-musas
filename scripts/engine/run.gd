@@ -259,9 +259,20 @@ static func gen_shop(G) -> Dictionary:
 	var disc := 0.5 if Eng.has_relic(G, "tarjeta") else 1.0
 	var price := func(n: float) -> int: return maxi(5, floori(n * disc + 0.5))
 	var cards := []
-	for id in Eng.reward_cards(G, 5, 0.1):
+	for id in Eng.reward_cards(G, 5, 0.1, 0.0):
 		var base: float = PRICE[DB.cards[id].rarity] * (0.9 + Eng.rnd(G) * 0.2)
 		cards.append({"id": id, "price": price.call(base), "sold": false})
+	# estante fijo de cartas neutrales: 3 sin oro extra, algo más baratas que las de clase
+	var neutral := []
+	if DB.extra:
+		var seen := []
+		for rar in ["common", "uncommon", "common"]:
+			var cands := DB.neutral.filter(func(id): return DB.cards[id].rarity == rar and not (id in seen))
+			if cands.is_empty():
+				continue
+			var nid: String = Eng.pick(G, cands)
+			seen.append(nid)
+			neutral.append({"id": nid, "price": price.call(PRICE[rar] * 0.85 * (0.9 + Eng.rnd(G) * 0.2)), "sold": false})
 	var relics := []
 	var pool := []
 	for id in DB.relics.keys():
@@ -273,7 +284,7 @@ static func gen_shop(G) -> Dictionary:
 	var potions := []
 	for id in Eng.shuffle(G, DB.potions.keys()).slice(0, 2):
 		potions.append({"id": id, "price": price.call(45), "sold": false})
-	return {"cards": cards, "relics": relics, "potions": potions, "remove": {"price": price.call(75 + 25 * G.get("removed", 0)), "used": false}}
+	return {"cards": cards, "neutral": neutral, "relics": relics, "potions": potions, "remove": {"price": price.call(75 + 25 * G.get("removed", 0)), "used": false}}
 
 
 static func pick_event(G) -> Dictionary:

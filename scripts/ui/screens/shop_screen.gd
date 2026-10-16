@@ -43,9 +43,32 @@ func _render() -> void:
 	cards.add_theme_constant_override("separation", 18)
 	_root.add_child(cards)
 	for it in _shop.cards:
-		var col := VBoxContainer.new()
-		col.add_theme_constant_override("separation", 6)
-		var cv := CardView.create(Eng.make_card(G, it.id), null, 158.0)
+		cards.add_child(_card_item(it, 142.0))
+	var mid := HBoxContainer.new()
+	mid.alignment = BoxContainer.ALIGNMENT_CENTER
+	mid.add_theme_constant_override("separation", 22)
+	_root.add_child(mid)
+	if not _shop.neutral.is_empty():
+		var nrow := HBoxContainer.new()
+		nrow.add_theme_constant_override("separation", 12)
+		for it in _shop.neutral:
+			nrow.add_child(_card_item(it, 112.0))
+		var nv := VBoxContainer.new()
+		nv.add_theme_constant_override("separation", 6)
+		nv.add_child(UIK.label("Cartas neutrales", 18, UIK.GOLD, "bold", HORIZONTAL_ALIGNMENT_CENTER))
+		nv.add_child(nrow)
+		mid.add_child(_box_wrap(nv))
+	mid.add_child(_box("Reliquias", _items(_shop.relics, "relic")))
+	mid.add_child(_box("Pociones", _items(_shop.potions, "potion")))
+	_render_service(mid)
+
+
+func _card_item(it: Dictionary, w: float) -> Control:
+	var G = Meta.run
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 6)
+	var cv := CardView.create(Eng.make_card(G, it.id), null, w)
+	if true:
 		if it.sold:
 			cv.modulate = Color(1, 1, 1, 0.25)
 		else:
@@ -61,15 +84,13 @@ func _render() -> void:
 					G.deck.append(Eng.make_card(G, item.id))
 					Sfx.play("coin")
 					_render())
-		col.add_child(cv)
-		col.add_child(_price_tag(it.price, G.gold))
-		cards.add_child(col)
-	var mid := HBoxContainer.new()
-	mid.alignment = BoxContainer.ALIGNMENT_CENTER
-	mid.add_theme_constant_override("separation", 30)
-	_root.add_child(mid)
-	mid.add_child(_box("Reliquias", _items(_shop.relics, "relic")))
-	mid.add_child(_box("Pociones", _items(_shop.potions, "potion")))
+	col.add_child(cv)
+	col.add_child(_price_tag(it.price, G.gold))
+	return col
+
+
+func _render_service(mid: Control) -> void:
+	var G = Meta.run
 	var rm: Dictionary = _shop.remove
 	var rb := _mini("ui:burn", "[b][color=#f0cf7a]Eliminar una carta[/color][/b]\nQuita una carta de tu mazo para hacerlo más fuerte.")
 	if rm.used:

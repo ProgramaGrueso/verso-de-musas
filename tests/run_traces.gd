@@ -159,6 +159,7 @@ func _run_structure(p: Dictionary) -> Array:
 
 
 func _init() -> void:
+	DB.extra = false   # las trazas del web no incluyen las cartas nuevas
 	DB.load_all()
 	var args := OS.get_cmdline_user_args()
 	var filt: String = args[0] if args.size() > 0 else ""

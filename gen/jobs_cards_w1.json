@@ -1,0 +1,792 @@
+[
+ {
+  "kind": "image",
+  "name": "card_zafiro_dragon_breath",
+  "lora": "miranda_capurro_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31001,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. exhaling a cone of roaring flame from her mouth sweeping across a line of enemies, scorched courtyard, embers. The heroine: a single young woman, miranda_capurro, with a photorealistic sharply defined real human face, intense dark eyes, dark brown hair pulled back, wearing dark ornate plate armor with a long torn red cape and wielding a big greatsword. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_zafiro_shoulder",
+  "lora": "miranda_capurro_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31002,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. low angle shoulder-charge slamming an armored soldier backward, shield-like pauldron, dust and sparks. The heroine: a single young woman, miranda_capurro, with a photorealistic sharply defined real human face, intense dark eyes, dark brown hair pulled back, wearing dark ornate plate armor with a long torn red cape and wielding a big greatsword. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_zafiro_warcry",
+  "lora": "miranda_capurro_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31003,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. roaring a war cry with sword raised high, shockwave rings, red cape flaring, army silhouettes behind. The heroine: a single young woman, miranda_capurro, with a photorealistic sharply defined real human face, intense dark eyes, dark brown hair pulled back, wearing dark ornate plate armor with a long torn red cape and wielding a big greatsword. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_zafiro_shatter",
+  "lora": "miranda_capurro_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31004,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. slamming her armored gauntlet into the ground releasing a metallic shockwave that flings enemies, cracked flagstones. The heroine: a single young woman, miranda_capurro, with a photorealistic sharply defined real human face, intense dark eyes, dark brown hair pulled back, wearing dark ornate plate armor with a long torn red cape and wielding a big greatsword. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_zafiro_old_blood",
+  "lora": "miranda_capurro_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31005,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. cutting her palm over her sword, glowing crimson blood running down the blade, eyes burning, dark chapel. The heroine: a single young woman, miranda_capurro, with a photorealistic sharply defined real human face, intense dark eyes, dark brown hair pulled back, wearing dark ornate plate armor with a long torn red cape and wielding a big greatsword. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_zafiro_quake",
+  "lora": "miranda_capurro_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31006,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. overhead greatsword strike cracking the earth in a radial fissure, rocks flying, an enemy staggering. The heroine: a single young woman, miranda_capurro, with a photorealistic sharply defined real human face, intense dark eyes, dark brown hair pulled back, wearing dark ornate plate armor with a long torn red cape and wielding a big greatsword. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_zafiro_living_wall",
+  "lora": "miranda_capurro_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31007,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. standing unmoving as thousands of arrows shatter against her armor, spikes growing from her pauldrons, stormy battlefield. The heroine: a single young woman, miranda_capurro, with a photorealistic sharply defined real human face, intense dark eyes, dark brown hair pulled back, wearing dark ornate plate armor with a long torn red cape and wielding a big greatsword. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_zafiro_ember_armor",
+  "lora": "miranda_capurro_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31008,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. her whole plate armor glowing red-hot with molten cracks and rising heat shimmer, flames licking her cape, dark forge. The heroine: a single young woman, miranda_capurro, with a photorealistic sharply defined real human face, intense dark eyes, dark brown hair pulled back, wearing dark ornate plate armor with a long torn red cape and wielding a big greatsword. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_zafiro_guillotine",
+  "lora": "miranda_capurro_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31009,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. executioner-style falling greatsword stroke trailing a crimson arc of light, a towering ogre mid-collapse, ruined arena. The heroine: a single young woman, miranda_capurro, with a photorealistic sharply defined real human face, intense dark eyes, dark brown hair pulled back, wearing dark ornate plate armor with a long torn red cape and wielding a big greatsword. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_lia_hidden_knife",
+  "lora": "staryuuki_krea2_v2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31010,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. pulling a thin dagger from her boot with a playful smirk, moonlit alley, a sleeping guard behind. The heroine: a single young woman, staryuuki, with a photorealistic sharply defined real human face, grey-green eyes, black hair with straight bangs, wearing a black hooded jacket with leather straps and carrying curved daggers. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_lia_ambush",
+  "lora": "staryuuki_krea2_v2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31011,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. dropping from a tree branch onto a bandit with both daggers, forest canopy, falling leaves. The heroine: a single young woman, staryuuki, with a photorealistic sharply defined real human face, grey-green eyes, black hair with straight bangs, wearing a black hooded jacket with leather straps and carrying curved daggers. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_lia_toxic_dew",
+  "lora": "staryuuki_krea2_v2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31012,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. flicking glowing green droplets from a vial toward a monster while ducking behind a cloak, swamp mist. The heroine: a single young woman, staryuuki, with a photorealistic sharply defined real human face, grey-green eyes, black hair with straight bangs, wearing a black hooded jacket with leather straps and carrying curved daggers. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_lia_blade_dance",
+  "lora": "staryuuki_krea2_v2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31013,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. spinning pirouette slashing three times with twin daggers, afterimages of blades, moonlit rooftop. The heroine: a single young woman, staryuuki, with a photorealistic sharply defined real human face, grey-green eyes, black hair with straight bangs, wearing a black hooded jacket with leather straps and carrying curved daggers. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_lia_steel_burst",
+  "lora": "staryuuki_krea2_v2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31014,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. tossing a fan of silver daggers into the air that hover around her like a shield, dark forest clearing. The heroine: a single young woman, staryuuki, with a photorealistic sharply defined real human face, grey-green eyes, black hair with straight bangs, wearing a black hooded jacket with leather straps and carrying curved daggers. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_lia_paralysis",
+  "lora": "staryuuki_krea2_v2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31015,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. jabbing a long glowing needle into a hulking brute's neck, green veins spreading under his skin, tavern shadows. The heroine: a single young woman, staryuuki, with a photorealistic sharply defined real human face, grey-green eyes, black hair with straight bangs, wearing a black hooded jacket with leather straps and carrying curved daggers. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_lia_shadow_agile",
+  "lora": "staryuuki_krea2_v2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31016,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. leaping across rooftops in a blur of black cloth with her shadow stretching behind her, full moon, city of chimneys. The heroine: a single young woman, staryuuki, with a photorealistic sharply defined real human face, grey-green eyes, black hair with straight bangs, wearing a black hooded jacket with leather straps and carrying curved daggers. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_lia_plague",
+  "lora": "staryuuki_krea2_v2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31017,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. holding up a cracked glass orb that releases a spreading cloud of glowing green plague over a horde of monsters, ruined village. The heroine: a single young woman, staryuuki, with a photorealistic sharply defined real human face, grey-green eyes, black hair with straight bangs, wearing a black hooded jacket with leather straps and carrying curved daggers. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_lia_blade_waltz",
+  "lora": "staryuuki_krea2_v2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31018,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. a whirlwind waltz in the middle of a circle of enemies, countless flying daggers forming a glittering ring, ballroom turned battlefield. The heroine: a single young woman, staryuuki, with a photorealistic sharply defined real human face, grey-green eyes, black hair with straight bangs, wearing a black hooded jacket with leather straps and carrying curved daggers. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_claudia_osty_claw",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31019,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. the giant ghostly skeletal left hand raking its claws across a monster while she watches calmly, violet mist, crypt. The heroine: a single pale gothic young woman, karen_character, with a photorealistic sharply defined real human face, long straight black hair with bangs, wearing a black coat with a fur collar, gold trim and red lining, accompanied by a ghostly skeletal left hand. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_claudia_bone_whisper",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31020,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. whispering to a swarm of small bones that knit together into a protective wall around her, candlelit catacomb. The heroine: a single pale gothic young woman, karen_character, with a photorealistic sharply defined real human face, long straight black hair with bangs, wearing a black coat with a fur collar, gold trim and red lining, accompanied by a ghostly skeletal left hand. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_claudia_minor_harvest",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31021,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. slashing a scythe of violet light through a monster while a card-like glowing page burns away in her other hand, graveyard. The heroine: a single pale gothic young woman, karen_character, with a photorealistic sharply defined real human face, long straight black hair with bangs, wearing a black coat with a fur collar, gold trim and red lining, accompanied by a ghostly skeletal left hand. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_claudia_skeletal_guard",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31022,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. a towering armored skeleton guardian rising from the ground beside her with a tower shield, purple lightning, cemetery gates. The heroine: a single pale gothic young woman, karen_character, with a photorealistic sharply defined real human face, long straight black hair with bangs, wearing a black coat with a fur collar, gold trim and red lining, accompanied by a ghostly skeletal left hand. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_claudia_twin_bite",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31023,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. the skeletal left hand snapping twice like jaws at a snarling ghoul, bone fragments flying, mausoleum. The heroine: a single pale gothic young woman, karen_character, with a photorealistic sharply defined real human face, long straight black hair with bangs, wearing a black coat with a fur collar, gold trim and red lining, accompanied by a ghostly skeletal left hand. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_claudia_requiem",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31024,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. conducting an unseen choir with her arms raised while a wave of violet spectral sound sweeps over all enemies, gothic cathedral ruins. The heroine: a single pale gothic young woman, karen_character, with a photorealistic sharply defined real human face, long straight black hair with bangs, wearing a black coat with a fur collar, gold trim and red lining, accompanied by a ghostly skeletal left hand. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_claudia_blood_ritual",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31025,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. drawing a crimson sigil on the floor with her own blood while the ghostly hand grows larger behind her, candlelit ritual circle. The heroine: a single pale gothic young woman, karen_character, with a photorealistic sharply defined real human face, long straight black hair with bangs, wearing a black coat with a fur collar, gold trim and red lining, accompanied by a ghostly skeletal left hand. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_claudia_bone_throne",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31026,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. seated on a colossal throne of fused skeletons with the ghostly hand resting on its armrest, violet fire torches, vast ossuary hall. The heroine: a single pale gothic young woman, karen_character, with a photorealistic sharply defined real human face, long straight black hair with bangs, wearing a black coat with a fur collar, gold trim and red lining, accompanied by a ghostly skeletal left hand. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_claudia_violet_eclipse",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31027,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. a violet eclipse swallowing the sky over a battlefield as a colossal spectral hand descends and crushes everything below, she stands calm. The heroine: a single pale gothic young woman, karen_character, with a photorealistic sharply defined real human face, long straight black hair with bangs, wearing a black coat with a fur collar, gold trim and red lining, accompanied by a ghostly skeletal left hand. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_aurora_ember_petal",
+  "lora": "SadieS_SoloLoRA_Kr2v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31028,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. flicking a burning petal from her fan that streaks toward an enemy, rose-gold sparks, sunset temple courtyard. The heroine: a single young woman with a photorealistic, sharply defined real human face, symmetrical honey-amber eyes, bronze tan skin, wavy chestnut hair with golden combs, saffron and gold silk dancer outfit, gold jewelry, holding large gold filigree folding hand fans with mirror facets. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_aurora_gilded_veil",
+  "lora": "SadieS_SoloLoRA_Kr2v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31029,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. twirling a translucent golden veil that flares blinding light across a group of enemies, marble temple, sunbeams. The heroine: a single young woman with a photorealistic, sharply defined real human face, symmetrical honey-amber eyes, bronze tan skin, wavy chestnut hair with golden combs, saffron and gold silk dancer outfit, gold jewelry, holding large gold filigree folding hand fans with mirror facets. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_aurora_flame_spin",
+  "lora": "SadieS_SoloLoRA_Kr2v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31030,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. spinning twice with both fans leaving a spiral of fire, wind-whipped silk, desert dunes at golden hour. The heroine: a single young woman with a photorealistic, sharply defined real human face, symmetrical honey-amber eyes, bronze tan skin, wavy chestnut hair with golden combs, saffron and gold silk dancer outfit, gold jewelry, holding large gold filigree folding hand fans with mirror facets. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_aurora_blinding_gleam",
+  "lora": "SadieS_SoloLoRA_Kr2v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31031,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. raising a mirror fan to reflect the sun into a dazzling beam that blinds a crowd of enemies, shielding their eyes, white-gold flare. The heroine: a single young woman with a photorealistic, sharply defined real human face, symmetrical honey-amber eyes, bronze tan skin, wavy chestnut hair with golden combs, saffron and gold silk dancer outfit, gold jewelry, holding large gold filigree folding hand fans with mirror facets. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_aurora_dawn_dance",
+  "lora": "SadieS_SoloLoRA_Kr2v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31032,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. dancing with arms wide at the break of dawn on a temple rooftop, first sunrays igniting her veils, warm golden mist. The heroine: a single young woman with a photorealistic, sharply defined real human face, symmetrical honey-amber eyes, bronze tan skin, wavy chestnut hair with golden combs, saffron and gold silk dancer outfit, gold jewelry, holding large gold filigree folding hand fans with mirror facets. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_aurora_ray_rain",
+  "lora": "SadieS_SoloLoRA_Kr2v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31033,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. dozens of thin golden rays raining from the sky through the temple ceiling onto enemies while she stands in the light. The heroine: a single young woman with a photorealistic, sharply defined real human face, symmetrical honey-amber eyes, bronze tan skin, wavy chestnut hair with golden combs, saffron and gold silk dancer outfit, gold jewelry, holding large gold filigree folding hand fans with mirror facets. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_aurora_burning_mirror",
+  "lora": "SadieS_SoloLoRA_Kr2v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31034,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. holding a huge burning mirror shield that reflects a monster's blast back at it, molten gold frame, ruined arena. The heroine: a single young woman with a photorealistic, sharply defined real human face, symmetrical honey-amber eyes, bronze tan skin, wavy chestnut hair with golden combs, saffron and gold silk dancer outfit, gold jewelry, holding large gold filigree folding hand fans with mirror facets. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_aurora_golden_eclipse",
+  "lora": "SadieS_SoloLoRA_Kr2v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31035,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. a golden solar eclipse overhead with a corona of fire while she stands on a ziggurat with fans spread wide, enemies below silhouetted. The heroine: a single young woman with a photorealistic, sharply defined real human face, symmetrical honey-amber eyes, bronze tan skin, wavy chestnut hair with golden combs, saffron and gold silk dancer outfit, gold jewelry, holding large gold filigree folding hand fans with mirror facets. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_aurora_sun_hymn",
+  "lora": "SadieS_SoloLoRA_Kr2v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31036,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. singing and dancing before a colossal rising sun disc, golden choir of veiled dancers behind her, radiant glory. The heroine: a single young woman with a photorealistic, sharply defined real human face, symmetrical honey-amber eyes, bronze tan skin, wavy chestnut hair with golden combs, saffron and gold silk dancer outfit, gold jewelry, holding large gold filigree folding hand fans with mirror facets. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_irene_loose_gear",
+  "lora": "RLY-thot_shot-KREA2-irena-v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31037,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. pulling a spinning brass cog loose from her own wrist and flicking it like a throwing disc, workshop sparks. The heroine: a single young clockwork doll woman, rlyirena, with a photorealistic sharply defined real human face, symmetrical light blue-grey eyes, long wavy blonde hair, dusty rose pink Victorian lace dress, white lace-up boots and a large brass winding key on her back. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_irene_reinforced_spring",
+  "lora": "RLY-thot_shot-KREA2-irena-v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31038,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. a giant coiled steel spring bracing her against a crashing blow, brass pistons, factory floor. The heroine: a single young clockwork doll woman, rlyirena, with a photorealistic sharply defined real human face, symmetrical light blue-grey eyes, long wavy blonde hair, dusty rose pink Victorian lace dress, white lace-up boots and a large brass winding key on her back. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_irene_pendulum_blow",
+  "lora": "RLY-thot_shot-KREA2-irena-v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31039,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. swinging a heavy brass pendulum weight like a mace into an enemy's chest, grandfather clock tower. The heroine: a single young clockwork doll woman, rlyirena, with a photorealistic sharply defined real human face, symmetrical light blue-grey eyes, long wavy blonde hair, dusty rose pink Victorian lace dress, white lace-up boots and a large brass winding key on her back. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_irene_quick_wind",
+  "lora": "RLY-thot_shot-KREA2-irena-v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31040,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. frantically cranking the brass key on her back with a tiny grimace, steam hissing from her joints, dim clockwork attic. The heroine: a single young clockwork doll woman, rlyirena, with a photorealistic sharply defined real human face, symmetrical light blue-grey eyes, long wavy blonde hair, dusty rose pink Victorian lace dress, white lace-up boots and a large brass winding key on her back. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_irene_clockwork_chain",
+  "lora": "RLY-thot_shot-KREA2-irena-v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31041,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. three rapid precise strikes with a chain of linked small cogs, a ribbon of motion blur, watchmaker's studio. The heroine: a single young clockwork doll woman, rlyirena, with a photorealistic sharply defined real human face, symmetrical light blue-grey eyes, long wavy blonde hair, dusty rose pink Victorian lace dress, white lace-up boots and a large brass winding key on her back. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_irene_clock_tower",
+  "lora": "RLY-thot_shot-KREA2-irena-v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31042,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. a vast clock tower face behind her chiming a shockwave that staggers enemies, mist over a Victorian city. The heroine: a single young clockwork doll woman, rlyirena, with a photorealistic sharply defined real human face, symmetrical light blue-grey eyes, long wavy blonde hair, dusty rose pink Victorian lace dress, white lace-up boots and a large brass winding key on her back. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_irene_spring_discharge",
+  "lora": "RLY-thot_shot-KREA2-irena-v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31043,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. a huge wound spring bursting open and releasing a shockwave of cogs and light that flings enemies away, brass cathedral. The heroine: a single young clockwork doll woman, rlyirena, with a photorealistic sharply defined real human face, symmetrical light blue-grey eyes, long wavy blonde hair, dusty rose pink Victorian lace dress, white lace-up boots and a large brass winding key on her back. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_irene_fine_clockwork",
+  "lora": "RLY-thot_shot-KREA2-irena-v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31044,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. an intricate glowing blueprint of interlocking tiny gears floating around her hands as she adjusts a mechanism, loupe, lamplit bench. The heroine: a single young clockwork doll woman, rlyirena, with a photorealistic sharply defined real human face, symmetrical light blue-grey eyes, long wavy blonde hair, dusty rose pink Victorian lace dress, white lace-up boots and a large brass winding key on her back. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_irene_colossal_automaton",
+  "lora": "RLY-thot_shot-KREA2-irena-v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31045,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. a colossal brass automaton towering behind her punching down a gate while she stands unflinching in its shadow, steam and gears. The heroine: a single young clockwork doll woman, rlyirena, with a photorealistic sharply defined real human face, symmetrical light blue-grey eyes, long wavy blonde hair, dusty rose pink Victorian lace dress, white lace-up boots and a large brass winding key on her back. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_irene_clock_heart",
+  "lora": "RLY-thot_shot-KREA2-irena-v1.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31046,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. her porcelain chest open revealing a glowing golden clockwork heart beating in perfect rhythm, light pouring through the gears, dark void. The heroine: a single young clockwork doll woman, rlyirena, with a photorealistic sharply defined real human face, symmetrical light blue-grey eyes, long wavy blonde hair, dusty rose pink Victorian lace dress, white lace-up boots and a large brass winding key on her back. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_selene_stray_drop",
+  "lora": "RLY-thot_shot-KREA2-jada-v11-trigger-rlyjada.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31047,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. a single glowing blue water droplet leaping from her fingertip into an enemy's face, splash crown, cave pool. The heroine: a single young woman, rlyjada, with a photorealistic sharply defined real human face, dark brown eyes, long wavy dark brown hair, a flowing deep teal-blue silk gown with white-silver trim and a necklace of large white pearls, barefoot. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_selene_mist_veil",
+  "lora": "RLY-thot_shot-KREA2-jada-v11-trigger-rlyjada.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31048,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. wrapping herself in a swirling veil of sea mist that deflects arrows, lighthouse cliff at dawn. The heroine: a single young woman, rlyjada, with a photorealistic sharply defined real human face, dark brown eyes, long wavy dark brown hair, a flowing deep teal-blue silk gown with white-silver trim and a necklace of large white pearls, barefoot. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_selene_shining_conch",
+  "lora": "RLY-thot_shot-KREA2-jada-v11-trigger-rlyjada.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31049,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. holding a glowing conch shell to her ear and listening as a pearl forms in its mouth, tide pool at twilight. The heroine: a single young woman, rlyjada, with a photorealistic sharply defined real human face, dark brown eyes, long wavy dark brown hair, a flowing deep teal-blue silk gown with white-silver trim and a necklace of large white pearls, barefoot. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_selene_rising_tide",
+  "lora": "RLY-thot_shot-KREA2-jada-v11-trigger-rlyjada.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31050,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. a wall of rising sea water surging up a stone staircase with her at its crest, moonlit harbor, spray. The heroine: a single young woman, rlyjada, with a photorealistic sharply defined real human face, dark brown eyes, long wavy dark brown hair, a flowing deep teal-blue silk gown with white-silver trim and a necklace of large white pearls, barefoot. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_selene_pearl_whirl",
+  "lora": "RLY-thot_shot-KREA2-jada-v11-trigger-rlyjada.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31051,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. a swirling vortex of glowing pearls and sea foam sweeping around her and out across an enemy crowd, underwater temple. The heroine: a single young woman, rlyjada, with a photorealistic sharply defined real human face, dark brown eyes, long wavy dark brown hair, a flowing deep teal-blue silk gown with white-silver trim and a necklace of large white pearls, barefoot. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_selene_abyssal_echo",
+  "lora": "RLY-thot_shot-KREA2-jada-v11-trigger-rlyjada.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31052,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. dropping a pebble into a bottomless black well while a deep echo ripples outward in glowing rings, bioluminescent depths. The heroine: a single young woman, rlyjada, with a photorealistic sharply defined real human face, dark brown eyes, long wavy dark brown hair, a flowing deep teal-blue silk gown with white-silver trim and a necklace of large white pearls, barefoot. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_selene_silver_current",
+  "lora": "RLY-thot_shot-KREA2-jada-v11-trigger-rlyjada.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31053,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. a river of silver light flowing around her arms and widening into extra glowing orbs, moonlit estuary. The heroine: a single young woman, rlyjada, with a photorealistic sharply defined real human face, dark brown eyes, long wavy dark brown hair, a flowing deep teal-blue silk gown with white-silver trim and a necklace of large white pearls, barefoot. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_selene_siren_song",
+  "lora": "RLY-thot_shot-KREA2-jada-v11-trigger-rlyjada.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31054,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. singing with eyes closed on a rock in the sea while enemy sailors drop their weapons entranced, glowing sound waves over waves. The heroine: a single young woman, rlyjada, with a photorealistic sharply defined real human face, dark brown eyes, long wavy dark brown hair, a flowing deep teal-blue silk gown with white-silver trim and a necklace of large white pearls, barefoot. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_selene_colossal_wave",
+  "lora": "RLY-thot_shot-KREA2-jada-v11-trigger-rlyjada.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31055,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. a mountain-sized wave rearing over a fleet of enemy ships with her tiny figure standing on the crest, storm sky, epic scale. The heroine: a single young woman, rlyjada, with a photorealistic sharply defined real human face, dark brown eyes, long wavy dark brown hair, a flowing deep teal-blue silk gown with white-silver trim and a necklace of large white pearls, barefoot. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_selene_endless_tide",
+  "lora": "RLY-thot_shot-KREA2-jada-v11-trigger-rlyjada.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31056,
+  "strength": 0.85,
+  "prompt": "Painterly fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, stylized painted environment and effects (not a photograph), only her face and skin are realistic and sharply defined. the tide endlessly rising and falling around her in a spiral beneath twin moons, glowing orbs orbiting, vast tidal plain. The heroine: a single young woman, rlyjada, with a photorealistic sharply defined real human face, dark brown eyes, long wavy dark brown hair, a flowing deep teal-blue silk gown with white-silver trim and a necklace of large white pearls, barefoot. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_second_wind",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31057,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a weary traveler's hands cupping a glowing spring of water at dawn, warm light, mossy stones. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_focus",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31058,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a candle flame burning perfectly still inside a dark empty room, a single sheet of light on a desk. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_improvised_guard",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31059,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a wooden tavern door torn off its hinges and raised as a shield with arrows stuck in it, dusty road. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_sure_strike",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31060,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a plain iron sword striking a stone, a bright spark flying, workshop forge background. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_trip",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31061,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a taut rope strung across a dark alley sending a heavy armored boot tumbling, lantern light. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_ration",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31062,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, bread, cheese and a flask on a cloth beside a small campfire under the stars. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_scavenge",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31063,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a gloved hand rummaging through a pile of old books and trinkets in a ruined library, dust motes in light. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_purge",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31064,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a page of black ink burning to nothing in a silver brazier, clean white smoke, dark chapel. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_lucky_blow",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31065,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a pair of old bone dice mid-air with a golden coin glinting beside them, tavern table. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_hunters_mark",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31066,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a glowing red sigil burned into a wooden post at the edge of a dark forest, drifting embers. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_courage_rush",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31067,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a burst of golden light from a raised fist clenching a torn banner, wind and sparks. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_stand_firm",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31068,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a lone figure planting a heavy boot and a spear in the mud as a wave of foes approaches, rain and torches. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_smoke_bomb",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31069,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a clay bomb bursting into a thick cloud of violet smoke in a narrow street, silhouettes coughing. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_camp_tonic",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31070,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a small glass bottle of golden tonic glowing on a mossy log beside a lantern in the forest. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_all_or_nothing",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31071,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a hand pushing a pile of gold coins into the center of a candlelit table, tense shadows, a dagger beside. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_desperate_charge",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31072,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a rusted spear thrown through a collapsing gate in a blaze of torchlight, soldiers diving aside. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_barrage",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31073,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, three arrows in flight frozen in a line over a misty valley, feathered shafts, soft dawn. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_shockwave",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31074,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a circular shockwave of dust and cracked cobblestones spreading from a crater in a plaza, debris floating. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_strategic_pause",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31075,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, an hourglass with golden sand frozen mid-fall on a war table with a map and carved pieces. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_second_chance",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31076,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a phoenix feather glowing gold lying in the ashes of a burnt battlefield, first dawn light. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_destiny_blow",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31077,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a single colossal sword of white light falling from the clouds onto a dark plain, a moment before impact. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_vigil",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31078,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a lone stone sentinel statue keeping watch on a cliff at night, a lantern at its feet, stars wheeling above. No text, no watermark."
+ },
+ {
+  "kind": "image",
+  "name": "card_neu_resolve",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 384,
+  "seed": 31079,
+  "strength": 0,
+  "prompt": "Painterly dark fantasy digital illustration, concept art for a card game, visible brush strokes, rich saturated colors, dramatic lighting, no people facing the camera, a sword and a feather crossed on an old stone altar under a ray of light, ancient temple. No text, no watermark."
+ }
+]
