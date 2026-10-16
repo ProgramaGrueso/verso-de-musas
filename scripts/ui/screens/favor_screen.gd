@@ -48,7 +48,7 @@ func _ready() -> void:
 		add_child(_emblem(ent.color))
 	# degradado oscuro hacia abajo: separa el arte de las opciones
 	var fade := TextureRect.new()
-	fade.texture = UIK.grad_tex([[0.0, Color(0.02, 0.02, 0.05, 0.0)], [0.5, Color(0.02, 0.02, 0.05, 0.0)], [0.66, Color(0.02, 0.02, 0.05, 0.92)], [1.0, Color(0.02, 0.02, 0.05, 1.0)]])
+	fade.texture = UIK.grad_tex([[0.0, Color(0.02, 0.02, 0.05, 0.0)], [0.4, Color(0.02, 0.02, 0.05, 0.0)], [0.58, Color(0.02, 0.02, 0.05, 0.9)], [1.0, Color(0.02, 0.02, 0.05, 1.0)]])
 	fade.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	fade.stretch_mode = TextureRect.STRETCH_SCALE
 	UIK.full_rect(fade)
@@ -61,19 +61,19 @@ func _ready() -> void:
 	add_child(title)
 	var who := UIK.label(ent.name, 24, ent.color, "title", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(who, 6)
-	who.position = Vector2(0, 340)
+	who.position = Vector2(0, 280)
 	who.size = Vector2(1280, 34)
 	add_child(who)
 	var line := UIK.label(ent.line, 20, Color("#e8e4f4"), "sans", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(line, 5)
-	line.position = Vector2(140, 380)
+	line.position = Vector2(140, 322)
 	line.size = Vector2(1000, 32)
 	add_child(line)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 20)
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	row.position = Vector2(50, 440)
-	row.size = Vector2(1180, 200)
+	row.position = Vector2(50, 394)
+	row.size = Vector2(1180, 280)
 	add_child(row)
 	var opts := Favors.offer(G, ei)
 	var btns := []
@@ -89,9 +89,9 @@ func _ready() -> void:
 			Nav.map(true))
 		btns.append(b)
 		row.add_child(b)
-	var skip := UIK.button("Rechazar los favores", "", 18)
-	skip.position = Vector2(490, 656)
-	skip.size = Vector2(300, 46)
+	var skip := UIK.button("Rechazar los favores", "", 15)
+	skip.position = Vector2(500, 682)
+	skip.size = Vector2(280, 32)
 	skip.pressed.connect(func(): Nav.map(true))
 	add_child(skip)
 	if not btns.is_empty():
@@ -124,55 +124,102 @@ func _emblem(col: Color) -> Control:
 	return c
 
 
+const CARD := Vector2(372, 280)
+
+
+## Carta de favor: ilustración a todo el fondo, cinta de tipo, marco dorado y elevación al señalarla.
 func _card(id: String) -> Button:
 	var d: Dictionary = Favors.DEFS[id]
+	var kc: Color = KIND_COLOR[d.kind]
 	var b := Button.new()
 	b.focus_mode = Control.FOCUS_ALL
-	b.custom_minimum_size = Vector2(370, 200)
-	var n := UIK.stylebox(Color("#1c3a44"), Color("#52858c"), 2, 16, 6)
-	var h := UIK.stylebox(Color("#27505c"), Color("#f0cf7a"), 3, 16, 12)
-	b.add_theme_stylebox_override("normal", n)
-	b.add_theme_stylebox_override("hover", h)
-	b.add_theme_stylebox_override("focus", h)
-	b.add_theme_stylebox_override("pressed", h)
-	b.mouse_entered.connect(func(): Sfx.play("select_soft", 0.4))
-	b.pressed.connect(func(): Sfx.play("click"))
-	var hb := HBoxContainer.new()
-	hb.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	hb.offset_left = 16
-	hb.offset_right = -16
-	hb.offset_top = 16
-	hb.offset_bottom = -16
-	hb.add_theme_constant_override("separation", 14)
-	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	b.add_child(hb)
-	# icono ilustrado
-	var frame := Panel.new()
-	frame.custom_minimum_size = Vector2(112, 112)
-	frame.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	frame.add_theme_stylebox_override("panel", UIK.stylebox(Color("#0c1418"), KIND_COLOR[d.kind], 2, 14, 0))
-	frame.clip_children = CanvasItem.CLIP_CHILDREN_AND_DRAW
-	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var tr := TextureRect.new()
-	tr.texture = UIK.tex(Favors.icon_path(id))
-	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	tr.size = Vector2(112, 112)
-	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	frame.add_child(tr)
-	hb.add_child(frame)
+	b.custom_minimum_size = CARD
+	b.pivot_offset = CARD / 2
+	var empty := StyleBoxEmpty.new()
+	for st in ["normal", "hover", "pressed", "focus", "disabled"]:
+		b.add_theme_stylebox_override(st, empty)
+	# fondo recortado con esquinas redondeadas
+	var clip := Panel.new()
+	clip.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	clip.add_theme_stylebox_override("panel", UIK.stylebox(Color("#0b0912"), Color(0, 0, 0, 0), 0, 14, 0))
+	clip.clip_children = CanvasItem.CLIP_CHILDREN_AND_DRAW
+	clip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	b.add_child(clip)
+	var art := TextureRect.new()
+	art.texture = UIK.tex(Favors.icon_path(id))
+	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	art.position = Vector2(-14, -34)
+	art.size = Vector2(CARD.x + 28, CARD.x + 28)
+	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	clip.add_child(art)
+	var shade := TextureRect.new()
+	shade.texture = UIK.grad_tex([[0.0, Color(0.03, 0.02, 0.06, 0.0)], [0.42, Color(0.03, 0.02, 0.06, 0.1)], [0.66, Color(0.03, 0.02, 0.06, 0.9)], [1.0, Color(0.03, 0.02, 0.06, 0.98)]])
+	shade.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	shade.stretch_mode = TextureRect.STRETCH_SCALE
+	UIK.full_rect(shade)
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	clip.add_child(shade)
+	# cinta de tipo
+	var rib := PanelContainer.new()
+	var rs := UIK.stylebox(Color(kc.darkened(0.65), 0.92), kc, 1, 8, 0)
+	rs.content_margin_left = 12
+	rs.content_margin_right = 12
+	rs.content_margin_top = 3
+	rs.content_margin_bottom = 3
+	rib.add_theme_stylebox_override("panel", rs)
+	rib.position = Vector2(14, 14)
+	rib.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var rl := UIK.label(KIND_LABEL[d.kind], 13, kc.lightened(0.35))
+	rib.add_child(rl)
+	b.add_child(rib)
+	# texto
 	var v := VBoxContainer.new()
-	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	v.add_theme_constant_override("separation", 6)
+	v.position = Vector2(20, 142)
+	v.size = Vector2(CARD.x - 40, 118)
+	v.add_theme_constant_override("separation", 4)
 	v.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hb.add_child(v)
-	v.add_child(UIK.label(KIND_LABEL[d.kind], 14, KIND_COLOR[d.kind], "sans", HORIZONTAL_ALIGNMENT_LEFT))
-	var nm := UIK.label(d.name, 22, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_LEFT)
+	b.add_child(v)
+	var nm := UIK.label(d.name, 22, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
+	UIK.outlined(nm, 6, Color(0, 0, 0, 0.8))
 	nm.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	v.add_child(nm)
-	var tx := UIK.rich(d.desc, 17, Color("#e8f2f2"))
+	var sep := ColorRect.new()
+	sep.color = Color(UIK.GOLD, 0.45)
+	sep.custom_minimum_size = Vector2(0, 1)
+	sep.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	v.add_child(sep)
+	var tx := UIK.rich("[center]%s[/center]" % d.desc, 17, Color("#ece6f6"))
 	tx.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	tx.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tx.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	v.add_child(tx)
+	# marco dorado (encima de todo)
+	var frame := Panel.new()
+	frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var fn := UIK.stylebox(Color(0, 0, 0, 0), Color("#a98a47"), 2, 14, 0)
+	var fh := UIK.stylebox(Color(0, 0, 0, 0), Color("#ffe9a0"), 4, 14, 0)
+	frame.add_theme_stylebox_override("panel", fn)
+	b.add_child(frame)
+	var inner := Panel.new()
+	inner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	inner.offset_left = 6
+	inner.offset_top = 6
+	inner.offset_right = -6
+	inner.offset_bottom = -6
+	inner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	inner.add_theme_stylebox_override("panel", UIK.stylebox(Color(0, 0, 0, 0), Color(UIK.GOLD, 0.25), 1, 10, 0))
+	b.add_child(inner)
+	var hov := func(on: bool):
+		frame.add_theme_stylebox_override("panel", fh if on else fn)
+		var tw := b.create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.tween_property(b, "scale", Vector2.ONE * (1.05 if on else 1.0), 0.18)
+		tw.tween_property(art, "position:y", -44.0 if on else -34.0, 0.25)
+		b.z_index = 5 if on else 0
+	b.mouse_entered.connect(func(): hov.call(true); Sfx.play("select_soft", 0.4))
+	b.mouse_exited.connect(func(): if not b.has_focus(): hov.call(false))
+	b.focus_entered.connect(func(): hov.call(true))
+	b.focus_exited.connect(func(): hov.call(false))
+	b.pressed.connect(func(): Sfx.play("click"))
 	return b
