@@ -6,7 +6,7 @@ signal clicked(view)
 
 const ENEMY_SCALE := 1.3
 ## Enemigos cuyo arte mira a la derecha: se voltean para que miren a la musa (izquierda).
-const FLIP := ["dockrat", "vinelasher"]
+const FLIP := ["dockrat", "vinelasher", "crab"]
 const MV := {"dockrat": "skitter", "minicrab": "skitter", "slime": "slither", "honeyslime": "slither", "crab": "stomp", "crabking": "stomp", "thornbeast": "stomp",
 	"mossgolem": "stomp", "chainwarden": "stomp", "beetle": "stomp", "royalguard": "stomp", "stag": "stomp", "ghostpirate": "hover", "jelly": "hover", "wasp": "hover",
 	"drone": "hover", "nurse": "hover", "queen": "hover", "hivemind": "hover", "tentacle": "sway", "sporecap": "sway", "vinelasher": "sway", "sprout": "sway",

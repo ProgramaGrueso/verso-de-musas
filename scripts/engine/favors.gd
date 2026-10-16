@@ -18,7 +18,7 @@ const DEFS := {
 	"vida_oro": {"kind": "trade", "name": "Vigor a cambio de oro", "desc": "Ganas 12 PV máx. Pierdes 60 de oro (o todo el que tengas)."},
 	"temple": {"kind": "trade", "name": "Temple a cambio de sangre", "desc": "Mejoras 2 cartas al azar de tu mazo. Pierdes 8 PV."},
 	"carta": {"kind": "card", "name": "Regalo de la Musa", "desc": "Añades a tu mazo una carta mejorada elegida al azar de tu musa."},
-	"balsamo": {"kind": "card", "name": "Bálsamo Verde", "desc": "Recuperas el 40% de tus PV máx."},
+	"balsamo": {"kind": "card", "name": "Bálsamo Verde", "desc": "Recuperas el 40% de tus PV máx. Solo se ofrece si te faltan PV."},
 	"pocion": {"kind": "card", "name": "Alquimia Ofrecida", "desc": "Recibes hasta 2 pociones aleatorias."},
 }
 
@@ -54,6 +54,8 @@ static func offer(G, ent: int = 0) -> Array:
 static func available(G, id: String) -> bool:
 	if id == "reliquia_duda":
 		return Eng.random_relic(G) != null
+	if id == "balsamo":
+		return G.hp <= G.maxHp * 0.75   # curar con la vida casi llena no sirve de nada
 	if id == "pocion":
 		return G.potions.has(null)
 	if id == "temple":
