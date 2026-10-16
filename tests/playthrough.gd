@@ -41,7 +41,7 @@ func _start_run() -> void:
 		G.hp = 4000
 	Meta.run = G
 	G.map = RunGen.gen_map(G)
-	Nav.map(true)
+	Nav.favor()
 
 
 var _log_t := 0.0
@@ -84,6 +84,7 @@ func _process(dt: float) -> void:
 		"reward": _bot_reward()
 		"shop": _bot_leave_shop()
 		"rest": _bot_rest()
+		"favor": _bot_favor()
 		"event": _bot_event()
 		"end": _bot_end()
 		"ending": _bot_ending()
@@ -217,6 +218,21 @@ func _bot_leave_shop() -> void:
 
 
 var _rest_id := 0
+
+
+var _favor_id := 0
+
+
+func _bot_favor() -> void:
+	if not _cool(0.5) or _favor_id == Main.I.screen.get_instance_id():
+		return
+	_favor_id = Main.I.screen.get_instance_id()
+	var all := []
+	_find(Main.I.screen, "Button", all)
+	var opts: Array = all.filter(func(b): return not b.disabled and b.get_child_count() > 0)
+	print("  favor: %d opciones" % opts.size())
+	if not opts.is_empty():
+		opts[rng.randi() % opts.size()].pressed.emit()
 
 
 func _bot_rest() -> void:

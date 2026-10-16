@@ -129,6 +129,9 @@ func update_top() -> void:
 	_tb_gold.text = "%d" % G.gold
 	var act: Dictionary = DB.acts[G.act - 1]
 	_tb_act.text = "%s · %s" % [act.sub, act.name]
+	var fv := Favors.active(G)
+	if not fv.is_empty():
+		_tb_act.text += "  [%s %s]" % [fv.icon, fv.name]
 	_tb_deck_n.text = str(G.deck.size())
 	# reliquias (bajo la cabecera)
 	for c in _tb_relics.get_children():

@@ -14,6 +14,9 @@ static func map(announce: bool = false) -> void:
 	s.announce = announce
 	Main.I.set_screen(s, "map")
 
+static func favor() -> void:
+	Main.I.set_screen(FavorScreen.new(), "favor")
+
 static func combat(ids: Array, tier: String) -> void:
 	var s := CombatScreen.new()
 	s.ids = ids
@@ -65,10 +68,11 @@ static func node_done(was_boss: bool) -> void:
 		G.act += 1
 		G.pos = null
 		G.map = RunGen.gen_map(G)
+		Favors.expire(G)
 		if G.act == 3:
 			Meta.add("act3")
 		G.hp = G.maxHp   # se recupera por completo entre zonas
-		map(true)
+		favor()
 		return
 	map()
 

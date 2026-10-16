@@ -261,6 +261,7 @@ static func start_combat(G, ids: Array, opts: Dictionary = {}) -> Dictionary:
 	if DB.characters[G.char].has("osty"):
 		C.osty = DB.characters[G.char].osty.duplicate()
 	relic_hook(C, "onCombatStart")
+	Favors.on_combat_start(C)
 	if G.nm and nmods(G).wound:
 		add_cards(C, "wound", 1, "draw")
 	for e in C.enemies:

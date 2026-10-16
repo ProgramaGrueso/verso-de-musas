@@ -112,7 +112,7 @@ func _start() -> void:
 	Meta.run = G
 	Meta.clear_save()
 	G.map = RunGen.gen_map(G)
-	Nav.map(true)
+	Nav.favor()
 
 
 func _render(animate: bool) -> void:
