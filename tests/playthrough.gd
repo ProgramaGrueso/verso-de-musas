@@ -40,7 +40,7 @@ func _start_run() -> void:
 		G.maxHp = 4000
 		G.hp = 4000
 	Meta.run = G
-	G.map = RunGen.gen_map(G)
+	G.map = RunGen.gen_map_game(G)
 	Nav.favor()
 
 

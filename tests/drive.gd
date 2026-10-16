@@ -24,7 +24,7 @@ func _ready() -> void:
 	out_dir = args[1] if args.size() > 1 else "/tmp"
 	if scenario == "menusave":   # menú con partida guardada
 		var G0 := Eng.new_run("zafiro", {"seed": 1})
-		G0.map = RunGen.gen_map(G0)
+		G0.map = RunGen.gen_map_game(G0)
 		Meta.save_run(G0)
 	main = load("res://scenes/main.tscn").instantiate()
 	add_child(main)
@@ -38,12 +38,31 @@ func _ready() -> void:
 	if scenario == "favor":
 		var Gf := Eng.new_run("zafiro", {"seed": 42})
 		Meta.run = Gf
-		Gf.map = RunGen.gen_map(Gf)
+		Gf.map = RunGen.gen_map_game(Gf)
 		for a in [1, 2, 3, 4, 5, 6]:
 			Gf.act = 1 + a % 3
 			Nav.favor()
 			await wait(0.8)
 			await shot("favor_%d" % a)
+		get_tree().quit()
+		return
+	if scenario == "mapview":
+		var Gm := Eng.new_run("zafiro", {"seed": 7})
+		Meta.run = Gm
+		Gm.act = int(args[2]) if args.size() > 2 else 1
+		Gm.map = RunGen.gen_map_game(Gm)
+		# avanza 3 salas para ver caminos recorridos
+		for i in 3:
+			var nx: Array = RunGen.next_nodes(Gm)
+			Gm.pos = nx[0]
+			nx[0].visited = true
+		Nav.map()
+		await wait(0.8)
+		var sc = Main.I.screen._sc
+		for y in [2480, 1500, 600, 0]:
+			sc.scroll_vertical = y
+			await wait(0.3)
+			await shot("map_%d" % y)
 		get_tree().quit()
 		return
 	if scenario == "keys":
@@ -62,7 +81,7 @@ func _ready() -> void:
 	TitleScreen.last_char = ch
 	var G := Eng.new_run(ch, {"seed": 42})
 	Meta.run = G
-	G.map = RunGen.gen_map(G)
+	G.map = RunGen.gen_map_game(G)
 	Nav.map(true)
 	await wait(1.2)
 	await shot("03_map")
@@ -102,7 +121,7 @@ func screens() -> void:
 	var G := Eng.new_run("claudia", {"seed": 7})
 	Meta.run = G
 	TitleScreen.last_char = "claudia"
-	G.map = RunGen.gen_map(G)
+	G.map = RunGen.gen_map_game(G)
 	G.gold = 400
 	G.potions[0] = "fuego"
 	G.potions[1] = "escudo"
@@ -188,7 +207,7 @@ func drag_test(args: Array) -> void:
 	var ch: String = args[2] if args.size() > 2 else "zafiro"
 	var G := Eng.new_run(ch, {"seed": 42})
 	Meta.run = G
-	G.map = RunGen.gen_map(G)
+	G.map = RunGen.gen_map_game(G)
 	Nav.combat(["dockrat", "jelly", "crab"], "normal")
 	await wait(2.0)
 	var cs: CombatScreen = main.screen
@@ -254,7 +273,7 @@ func key(k: int) -> void:
 func keys_test() -> void:
 	var G := Eng.new_run("lia", {"seed": 5})
 	Meta.run = G
-	G.map = RunGen.gen_map(G)
+	G.map = RunGen.gen_map_game(G)
 	G.potions[0] = "fuego"
 	Nav.combat(["dockrat", "jelly", "crab"], "normal")
 	await wait(2.0)

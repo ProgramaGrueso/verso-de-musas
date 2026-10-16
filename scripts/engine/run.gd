@@ -85,6 +85,153 @@ static func gen_map(G) -> Dictionary:
 	return {"rows": rows, "boss": boss}
 
 
+# ---------- Mapa de juego (más amplio y ordenado que el del web) ----------
+## 8 filas de 2-4 salas + jefe. Las conexiones son monótonas (nunca se cruzan) y se garantiza
+## 1-2 tiendas, 1-2 élites, 2-3 eventos, una hoguera intermedia y hogueras antes del jefe.
+const GROWS := 8
+
+
+static func gen_map_game(G) -> Dictionary:
+	var rows := []
+	for r in GROWS:
+		var n: int = 3 if r == 0 else Eng.pick(G, [2, 3, 3, 4])
+		var cols: Array = Eng.shuffle(G, [0, 1, 2, 3]).slice(0, n)
+		cols.sort()
+		var row := []
+		for c in cols:
+			row.append({"r": r, "c": c, "type": "combat", "next": [], "visited": false})
+		rows.append(row)
+	var boss := {"r": GROWS, "c": 1.5, "type": "boss", "next": [], "visited": false}
+	# conexiones monótonas: recorrido en paralelo por ambas filas, sin cruces
+	for r in GROWS - 1:
+		var A: Array = rows[r]
+		var B: Array = rows[r + 1]
+		var i := 0
+		var j := 0
+		A[0].next.append(B[0])
+		while i < A.size() - 1 or j < B.size() - 1:
+			var can_i := i < A.size() - 1
+			var can_j := j < B.size() - 1
+			var mv := 0   # 0 = ambos, 1 = solo i, 2 = solo j
+			if can_i and can_j:
+				var t := Eng.rnd(G)
+				mv = 0 if t < 0.34 else (1 if t < 0.67 else 2)
+			elif can_i:
+				mv = 1
+			else:
+				mv = 2
+			if mv != 2:
+				i += 1
+			if mv != 1:
+				j += 1
+			if not _has_node(A[i].next, B[j]):
+				A[i].next.append(B[j])
+	for a in rows[GROWS - 1]:
+		a.next.append(boss)
+	_assign_types(G, rows)
+	return {"rows": rows, "boss": boss}
+
+
+static func _assign_types(G, rows: Array) -> void:
+	var last := GROWS - 1
+	for nd in rows[last]:
+		nd.type = "rest"
+	var pick_nodes := func(rr: Array, k: int, t: String, avoid: Array) -> void:
+		for _i in k:
+			var cand := []
+			for r in rr:
+				for nd in rows[r]:
+					if nd.type == "combat" and _ok_type(rows, nd, t):
+						cand.append(nd)
+			if not cand.is_empty():
+				Eng.pick(G, cand).type = t
+	pick_nodes.call([3, 4], 1, "rest", [])
+	pick_nodes.call([3, 4, 5, 6], Eng.rint(G, 1, 2), "elite", [])
+	_place_shops(G, rows, 2 if Eng.rnd(G) < 0.7 else 1)
+	pick_nodes.call([1, 2, 3, 4, 5, 6], Eng.rint(G, 2, 3), "event", [])
+
+
+## Coloca las tiendas donde más caminos cubren (así casi ningún trayecto se queda sin tienda).
+static func _place_shops(G, rows: Array, count: int) -> void:
+	for _k in count:
+		# caminos que aún NO pasan por ninguna tienda, hasta cada sala y desde cada sala
+		var to_boss := {}
+		for r in range(GROWS - 1, -1, -1):
+			for nd in rows[r]:
+				var w := 0
+				for m in nd.next:
+					w += 1 if m.type == "boss" else to_boss["%d_%d" % [m.r, m.c]]
+				to_boss["%d_%d" % [nd.r, nd.c]] = 0 if nd.type == "shop" else w
+		var from_start := {}
+		for r in GROWS:
+			for nd in rows[r]:
+				var key := "%d_%d" % [nd.r, nd.c]
+				if r == 0:
+					from_start[key] = 1
+				var f: int = from_start.get(key, 0)
+				if nd.type == "shop":
+					f = 0
+				for m in nd.next:
+					if m.type != "boss":
+						var mk := "%d_%d" % [m.r, m.c]
+						from_start[mk] = from_start.get(mk, 0) + f
+		var best := []
+		var best_w := -1
+		for r in [2, 3, 4, 5]:
+			for nd in rows[r]:
+				if nd.type != "combat" or not _ok_type(rows, nd, "shop"):
+					continue
+				var key := "%d_%d" % [nd.r, nd.c]
+				var w: int = from_start.get(key, 0) * to_boss[key]
+				if w > best_w:
+					best_w = w
+					best = [nd]
+				elif w == best_w:
+					best.append(nd)
+		if best.is_empty():
+			return
+		Eng.pick(G, best).type = "shop"
+
+
+## Un tipo especial no puede repetirse en salas contiguas (ni en la misma fila pegadas).
+static func _ok_type(rows: Array, nd: Dictionary, t: String) -> bool:
+	if t == "combat":
+		return true
+	for row in rows:
+		for o in row:
+			if o.type == t and (_has_node(o.next, nd) or _has_node(nd.next, o)):
+				return false
+	return true
+
+
+## Devuelve null si todo camino hasta el jefe pasa por una sala `t`; si no, los nodos de un camino sin ella.
+static func _path_without(rows: Array, r: int, t: String):
+	var memo := {}
+	var walk := func(nd, self_ref) -> Variant:
+		if nd.type == "boss":
+			return []
+		var key := "%d_%d" % [nd.r, nd.c]
+		if memo.has(key):
+			return memo[key]
+		var res = null
+		if nd.type != t:
+			if nd.next.is_empty():
+				res = [nd]
+			else:
+				for m in nd.next:
+					var sub = self_ref.call(m, self_ref)
+					if sub != null:
+						res = [nd] + sub
+						break
+		memo[key] = res
+		return res
+	for nd in rows[r]:
+		var p = walk.call(nd, walk)
+		if p != null:
+			return p
+	return null
+
+
 static func _w(G, table: Array) -> String:
 	var tot := 0
 	for x in table:

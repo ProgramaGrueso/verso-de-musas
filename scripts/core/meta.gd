@@ -208,7 +208,7 @@ func load_run():
 		for n in row:
 			cells.append({"r": n.r, "c": n.c, "type": n.type, "visited": n.visited, "next": []})
 		rows.append(cells)
-	var boss := {"r": RunGen.ROWS, "c": 1.5, "type": "boss", "next": [], "visited": G.map.boss.visited}
+	var boss := {"r": G.map.rows.size(), "c": 1.5, "type": "boss", "next": [], "visited": G.map.boss.visited}
 	for r in G.map.rows.size():
 		for i in G.map.rows[r].size():
 			for x in G.map.rows[r][i].next:

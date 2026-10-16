@@ -111,7 +111,7 @@ func _start() -> void:
 	var G := Eng.new_run(pick, {"easy": easy, "nm": nm})
 	Meta.run = G
 	Meta.clear_save()
-	G.map = RunGen.gen_map(G)
+	G.map = RunGen.gen_map_game(G)
 	Nav.favor()
 
 

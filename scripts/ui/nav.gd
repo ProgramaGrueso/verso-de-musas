@@ -67,7 +67,7 @@ static func node_done(was_boss: bool) -> void:
 			return
 		G.act += 1
 		G.pos = null
-		G.map = RunGen.gen_map(G)
+		G.map = RunGen.gen_map_game(G)
 		Favors.expire(G)
 		if G.act == 3:
 			Meta.add("act3")

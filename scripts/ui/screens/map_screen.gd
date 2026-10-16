@@ -2,7 +2,9 @@ class_name MapScreen
 extends Control
 ## Mapa de la zona: grafo de salas con camino punteado y desplazamiento vertical.
 
-const MAP_H := 2300
+const MAP_H := 2480
+const ROW_GAP := 250.0
+const NODE_COL := {"combat": Color("#7f6ab8"), "elite": Color("#d8404c"), "event": Color("#4fa3c7"), "shop": Color("#e0b84a"), "rest": Color("#e08a3c"), "boss": Color("#ff5a6a")}
 const NODE_NAME := {"combat": "Combate", "elite": "Élite", "event": "Evento", "shop": "Tienda", "rest": "Hoguera", "boss": "Jefe"}
 const NODE_DESC := {
 	"combat": "Un combate normal. Premio: oro, carta y a veces una poción.",
@@ -24,8 +26,11 @@ var _drag_top := 0
 
 func _node_pos(n: Dictionary) -> Vector2:
 	if n.type == "boss":
-		return Vector2(640, 190)
-	return Vector2(230 + (float(n.c) / 3.0) * 820, MAP_H - 260 - (float(n.r) / (RunGen.ROWS - 1)) * (MAP_H - 760))
+		return Vector2(640, 230)
+	# retícula limpia con una mínima variación fija por sala (sin aleatoriedad en pantalla)
+	var jx := fposmod(n.c * 37.0 + n.r * 53.0, 28.0) - 14.0
+	var jy := fposmod(n.c * 23.0 + n.r * 71.0, 24.0) - 12.0
+	return Vector2(255 + float(n.c) * 257.0 + jx, MAP_H - 300.0 - float(n.r) * ROW_GAP + jy)
 
 
 func _ready() -> void:
@@ -56,6 +61,21 @@ func _ready() -> void:
 		t.size = Vector2(1280, MAP_H)
 		t.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		inner.add_child(t)
+	# velo oscuro + viñeta: el fondo acompaña, los nodos mandan
+	var veil := ColorRect.new()
+	veil.color = Color(0.02, 0.02, 0.05, 0.62)
+	veil.size = Vector2(1280, MAP_H)
+	veil.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	inner.add_child(veil)
+	for side in [0, 1]:
+		var vg := TextureRect.new()
+		vg.texture = UIK.grad_tex([[0.0, Color(0.02, 0.02, 0.05, 0.85 if side == 0 else 0.0)], [1.0, Color(0.02, 0.02, 0.05, 0.0 if side == 0 else 0.85)]], true)
+		vg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		vg.stretch_mode = TextureRect.STRETCH_SCALE
+		vg.size = Vector2(260, MAP_H)
+		vg.position = Vector2(0 if side == 0 else 1020, 0)
+		vg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		inner.add_child(vg)
 	var paths := MapPaths.new()
 	paths.size = Vector2(1280, MAP_H)
 	paths.screen = self
@@ -66,7 +86,7 @@ func _ready() -> void:
 	# inicio
 	var st := UIK.label("Inicio del ascenso", 20, UIK.GOLD, "bold", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(st, 6)
-	st.position = Vector2(440, MAP_H - 60)
+	st.position = Vector2(440, MAP_H - 70)
 	st.size = Vector2(400, 30)
 	inner.add_child(st)
 	var all := []
@@ -75,7 +95,14 @@ func _ready() -> void:
 	all.append(G.map.boss)
 	for n in all:
 		_add_node(inner, n)
-	# cabecera
+	# cabecera (con un velo propio para que nunca choque con los caminos)
+	var scrim := TextureRect.new()
+	scrim.texture = UIK.grad_tex([[0.0, Color(0.02, 0.02, 0.05, 0.92)], [1.0, Color(0.02, 0.02, 0.05, 0.0)]])
+	scrim.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	scrim.stretch_mode = TextureRect.STRETCH_SCALE
+	scrim.size = Vector2(1280, 150)
+	scrim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(scrim)
 	var act: Dictionary = DB.acts[G.act - 1]
 	var head := VBoxContainer.new()
 	head.position = Vector2(0, 54)
@@ -99,7 +126,7 @@ func _ready() -> void:
 		nav.add_child(b)
 	add_child(nav)
 	var leg := VBoxContainer.new()
-	leg.position = Vector2(14, 560)
+	leg.position = Vector2(14, 520)
 	for k in NODE_NAME.keys():
 		var l := Icons.with_text("node", k, NODE_NAME[k], 24, 16, Color.WHITE)
 		UIK.outlined(l.get_node("Text"), 5)
@@ -117,54 +144,57 @@ func _add_node(inner: Control, n: Dictionary) -> void:
 	var p := _node_pos(n)
 	var can := _avail.any(func(x): return is_same(x, n))
 	var here: bool = G.pos != null and is_same(G.pos, n)
+	var big: bool = n.type == "boss"
+	var sz := 112.0 if big else (84.0 if n.type == "elite" else 76.0)
+	var half := sz / 2.0
 	var b := Button.new()
-	b.size = Vector2(68, 68)
-	b.position = p - Vector2(34, 34)
-	b.pivot_offset = Vector2(34, 34)
+	b.size = Vector2(sz, sz)
+	b.position = p - Vector2(half, half)
+	b.pivot_offset = Vector2(half, half)
 	b.icon = Icons.tex("node", n.type)
 	b.expand_icon = true
 	b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	b.add_theme_constant_override("icon_max_width", 46)
-	b.add_theme_color_override("icon_disabled_color", Color.WHITE)
-	b.add_theme_color_override("icon_hover_color", Color.WHITE)
-	b.add_theme_color_override("icon_pressed_color", Color.WHITE)
-	b.add_theme_color_override("icon_focus_color", Color.WHITE)
+	b.add_theme_constant_override("icon_max_width", int(sz * 0.74))
+	for k in ["disabled", "hover", "pressed", "focus"]:
+		b.add_theme_color_override("icon_%s_color" % k, Color.WHITE)
 	b.focus_mode = Control.FOCUS_ALL
-	var col: Color = {"combat": Color("#3a2e5c"), "elite": Color("#5c2430"), "event": Color("#2e4a5c"), "shop": Color("#5c4a1e"), "rest": Color("#5c3a1e"), "boss": Color("#6a1f2d")}[n.type]
-	var border := UIK.GOLD if can else (Color("#8a7fb0") if not n.visited else Color("#5a8a5a"))
-	var sb := UIK.stylebox(col, border, 4, 34, 10 if can else 4)
-	var sbh := UIK.stylebox(col.lightened(0.2), Color.WHITE, 4, 34, 14)
+	var tc: Color = NODE_COL[n.type]
+	var fill := Color(tc.darkened(0.78), 0.96)
+	var ring := Color("#ffe08a") if can else (Color("#58b868") if n.visited else Color(tc, 0.55))
+	var sb := UIK.stylebox(fill, ring, 4 if can else 3, int(half), 16 if can else 5)
+	sb.shadow_color = Color(Color("#ffd86a") if can else Color.BLACK, 0.55 if can else 0.6)
+	var sbh := UIK.stylebox(fill.lightened(0.18), Color.WHITE, 5, int(half), 22)
+	sbh.shadow_color = Color("#ffe9a8", 0.75)
 	for st in ["normal", "disabled", "pressed", "focus"]:
 		b.add_theme_stylebox_override(st, sb)
 	b.add_theme_stylebox_override("hover", sbh if can else sb)
-	if n.type == "boss":
-		b.size = Vector2(92, 92)
-		b.position = p - Vector2(46, 46)
-		b.pivot_offset = Vector2(46, 46)
-		b.add_theme_constant_override("icon_max_width", 64)
 	if n.visited and not here:
-		b.modulate = Color(0.6, 0.65, 0.6)
+		b.modulate = Color(0.62, 0.7, 0.64)
+	elif not can and not here:
+		b.modulate = Color(0.86, 0.86, 0.92)
 	b.disabled = not can
 	if can:
 		var tw := b.create_tween().set_loops()
-		tw.tween_property(b, "scale", Vector2(1.1, 1.1), 0.6).set_trans(Tween.TRANS_SINE)
-		tw.tween_property(b, "scale", Vector2.ONE, 0.6).set_trans(Tween.TRANS_SINE)
+		tw.tween_property(b, "scale", Vector2(1.08, 1.08), 0.7).set_trans(Tween.TRANS_SINE)
+		tw.tween_property(b, "scale", Vector2.ONE, 0.7).set_trans(Tween.TRANS_SINE)
 		b.pressed.connect(func(): Nav.enter_node(n))
 	b.mouse_filter = Control.MOUSE_FILTER_STOP
 	UIK.tip(b, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [NODE_NAME[n.type], NODE_DESC[n.type]])
 	inner.add_child(b)
-	var lab := UIK.label(NODE_NAME[n.type], 15, Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_CENTER)
-	UIK.outlined(lab, 5)
-	lab.position = Vector2(p.x - 50, p.y + (48 if n.type != "boss" else 58))
-	lab.size = Vector2(100, 20)
-	inner.add_child(lab)
+	if can or big:
+		var lab := UIK.label(NODE_NAME[n.type], 16, UIK.GOLD if can else Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_CENTER)
+		UIK.outlined(lab, 6)
+		lab.position = Vector2(p.x - 60, p.y + half + 4)
+		lab.size = Vector2(120, 22)
+		lab.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		inner.add_child(lab)
 	if here:
 		var you := TextureRect.new()
 		you.texture = UIK.tex("res://assets/ui/%s_icon.png" % G.char)
 		you.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		you.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		you.size = Vector2(56, 56)
-		you.position = p + Vector2(-28, -92)
+		you.position = p + Vector2(-28, -half - 66)
 		you.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var yb := UIK.stylebox(Color(0, 0, 0, 0), UIK.GOLD, 3, 28, 0)
 		var fr := Panel.new()
@@ -227,48 +257,46 @@ class MapPaths extends Control:
 	var G
 	var avail: Array = []
 
-	func _curve(a: Vector2, b: Vector2) -> PackedVector2Array:
-		var mx := (a.x + b.x) / 2.0
-		var my := (a.y + b.y) / 2.0
-		var off := fposmod(a.x * 7.0 + b.y * 3.0, 60.0) - 30.0
-		var c := Vector2(mx + off, my)
+	## Bézier cúbica con tangentes verticales (curva en S suave), recortada en el borde de cada sala.
+	func _curve(a: Vector2, b: Vector2, ra: float, rb: float) -> PackedVector2Array:
+		var dy := (b.y - a.y) * 0.5
+		var c1 := Vector2(a.x, a.y + dy)
+		var c2 := Vector2(b.x, b.y - dy)
 		var pts := PackedVector2Array()
-		for i in 25:
-			var t := i / 24.0
-			pts.append(a.lerp(c, t).lerp(c.lerp(b, t), t))
+		for i in 41:
+			var t := i / 40.0
+			var u := 1.0 - t
+			var pt := u * u * u * a + 3.0 * u * u * t * c1 + 3.0 * u * t * t * c2 + t * t * t * b
+			if pt.distance_to(a) >= ra and pt.distance_to(b) >= rb:
+				pts.append(pt)
 		return pts
 
-	func _stroke(pts: PackedVector2Array, col: Color, dotted: bool, w: float) -> void:
-		draw_polyline(pts, Color(0, 0, 0, 0.66), 18.0, true)
-		if not dotted:
-			draw_polyline(pts, col, w, true)
+	func _stroke(pts: PackedVector2Array, col: Color, w: float, glow: bool = false) -> void:
+		if pts.size() < 2:
 			return
-		# puntos cada ~15 px a lo largo de la curva
-		var acc := 0.0
-		for i in range(1, pts.size()):
-			var seg := pts[i - 1].distance_to(pts[i])
-			var steps := maxi(1, int(seg / 4.0))
-			for s in steps:
-				var p := pts[i - 1].lerp(pts[i], float(s) / steps)
-				acc += seg / steps
-				if acc >= 15.0:
-					acc = 0.0
-					draw_circle(p, 4.0, col)
+		draw_polyline(pts, Color(0, 0, 0, 0.55), w + 7.0, true)
+		if glow:
+			draw_polyline(pts, Color(col, 0.28), w + 8.0, true)
+		draw_polyline(pts, col, w, true)
+
+	func _r(n: Dictionary) -> float:
+		return 62.0 if n.type == "boss" else (46.0 if n.type == "elite" else 42.0)
 
 	func _draw() -> void:
 		var all := []
 		for row in G.map.rows:
 			all.append_array(row)
 		all.append(G.map.boss)
+		var start := Vector2(640, MapScreen.MAP_H - 120)
 		for sp in G.map.rows[0]:
-			var a := Vector2(640, MapScreen.MAP_H - 70)
 			var b: Vector2 = screen._node_pos(sp)
-			_stroke(_curve(a, b), Color("#f0cf7a") if G.pos != null else Color("#c9b98a"), G.pos == null, 6.0)
+			var open: bool = G.pos == null
+			_stroke(_curve(start, b, 8.0, _r(sp)), Color("#fff2b0") if open else Color("#f0cf7a"), 5.0 if open else 4.0, open)
 		for n in all:
 			for m in n.next:
 				var a2: Vector2 = screen._node_pos(n)
 				var b2: Vector2 = screen._node_pos(m)
 				var used: bool = n.visited and m.visited
 				var open: bool = G.pos != null and is_same(G.pos, n) and avail.any(func(x): return is_same(x, m))
-				var col := Color("#f0cf7a") if used else (Color("#fff2b0") if open else Color("#a89bd0", 0.75))
-				_stroke(_curve(a2, b2), col, not used, 7.0 if used else 6.0)
+				var col := Color("#f0cf7a") if used else (Color("#fff2b0") if open else Color("#c9c0ec", 0.5))
+				_stroke(_curve(a2, b2, _r(n), _r(m)), col, 5.0 if (used or open) else 3.0, open)
