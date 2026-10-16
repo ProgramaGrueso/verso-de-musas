@@ -1,0 +1,162 @@
+[
+ {
+  "kind": "image",
+  "name": "ficon_fuerza",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9200,
+  "strength": 0,
+  "prompt": "a clenched armored fist wreathed in red flame, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_egida",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9201,
+  "strength": 0,
+  "prompt": "an ornate round shield of silver and sapphire with a glowing rim, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_inspiracion",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9202,
+  "strength": 0,
+  "prompt": "an open ancient book releasing floating glowing cards and golden sparks, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_espinas",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9203,
+  "strength": 0,
+  "prompt": "a curled thorny rose vine with sharp glowing green thorns, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_agilidad",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9204,
+  "strength": 0,
+  "prompt": "a pair of dancing slippers with swirling ribbons of light, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_regen",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9205,
+  "strength": 0,
+  "prompt": "a glowing teal seashell pouring a healing stream of light, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_mal_de_ojo",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9206,
+  "strength": 0,
+  "prompt": "a cursed purple eye with a cracked pupil radiating dark mist, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_oro_botin",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9207,
+  "strength": 0,
+  "prompt": "an overflowing chest of gold coins glowing warmly, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_furia_pacto",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9208,
+  "strength": 0,
+  "prompt": "a jagged crimson sword wrapped in dark chains and flames, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_oro_sangre",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9209,
+  "strength": 0,
+  "prompt": "a golden goblet filled with blood dripping gold coins, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_reliquia_duda",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9210,
+  "strength": 0,
+  "prompt": "an ancient relic crown tangled in black smoke and whispering shadows, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_vida_oro",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9211,
+  "strength": 0,
+  "prompt": "an anatomical glowing heart made of gold with cracks of light, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_temple",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9212,
+  "strength": 0,
+  "prompt": "an anvil with a glowing hammer striking sparks, with a drop of blood, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_carta",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9213,
+  "strength": 0,
+  "prompt": "a single glowing tarot card with a golden muse silhouette floating above an open hand, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_balsamo",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9214,
+  "strength": 0,
+  "prompt": "a glass vial of luminous green healing elixir with leaves, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ },
+ {
+  "kind": "image",
+  "name": "ficon_pocion",
+  "lora": "karen_krea2.safetensors",
+  "w": 512,
+  "h": 512,
+  "seed": 9215,
+  "strength": 0,
+  "prompt": "two bubbling potion bottles, one blue one pink, glowing, square emblem icon, centered single symbolic object, dark fantasy painterly illustration, rich glowing colors, plain dark background, no text, no letters"
+ }
+]

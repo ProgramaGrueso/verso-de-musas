@@ -1422,6 +1422,7 @@ func _check_end() -> bool:
 func _finish_win() -> void:
 	for id in G.relics:
 		Relics.run(id, "onCombatEnd", G)
+	Favors.on_combat_end(G)
 	G.stats.fights += 1
 	var t := tier
 	C = {}

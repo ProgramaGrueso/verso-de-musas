@@ -1141,6 +1141,8 @@ static func combat_reward(G, tier: String) -> Dictionary:
 		rew.relic = random_relic(G)
 	if tier == "boss":
 		rew.bossRelics = boss_relics(G)
+	if Favors.is_active(G, "oro_botin"):
+		rew.gold = floori(rew.gold * 1.5 + 0.5)
 	var roll := rnd(G) < (0.4 if tier == "normal" else 0.6)
 	if roll and G.potions.has(null):
 		rew.potion = pick(G, DB.potions.keys())

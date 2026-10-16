@@ -75,7 +75,7 @@ func _ready() -> void:
 	row.position = Vector2(50, 440)
 	row.size = Vector2(1180, 200)
 	add_child(row)
-	var opts := Favors.offer(G).filter(func(i): return Favors.available(G, i))
+	var opts := Favors.offer(G, ei)
 	var btns := []
 	for id in opts:
 		var b := _card(id)
@@ -137,20 +137,40 @@ func _card(id: String) -> Button:
 	b.add_theme_stylebox_override("pressed", h)
 	b.mouse_entered.connect(func(): Sfx.play("select_soft", 0.4))
 	b.pressed.connect(func(): Sfx.play("click"))
+	var hb := HBoxContainer.new()
+	hb.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	hb.offset_left = 16
+	hb.offset_right = -16
+	hb.offset_top = 16
+	hb.offset_bottom = -16
+	hb.add_theme_constant_override("separation", 14)
+	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	b.add_child(hb)
+	# icono ilustrado
+	var frame := Panel.new()
+	frame.custom_minimum_size = Vector2(112, 112)
+	frame.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	frame.add_theme_stylebox_override("panel", UIK.stylebox(Color("#0c1418"), KIND_COLOR[d.kind], 2, 14, 0))
+	frame.clip_children = CanvasItem.CLIP_CHILDREN_AND_DRAW
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var tr := TextureRect.new()
+	tr.texture = UIK.tex(Favors.icon_path(id))
+	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	tr.size = Vector2(112, 112)
+	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.add_child(tr)
+	hb.add_child(frame)
 	var v := VBoxContainer.new()
-	v.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	v.offset_left = 20
-	v.offset_right = -20
-	v.offset_top = 18
-	v.offset_bottom = -14
-	v.add_theme_constant_override("separation", 8)
+	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	v.add_theme_constant_override("separation", 6)
 	v.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	b.add_child(v)
-	v.add_child(UIK.label(KIND_LABEL[d.kind], 15, KIND_COLOR[d.kind], "sans", HORIZONTAL_ALIGNMENT_CENTER))
-	var nm := UIK.label("%s  %s" % [d.icon, d.name], 24, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
+	hb.add_child(v)
+	v.add_child(UIK.label(KIND_LABEL[d.kind], 14, KIND_COLOR[d.kind], "sans", HORIZONTAL_ALIGNMENT_LEFT))
+	var nm := UIK.label(d.name, 22, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_LEFT)
 	nm.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	v.add_child(nm)
-	var tx := UIK.rich("[center]%s[/center]" % d.desc, 19, Color("#e8f2f2"))
+	var tx := UIK.rich(d.desc, 17, Color("#e8f2f2"))
 	tx.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	tx.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tx.mouse_filter = Control.MOUSE_FILTER_IGNORE
