@@ -1,5 +1,62 @@
 [
- {"kind":"image","name":"favor_1","w":1280,"h":720,"seed":9101,"strength":0,"prompt":"a majestic sea goddess spirit with flowing glowing teal hair rising from dark underwater ruins, arms open in blessing, bioluminescent light, dark fantasy painterly illustration, wide cinematic composition, figure centered in the upper half, dark empty lower third"},
- {"kind":"image","name":"favor_2","w":1280,"h":720,"seed":9102,"strength":0,"prompt":"an ancient spectral stag with a crown of glowing green antlers in a mystical overgrown forest, bestowing a blessing, dark fantasy painterly illustration, wide cinematic composition, creature centered in the upper half, dark empty lower third"},
- {"kind":"image","name":"favor_3","w":1280,"h":720,"seed":9103,"strength":0,"prompt":"a radiant golden angelic queen with six wings of amber light inside a honeycomb cathedral, offering a blessing with outstretched hand, dark fantasy painterly illustration, wide cinematic composition, figure centered in the upper half, dark empty lower third"}
+ {
+  "kind": "image",
+  "name": "favor_1",
+  "lora": "karen_krea2.safetensors",
+  "w": 1280,
+  "h": 720,
+  "seed": 9100,
+  "strength": 0,
+  "prompt": "a majestic sea goddess spirit with flowing luminous teal hair rising from dark flooded ruins, arms open in blessing, bioluminescent light, dark fantasy painterly digital illustration, wide cinematic 16:9 composition, single majestic figure centered in the upper half of the frame, dramatic rim light, deep dark empty space in the lower third, no text"
+ },
+ {
+  "kind": "image",
+  "name": "favor_2",
+  "lora": "karen_krea2.safetensors",
+  "w": 1280,
+  "h": 720,
+  "seed": 9101,
+  "strength": 0,
+  "prompt": "an ancient spectral stag with a huge crown of glowing green antlers standing in a mystical overgrown forest, bestowing a blessing, dark fantasy painterly digital illustration, wide cinematic 16:9 composition, single majestic figure centered in the upper half of the frame, dramatic rim light, deep dark empty space in the lower third, no text"
+ },
+ {
+  "kind": "image",
+  "name": "favor_3",
+  "lora": "karen_krea2.safetensors",
+  "w": 1280,
+  "h": 720,
+  "seed": 9102,
+  "strength": 0,
+  "prompt": "a radiant golden angelic queen with six wings of amber light inside a honeycomb cathedral, offering a blessing with an outstretched hand, dark fantasy painterly digital illustration, wide cinematic 16:9 composition, single majestic figure centered in the upper half of the frame, dramatic rim light, deep dark empty space in the lower third, no text"
+ },
+ {
+  "kind": "image",
+  "name": "favor_4",
+  "lora": "karen_krea2.safetensors",
+  "w": 1280,
+  "h": 720,
+  "seed": 9103,
+  "strength": 0,
+  "prompt": "a fallen angel with tattered black feathered wings and a cracked broken halo of pale light, kneeling gracefully amid drifting ash, offering a bargain with an open hand, dark fantasy painterly digital illustration, wide cinematic 16:9 composition, single majestic figure centered in the upper half of the frame, dramatic rim light, deep dark empty space in the lower third, no text"
+ },
+ {
+  "kind": "image",
+  "name": "favor_5",
+  "lora": "karen_krea2.safetensors",
+  "w": 1280,
+  "h": 720,
+  "seed": 9104,
+  "strength": 0,
+  "prompt": "an elegant crimson demon with curved horns and a courteous smile, wreathed in embers and floating contract scrolls, offering a pact with an open hand, dark fantasy painterly digital illustration, wide cinematic 16:9 composition, single majestic figure centered in the upper half of the frame, dramatic rim light, deep dark empty space in the lower third, no text"
+ },
+ {
+  "kind": "image",
+  "name": "favor_6",
+  "lora": "karen_krea2.safetensors",
+  "w": 1280,
+  "h": 720,
+  "seed": 9105,
+  "strength": 0,
+  "prompt": "an ethereal being of the violet moon, a veiled figure of silver mist and floating pale petals with a glowing crescent moon behind it, bestowing a blessing, dark fantasy painterly digital illustration, wide cinematic 16:9 composition, single majestic figure centered in the upper half of the frame, dramatic rim light, deep dark empty space in the lower third, no text"
+ }
 ]

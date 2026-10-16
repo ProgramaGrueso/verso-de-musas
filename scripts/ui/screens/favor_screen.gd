@@ -6,20 +6,37 @@ const KIND_LABEL := {"buff": "BENDICIÓN DEL ACTO", "trade": "PACTO", "card": "R
 const KIND_COLOR := {"buff": Color("#8bf0a4"), "trade": Color("#ff9a6b"), "card": Color("#9fd6dc")}
 
 
+## Seis entidades. La primera (la del inicio de la partida) es siempre la Dama de las Mareas; el resto se elige al azar.
 const ENTITY := [
 	{"name": "La Dama de las Mareas", "line": "«Los abismos recuerdan a quien los cruza. Toma mi favor, viajera.»", "color": Color("#4fd0d8")},
 	{"name": "El Ciervo Antiguo", "line": "«El bosque da y el bosque cobra. Elige lo que estés dispuesta a pagar.»", "color": Color("#8bf0a4")},
-	{"name": "La Reina Dorada", "line": "«Una última bendición antes del trono. No la desperdicies.»", "color": Color("#f0cf7a")},
+	{"name": "La Reina Dorada", "line": "«Una bendición antes del trono. No la desperdicies.»", "color": Color("#f0cf7a")},
+	{"name": "El Ángel Caído", "line": "«Caí por elegir. Te ofrezco lo mismo: elige, y paga.»", "color": Color("#c9c4d8")},
+	{"name": "El Demonio Cortés", "line": "«Un trato justo, querida. Yo pongo el poder; tú, el precio.»", "color": Color("#ff6b5a")},
+	{"name": "El Ente de la Luna Violeta", "line": "«Sueño con quienes aún no han caído. Acepta mi velo.»", "color": Color("#b58cff")},
 ]
+
+
+## Elige la entidad: la primera vez de la partida siempre la 0; después, una al azar distinta a la última.
+static func pick_entity(G) -> int:
+	if not G.has("entity"):
+		G["entity"] = 0
+	else:
+		var n := randi() % (ENTITY.size() - 1) + 1
+		if n == G.entity:
+			n = n % (ENTITY.size() - 1) + 1
+		G["entity"] = n
+	return G.entity
 
 
 func _ready() -> void:
 	var G = Meta.run
-	var ent: Dictionary = ENTITY[clampi(G.act - 1, 0, 2)]
+	var ei := pick_entity(G)
+	var ent: Dictionary = ENTITY[ei]
 	Sfx.music("rest", G.act)
 	add_child(UIK.backdrop(G.act))
 	# arte de la entidad que concede el favor (assets/bg/favor_<acto>.webp); si falta, un emblema luminoso
-	var art := UIK.tex("res://assets/bg/favor_%d.webp" % G.act)
+	var art := UIK.tex("res://assets/bg/favor_%d.webp" % (ei + 1))
 	if art != null:
 		var t := TextureRect.new()
 		t.texture = art
@@ -37,10 +54,10 @@ func _ready() -> void:
 	UIK.full_rect(fade)
 	fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(fade)
-	var title := UIK.label("Favor de las Musas", 40, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
+	var title := UIK.label("Favor de las Musas", 30, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_LEFT)
 	UIK.outlined(title, 8)
-	title.position = Vector2(0, 84)
-	title.size = Vector2(1280, 56)
+	title.position = Vector2(50, 96)
+	title.size = Vector2(500, 44)
 	add_child(title)
 	var who := UIK.label(ent.name, 24, ent.color, "title", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(who, 6)

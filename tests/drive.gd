@@ -39,8 +39,8 @@ func _ready() -> void:
 		var Gf := Eng.new_run("zafiro", {"seed": 42})
 		Meta.run = Gf
 		Gf.map = RunGen.gen_map(Gf)
-		for a in [1, 3]:
-			Gf.act = a
+		for a in [1, 2, 3, 4, 5, 6]:
+			Gf.act = 1 + a % 3
 			Nav.favor()
 			await wait(0.8)
 			await shot("favor_%d" % a)
