@@ -35,6 +35,17 @@ func _ready() -> void:
 			Meta.clear_save()
 		get_tree().quit()
 		return
+	if scenario == "favor":
+		var Gf := Eng.new_run("zafiro", {"seed": 42})
+		Meta.run = Gf
+		Gf.map = RunGen.gen_map(Gf)
+		for a in [1, 3]:
+			Gf.act = a
+			Nav.favor()
+			await wait(0.8)
+			await shot("favor_%d" % a)
+		get_tree().quit()
+		return
 	if scenario == "keys":
 		await keys_test()
 		return

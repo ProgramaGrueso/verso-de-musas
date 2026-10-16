@@ -267,6 +267,7 @@ static func start_combat(G, ids: Array, opts: Dictionary = {}) -> Dictionary:
 	for e in C.enemies:
 		choose_intent(C, e)
 	start_turn(C)
+	Favors.on_first_turn(C)
 	return C
 
 static func living(C) -> Array:

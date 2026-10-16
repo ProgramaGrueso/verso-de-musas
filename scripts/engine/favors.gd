@@ -77,7 +77,13 @@ static func on_combat_start(C) -> void:
 		return
 	match f.id:
 		"fuerza": Eng.add_status(C, C.pl, "strength", 1)
-		"egida": C.pl.block += 8
 		"inspiracion": C.firstTurnDraw += 2
 		"espinas": Eng.add_status(C, C.pl, "thorns", 3)
 		"agilidad": Eng.add_status(C, C.pl, "dexterity", 1)
+
+
+## Tras robar la mano inicial (start_turn borra el Bloqueo previo).
+static func on_first_turn(C) -> void:
+	var f = C.G.get("favor")
+	if f != null and f.id == "egida" and int(f.act) == C.G.act:
+		C.pl.block += 8

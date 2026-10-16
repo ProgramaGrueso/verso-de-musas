@@ -1,0 +1,5 @@
+[
+ {"kind":"image","name":"favor_1","w":1280,"h":720,"seed":9101,"strength":0,"prompt":"a majestic sea goddess spirit with flowing glowing teal hair rising from dark underwater ruins, arms open in blessing, bioluminescent light, dark fantasy painterly illustration, wide cinematic composition, figure centered in the upper half, dark empty lower third"},
+ {"kind":"image","name":"favor_2","w":1280,"h":720,"seed":9102,"strength":0,"prompt":"an ancient spectral stag with a crown of glowing green antlers in a mystical overgrown forest, bestowing a blessing, dark fantasy painterly illustration, wide cinematic composition, creature centered in the upper half, dark empty lower third"},
+ {"kind":"image","name":"favor_3","w":1280,"h":720,"seed":9103,"strength":0,"prompt":"a radiant golden angelic queen with six wings of amber light inside a honeycomb cathedral, offering a blessing with outstretched hand, dark fantasy painterly illustration, wide cinematic composition, figure centered in the upper half, dark empty lower third"}
+]
