@@ -24,6 +24,26 @@ func _ready() -> void:
 	Eng.meta_see_relic = see_relic
 	_load_meta()
 	_load_settings()
+	_setup_input_map()
+
+
+func _setup_input_map() -> void:
+	_ensure_joy_button("ui_accept", JOY_BUTTON_A)
+	_ensure_joy_button("ui_cancel", JOY_BUTTON_B)
+	_ensure_joy_button("ui_page_up", JOY_BUTTON_LEFT_SHOULDER)
+	_ensure_joy_button("ui_page_down", JOY_BUTTON_RIGHT_SHOULDER)
+
+
+func _ensure_joy_button(action: String, button: JoyButton) -> void:
+	if not InputMap.has_action(action):
+		InputMap.add_action(action)
+	for ev in InputMap.action_get_events(action):
+		if ev is InputEventJoypadButton and ev.button_index == button:
+			return
+	var b := InputEventJoypadButton.new()
+	b.button_index = button
+	b.device = -1
+	InputMap.action_add_event(action, b)
 
 
 func _process(dt: float) -> void:
@@ -58,6 +78,15 @@ func _load_meta() -> void:
 	if d is Dictionary:
 		for k in d.keys():
 			data[k] = d[k]
+	_sanitize_nm()
+
+
+## La Pesadilla de un personaje no puede superar sus victorias (cada victoria sube un solo nivel).
+func _sanitize_nm() -> void:
+	for c in data.nmBy.keys():
+		var cap: int = int(data.s.get("win_" + c, 0))
+		data.nmBy[c] = mini(int(data.nmBy[c]), cap)
+	_mark()
 
 
 func _load_settings() -> void:
@@ -159,12 +188,13 @@ func nm_unlocked(char: String = "") -> int:
 	return m
 
 
-func win_run(char: String, nm: int) -> void:
+func win_run(char: String, nm: int, easy: bool = false) -> void:
 	data.s.wins = data.s.get("wins", 0) + 1
 	data.s["win_" + char] = data.s.get("win_" + char, 0) + 1
 	if nm >= 1:
 		data.s.nm = maxi(data.s.get("nm", 0), nm)
-	data.nmBy[char] = maxi(data.nmBy.get(char, 0), mini(10, nm + 1))
+	if not easy:
+		data.nmBy[char] = maxi(data.nmBy.get(char, 0), mini(10, nm + 1))
 	_mark()
 	_check()
 

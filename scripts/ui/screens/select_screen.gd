@@ -93,7 +93,17 @@ func _ready() -> void:
 	bot.add_child(_go)
 	_render(false)
 	Sfx.music("menu", 1, TitleScreen.last_char if TitleScreen.last_char != "" else "zafiro")
+	for id in _avatars.keys():
+		var btn: Button = _avatars[id]
+		btn.focus_neighbor_bottom = _go.get_path()
+	_go.focus_neighbor_top = _avatars[pick].get_path()
+	_go.focus_neighbor_left = back.get_path()
+	back.focus_neighbor_right = _go.get_path()
 	_avatars[pick].grab_focus.call_deferred()
+
+
+func on_escape() -> void:
+	Nav.title()
 
 
 func _choose(id: String) -> void:

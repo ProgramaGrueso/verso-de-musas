@@ -18,6 +18,7 @@ const NODE_DESC := {
 var announce := false
 var _sc: ScrollContainer
 var _avail: Array = []
+var _avail_btns: Array[Button] = []
 var _G
 var _drag := false
 var _drag_y := 0.0
@@ -111,7 +112,7 @@ func _ready() -> void:
 	var t1 := UIK.label("%s: %s%s" % [act.sub, act.name, (" · Pesadilla %d" % G.nm) if G.get("nm", 0) else ""], 32, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(t1, 8)
 	head.add_child(t1)
-	var t2 := UIK.label("Arrastra o usa la rueda / las flechas para ver todo el camino", 15, Color("#d9d2ee"), "sans", HORIZONTAL_ALIGNMENT_CENTER)
+	var t2 := UIK.label("Arrastra o usa la rueda / stick derecho / flechas para ver el camino", 15, Color("#d9d2ee"), "sans", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(t2, 5)
 	head.add_child(t2)
 	add_child(head)
@@ -134,6 +135,13 @@ func _ready() -> void:
 	add_child(leg)
 	_sc.scroll_vertical = MAP_H
 	_focus.call_deferred(true)
+	if not _avail_btns.is_empty():
+		_avail_btns[0].grab_focus.call_deferred()
+		for i in _avail_btns.size():
+			var prev_btn = _avail_btns[(i - 1 + _avail_btns.size()) % _avail_btns.size()]
+			var next_btn = _avail_btns[(i + 1) % _avail_btns.size()]
+			_avail_btns[i].focus_neighbor_left = prev_btn.get_path()
+			_avail_btns[i].focus_neighbor_right = next_btn.get_path()
 	if announce:
 		Main.I.toast("%s: %s" % [act.sub, act.name])
 	UIK.fade_in(self, 0.3)
@@ -174,6 +182,12 @@ func _add_node(inner: Control, n: Dictionary) -> void:
 		b.modulate = Color(0.86, 0.86, 0.92)
 	b.disabled = not can
 	if can:
+		_avail_btns.append(b)
+		b.focus_entered.connect(func():
+			var target_y := int(maxf(0.0, p.y - 330.0))
+			var tw := create_tween()
+			tw.tween_property(_sc, "scroll_vertical", target_y, 0.35).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		)
 		var tw := b.create_tween().set_loops()
 		tw.tween_property(b, "scale", Vector2(1.08, 1.08), 0.7).set_trans(Tween.TRANS_SINE)
 		tw.tween_property(b, "scale", Vector2.ONE, 0.7).set_trans(Tween.TRANS_SINE)
@@ -250,6 +264,15 @@ func _input(ev: InputEvent) -> void:
 			KEY_DOWN: _scroll_by(160)
 			KEY_PAGEUP: _scroll_by(-520)
 			KEY_PAGEDOWN: _scroll_by(520)
+	elif ev is InputEventJoypadMotion:
+		if ev.axis == JOY_AXIS_RIGHT_Y and absf(ev.axis_value) > 0.15:
+			_sc.scroll_vertical += int(ev.axis_value * 14.0)
+	elif ev is InputEventJoypadButton and ev.pressed:
+		match ev.button_index:
+			JOY_BUTTON_LEFT_SHOULDER: _scroll_by(-280)
+			JOY_BUTTON_RIGHT_SHOULDER: _scroll_by(280)
+			JOY_BUTTON_DPAD_UP: _scroll_by(-160)
+			JOY_BUTTON_DPAD_DOWN: _scroll_by(160)
 
 
 class MapPaths extends Control:

@@ -61,6 +61,19 @@ func _render() -> void:
 	mid.add_child(_box("Reliquias", _items(_shop.relics, "relic")))
 	mid.add_child(_box("Pociones", _items(_shop.potions, "potion")))
 	_render_service(mid)
+	var leave := UIK.button("Salir de la tienda ➜", "big")
+	leave.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	leave.pressed.connect(func(): Nav.node_done(false))
+	_root.add_child(leave)
+	var first_focus: Control = null
+	for col in cards.get_children():
+		var cv = col.get_child(0)
+		if cv is CardView and cv.focus_mode != Control.FOCUS_NONE:
+			first_focus = cv
+			break
+	if first_focus == null:
+		first_focus = leave
+	first_focus.grab_focus.call_deferred()
 
 
 func _card_item(it: Dictionary, w: float) -> Control:
@@ -71,6 +84,7 @@ func _card_item(it: Dictionary, w: float) -> Control:
 	if true:
 		if it.sold:
 			cv.modulate = Color(1, 1, 1, 0.25)
+			cv.focus_mode = Control.FOCUS_NONE
 		else:
 			var item: Dictionary = it
 			cv.pressed.connect(func(_v):
@@ -115,10 +129,10 @@ func _render_service(mid: Control) -> void:
 	sv.add_child(rb)
 	sv.add_child(_price_tag(rm.price, G.gold))
 	mid.add_child(_box_wrap(sv))
-	var leave := UIK.button("Salir de la tienda ➜", "big")
-	leave.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	leave.pressed.connect(func(): Nav.node_done(false))
-	_root.add_child(leave)
+
+
+func on_escape() -> void:
+	Nav.node_done(false)
 
 
 func _box_wrap(inner: Control) -> Control:

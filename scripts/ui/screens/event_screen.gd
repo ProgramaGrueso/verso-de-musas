@@ -34,9 +34,12 @@ func _ready() -> void:
 	_opts.add_theme_constant_override("separation", 12)
 	col.add_child(_opts)
 	var ctx := EvCtx.new()
+	var first_opt: Button = null
 	for o in EventsLogic.options(G, ev.id):
 		var b := _banner(o.t, o.hint)
 		b.disabled = not o.ok
+		if first_opt == null and not b.disabled:
+			first_opt = b
 		var opt: Dictionary = o
 		b.pressed.connect(func():
 			if opt.has("fight"):
@@ -57,6 +60,8 @@ func _ready() -> void:
 			_opts.add_child(cb)
 			cb.grab_focus.call_deferred())
 		_opts.add_child(b)
+	if first_opt != null:
+		first_opt.grab_focus.call_deferred()
 	UIK.fade_in(self, 0.3)
 
 

@@ -70,6 +70,7 @@ func _build() -> void:
 	size = custom_minimum_size
 	pivot_offset = size / 2.0
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	focus_mode = Control.FOCUS_ALL
 	var h := size.y
 	var bg := Panel.new()
 	bg.add_theme_stylebox_override("panel", UIK.stylebox(Color("#1a1424"), Color("#1a1228"), int(3 * s), int(12 * s), 0))
@@ -177,6 +178,8 @@ func _build() -> void:
 	add_child(_num)
 	mouse_entered.connect(func(): hovered.emit(self, true))
 	mouse_exited.connect(func(): hovered.emit(self, false))
+	focus_entered.connect(_on_focus_entered)
+	focus_exited.connect(_on_focus_exited)
 	if show_tip:
 		UIK.tip(self, func(): return CardText.glossary_tip(_kws))
 	refresh(C)
@@ -209,15 +212,32 @@ func refresh(p_C = null) -> void:
 	_fit_text.call_deferred()
 
 
-func _apply_frame() -> void:
+func _apply_frame(focused: bool = false) -> void:
 	var d := Eng.card_def(inst)
 	var rc := Color(RAR_COL.get(d.rarity, "#9a94ad"))
 	var fs: StyleBoxFlat
-	if selected:
+	if selected or focused or has_focus():
 		fs = UIK.stylebox(Color(0, 0, 0, 0), Color.WHITE, int(5 * s), int(10 * s), 0)
 	else:
 		fs = UIK.stylebox(Color(0, 0, 0, 0), rc, int(3 * s), int(10 * s), 0)
 	_frame.add_theme_stylebox_override("panel", fs)
+
+
+func _on_focus_entered() -> void:
+	hovered.emit(self, true)
+	_apply_frame(true)
+	var tw := create_tween()
+	tw.tween_property(self, "scale", Vector2(1.08, 1.08), 0.1).set_trans(Tween.TRANS_SINE)
+	z_index = 50
+	Sfx.play("select_soft", 0.4)
+
+
+func _on_focus_exited() -> void:
+	hovered.emit(self, false)
+	_apply_frame(false)
+	var tw := create_tween()
+	tw.tween_property(self, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_SINE)
+	z_index = 0
 
 
 func set_selected(on: bool) -> void:
@@ -273,6 +293,16 @@ func set_state(p_playable: bool, p_afford: bool) -> void:
 
 
 func _gui_input(ev: InputEvent) -> void:
-	if ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT:
+	if ev is InputEventMouseButton:
+		var mb := ev as InputEventMouseButton
+		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
+			pressed.emit(self)
+			accept_event()
+	elif ev is InputEventJoypadButton:
+		var jb := ev as InputEventJoypadButton
+		if jb.pressed and jb.button_index == JOY_BUTTON_A:
+			pressed.emit(self)
+			accept_event()
+	elif ev.is_action_pressed("ui_accept"):
 		pressed.emit(self)
 		accept_event()

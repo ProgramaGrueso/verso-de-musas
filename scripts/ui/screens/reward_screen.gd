@@ -7,6 +7,7 @@ var tier := "normal"
 var _card_taken := false
 var _boss_taken := false
 var _list: VBoxContainer
+var _done_btn: Button
 
 
 func _ready() -> void:
@@ -42,9 +43,12 @@ func _ready() -> void:
 			var v := Dlg._center_col(o)
 			v.add_child(Dlg._title("Reliquia de jefe"))
 			var row := Dlg._row(14)
+			var first_b: Button = null
 			for id in rew.bossRelics:
 				var r: Dictionary = DB.relics[id]
 				var b := UIK.button(r.n, "", 24)
+				if first_b == null:
+					first_b = b
 				b.icon = Icons.tex("relic", id)
 				b.expand_icon = true
 				b.add_theme_constant_override("icon_max_width", 44)
@@ -60,6 +64,8 @@ func _ready() -> void:
 				b.pressed.connect(func(): Eng.add_relic(G, rid); Sfx.play("buff"); o.close(true))
 				row.add_child(cc)
 			v.add_child(row)
+			if first_b != null:
+				first_b.grab_focus.call_deferred()
 			var res = await o.done
 			if res == true:
 				_boss_taken = true
@@ -76,16 +82,20 @@ func _ready() -> void:
 			G.deck.append(Eng.make_card(G, pick[0].id))
 			_card_taken = true
 			Sfx.play("buff"))
-	var done := UIK.button("Continuar ➜", "big")
-	done.pressed.connect(func():
+	_done_btn = UIK.button("Continuar ➜", "big")
+	_done_btn.pressed.connect(func():
 		if not _card_taken and not await Dlg.confirm("¿Seguro que quieres continuar sin elegir una carta?"):
 			return
 		if not _boss_taken:
 			Main.I.toast("Elige una reliquia de jefe primero.")
 			return
 		Nav.node_done(tier == "boss"))
-	done.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	col.add_child(done)
+	_done_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	col.add_child(_done_btn)
+	if _list.get_child_count() > 0:
+		_list.get_child(0).grab_focus.call_deferred()
+	else:
+		_done_btn.grab_focus.call_deferred()
 	UIK.fade_in(self, 0.3)
 
 
@@ -123,5 +133,13 @@ func _item(icon: String, bb: String, fn: Callable) -> void:
 		if res != false:
 			b.disabled = true
 			b.modulate = Color(1, 1, 1, 0.6)
+			var found_next := false
+			for c in _list.get_children():
+				if c is Button and not c.disabled:
+					c.grab_focus.call_deferred()
+					found_next = true
+					break
+			if not found_next and _done_btn != null:
+				_done_btn.grab_focus.call_deferred()
 		Main.I.update_top())
 	_list.add_child(b)

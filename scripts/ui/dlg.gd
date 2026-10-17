@@ -27,8 +27,12 @@ class Overlay extends Control:
 		done.emit(result)
 		queue_free()
 
-	func _unhandled_key_input(ev: InputEvent) -> void:
-		if allow_esc and ev is InputEventKey and ev.pressed and not ev.echo and ev.keycode == KEY_ESCAPE:
+	func _unhandled_input(ev: InputEvent) -> void:
+		if not allow_esc:
+			return
+		var is_esc: bool = ev is InputEventKey and ev.pressed and not ev.echo and ev.keycode == KEY_ESCAPE
+		var is_joy: bool = ev is InputEventJoypadButton and ev.pressed and (ev.button_index in [JOY_BUTTON_B, JOY_BUTTON_BACK])
+		if is_esc or is_joy:
 			get_viewport().set_input_as_handled()
 			close(cancel_result)
 
@@ -160,6 +164,7 @@ static func view_cards(title: String, cards: Array, C = null) -> void:
 	b.pressed.connect(func(): o.close(null))
 	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	v.add_child(b)
+	b.grab_focus.call_deferred()
 	await o.done
 
 
@@ -202,6 +207,9 @@ static func pick_cards(opts: Dictionary) -> Array:
 	for cv in _find_cards(grid):
 		views[cv.inst.uid] = cv
 	v.add_child(grid)
+	var all_cards := _find_cards(grid)
+	if not all_cards.is_empty():
+		all_cards[0].grab_focus.call_deferred()
 	var row := _row(16)
 	ok.pressed.connect(func():
 		var chosen = opts.cards.filter(func(c): return c.uid in sel)
@@ -348,6 +356,7 @@ static func options() -> void:
 	col.add_child(row)
 	p.add_child(col)
 	v.add_child(p)
+	cl.grab_focus.call_deferred()
 	await o.done
 
 
@@ -362,6 +371,9 @@ Sube la torre superando 3 zonas. Elige tu camino en el mapa, derrota enemigos y 
 
 [b][color=#f0cf7a]Teclado[/color][/b]
 ← → eligen carta · ↑ ↓ cambian de enemigo · Enter o Espacio juegan · E termina el turno · Esc cancela. También 1–9 para elegir una carta. F11: pantalla completa.
+
+[b][color=#f0cf7a]Mando (Xbox / Gamepad)[/color][/b]
+Stick izquierdo / D-Pad: navegar cartas y menús · LB / RB: pasar cartas · A: jugar / confirmar · B: cancelar / volver · Y: terminar turno · X: mazo de robo · LT: poción · RT: descarte · Back / View: ver mazo · Start: menú de pausa.
 
 [b][color=#f0cf7a]Tus personajes[/color][/b]
 • [color=#ff8a93]Zafiro[/color]: Fuerza, Bloqueo y fuego. Sacrifica vida para golpear más fuerte.
@@ -396,10 +408,14 @@ static func pause_menu() -> void:
 	col.add_theme_constant_override("separation", 12)
 	col.custom_minimum_size = Vector2(340, 0)
 	col.add_child(_title("Pausa", 32))
-	var add := func(t: String, kind: String, fn: Callable):
+	var first_b: Button = null
+	var add := func(t: String, kind: String, fn: Callable) -> Button:
 		var b := UIK.button(t, kind)
 		b.pressed.connect(fn)
 		col.add_child(b)
+		if first_b == null:
+			first_b = b
+		return b
 	add.call("Seguir jugando", "green", func(): o.close(null))
 	add.call("Opciones", "", func(): Dlg.options())
 	add.call("Cómo jugar", "", func(): Dlg.help())
@@ -420,3 +436,5 @@ static func pause_menu() -> void:
 		Nav.game_over())
 	p.add_child(col)
 	v.add_child(p)
+	if first_b != null:
+		first_b.grab_focus.call_deferred()

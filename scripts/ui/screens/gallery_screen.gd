@@ -48,7 +48,12 @@ func _ready() -> void:
 	sc.add_child(grid)
 	for i in DB.lore.size():
 		grid.add_child(_tile(i))
+	back.grab_focus.call_deferred()
 	UIK.fade_in(self, 0.3)
+
+
+func on_escape() -> void:
+	Nav.map() if (Meta.run != null and from_run) else Nav.title()
 
 
 func _tile(i: int) -> Control:

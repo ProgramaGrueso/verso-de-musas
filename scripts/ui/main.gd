@@ -53,25 +53,108 @@ func _ready() -> void:
 	Nav.title()
 
 
+var _stick_h := 0.0
+var _stick_v := 0.0
+var _trigger_lt := false
+var _trigger_rt := false
+
+
 func _input(ev: InputEvent) -> void:
-	# Mando: en combate se traduce a las teclas del teclado (en menús Godot ya navega con ui_*)
-	if ev is InputEventJoypadButton and ev.pressed and current == "combat" and overlay_host.get_child_count() == 0:
-		var key := -1
-		match ev.button_index:
-			JOY_BUTTON_DPAD_LEFT: key = KEY_LEFT
-			JOY_BUTTON_DPAD_RIGHT: key = KEY_RIGHT
-			JOY_BUTTON_DPAD_UP: key = KEY_UP
-			JOY_BUTTON_DPAD_DOWN: key = KEY_DOWN
-			JOY_BUTTON_A: key = KEY_ENTER
-			JOY_BUTTON_B: key = KEY_ESCAPE
-			JOY_BUTTON_Y: key = KEY_E
-			JOY_BUTTON_START: key = KEY_ESCAPE
-		if key >= 0:
-			var k := InputEventKey.new()
-			k.keycode = key
-			k.pressed = true
-			Input.parse_input_event(k)
+	if ev is InputEventJoypadButton and ev.pressed:
+		if _handle_joypad_button(ev.button_index):
 			get_viewport().set_input_as_handled()
+			return
+	elif ev is InputEventJoypadMotion:
+		if _handle_joypad_motion(ev.axis, ev.axis_value):
+			get_viewport().set_input_as_handled()
+			return
+
+
+func _handle_joypad_button(btn: int) -> bool:
+	if overlay_host.get_child_count() > 0:
+		if btn in [JOY_BUTTON_B, JOY_BUTTON_BACK]:
+			var top_overlay = overlay_host.get_child(overlay_host.get_child_count() - 1)
+			if top_overlay is Dlg.Overlay and top_overlay.allow_esc:
+				top_overlay.close(top_overlay.cancel_result)
+				return true
+		elif btn == JOY_BUTTON_START:
+			var top_overlay = overlay_host.get_child(overlay_host.get_child_count() - 1)
+			if top_overlay is Dlg.Overlay and top_overlay.allow_esc:
+				top_overlay.close(top_overlay.cancel_result)
+				return true
+		return false
+
+	if btn == JOY_BUTTON_START:
+		if Meta.run != null and current in ["map", "combat", "reward", "shop", "rest", "event"]:
+			Dlg.pause_menu()
+			return true
+	elif btn == JOY_BUTTON_BACK:
+		if Meta.run != null and current in ["map", "combat", "reward", "shop", "rest", "event"]:
+			open_deck_dialog()
+			return true
+
+	if current == "combat" and screen is CombatScreen:
+		if (screen as CombatScreen).handle_gamepad_button(btn):
+			return true
+
+	if btn == JOY_BUTTON_B:
+		if screen != null and screen.has_method("on_escape"):
+			screen.on_escape()
+			return true
+		elif Meta.run != null and current in ["map", "reward", "shop", "rest", "event"]:
+			Dlg.pause_menu()
+			return true
+
+	return false
+
+
+func _handle_joypad_motion(axis: int, value: float) -> bool:
+	if overlay_host.get_child_count() > 0:
+		return false
+
+	if current == "combat" and screen is CombatScreen:
+		var cs := screen as CombatScreen
+		if axis == JOY_AXIS_TRIGGER_LEFT:
+			if value > 0.5 and not _trigger_lt:
+				_trigger_lt = true
+				return cs.handle_gamepad_trigger(true)
+			elif value < 0.2:
+				_trigger_lt = false
+		elif axis == JOY_AXIS_TRIGGER_RIGHT:
+			if value > 0.5 and not _trigger_rt:
+				_trigger_rt = true
+				return cs.handle_gamepad_trigger(false)
+			elif value < 0.2:
+				_trigger_rt = false
+		elif axis == JOY_AXIS_LEFT_X:
+			if value > 0.45 and _stick_h <= 0.0:
+				_stick_h = 1.0
+				cs.cycle_card(1)
+				return true
+			elif value < -0.45 and _stick_h >= 0.0:
+				_stick_h = -1.0
+				cs.cycle_card(-1)
+				return true
+			elif absf(value) < 0.25:
+				_stick_h = 0.0
+		elif axis == JOY_AXIS_LEFT_Y:
+			if value > 0.45 and _stick_v <= 0.0:
+				_stick_v = 1.0
+				cs.cycle_target(1)
+				return true
+			elif value < -0.45 and _stick_v >= 0.0:
+				_stick_v = -1.0
+				cs.cycle_target(-1)
+				return true
+			elif absf(value) < 0.25:
+				_stick_v = 0.0
+
+	return false
+
+
+func open_deck_dialog() -> void:
+	if Meta.run != null:
+		Dlg.view_cards("Tu mazo", _sorted_deck())
 
 
 func _unhandled_key_input(ev: InputEvent) -> void:

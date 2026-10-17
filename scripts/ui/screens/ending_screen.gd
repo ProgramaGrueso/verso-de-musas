@@ -94,12 +94,18 @@ func _mk_img() -> TextureRect:
 	return t
 
 
-func _unhandled_key_input(ev: InputEvent) -> void:
+func _unhandled_input(ev: InputEvent) -> void:
 	if ev is InputEventKey and ev.pressed and not ev.echo:
 		if ev.keycode in [KEY_SPACE, KEY_ENTER, KEY_RIGHT]:
 			get_viewport().set_input_as_handled()
 			_next()
 		elif ev.keycode == KEY_ESCAPE:
+			_finish()
+	elif ev is InputEventJoypadButton and ev.pressed:
+		if ev.button_index in [JOY_BUTTON_A, JOY_BUTTON_DPAD_RIGHT, JOY_BUTTON_START]:
+			get_viewport().set_input_as_handled()
+			_next()
+		elif ev.button_index == JOY_BUTTON_B:
 			_finish()
 
 

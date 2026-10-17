@@ -318,7 +318,7 @@ func _build_hud() -> void:
 	exhaust_btn.pressed.connect(func(): Dlg.view_cards("Cartas agotadas", C.exhaust, C))
 	ui_layer.add_child(exhaust_btn)
 	end_btn = Button.new()
-	end_btn.text = "Terminar turno"
+	end_btn.text = "Terminar turno (Y)"
 	end_btn.position = Vector2(1050, 480)
 	end_btn.custom_minimum_size = Vector2(220, 54)
 	end_btn.size = Vector2(220, 54)
@@ -806,11 +806,11 @@ func _update_tip() -> void:
 	if C.is_empty() or C.over != "" or busy:
 		t = ""
 	elif pending != null:
-		t = "Elige un enemigo para la poción (Esc para cancelar)" if pending.kind == "potion" else "Elige un enemigo: clic, o ←/→ y Enter (Esc para cancelar)"
+		t = "Elige enemigo: Stick / D-Pad y A / Enter (B / Esc cancela)" if pending.kind != "potion" else "Elige enemigo para la poción (B / Esc cancela)"
 	elif sel_uid >= 0:
-		t = "Haz clic otra vez en la carta para jugarla (Enter)" if Meta.settings.confirm else ""
+		t = "Pulsa A (o Enter) para jugar · Y: Terminar turno · LB/RB: Cartas" if Meta.settings.confirm else "Y: Terminar turno · LB/RB: Cartas"
 	else:
-		t = "Elige una carta de tu mano o arrástrala · cuesta energía"
+		t = "Elige carta con Stick / D-Pad / LB / RB · A: Seleccionar · Y: Terminar turno"
 	tipbar.text = t
 	tipbar.visible = t != ""
 
@@ -838,6 +838,7 @@ func _sync_hand() -> void:
 		var v: CardView = card_views.get(inst.uid)
 		if v == null:
 			v = CardView.create(inst, C, CARD_W)
+			v.focus_mode = Control.FOCUS_NONE
 			v.num_key = idx + 1 if idx < 9 else 0
 			v.pressed.connect(_on_card_press)
 			v.hovered.connect(_on_card_hover)
@@ -1192,12 +1193,128 @@ func _use_potion_now(slot: int, target) -> void:
 	_render_all()
 
 
+func cycle_card(dir: int) -> void:
+	if C.is_empty() or busy or C.over != "":
+		return
+	if pending != null:
+		cycle_target(dir)
+		return
+	if C.hand.is_empty():
+		return
+	var i := -1
+	for j in C.hand.size():
+		if C.hand[j].uid == sel_uid:
+			i = j
+	var j2: int
+	if i < 0:
+		j2 = 0
+	else:
+		j2 = clampi(i + dir, 0, C.hand.size() - 1)
+	var inst = C.hand[j2]
+	if inst != null:
+		_cancel_sel()
+		sel_uid = inst.uid
+		Sfx.play("select")
+		_sync_sel_visual()
+		_update_tip()
+
+
+func cycle_target(dir: int) -> void:
+	var lv := _living()
+	if lv.is_empty():
+		return
+	t_idx = (t_idx + dir + lv.size() * 4) % lv.size()
+	_hi_target()
+	Sfx.play("select")
+	Main.I.toast("Objetivo: " + lv[t_idx].name)
+
+
+func confirm_action() -> void:
+	if C.is_empty() or busy or C.over != "":
+		return
+	var lv := _living()
+	var inst2 = null
+	for c in C.hand:
+		if c.uid == sel_uid:
+			inst2 = c
+	if inst2 == null:
+		if not C.hand.is_empty():
+			sel_uid = C.hand[0].uid
+			Sfx.play("select")
+			_sync_sel_visual()
+			_update_tip()
+		return
+	if not Eng.can_play(C, inst2).ok:
+		Sfx.play("error")
+		return
+	var d := Eng.card_def(inst2)
+	var need_t := Eng.needs_target(d) and lv.size() > 1
+	if need_t and pending == null:
+		_start_targeting({"kind": "card", "uid": inst2.uid})
+		return
+	var t = lv[t_idx % lv.size()] if Eng.needs_target(d) else null
+	_cancel_sel()
+	_play_now(inst2, t)
+
+
+func use_potion_shortcut() -> void:
+	if busy or C.is_empty() or C.over != "" or pending != null:
+		return
+	var G = Meta.run
+	if G == null:
+		return
+	for i in G.potions.size():
+		if G.potions[i] != null:
+			_on_potion(i)
+			return
+	Main.I.toast("No tienes pociones disponibles.")
+
+
+func handle_gamepad_button(btn: int) -> bool:
+	if busy or C.is_empty() or C.over != "":
+		return false
+	match btn:
+		JOY_BUTTON_DPAD_LEFT, JOY_BUTTON_LEFT_SHOULDER:
+			cycle_card(-1)
+			return true
+		JOY_BUTTON_DPAD_RIGHT, JOY_BUTTON_RIGHT_SHOULDER:
+			cycle_card(1)
+			return true
+		JOY_BUTTON_DPAD_UP:
+			cycle_target(-1)
+			return true
+		JOY_BUTTON_DPAD_DOWN:
+			cycle_target(1)
+			return true
+		JOY_BUTTON_A:
+			confirm_action()
+			return true
+		JOY_BUTTON_B:
+			on_escape()
+			return true
+		JOY_BUTTON_Y:
+			_end_turn()
+			return true
+		JOY_BUTTON_X:
+			draw_btn.pressed.emit()
+			return true
+	return false
+
+
+func handle_gamepad_trigger(is_lt: bool) -> bool:
+	if is_lt:
+		use_potion_shortcut()
+		return true
+	else:
+		discard_btn.pressed.emit()
+		return true
+
+
 func _unhandled_key_input(ev: InputEvent) -> void:
 	if C.is_empty() or not (ev is InputEventKey) or not ev.pressed or ev.echo:
 		return
 	if Main.I.overlay_host.get_child_count() > 0 or busy or C.over != "":
 		return
-	var lv := _living()
 	var k: int = ev.keycode
 	if k >= KEY_1 and k <= KEY_9:
 		var idx := k - KEY_1
@@ -1205,61 +1322,26 @@ func _unhandled_key_input(ev: InputEvent) -> void:
 			_on_card_click(C.hand[idx])
 		get_viewport().set_input_as_handled()
 		return
-	if pending != null and k in [KEY_RIGHT, KEY_LEFT, KEY_UP, KEY_DOWN, KEY_TAB]:
-		if lv.is_empty():
-			return
-		t_idx = (t_idx + (1 if k in [KEY_RIGHT, KEY_DOWN, KEY_TAB] else -1) + lv.size() * 4) % lv.size()
-		_hi_target()
-		Sfx.play("select")
-		Main.I.toast("Objetivo: " + lv[t_idx].name)
+	if k == KEY_LEFT:
+		cycle_card(-1)
 		get_viewport().set_input_as_handled()
 		return
-	if k == KEY_RIGHT or k == KEY_LEFT:
-		var i := -1
-		for j in C.hand.size():
-			if C.hand[j].uid == sel_uid:
-				i = j
-		var j2 := mini(C.hand.size() - 1, i + 1) if k == KEY_RIGHT else maxi(0, 0 if i < 0 else i - 1)
-		var inst = C.hand[0 if i < 0 else j2] if not C.hand.is_empty() else null
-		if inst != null:
-			_cancel_sel()
-			sel_uid = inst.uid
-			Sfx.play("select")
-			_sync_sel_visual()
-			_update_tip()
+	if k == KEY_RIGHT:
+		cycle_card(1)
 		get_viewport().set_input_as_handled()
 		return
-	if k == KEY_UP or k == KEY_DOWN or k == KEY_TAB:
-		if not lv.is_empty():
-			t_idx = (t_idx + (-1 if k == KEY_UP else 1) + lv.size() * 4) % lv.size()
-			_hi_target()
-			Sfx.play("select")
-			Main.I.toast("Objetivo: " + lv[t_idx].name)
+	if k in [KEY_UP, KEY_DOWN, KEY_TAB]:
+		cycle_target(1 if k in [KEY_DOWN, KEY_TAB] else -1)
 		get_viewport().set_input_as_handled()
 		return
-	if k == KEY_ENTER or k == KEY_KP_ENTER or k == KEY_SPACE:
-		var inst2 = null
-		for c in C.hand:
-			if c.uid == sel_uid:
-				inst2 = c
-		if inst2 == null:
-			return
-		if not Eng.can_play(C, inst2).ok:
-			Sfx.play("error")
-			return
-		var d := Eng.card_def(inst2)
-		var need_t := Eng.needs_target(d) and lv.size() > 1
-		if need_t and pending == null:
-			_start_targeting({"kind": "card", "uid": inst2.uid})
-			get_viewport().set_input_as_handled()
-			return
-		var t = lv[t_idx % lv.size()] if Eng.needs_target(d) else null
-		_cancel_sel()
-		_play_now(inst2, t)
+	if k in [KEY_ENTER, KEY_KP_ENTER, KEY_SPACE]:
+		confirm_action()
 		get_viewport().set_input_as_handled()
 		return
 	if k == KEY_E:
 		_end_turn()
+		get_viewport().set_input_as_handled()
+		return
 
 
 # ============================== flujo de turno ==============================

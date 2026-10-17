@@ -49,8 +49,8 @@ static func game_over() -> void:
 static func victory() -> void:
 	var G = Meta.run
 	Meta.clear_save()
-	var new_nm: bool = mini(10, G.get("nm", 0) + 1) > Meta.nm_unlocked(G.char)
-	Meta.win_run(G.char, G.get("nm", 0))
+	var new_nm: bool = not G.easy and mini(10, G.get("nm", 0) + 1) > Meta.nm_unlocked(G.char)
+	Meta.win_run(G.char, G.get("nm", 0), G.easy)
 	Meta.data.lastWinner = G.char
 	Meta.data.seenEnding = true
 	var e := EndingScreen.new()
