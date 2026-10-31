@@ -49,8 +49,8 @@
    "act": 1,
    "tier": "elite",
    "hp": [
-    74,
-    78
+    84,
+    88
    ],
    "h": 290,
    "moves": {
@@ -64,11 +64,11 @@
     },
     "garra": {
      "name": "Garra",
-     "dmg": 13
+     "dmg": 16
     },
     "marea": {
      "name": "Resaca",
-     "dmg": 6,
+     "dmg": 7,
      "hits": 2
     },
     "lamento": {
@@ -99,8 +99,8 @@
    "act": 1,
    "tier": "boss",
    "hp": [
-    140,
-    144
+    100,
+    104
    ],
    "h": 350,
    "moves": {
@@ -110,28 +110,28 @@
       "id": "ghostpirate",
       "n": 1
      },
-     "block": 10
+     "block": 6
     },
     "canon": {
      "name": "Cañonazo",
-     "dmg": 20
+     "dmg": 12
     },
     "andanada": {
      "name": "Andanada",
-     "dmg": 5,
+     "dmg": 3,
      "hits": 4
     },
     "ancla": {
      "name": "Ancla de Hierro",
-     "dmg": 10,
+     "dmg": 8,
      "apply": {
-      "frail": 2
+      "frail": 1
      }
     },
     "ron": {
      "name": "Ron Maldito",
-     "selfStr": 3,
-     "heal": 12
+     "selfStr": 1,
+     "heal": 6
     }
    },
    "ai": {
@@ -179,8 +179,8 @@
    "act": 2,
    "tier": "elite",
    "hp": [
-    88,
-    92
+    98,
+    102
    ],
    "h": 300,
    "moves": {
@@ -191,12 +191,12 @@
     },
     "scythe": {
      "name": "Guadañas",
-     "dmg": 8,
+     "dmg": 9,
      "hits": 2
     },
     "ambush": {
      "name": "Emboscada",
-     "dmg": 17,
+     "dmg": 20,
      "apply": {
       "vulnerable": 1
      }
@@ -313,8 +313,8 @@
    "act": 3,
    "tier": "elite",
    "hp": [
-    100,
-    105
+    112,
+    117
    ],
    "h": 300,
    "moves": {
@@ -325,7 +325,7 @@
     },
     "sting": {
      "name": "Doble Aguijón",
-     "dmg": 9,
+     "dmg": 10,
      "hits": 2,
      "apply": {
       "weak": 1
@@ -333,7 +333,7 @@
     },
     "execute": {
      "name": "Ejecución",
-     "dmg": 26
+     "dmg": 30
     },
     "frenzy": {
      "name": "Frenesí",
