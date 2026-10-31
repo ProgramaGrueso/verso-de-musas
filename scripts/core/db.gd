@@ -71,10 +71,26 @@ static func load_all() -> void:
 	var rl := _read("relics")
 	relics = rl.relics; potions = rl.potions
 	events = _read("events").events
+	# Oleada 2 (tools/make_content_w2.py): enemigos, encuentros, reliquias, pociones y eventos nuevos
+	var en2 := _read("enemies_extra")
+	enemies.merge(en2.enemies)   # definiciones: no alteran ningún sorteo por sí solas
+	if extra:
+		for k in en2.encounters.keys():
+			var A: Dictionary = encounters[k]
+			var X: Dictionary = en2.encounters[k]
+			A["easy"] = X.easy
+			A["hard"] = X.hard
+			A["elite"] = A.elite + X.elite
+			A["boss"] = A.boss + X.boss
+		var rl2 := _read("relics_extra")
+		relics.merge(rl2.relics)
+		potions.merge(rl2.potions)
+		events = events + _read("events_extra").events
 	var lo := _read("lore")
 	lore = lo.lore; nm_texts = lo.nm; ending = lo.ending
 	var s := _read("states")
 	st = s.st; orb = s.orb; glos = s.glos
+	st.merge(_read("states_extra").st)
 	music_gains = _read("music").gains
 	# las claves de encuentros por acto llegan como texto ("1"); el motor las usa como entero
 	var enc := {}

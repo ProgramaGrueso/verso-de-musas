@@ -193,13 +193,33 @@ func _add_node(inner: Control, n: Dictionary) -> void:
 		tw.tween_property(b, "scale", Vector2.ONE, 0.7).set_trans(Tween.TRANS_SINE)
 		b.pressed.connect(func(): Nav.enter_node(n))
 	b.mouse_filter = Control.MOUSE_FILTER_STOP
-	UIK.tip(b, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [NODE_NAME[n.type], NODE_DESC[n.type]])
+	var node_name: String = NODE_NAME[n.type]
+	var node_desc: String = NODE_DESC[n.type]
+	if big:
+		var bid := RunGen.boss_id(G)
+		node_name = DB.enemies[bid].name
+		node_desc = "El guardián de la zona. ¡Prepárate!\nPV: %d–%d" % [DB.enemies[bid].hp[0], DB.enemies[bid].hp[1]]
+	UIK.tip(b, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [node_name, node_desc])
 	inner.add_child(b)
+	if big:
+		# retrato del jefe tras el nodo
+		var bt := UIK.tex("res://assets/enemies/%s.webp" % RunGen.boss_id(G))
+		if bt != null:
+			var portrait := TextureRect.new()
+			portrait.texture = bt
+			portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			portrait.size = Vector2(220, 200)
+			portrait.position = Vector2(p.x + half + 6, p.y - 120)
+			portrait.modulate = Color(1, 1, 1, 0.85)
+			portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			inner.add_child(portrait)
+			inner.move_child(portrait, b.get_index())
 	if can or big:
-		var lab := UIK.label(NODE_NAME[n.type], 16, UIK.GOLD if can else Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_CENTER)
+		var lab := UIK.label(node_name, 16, UIK.GOLD if can else Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_CENTER)
 		UIK.outlined(lab, 6)
-		lab.position = Vector2(p.x - 60, p.y + half + 4)
-		lab.size = Vector2(120, 22)
+		lab.position = Vector2(p.x - 110, p.y + half + 4)
+		lab.size = Vector2(220, 22)
 		lab.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		inner.add_child(lab)
 	if here:

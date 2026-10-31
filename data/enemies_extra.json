@@ -1,0 +1,579 @@
+{
+ "enemies": {
+  "eel": {
+   "name": "Anguila Voltaica",
+   "act": 1,
+   "tier": "normal",
+   "hp": [
+    24,
+    28
+   ],
+   "h": 170,
+   "moves": {
+    "shock": {
+     "name": "Descarga",
+     "dmg": 9
+    },
+    "coil": {
+     "name": "Enroscarse",
+     "block": 7,
+     "dmg": 4
+    },
+    "zap": {
+     "name": "Chispazo",
+     "dmg": 3,
+     "hits": 2,
+     "apply": {
+      "weak": 1
+     }
+    }
+   },
+   "ai": {
+    "t": "rnd",
+    "keys": [
+     "shock",
+     "coil",
+     "zap"
+    ],
+    "w": [
+     3,
+     2,
+     2
+    ]
+   },
+   "ap": "a long electric eel monster coiled in the air, glowing blue lightning running along its slimy dark body, needle teeth, crackling sparks, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
+   "id": "eel"
+  },
+  "sirena": {
+   "name": "Sirena Abisal",
+   "act": 1,
+   "tier": "elite",
+   "hp": [
+    74,
+    78
+   ],
+   "h": 290,
+   "moves": {
+    "canto": {
+     "name": "Canto Hechizante",
+     "apply": {
+      "weak": 2,
+      "vulnerable": 1
+     },
+     "block": 8
+    },
+    "garra": {
+     "name": "Garra",
+     "dmg": 13
+    },
+    "marea": {
+     "name": "Resaca",
+     "dmg": 6,
+     "hits": 2
+    },
+    "lamento": {
+     "name": "Lamento",
+     "dmg": 5,
+     "add": {
+      "id": "doubt",
+      "n": 1,
+      "to": "discard"
+     }
+    }
+   },
+   "ai": {
+    "t": "cyc",
+    "seq": [
+     "canto",
+     "garra",
+     "marea",
+     "lamento",
+     "garra"
+    ]
+   },
+   "ap": "a terrifying abyssal siren, a pale drowned woman-like sea creature with a long eel tail, webbed claws, black hollow eyes, seaweed hair, glowing teal runes on her skin, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
+   "id": "sirena"
+  },
+  "drowncaptain": {
+   "name": "Capitana Ahogada",
+   "act": 1,
+   "tier": "boss",
+   "hp": [
+    140,
+    144
+   ],
+   "h": 350,
+   "moves": {
+    "abordaje": {
+     "name": "¡Al abordaje!",
+     "summon": {
+      "id": "ghostpirate",
+      "n": 1
+     },
+     "block": 10
+    },
+    "canon": {
+     "name": "Cañonazo",
+     "dmg": 20
+    },
+    "andanada": {
+     "name": "Andanada",
+     "dmg": 5,
+     "hits": 4
+    },
+    "ancla": {
+     "name": "Ancla de Hierro",
+     "dmg": 10,
+     "apply": {
+      "frail": 2
+     }
+    },
+    "ron": {
+     "name": "Ron Maldito",
+     "selfStr": 3,
+     "heal": 12
+    }
+   },
+   "ai": {
+    "t": "custom"
+   },
+   "ap": "a towering undead drowned pirate captain, a skeletal woman in a rotting tricorn hat and tattered captain coat dripping seawater, a cannon arm and a rusted anchor on a chain, ghostly green fire in her eye sockets, barnacles and coral on her bones, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
+   "id": "drowncaptain"
+  },
+  "brambwolf": {
+   "name": "Lobo de Zarzas",
+   "act": 2,
+   "tier": "normal",
+   "hp": [
+    36,
+    40
+   ],
+   "h": 210,
+   "moves": {
+    "howl": {
+     "name": "Aullido",
+     "selfStr": 2,
+     "block": 6
+    },
+    "bite": {
+     "name": "Dentellada",
+     "dmg": 11
+    },
+    "maul": {
+     "name": "Zarpazo",
+     "dmg": 6,
+     "hits": 2
+    }
+   },
+   "ai": {
+    "t": "first_alt",
+    "first": "howl",
+    "odd": "bite",
+    "even": "maul"
+   },
+   "ap": "a feral wolf made of thorny brambles and twisted vines, glowing green eyes, thorns instead of fur, snarling with wooden fangs, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
+   "id": "brambwolf"
+  },
+  "mantis": {
+   "name": "Mantis de Espinas",
+   "act": 2,
+   "tier": "elite",
+   "hp": [
+    88,
+    92
+   ],
+   "h": 300,
+   "moves": {
+    "camo": {
+     "name": "Camuflaje",
+     "block": 16,
+     "thorns": 2
+    },
+    "scythe": {
+     "name": "Guadañas",
+     "dmg": 8,
+     "hits": 2
+    },
+    "ambush": {
+     "name": "Emboscada",
+     "dmg": 17,
+     "apply": {
+      "vulnerable": 1
+     }
+    },
+    "molt": {
+     "name": "Muda",
+     "selfStr": 2
+    }
+   },
+   "ai": {
+    "t": "cyc",
+    "seq": [
+     "camo",
+     "scythe",
+     "ambush",
+     "molt",
+     "scythe"
+    ]
+   },
+   "ap": "a giant praying mantis monster covered in thorns and bark-like armor, huge scythe forelimbs, mossy green and dark red colors, menacing hunter pose, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
+   "id": "mantis"
+  },
+  "mycelking": {
+   "name": "Rey Micelio",
+   "act": 2,
+   "tier": "boss",
+   "hp": [
+    172,
+    176
+   ],
+   "h": 360,
+   "moves": {
+    "colonia": {
+     "name": "Colonia",
+     "summon": {
+      "id": "sporecap",
+      "n": 1
+     },
+     "block": 12
+    },
+    "aplastar": {
+     "name": "Aplastar",
+     "dmg": 24
+    },
+    "esporas": {
+     "name": "Nube de Esporas",
+     "dmg": 6,
+     "apply": {
+      "weak": 2,
+      "frail": 2
+     }
+    },
+    "pudrir": {
+     "name": "Putrefacción",
+     "dmg": 9,
+     "hits": 2,
+     "add": {
+      "id": "wound",
+      "n": 1,
+      "to": "discard"
+     }
+    },
+    "festin": {
+     "name": "Festín Fúngico",
+     "healAll": 10,
+     "block": 10
+    }
+   },
+   "ai": {
+    "t": "custom"
+   },
+   "ap": "a colossal mushroom king, a hulking fungal giant with a huge glowing purple and orange cap like a crown, mycelium roots as a beard and cape, bioluminescent spores drifting, ancient and regal, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
+   "id": "mycelking"
+  },
+  "workerbee": {
+   "name": "Obrera Acorazada",
+   "act": 3,
+   "tier": "normal",
+   "hp": [
+    44,
+    48
+   ],
+   "h": 200,
+   "moves": {
+    "carry": {
+     "name": "Acarrear",
+     "block": 10,
+     "dmg": 6
+    },
+    "pierce": {
+     "name": "Perforar",
+     "dmg": 13
+    },
+    "rally": {
+     "name": "Reagrupar",
+     "selfStr": 2,
+     "healAll": 6
+    }
+   },
+   "ai": {
+    "t": "cyc",
+    "seq": [
+     "carry",
+     "pierce",
+     "rally",
+     "pierce"
+    ]
+   },
+   "ap": "a giant armored worker bee warrior with thick amber chitin plates, carrying a honeycomb shield, sharp mandibles, golden and black, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
+   "id": "workerbee"
+  },
+  "hornet": {
+   "name": "Avispón Verdugo",
+   "act": 3,
+   "tier": "elite",
+   "hp": [
+    100,
+    105
+   ],
+   "h": 300,
+   "moves": {
+    "buzz": {
+     "name": "Zumbido",
+     "selfStr": 2,
+     "block": 12
+    },
+    "sting": {
+     "name": "Doble Aguijón",
+     "dmg": 9,
+     "hits": 2,
+     "apply": {
+      "weak": 1
+     }
+    },
+    "execute": {
+     "name": "Ejecución",
+     "dmg": 26
+    },
+    "frenzy": {
+     "name": "Frenesí",
+     "dmg": 4,
+     "hits": 4
+    }
+   },
+   "ai": {
+    "t": "cyc",
+    "seq": [
+     "buzz",
+     "sting",
+     "execute",
+     "frenzy"
+    ]
+   },
+   "ap": "a giant executioner hornet with a black and crimson carapace, a hooded executioner mask-like head, a huge barbed stinger like a blade, translucent wings, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
+   "id": "hornet"
+  },
+  "waxcolossus": {
+   "name": "Coloso de Cera",
+   "act": 3,
+   "tier": "boss",
+   "hp": [
+    226,
+    232
+   ],
+   "h": 390,
+   "moves": {
+    "sello": {
+     "name": "Sello de Cera",
+     "block": 28
+    },
+    "aplastar": {
+     "name": "Puño de Panal",
+     "dmg": 32
+    },
+    "goteo": {
+     "name": "Goteo Ardiente",
+     "dmg": 5,
+     "hits": 5
+    },
+    "cera": {
+     "name": "Cera Fundida",
+     "dmg": 12,
+     "apply": {
+      "frail": 2,
+      "weak": 1
+     }
+    },
+    "endurecer": {
+     "name": "Endurecer",
+     "selfStr": 3,
+     "thorns": 3
+    },
+    "fundirse": {
+     "name": "Fundición",
+     "selfStr": 4,
+     "dmg": 10,
+     "hits": 2
+    }
+   },
+   "ai": {
+    "t": "custom"
+   },
+   "ap": "a colossal golem made of glowing amber beeswax and honeycomb, molten wax dripping from its body, burning candle wicks on its shoulders, a hollow glowing core in its chest, ancient guardian of the hive, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
+   "id": "waxcolossus"
+  }
+ },
+ "encounters": {
+  "1": {
+   "easy": [
+    [
+     "jelly",
+     "dockrat"
+    ],
+    [
+     "slime"
+    ],
+    [
+     "crab"
+    ],
+    [
+     "eel"
+    ],
+    [
+     "dockrat",
+     "dockrat"
+    ]
+   ],
+   "hard": [
+    [
+     "dockrat",
+     "dockrat",
+     "dockrat"
+    ],
+    [
+     "ghostpirate"
+    ],
+    [
+     "slime",
+     "jelly"
+    ],
+    [
+     "eel",
+     "dockrat"
+    ],
+    [
+     "crab",
+     "dockrat"
+    ],
+    [
+     "ghostpirate",
+     "dockrat"
+    ]
+   ],
+   "elite": [
+    [
+     "sirena"
+    ]
+   ],
+   "boss": [
+    [
+     "drowncaptain"
+    ]
+   ]
+  },
+  "2": {
+   "easy": [
+    [
+     "sporecap"
+    ],
+    [
+     "vinelasher"
+    ],
+    [
+     "brambwolf"
+    ],
+    [
+     "dryad"
+    ],
+    [
+     "thornbeast"
+    ]
+   ],
+   "hard": [
+    [
+     "sporecap",
+     "vinelasher"
+    ],
+    [
+     "mossgolem"
+    ],
+    [
+     "dryad",
+     "sporecap"
+    ],
+    [
+     "vinelasher",
+     "vinelasher",
+     "sporecap"
+    ],
+    [
+     "brambwolf",
+     "sporecap"
+    ],
+    [
+     "thornbeast",
+     "sprout",
+     "sprout"
+    ]
+   ],
+   "elite": [
+    [
+     "mantis"
+    ]
+   ],
+   "boss": [
+    [
+     "mycelking"
+    ]
+   ]
+  },
+  "3": {
+   "easy": [
+    [
+     "drone",
+     "drone"
+    ],
+    [
+     "wasp"
+    ],
+    [
+     "honeyslime"
+    ],
+    [
+     "workerbee"
+    ],
+    [
+     "beetle"
+    ]
+   ],
+   "hard": [
+    [
+     "drone",
+     "drone",
+     "drone"
+    ],
+    [
+     "wasp",
+     "drone"
+    ],
+    [
+     "nurse",
+     "wasp"
+    ],
+    [
+     "wasp",
+     "wasp"
+    ],
+    [
+     "workerbee",
+     "drone",
+     "drone"
+    ],
+    [
+     "beetle",
+     "drone"
+    ]
+   ],
+   "elite": [
+    [
+     "hornet"
+    ]
+   ],
+   "boss": [
+    [
+     "waxcolossus"
+    ]
+   ]
+  }
+ }
+}

@@ -199,6 +199,88 @@ func win_run(char: String, nm: int, easy: bool = false) -> void:
 	_check()
 
 
+# ---------- Historial de partidas y reto diario ----------
+const HISTORY_MAX := 60
+
+
+## Guarda un resumen de la partida terminada (victoria, derrota o rendición). Solo una vez por partida.
+func record_run(G, won: bool) -> void:
+	if G == null or G.get("recorded", false):
+		return
+	G["recorded"] = true
+	var deck := []
+	for c in G.deck:
+		deck.append(c.id + ("+" if c.up else ""))
+	var played: Dictionary = G.stats.get("played", {})
+	var ids: Array = played.keys()
+	ids.sort_custom(func(a, b): return played[a] > played[b])
+	var top := []
+	for id in ids.slice(0, 5):
+		top.append([id, played[id]])
+	var h := {
+		"t": int(Time.get_unix_time_from_system()), "char": G.char, "win": won, "nm": int(G.get("nm", 0)), "easy": bool(G.easy),
+		"seed": int(G.seed), "daily": str(G.get("daily", "")), "mod": str(G.get("dailyMod", "")), "act": int(G.act), "floor": int(G.floor),
+		"by": "" if G.get("surrender", false) else str(G.get("deathBy", "")), "surrender": bool(G.get("surrender", false)),
+		"deck": deck, "relics": G.relics.duplicate(), "maxHp": int(G.maxHp),
+		"fights": int(G.stats.fights), "kills": int(G.stats.kills), "turns": int(G.stats.turns), "top": top,
+	}
+	if not data.has("history") or not (data.history is Array):
+		data["history"] = []
+	data.history.push_front(h)
+	if data.history.size() > HISTORY_MAX:
+		data.history.resize(HISTORY_MAX)
+	# acumulados por musa: no se pierden al recortar el historial
+	var st: Dictionary = data.s
+	st["runs_" + G.char] = st.get("runs_" + G.char, 0) + 1
+	st["bestFloor_" + G.char] = maxi(st.get("bestFloor_" + G.char, 0), int(G.floor))
+	if not data.has("cardsPlayed") or not (data.cardsPlayed is Dictionary):
+		data["cardsPlayed"] = {}
+	for id in played.keys():
+		data.cardsPlayed[id] = data.cardsPlayed.get(id, 0) + played[id]
+	if str(G.get("daily", "")) != "":
+		_record_daily(G, won)
+	_mark()
+
+
+func history() -> Array:
+	return data.get("history", [])
+
+
+## Resultado del reto diario de ese día: {tries, win, floor, char}
+func daily_result(key: String) -> Dictionary:
+	var d = data.get("daily", {})
+	if d is Dictionary and d.has(key):
+		return d[key]
+	return {}
+
+
+func daily_started(key: String, char: String) -> void:
+	if not data.has("daily") or not (data.daily is Dictionary):
+		data["daily"] = {}
+	var r: Dictionary = data.daily.get(key, {"tries": 0, "win": false, "floor": 0, "char": char})
+	r.tries = int(r.get("tries", 0)) + 1
+	data.daily[key] = r
+	# conserva solo los últimos 30 días
+	var keys: Array = data.daily.keys()
+	keys.sort()
+	while keys.size() > 30:
+		data.daily.erase(keys.pop_front())
+	_mark()
+
+
+func _record_daily(G, won: bool) -> void:
+	var key := str(G.daily)
+	if not data.has("daily") or not (data.daily is Dictionary):
+		data["daily"] = {}
+	var r: Dictionary = data.daily.get(key, {"tries": 1, "win": false, "floor": 0, "char": G.char})
+	if won:
+		r.win = true
+	r.floor = maxi(int(r.get("floor", 0)), int(G.floor))
+	data.daily[key] = r
+	if won:
+		add("dailyWins")
+
+
 # ---------- Guardado de la partida ----------
 func has_save() -> bool:
 	return FileAccess.file_exists(SAVE_PATH) and _read(SAVE_PATH) != null

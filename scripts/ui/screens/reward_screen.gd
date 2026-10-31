@@ -50,6 +50,8 @@ func _ready() -> void:
 				if first_b == null:
 					first_b = b
 				b.icon = Icons.tex("relic", id)
+				if b.icon == null:
+					b.text = "%s  %s" % [r.i, r.n]
 				b.expand_icon = true
 				b.add_theme_constant_override("icon_max_width", 44)
 				b.custom_minimum_size = Vector2(300, 0)
@@ -75,11 +77,14 @@ func _ready() -> void:
 		_item("ui:deck", "Añadir una carta a tu mazo\n[font_size=16][color=#a79fc0]Elige 1 de 3.[/color][/font_size]", func():
 			var cards := []
 			for id in rew.cards:
-				cards.append(Eng.make_card(G, id))
+				var shown := Eng.make_card(G, id)
+				if Eng.has_relic(G, "huevo") and Eng.can_upgrade(shown):
+					shown.up = true
+				cards.append(shown)
 			var pick: Array = await Dlg.pick_cards({"title": "Elige una carta", "sub": "Se añadirá a tu mazo.", "cards": cards, "n": 1, "cancel": "Saltar", "big": true, "confirmLabel": "Tomar carta"})
 			if pick.is_empty():
 				return false
-			G.deck.append(Eng.make_card(G, pick[0].id))
+			Eng.gain_card(G, pick[0].id)
 			_card_taken = true
 			Sfx.play("buff"))
 	_done_btn = UIK.button("Continuar ➜", "big")

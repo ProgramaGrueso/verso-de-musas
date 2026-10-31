@@ -10,10 +10,15 @@ const FLIP := ["dockrat", "vinelasher", "crab"]
 const MV := {"dockrat": "skitter", "minicrab": "skitter", "slime": "slither", "honeyslime": "slither", "crab": "stomp", "crabking": "stomp", "thornbeast": "stomp",
 	"mossgolem": "stomp", "chainwarden": "stomp", "beetle": "stomp", "royalguard": "stomp", "stag": "stomp", "ghostpirate": "hover", "jelly": "hover", "wasp": "hover",
 	"drone": "hover", "nurse": "hover", "queen": "hover", "hivemind": "hover", "tentacle": "sway", "sporecap": "sway", "vinelasher": "sway", "sprout": "sway",
-	"treant": "sway", "rootmother": "sway", "dryad": "sway"}
+	"treant": "sway", "rootmother": "sway", "dryad": "sway",
+	# Oleada 2
+	"eel": "sway", "sirena": "hover", "drowncaptain": "stomp", "brambwolf": "skitter", "mantis": "sway", "mycelking": "stomp",
+	"workerbee": "stomp", "hornet": "hover", "waxcolossus": "stomp"}
 const EMOJI := {"dockrat": "🐀", "slime": "🟢", "crab": "🦀", "jelly": "🪼", "ghostpirate": "👻", "minicrab": "🦀", "chainwarden": "⛓️", "tentacle": "🐙", "crabking": "🦀",
 	"sporecap": "🍄", "vinelasher": "🌿", "thornbeast": "🐗", "mossgolem": "🗿", "dryad": "🌳", "sprout": "🌱", "treant": "🌲", "stag": "🦌", "rootmother": "🌳", "drone": "🐝",
-	"wasp": "🐝", "honeyslime": "🍯", "nurse": "🐛", "beetle": "🪲", "royalguard": "🛡️", "hivemind": "🧠", "queen": "👑"}
+	"wasp": "🐝", "honeyslime": "🍯", "nurse": "🐛", "beetle": "🪲", "royalguard": "🛡️", "hivemind": "🧠", "queen": "👑",
+	"eel": "🐍", "sirena": "🧜", "drowncaptain": "🏴‍☠️", "brambwolf": "🐺", "mantis": "🦗", "mycelking": "🍄", "workerbee": "🐝",
+	"hornet": "🐝", "waxcolossus": "🕯️"}
 
 var e: Dictionary
 var eh := 150.0

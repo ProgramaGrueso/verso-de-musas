@@ -24,7 +24,7 @@ func _ready() -> void:
 	var t := UIK.label(ev.title, 36, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(t, 6)
 	col.add_child(t)
-	_text = UIK.rich("[center]%s[/center]" % ev.text, 20, Color("#e8e4f4"))
+	_text = UIK.rich("[center]%s[/center]" % EventsLogic.text_for(G, ev), 20, Color("#e8e4f4"))
 	_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	col.add_child(_text)
 	var sp := Control.new()
@@ -43,7 +43,7 @@ func _ready() -> void:
 		var opt: Dictionary = o
 		b.pressed.connect(func():
 			if opt.has("fight"):
-				Nav.combat(RunGen.encounter_for(G, opt.fight), opt.fight)
+				Nav.combat(opt.fight_ids if opt.has("fight_ids") else RunGen.encounter_game(G, opt.fight), opt.fight)
 				return
 			for c in _opts.get_children():
 				if c is Button:
@@ -149,3 +149,16 @@ class EvCtx extends RefCounted:
 		var G = Meta.run
 		var cards: Array = G.deck.filter(filter)
 		return await Dlg.pick_cards({"title": title, "upgradePreview": upgrade_preview, "cards": cards, "n": n, "cancel": "Cancelar"})
+
+	## Elegir 1 carta nueva entre `ids` (no están en el mazo). Devuelve [] si se salta.
+	func choose_new(title: String, ids: Array) -> Array:
+		var G = Meta.run
+		if ids.is_empty():
+			return []
+		var cards := []
+		for id in ids:
+			var c := Eng.make_card(G, id)
+			if Eng.has_relic(G, "huevo") and Eng.can_upgrade(c):
+				c.up = true
+			cards.append(c)
+		return await Dlg.pick_cards({"title": title, "sub": "Se añadirá a tu mazo.", "cards": cards, "n": 1, "cancel": "Saltar", "big": true, "confirmLabel": "Tomar carta"})

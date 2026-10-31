@@ -161,6 +161,10 @@ func _unhandled_key_input(ev: InputEvent) -> void:
 	if ev is InputEventKey and ev.pressed and not ev.echo:
 		if ev.keycode == KEY_F11:
 			_toggle_fullscreen()
+		elif ev.keycode == KEY_M and overlay_host.get_child_count() == 0 and Meta.run != null and current in ["map", "combat", "reward", "shop", "rest", "event"]:
+			open_deck_dialog()
+		elif ev.keycode in [KEY_H, KEY_F1] and overlay_host.get_child_count() == 0 and not (current in ["select"]):
+			Dlg.help()
 		elif ev.keycode == KEY_ESCAPE:
 			if overlay_host.get_child_count() == 0 and screen != null and screen.has_method("on_escape"):
 				screen.on_escape()
@@ -187,7 +191,7 @@ func set_screen(node: Control, name: String) -> void:
 
 func update_top() -> void:
 	var G = Meta.run
-	var show_top: bool = G != null and not (current in ["title", "select", "gallery", "ending", "end"])
+	var show_top: bool = G != null and not (current in ["title", "select", "gallery", "ending", "end", "history"])
 	top.visible = show_top
 	if not show_top:
 		return
@@ -206,7 +210,13 @@ func update_top() -> void:
 	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pic.add_child(tr)
 	pic.mouse_filter = Control.MOUSE_FILTER_PASS
-	UIK.tip(pic, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [DB.characters[G.char].name, DB.characters[G.char].role])
+	var who_tip: String = "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [DB.characters[G.char].name, DB.characters[G.char].role]
+	var perm := Eng.perm_text(G)
+	if perm != "":
+		who_tip += "\n[color=#8bf0a4]Bendiciones permanentes: %s.[/color]" % perm
+	if G.get("daily", "") != "":
+		who_tip += "\n[color=#caa5ff]Reto diario %s: %s[/color]" % [G.daily, Daily.mod_name(G.get("dailyMod", ""))]
+	UIK.tip(pic, who_tip)
 	_tb_who.add_child(pic)
 	_tb_hp.text = "%d/%d" % [G.hp, G.maxHp]
 	_tb_gold.text = "%d" % G.gold
@@ -239,6 +249,10 @@ func update_top() -> void:
 			sb = UIK.stylebox(Color("#0d1418", 0.9), Color(p.c), 2, 23, 0)
 			b.expand_icon = true
 			b.icon = Icons.tex("potion", id)
+			if b.icon == null:
+				b.text = p.i   # sin icono pintado todavía: el emoji de la poción
+				b.add_theme_font_override("font", UIK.font())
+				b.add_theme_font_size_override("font_size", 22)
 			b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			b.add_theme_constant_override("icon_max_width", 40)
 			for c in ["icon_hover_color", "icon_pressed_color", "icon_focus_color", "icon_normal_color"]:

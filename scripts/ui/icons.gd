@@ -14,6 +14,18 @@ static func has(kind: String, id: String) -> bool:
 	return ResourceLoader.exists(path(kind, id))
 
 
+## Emoji de respaldo para reliquias/pociones/estados que aún no tienen icono pintado.
+static func emoji(kind: String, id: String) -> String:
+	match kind:
+		"relic":
+			return DB.relics[id].i if DB.relics.has(id) else "❔"
+		"potion":
+			return DB.potions[id].i if DB.potions.has(id) else "❔"
+		"status":
+			return DB.st[id].i if DB.st.has(id) else ""
+	return ""
+
+
 static func tex(kind: String, id: String) -> Texture2D:
 	var p := path(kind, id)
 	return load(p) if ResourceLoader.exists(p) else null
@@ -38,6 +50,13 @@ static func frame(kind: String, id: String, size: float, _border: Color = UIK.GO
 	holder.custom_minimum_size = Vector2(size, size)
 	holder.size = Vector2(size, size)
 	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if not has(kind, id) and emoji(kind, id) != "":
+		var l := UIK.label(emoji(kind, id), int(size * 0.62), Color.WHITE, "sans", HORIZONTAL_ALIGNMENT_CENTER)
+		l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		l.size = Vector2(size, size)
+		l.custom_minimum_size = Vector2(size, size)
+		holder.add_child(l)
+		return holder
 	var sh := rect(kind, id, size)
 	sh.modulate = Color(0, 0, 0, 0.55)
 	sh.position = Vector2(0, size * 0.04)
@@ -49,7 +68,7 @@ static func frame(kind: String, id: String, size: float, _border: Color = UIK.GO
 ## Etiqueta BBCode que incrusta el icono en un RichTextLabel.
 static func bb(kind: String, id: String, size: int = 20) -> String:
 	if not has(kind, id):
-		return ""
+		return emoji(kind, id)
 	return "[img=%dx%d]%s[/img]" % [size, size, path(kind, id)]
 
 

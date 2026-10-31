@@ -1,0 +1,126 @@
+{
+ "events": [
+  {
+   "id": "biblioteca",
+   "title": "Biblioteca Sumergida",
+   "img": "📚",
+   "text": "Estanterías medio hundidas guardan tomos que no se han mojado jamás. Uno de ellos se abre solo a tu paso."
+  },
+  {
+   "id": "jugador",
+   "title": "El Jugador de Dados",
+   "img": "🎲",
+   "text": "Un hombrecillo de sonrisa dorada agita un cubilete junto al camino. \"¿Una partida? La suerte es la única musa que nunca miente.\""
+  },
+  {
+   "id": "espejo",
+   "title": "Espejo de las Musas",
+   "img": "🪞",
+   "text": "Un espejo de marco dorado flota sobre el suelo. Tu reflejo no te imita: te observa, curioso."
+  },
+  {
+   "id": "peregrina",
+   "title": "Peregrina Herida",
+   "img": "🕯️",
+   "text": "Una peregrina descansa junto a un farol apagado, con la pierna vendada. \"Llevo días caminando hacia la torre... ¿me ayudarías?\""
+  },
+  {
+   "id": "recuerdo",
+   "title": "Un Recuerdo",
+   "img": "💭",
+   "text": "Algo en este lugar te resulta dolorosamente familiar.",
+   "textBy": {
+    "zafiro": "Entre la bruma ves el estandarte de los Acorazados ondeando sobre una muralla que ya no existe. Por un instante oyes a tus hermanos de armas llamarte por tu nombre.",
+    "lia": "Un zorro plateado te observa desde la maleza, igual que aquel que te enseñó a cazar en los Bosques Verdes. Sonríe, si es que los zorros sonríen.",
+    "claudia": "La luna violeta se refleja en un charco y, en su fondo, una niña juega con una mano de huesos. Osty se agita, inquieto.",
+    "aurora": "Un rayo de sol se cuela entre las ruinas y dibuja en el suelo los pasos de la primera danza que aprendiste en el templo del solio.",
+    "irene": "Un tictac familiar suena a tu espalda. Por un momento recuerdas unas manos cálidas girando tu llave... y luego, nada.",
+    "selene": "La espuma canta la nana con la que naciste. Las olas te llaman por un nombre que habías olvidado."
+   }
+  },
+  {
+   "id": "naufragio",
+   "title": "Barco Naufragado",
+   "img": "⛵",
+   "act": 1,
+   "text": "El casco de un galeón asoma entre las aguas negras del muelle. Algo brilla en la bodega... y algo se mueve en el camarote."
+  },
+  {
+   "id": "kraken",
+   "title": "Ojo en la Marea",
+   "img": "🐙",
+   "act": 1,
+   "text": "Bajo el agua, un ojo enorme se abre y te sigue. Un tentáculo emerge despacio y se queda inmóvil, esperando."
+  },
+  {
+   "id": "susurros",
+   "title": "Árbol de los Susurros",
+   "img": "🌳",
+   "act": 2,
+   "text": "Las ramas de este árbol murmuran secretos en una lengua antigua. Algunos frutos brillan entre las hojas."
+  },
+  {
+   "id": "hadas",
+   "title": "Círculo de Hadas",
+   "img": "🧚",
+   "act": 2,
+   "text": "Un anillo de setas luminosas rodea un claro. Diminutas luces bailan y ríen, invitándote a entrar."
+  },
+  {
+   "id": "panal",
+   "title": "Panal Rebosante",
+   "img": "🍯",
+   "act": 3,
+   "text": "Un panal del tamaño de una casa gotea miel dorada. El zumbido de su interior es tranquilo... por ahora."
+  },
+  {
+   "id": "trono",
+   "title": "Trono Vacío",
+   "img": "👑",
+   "act": 3,
+   "text": "En una sala de cera endurecida se alza un trono sin dueño. Una corona descansa sobre el asiento, esperando una cabeza."
+  },
+  {
+   "id": "coliseo",
+   "title": "Arena de los Acorazados",
+   "img": "🛡️",
+   "char": "zafiro",
+   "text": "Reconoces la arena donde entrenabas de joven. Los muñecos de práctica siguen en pie, cubiertos de óxido."
+  },
+  {
+   "id": "madriguera",
+   "title": "Madriguera del Zorro Plateado",
+   "img": "🦊",
+   "char": "lia",
+   "text": "Un rastro de huellas plateadas lleva a una madriguera. Dentro hay un pequeño tesoro de cazadora... y una piedra de afilar."
+  },
+  {
+   "id": "osario",
+   "title": "Osario Olvidado",
+   "img": "🦴",
+   "char": "claudia",
+   "text": "Miles de huesos descansan ordenados en nichos. Osty se acerca a ellos con algo parecido al cariño."
+  },
+  {
+   "id": "templo_sol",
+   "title": "Templo del Solio",
+   "img": "🌞",
+   "char": "aurora",
+   "text": "Un pequeño templo dorado resiste entre las ruinas. En su altar arde todavía la llama de las danzarinas."
+  },
+  {
+   "id": "taller",
+   "title": "Taller del Relojero",
+   "img": "⚙️",
+   "char": "irene",
+   "text": "Un taller polvoriento lleno de muñecas a medio montar. Sobre la mesa, herramientas que parecen hechas para tus manos."
+  },
+  {
+   "id": "poza_lunar",
+   "title": "Poza Lunar",
+   "img": "🌙",
+   "char": "selene",
+   "text": "Una poza de agua inmóvil refleja una luna que no está en el cielo. Al acercarte, el agua empieza a cantar."
+  }
+ ]
+}

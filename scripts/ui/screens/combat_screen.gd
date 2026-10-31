@@ -46,6 +46,8 @@ var draw_btn: Button
 var discard_btn: Button
 var exhaust_btn: Button
 var end_btn: Button
+var undo_btn: Button
+var incoming_lbl: RichTextLabel
 var tipbar: Label
 var vignette: TextureRect
 var target_line: TargetLine
@@ -56,6 +58,7 @@ var _dragging := false
 var _drag_view: CardView = null
 var _pop_n := 0
 var _shake_tw: Tween
+var _undo := {}               # modo fácil: estado antes de la última carta jugada
 
 
 func _ready() -> void:
@@ -239,6 +242,15 @@ func _build_player() -> void:
 	player_block.add_child(player_block_lbl)
 	player_block.visible = false
 	player_box.add_child(player_block)
+	incoming_lbl = UIK.rich("", 17, Color.WHITE, "bold")
+	incoming_lbl.fit_content = false
+	incoming_lbl.position = Vector2(10, 328)
+	incoming_lbl.size = Vector2(320, 30)
+	incoming_lbl.mouse_filter = Control.MOUSE_FILTER_PASS
+	incoming_lbl.add_theme_constant_override("outline_size", 6)
+	incoming_lbl.add_theme_color_override("font_outline_color", Color.BLACK)
+	UIK.tip(incoming_lbl, func(): return _incoming_tip())
+	player_box.add_child(incoming_lbl)
 	player_status = HFlowContainer.new()
 	player_status.position = Vector2(40, 386)
 	player_status.size = Vector2(260, 34)
@@ -338,6 +350,13 @@ func _build_hud() -> void:
 	end_btn.pivot_offset = Vector2(110, 27)
 	end_btn.pressed.connect(func(): Sfx.play("click"); _end_turn())
 	ui_layer.add_child(end_btn)
+	undo_btn = UIK.button("↶ Deshacer (Z)", "small")
+	undo_btn.position = Vector2(1090, 432)
+	undo_btn.focus_mode = Control.FOCUS_NONE
+	undo_btn.visible = false
+	undo_btn.pressed.connect(undo)
+	UIK.tip(undo_btn, "[b][color=#f0cf7a]Deshacer[/color][/b]\nModo fácil: devuelve la última carta jugada a tu mano, como si no la hubieras jugado.\nNo se puede si murió algún enemigo.")
+	ui_layer.add_child(undo_btn)
 	tipbar = UIK.label("", 18, Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_CENTER)
 	tipbar.position = Vector2(240, 62)
 	tipbar.size = Vector2(800, 34)
@@ -682,6 +701,35 @@ func _update_player() -> void:
 			player_status.add_child(EnemyView.status_chip(k, v))
 	var low: bool = float(G.hp) / G.maxHp <= 0.3 and G.hp > 0
 	vignette.visible = low
+	_update_incoming()
+
+
+## Vista previa: daño total anunciado por los enemigos y cuánto llegaría a tus PV con el Bloqueo actual.
+func _update_incoming() -> void:
+	if incoming_lbl == null:
+		return
+	if C.is_empty() or C.over != "" or C.phase != "player":
+		incoming_lbl.text = ""
+		return
+	var inc := Eng.incoming(C)
+	if inc.total <= 0:
+		incoming_lbl.text = ""
+		return
+	var res: String = "[color=#8bf0a4]todo bloqueado[/color]" if inc.hp <= 0 else "[color=#ff7b85]−%d PV[/color]" % inc.hp
+	incoming_lbl.text = "[center]%s %d  ➜  %s[/center]" % [Icons.bb("intent", "attack", 22), inc.total, res]
+
+
+func _incoming_tip() -> String:
+	if C.is_empty():
+		return ""
+	var inc := Eng.incoming(C)
+	var t: String = "[b][color=#f0cf7a]Daño entrante[/color][/b]\nSi terminas el turno ahora, los enemigos atacarán por [b]%d[/b] en total." % inc.total
+	if C.pl.block > 0:
+		t += "\nTu Bloqueo absorbe hasta [b]%d[/b]." % C.pl.block
+	if inc.osty > 0:
+		t += "\nOsty absorbe [b]%d[/b]." % inc.osty
+	t += "\nPerderías [b]%d PV[/b]." % inc.hp
+	return t
 
 
 func _update_osty() -> void:
@@ -787,6 +835,8 @@ func _update_hud() -> void:
 			any_playable = true
 			break
 	end_btn.disabled = busy or C.over != ""
+	if undo_btn != null:
+		undo_btn.visible = G.easy and not _undo.is_empty() and not busy and Eng.can_restore(C, _undo)
 	var glow: bool = not any_playable and not busy and C.over == ""
 	if glow and not end_btn.has_meta("glow_tw"):
 		var tw := end_btn.create_tween().set_loops()
@@ -1183,6 +1233,7 @@ func _on_potion(slot: int) -> void:
 
 func _use_potion_now(slot: int, target) -> void:
 	busy = true
+	_undo = {}
 	Sfx.play("potion")
 	Eng.use_potion(C, slot, target)
 	_render_all()
@@ -1310,6 +1361,36 @@ func handle_gamepad_trigger(is_lt: bool) -> bool:
 		return true
 
 
+## Modo fácil: vuelve al estado anterior a la última carta jugada.
+func undo() -> void:
+	if C.is_empty() or busy or _undo.is_empty() or not G.easy:
+		return
+	if not Eng.can_restore(C, _undo):
+		_undo = {}
+		Main.I.toast("Ya no se puede deshacer esa jugada.")
+		_update_hud()
+		return
+	_cancel_sel()
+	Eng.restore(C, _undo)
+	_undo = {}
+	# las cartas de la mano se vuelven a crear desde el estado restaurado
+	for uid in card_views.keys():
+		var v: CardView = card_views[uid]
+		if is_instance_valid(v):
+			v.queue_free()
+	card_views.clear()
+	Sfx.play("select")
+	_render_all()
+	Main.I.toast("Jugada deshecha.")
+
+
+func _potion_key(slot: int) -> void:
+	if slot < G.potions.size() and G.potions[slot] != null:
+		_on_potion(slot)
+	else:
+		Sfx.play("error")
+
+
 func _unhandled_key_input(ev: InputEvent) -> void:
 	if C.is_empty() or not (ev is InputEventKey) or not ev.pressed or ev.echo:
 		return
@@ -1340,6 +1421,27 @@ func _unhandled_key_input(ev: InputEvent) -> void:
 		return
 	if k == KEY_E:
 		_end_turn()
+		get_viewport().set_input_as_handled()
+		return
+	var pot_keys := [KEY_Q, KEY_W, KEY_R, KEY_T]
+	if k in pot_keys:
+		_potion_key(pot_keys.find(k))
+		get_viewport().set_input_as_handled()
+		return
+	if k == KEY_Z:
+		undo()
+		get_viewport().set_input_as_handled()
+		return
+	if k == KEY_D:
+		draw_btn.pressed.emit()
+		get_viewport().set_input_as_handled()
+		return
+	if k == KEY_S:
+		discard_btn.pressed.emit()
+		get_viewport().set_input_as_handled()
+		return
+	if k == KEY_X and not C.exhaust.is_empty():
+		exhaust_btn.pressed.emit()
 		get_viewport().set_input_as_handled()
 		return
 
@@ -1397,6 +1499,7 @@ func _play_now(inst: Dictionary, target) -> void:
 	if busy:
 		return
 	busy = true
+	_undo = Eng.snapshot(C) if G.easy else {}
 	var d := Eng.card_def(inst)
 	_cancel_sel()
 	_fly_ghost(inst.uid, target)
@@ -1408,6 +1511,7 @@ func _play_now(inst: Dictionary, target) -> void:
 		await _sleep(0.26 if (not Eng.is_x(d.cost) and d.cost >= 2) else 0.18)
 	if not Eng.play_card(C, inst.uid, target):
 		busy = false
+		_undo = {}
 		var v: CardView = card_views.get(inst.uid)
 		if v:
 			v.visible = true
@@ -1443,6 +1547,7 @@ func _end_turn() -> void:
 		return
 	_cancel_sel()
 	busy = true
+	_undo = {}
 	Sfx.play("end")
 	Eng.end_player_turn(C)
 	_render_all()
@@ -1494,6 +1599,15 @@ func _check_end() -> bool:
 		await _sleep(1.1)
 		_finish_win()
 	else:
+		var names := []
+		for e in C.enemies:
+			if e.hp > 0 and not (e.name in names):
+				names.append(e.name)
+		if names.is_empty():
+			for e in C.enemies:
+				if not (e.name in names):
+					names.append(e.name)
+		G["deathBy"] = ", ".join(names)
 		Sfx.play("lose")
 		sprite.play("die")
 		await _sleep(2.3)

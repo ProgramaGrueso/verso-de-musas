@@ -17,6 +17,10 @@ static func run(id: String, hook: String, ctx, a = null) -> void:
 		"onCardPlayed":
 			if id == "prisma_solar" and ctx.playedThisTurn % 3 == 0:
 				_solar(ctx)
+			elif id == "amuleto" and a != null and a.d.type == "power":
+				Eng.draw_cards(ctx, 1)
+				ctx.pl.block += 4
+				Eng._fx(ctx, "block", {"n": 4})
 		"onCombatEnd":
 			if id == "brasa_carmesi":
 				ctx.hp = mini(ctx.maxHp, ctx.hp + 6)
@@ -27,6 +31,16 @@ static func run(id: String, hook: String, ctx, a = null) -> void:
 			elif id == "pozo":
 				ctx.maxHp += 25
 				ctx.hp = ctx.maxHp
+			elif id == "medallon":
+				ctx.potions.append(null)
+		"onKill":
+			if id == "colmillo" and ctx.over != "lose":
+				ctx.G.hp = mini(ctx.G.maxHp, ctx.G.hp + 3)
+				Eng._fx(ctx, "heal", {"n": 3})
+		"onShuffle":
+			if id == "brujula":
+				ctx.pl.block += 5
+				Eng._fx(ctx, "block", {"n": 5})
 
 
 static func _on_combat_start(id: String, C) -> void:
@@ -62,6 +76,40 @@ static func _on_combat_start(id: String, C) -> void:
 		"ojo":
 			C.extraDraw += 1
 			Eng.add_cards(C, "doubt", 1, "draw")
+		# --- Oleada 2
+		"tinta":
+			for e in C.enemies:
+				Eng.add_status(C, e, "weak", 1)
+		"caparazon": Eng.add_status(C, C.pl, "metallicize", 2)
+		"corona_espinas":
+			C.maxEnergy += 1
+			Eng.add_cards(C, "burn", 1, "draw")
+		"reloj_roto": C.maxEnergy += 1
+		"estandarte":
+			if C.G.hp * 2 <= C.G.maxHp:
+				Eng.add_status(C, C.pl, "strength", 2)
+		"corazon_volcan":
+			C.maxEnergy += 1
+			C.G.hp = maxi(1, C.G.hp - 4)
+			Eng._fx(C, "playerHit", {"amt": 4, "blocked": 0, "direct": true})
+		"bandolera": Eng.add_cards(C, "lia_shiv", 2, "hand")
+		"capa_sombra":
+			C.maxEnergy += 1
+			C.extraDraw -= 1
+		"craneo_cristal": Eng.add_status(C, C.pl, "ostyRegen", 2)
+		"luna_violeta":
+			C.maxEnergy += 1
+			if C.osty != null:
+				C.osty.hp = maxi(1, floori(C.osty.hp / 2.0))
+		"abanico_espejo": Eng.add_status(C, C.pl, "heat", 3)
+		"sol_naciente":
+			for e in C.enemies:
+				Eng.add_status(C, e, "glow", 2)
+		"eclipse":
+			C.maxEnergy += 1
+			for e in C.enemies:
+				e.block += 8
+		"caracola_abismal": Eng.channel_orb(C, "abismo")
 
 
 static func _on_turn_start(id: String, C) -> void:
@@ -76,6 +124,9 @@ static func _on_turn_start(id: String, C) -> void:
 		"resorte_reserva":
 			if not Eng.get_s(C.pl, "cuerda"):
 				Eng.gain_wind(C, 2)
+		"reloj_arena":
+			if C.turn == 3:
+				C.energy += 2
 
 
 static func _on_turn_end(id: String, C) -> void:
@@ -106,3 +157,26 @@ static func use_potion(id: String, C, t) -> void:
 			Eng.add_status(C, t, "weak", 3)
 			Eng.add_status(C, t, "vulnerable", 3)
 		"rapidez": Eng.draw_cards(C, 3)
+		# --- Oleada 2
+		"duplicar": C["dupNext"] = true
+		"herrero":
+			for c in C.hand:
+				if Eng.can_upgrade(c):
+					c.up = true
+		"gambito":
+			var n: int = C.hand.size()
+			while not C.hand.is_empty():
+				var c2: Dictionary = C.hand.pop_back()
+				C.discard.append(c2)
+				Eng._fx(C, "discard", {"card": c2})
+			Eng.draw_cards(C, n)
+		"agilidad": Eng.add_status(C, C.pl, "dexterity", 2)
+		"espinas": Eng.add_status(C, C.pl, "thorns", 4)
+		"savia": Eng.add_status(C, C.pl, "regen", 5)
+		"brea":
+			for e in Eng.living(C):
+				Eng.deal_to_enemy(C, e, 12, {"noReflect": true})
+		"memoria":
+			if not C.discard.is_empty() and C.hand.size() < 10:
+				C.hand.append(C.discard.pop_back())
+				Eng._fx(C, "draw", {"n": 1})

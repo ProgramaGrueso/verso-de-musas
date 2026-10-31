@@ -35,6 +35,9 @@ func _ready() -> void:
 		await get_tree().create_timer(0.5).timeout
 		done.call())
 	row.add_child(b1)
+	if Eng.has_relic(G, "reloj_roto"):
+		b1.disabled = true
+		UIK.tip(b1, "[b][color=#f0cf7a]Reloj Detenido[/color][/b]\nEl tiempo no corre para ti: no puedes descansar.")
 	var b2 := _big_opt("ui:anvil", "Mejorar", "Mejora una carta de tu mazo.")
 	b2.disabled = not G.deck.any(func(c): return Eng.can_upgrade(c))
 	b2.pressed.connect(func():
@@ -43,7 +46,7 @@ func _ready() -> void:
 		ref.b2.disabled = true
 		var pick: Array = await Dlg.pick_cards({"title": "Elige una carta para mejorar", "sub": "Al elegir una carta verás cómo queda mejorada.", "upgradePreview": true, "cards": cands, "n": 1, "cancel": "Cancelar", "confirmLabel": "Mejorar"})
 		if pick.is_empty():
-			ref.b1.disabled = false
+			ref.b1.disabled = Eng.has_relic(G, "reloj_roto")
 			ref.b2.disabled = not G.deck.any(func(c): return Eng.can_upgrade(c))
 			return
 		var c = G.deck.filter(func(x): return x.uid == pick[0].uid)[0]
@@ -54,7 +57,15 @@ func _ready() -> void:
 	row.add_child(b2)
 	ref.b1 = b1
 	ref.b2 = b2
-	b1.grab_focus.call_deferred()
+	if b1.disabled and b2.disabled:
+		# Reloj Detenido y nada que mejorar: que nunca se quede atascada aquí
+		var skip := UIK.button("Seguir el camino ➜", "big")
+		skip.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		skip.pressed.connect(func(): done.call())
+		col.add_child(skip)
+		skip.grab_focus.call_deferred()
+	else:
+		(b2 if b1.disabled else b1).grab_focus.call_deferred()
 	UIK.fade_in(self, 0.3)
 
 

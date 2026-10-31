@@ -1,0 +1,43 @@
+{
+ "relic": {
+  "colmillo": "a large white wolf fang on a leather cord",
+  "medallon": "a round bronze apothecary medallion with a small potion bottle engraved",
+  "tinta": "a small glass bottle of black squid ink with a tentacle curling around it",
+  "caparazon": "a polished turtle shell glowing with a soft green shine",
+  "brujula": "an antique bronze compass with a glowing needle",
+  "reloj_arena": "an ornate hourglass with glowing golden sand",
+  "huevo": "a speckled golden griffin egg with feathers around it",
+  "pluma": "a blazing phoenix feather of red and gold fire",
+  "cristal": "a faceted violet crystal echoing rings of light",
+  "amuleto": "a blue eye amulet charm with wave patterns",
+  "corona_espinas": "a crown of black thorns with red roses",
+  "reloj_roto": "a cracked silver pocket watch with stopped hands",
+  "estandarte": "a small crimson battle standard with a golden knight crest",
+  "guantelete": "an armored gauntlet glowing with red hot fire",
+  "corazon_volcan": "a heart shaped volcanic rock with glowing lava cracks",
+  "bandolera": "a leather bandolier holding green glowing throwing knives",
+  "colmillo_vibora": "a viper fang dripping green venom",
+  "capa_sombra": "a folded black cloak with bat wing edges and purple shadows",
+  "craneo_cristal": "a crystal skull glowing violet",
+  "grimorio": "a forbidden black grimoire with a violet glowing eye on the cover and chains",
+  "luna_violeta": "a violet full moon orb on a silver stand",
+  "abanico_espejo": "a golden folding fan with mirror facets reflecting sunlight",
+  "sol_naciente": "a golden sunrise emblem with radiant rays",
+  "eclipse": "a black sun eclipse disc with a golden corona",
+  "muelle_doble": "a pair of brass clockwork springs intertwined",
+  "caracola_abismal": "a dark spiral seashell with a deep blue abyssal glow inside"
+ },
+ "potion": {
+  "duplicar": "a glass flask of violet potion with two mirrored swirls",
+  "herrero": "a glass flask of orange molten metal potion with a tiny hammer",
+  "gambito": "a glass flask of pink potion with playing cards floating around it",
+  "agilidad": "a glass flask of mint green potion with a winged foot symbol",
+  "espinas": "a glass flask of green potion with thorns growing on the glass",
+  "savia": "a glass flask of glowing green sap with a sprouting leaf",
+  "brea": "a round black tar bomb with a lit fuse",
+  "memoria": "a glass flask of pale blue liquid with a ghostly card inside"
+ },
+ "status": {
+  "regen": "a glowing green sprouting leaf with healing sparkles"
+ }
+}

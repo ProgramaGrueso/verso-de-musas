@@ -80,7 +80,10 @@ func _card_item(it: Dictionary, w: float) -> Control:
 	var G = Meta.run
 	var col := VBoxContainer.new()
 	col.add_theme_constant_override("separation", 6)
-	var cv := CardView.create(Eng.make_card(G, it.id), null, w)
+	var shown := Eng.make_card(G, it.id)
+	if Eng.has_relic(G, "huevo") and Eng.can_upgrade(shown):
+		shown.up = true   # el Huevo de Grifo: se ve como llegará al mazo
+	var cv := CardView.create(shown, null, w)
 	if true:
 		if it.sold:
 			cv.modulate = Color(1, 1, 1, 0.25)
@@ -95,7 +98,7 @@ func _card_item(it: Dictionary, w: float) -> Control:
 				if await Dlg.confirm("¿Comprar [b][color=#f0cf7a]%s[/color][/b] por %d de oro?" % [DB.cards[item.id].name, item.price]):
 					G.gold -= item.price
 					item.sold = true
-					G.deck.append(Eng.make_card(G, item.id))
+					Eng.gain_card(G, item.id)
 					Sfx.play("coin")
 					_render())
 	col.add_child(cv)
@@ -163,6 +166,10 @@ func _mini(icon: String, tip_text: String) -> Button:
 	b.custom_minimum_size = Vector2(76, 76)
 	var parts := icon.split(":")
 	b.icon = Icons.tex(parts[0], parts[1])
+	if b.icon == null:
+		b.text = Icons.emoji(parts[0], parts[1])
+		b.add_theme_font_override("font", UIK.font())
+		b.add_theme_font_size_override("font_size", 38)
 	b.expand_icon = true
 	b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	b.add_theme_constant_override("icon_max_width", 62)

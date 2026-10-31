@@ -5,6 +5,7 @@ extends RefCounted
 const ROWS := 6
 const COLS := 4
 const PRICE := {"common": 50, "uncommon": 78, "rare": 150}
+const RELIC_PRICE := {"common": 140, "uncommon": 190, "rare": 255}
 
 
 static func _same(a, b) -> bool:
@@ -129,6 +130,11 @@ static func gen_map_game(G) -> Dictionary:
 	for a in rows[GROWS - 1]:
 		a.next.append(boss)
 	_assign_types(G, rows)
+	# jefe del acto (con contenido ampliado hay varios por acto): se decide al crear el mapa y se muestra en él
+	if DB.extra:
+		G["bossId"] = Eng.pick(G, DB.encounters[G.act].boss)[0]
+	G["actFights"] = 0
+	G["lastEnc"] = ""
 	return {"rows": rows, "boss": boss}
 
 
@@ -255,6 +261,36 @@ static func encounter_for(G, tier: String) -> Array:
 	return Eng.pick(G, t)
 
 
+## Jefe de este acto (partidas antiguas sin G.bossId: el jefe original).
+static func boss_id(G) -> String:
+	var b = G.get("bossId")
+	if b != null and b != "" and DB.enemies.has(b) and int(DB.enemies[b].act) == int(G.act):
+		return b
+	return DB.encounters[G.act].boss[0][0]
+
+
+## Encuentro para el juego: los 3 primeros combates normales de cada acto salen de la lista "fácil" y el resto de la
+## "difícil"; no se repite el encuentro anterior. Sin contenido ampliado equivale a encounter_for.
+static func encounter_game(G, tier: String) -> Array:
+	var A: Dictionary = DB.encounters[G.act]
+	if not DB.extra or not A.has("easy"):
+		return encounter_for(G, tier)
+	if tier == "boss":
+		return [boss_id(G)]
+	var key := tier
+	if tier == "normal":
+		key = "easy" if int(G.get("actFights", 0)) < 3 else "hard"
+		G["actFights"] = int(G.get("actFights", 0)) + 1
+	var pool: Array = A[key]
+	var last: String = str(G.get("lastEnc", ""))
+	var cands := pool.filter(func(x): return "+".join(x) != last)
+	if cands.is_empty():
+		cands = pool
+	var enc: Array = Eng.pick(G, cands)
+	G["lastEnc"] = "+".join(enc)
+	return enc.duplicate()
+
+
 static func gen_shop(G) -> Dictionary:
 	var disc := 0.5 if Eng.has_relic(G, "tarjeta") else 1.0
 	var price := func(n: float) -> int: return maxi(5, floori(n * disc + 0.5))
@@ -274,23 +310,68 @@ static func gen_shop(G) -> Dictionary:
 			seen.append(nid)
 			neutral.append({"id": nid, "price": price.call(PRICE[rar] * 0.85 * (0.9 + Eng.rnd(G) * 0.2)), "sold": false})
 	var relics := []
-	var pool := []
-	for id in DB.relics.keys():
-		var r: Dictionary = DB.relics[id]
-		if r.rarity == "common" and not (id in G.relics) and (not r.has("char") or r.char == G.char):
-			pool.append(id)
-	for id in Eng.shuffle(G, pool).slice(0, 2):
-		relics.append({"id": id, "price": price.call(140 + Eng.rint(G, 0, 40)), "sold": false})
+	if DB.extra:
+		# una reliquia común, una poco común y una tercera poco común o rara
+		var taken := []
+		for spec in [["common", "common"], ["uncommon", "common"], ["rare" if Eng.rnd(G) < 0.45 else "uncommon", "uncommon"]]:
+			var rar: String = spec[0]
+			var cands: Array = Eng._relic_candidates(G, rar).filter(func(x): return not (x in taken))
+			if cands.is_empty():
+				rar = spec[1]
+				cands = Eng._relic_candidates(G, rar).filter(func(x): return not (x in taken))
+			if cands.is_empty():
+				continue
+			var rid: String = Eng.pick(G, cands)
+			taken.append(rid)
+			var base: int = RELIC_PRICE[rar]
+			relics.append({"id": rid, "price": price.call(base + Eng.rint(G, 0, 40)), "sold": false})
+	else:
+		var pool := []
+		for id in DB.relics.keys():
+			var r: Dictionary = DB.relics[id]
+			if r.rarity == "common" and not (id in G.relics) and (not r.has("char") or r.char == G.char):
+				pool.append(id)
+		for id in Eng.shuffle(G, pool).slice(0, 2):
+			relics.append({"id": id, "price": price.call(140 + Eng.rint(G, 0, 40)), "sold": false})
 	var potions := []
 	for id in Eng.shuffle(G, DB.potions.keys()).slice(0, 2):
 		potions.append({"id": id, "price": price.call(45), "sold": false})
 	return {"cards": cards, "neutral": neutral, "relics": relics, "potions": potions, "remove": {"price": price.call(75 + 25 * G.get("removed", 0)), "used": false}}
 
 
+## ¿Puede salir este evento ahora? (los eventos ampliados pueden ser de un acto o de una musa concretos)
+static func event_ok(G, e: Dictionary) -> bool:
+	if e.has("act") and int(e.act) != int(G.act):
+		return false
+	if e.has("char") and e.char != G.char:
+		return false
+	return true
+
+
 static func pick_event(G) -> Dictionary:
+	if DB.extra:
+		return _pick_event_extra(G)
 	var pool := DB.events.filter(func(e): return not (e.id in G.seenEvents))
 	var ev: Dictionary = Eng.pick(G, pool if not pool.is_empty() else DB.events)
 	G.seenEvents.append(ev.id)
 	if G.seenEvents.size() >= DB.events.size():
 		G.seenEvents = []
+	return ev
+
+
+## Sorteo con eventos de acto y de musa: los exclusivos de la musa pesan el doble para que se vean a menudo.
+static func _pick_event_extra(G) -> Dictionary:
+	var elig := DB.events.filter(func(e): return event_ok(G, e))
+	var pool := elig.filter(func(e): return not (e.id in G.seenEvents))
+	if pool.is_empty():
+		for e in elig:
+			G.seenEvents.erase(e.id)
+		pool = elig
+	var weighted := []
+	for e in pool:
+		weighted.append(e)
+		if e.has("char"):
+			weighted.append(e)
+	var ev: Dictionary = Eng.pick(G, weighted)
+	G.seenEvents.append(ev.id)
 	return ev

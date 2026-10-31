@@ -151,6 +151,44 @@ static func message(title: String, bbcode: String, btn: String = "Entendido", wi
 	await o.done
 
 
+## Pide un texto. Devuelve el texto escrito o null si se cancela.
+static func text_input(title: String, sub: String = "", initial: String = "", placeholder: String = ""):
+	var o := _overlay()
+	o.cancel_result = null
+	var v := _center_col(o)
+	var p := UIK.panel(30)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 14)
+	col.add_child(_title(title, 32))
+	if sub != "":
+		var r := UIK.rich("[center]%s[/center]" % sub, 18, UIK.DIM)
+		r.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		r.custom_minimum_size = Vector2(540, 0)
+		col.add_child(r)
+	var le := LineEdit.new()
+	le.text = initial
+	le.placeholder_text = placeholder
+	le.max_length = 40
+	le.custom_minimum_size = Vector2(540, 52)
+	le.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	le.add_theme_font_override("font", UIK.font("bold"))
+	le.add_theme_font_size_override("font_size", 24)
+	col.add_child(le)
+	var row := _row(16)
+	var y := UIK.button("Aceptar", "green")
+	var n := UIK.button("Cancelar", "red")
+	y.pressed.connect(func(): o.close(le.text))
+	n.pressed.connect(func(): o.close(null))
+	le.text_submitted.connect(func(t: String): o.close(t))
+	row.add_child(y)
+	row.add_child(n)
+	col.add_child(row)
+	p.add_child(col)
+	v.add_child(p)
+	le.grab_focus.call_deferred()
+	return await o.done
+
+
 # ---------- Cartas ----------
 static func view_cards(title: String, cards: Array, C = null) -> void:
 	var o := _overlay()
@@ -367,10 +405,13 @@ Sube la torre superando 3 zonas. Elige tu camino en el mapa, derrota enemigos y 
 • Tienes ⚡ energía (3 por turno). Cada carta tiene un coste en la esquina.
 • Haz clic en una carta para elegirla y otra vez para jugarla (o arrástrala hacia arriba). Si la carta ataca a un enemigo concreto, haz clic en el enemigo.
 • Encima de cada enemigo ves su intención: ⚔️ ataque (con el daño), 🛡️ defensa, ⬇️ te debilita, ⬆️ se fortalece.
+• Sobre tu barra de vida verás el daño total que llega este turno y cuántos PV perderías con tu Bloqueo actual.
 • Pulsa Terminar turno cuando acabes. El Bloqueo 🛡️ te protege del daño solo durante un turno.
 
 [b][color=#f0cf7a]Teclado[/color][/b]
-← → eligen carta · ↑ ↓ cambian de enemigo · Enter o Espacio juegan · E termina el turno · Esc cancela. También 1–9 para elegir una carta. F11: pantalla completa.
+← → eligen carta · ↑ ↓ cambian de enemigo · Enter o Espacio juegan · E termina el turno · Esc cancela. También 1–9 para elegir una carta.
+Q / W / R / T: usar la poción del hueco 1 / 2 / 3 / 4 · D: mazo de robo · S: descarte · X: agotadas · Z: deshacer la última carta (modo fácil).
+M: ver tu mazo · H o F1: esta ayuda · F11: pantalla completa.
 
 [b][color=#f0cf7a]Mando (Xbox / Gamepad)[/color][/b]
 Stick izquierdo / D-Pad: navegar cartas y menús · LB / RB: pasar cartas · A: jugar / confirmar · B: cancelar / volver · Y: terminar turno · X: mazo de robo · LT: poción · RT: descarte · Back / View: ver mazo · Start: menú de pausa.
@@ -386,7 +427,8 @@ Stick izquierdo / D-Pad: navegar cartas y menús · LB / RB: pasar cartas · A: 
 [b][color=#f0cf7a]Consejos[/color][/b]
 • Pasa el ratón sobre cualquier estado, reliquia o carta para ver qué hace.
 • Descansa 🔥 cuando tu vida esté baja. Las tiendas 💰 permiten eliminar cartas malas.
-• Si pierdes, ¡vuelve a intentarlo! Cada partida es distinta. El modo fácil da más vida y enemigos más débiles."""
+• Si pierdes, ¡vuelve a intentarlo! Cada partida es distinta. El modo fácil da más vida, enemigos más débiles y permite deshacer la última carta.
+• Cada partida tiene una semilla: escríbela al elegir musa para repetir los mismos mapas, o juega el Reto diario, igual para todo el mundo."""
 
 
 static func help() -> void:
@@ -433,7 +475,18 @@ static func pause_menu() -> void:
 			return
 		o.close(null)
 		Nav.leave_run()
+		G["surrender"] = true
 		Nav.game_over())
+	var seed_row := _row(10)
+	var sl := UIK.label("Semilla: %d" % G.seed, 16, UIK.DIM)
+	sl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	seed_row.add_child(sl)
+	var cp := UIK.button("Copiar", "small")
+	cp.pressed.connect(func():
+		DisplayServer.clipboard_set(str(G.seed))
+		Main.I.toast("Semilla copiada: %d" % G.seed))
+	seed_row.add_child(cp)
+	col.add_child(seed_row)
 	p.add_child(col)
 	v.add_child(p)
 	if first_b != null:

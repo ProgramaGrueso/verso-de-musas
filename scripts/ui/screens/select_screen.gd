@@ -5,6 +5,7 @@ extends Control
 var pick := ""
 var easy := false
 var nm := 0
+var seed_txt := ""
 var _bg: TextureRect
 var _panel: VBoxContainer
 var _nm_box: VBoxContainer
@@ -118,7 +119,8 @@ func _choose(id: String) -> void:
 func _start() -> void:
 	if not DB.characters[pick].implemented:
 		return
-	var G := Eng.new_run(pick, {"easy": easy, "nm": nm})
+	var G := Eng.new_run(pick, {"easy": easy, "nm": nm, "seed": Eng.seed_from_text(seed_txt)})
+	G["seeded"] = true   # cada acto arranca de un RNG propio: la misma semilla repite los mismos mapas
 	Meta.run = G
 	Meta.clear_save()
 	G.map = RunGen.gen_map_game(G)
@@ -216,5 +218,13 @@ func _render_toggle() -> void:
 	cb.add_theme_font_override("font", UIK.font("bold"))
 	cb.add_theme_font_size_override("font_size", 20)
 	cb.toggled.connect(func(p): easy = p; Meta.settings.easy = p; Meta.save_settings(); Sfx.play("select"))
-	UIK.tip(cb, "[b][color=#f0cf7a]Modo fácil[/color][/b]\nMás vida y enemigos más débiles. No se combina con la Pesadilla.")
+	UIK.tip(cb, "[b][color=#f0cf7a]Modo fácil[/color][/b]\nMás vida, enemigos más débiles y puedes deshacer la última carta jugada. No se combina con la Pesadilla.")
 	_mid.add_child(cb)
+	var sd := UIK.button("Semilla: " + (seed_txt if seed_txt != "" else "aleatoria"), "small")
+	sd.pressed.connect(func():
+		var t = await Dlg.text_input("Semilla", "Escribe un número o una palabra para repetir los mismos mapas (por ejemplo, la semilla de una partida de un amigo). Déjalo vacío para una partida aleatoria.", seed_txt, "aleatoria")
+		if t != null:
+			seed_txt = str(t).strip_edges()
+			_render_toggle())
+	UIK.tip(sd, "[b][color=#f0cf7a]Semilla[/color][/b]\nLa misma semilla genera los mismos mapas en los tres actos.")
+	_mid.add_child(sd)

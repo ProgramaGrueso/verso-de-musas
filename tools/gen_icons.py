@@ -129,6 +129,10 @@ G = {
  },
 }
 
+# Oleada 2 (tools/make_content_w2.py): reliquias y pociones nuevas
+for _g, _items in json.load(open(ROOT / "gen" / "icons_w2.json", encoding="utf-8")).items():
+    G[_g].update(_items)
+
 def redo_soft(path):
     """Versión «luminosa»: fondo oscuro con viñeta (se recorta con una máscara radial suave en cut_icons.py --soft)."""
     out = ROOT / "gen" / "icons_soft"; out.mkdir(exist_ok=True)

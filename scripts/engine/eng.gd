@@ -77,6 +77,8 @@ static func st_neg(k: String, n: int) -> bool:
 static func add_status(C, c, k: String, n: int) -> void:
 	if n == 0:
 		return
+	if k == "poison" and n > 0 and not is_same(c, C.pl) and has_relic(C.G, "colmillo_vibora"):
+		n += 1
 	var s: Dictionary = c.status
 	s[k] = s.get(k, 0) + n
 	if k == "poison" and n > 0 and not is_same(c, C.pl):
@@ -197,6 +199,24 @@ static func has_relic(G, id: String) -> bool:
 	return id in G.relics
 
 
+# ---------- Semillas ----------
+## Convierte el texto que escribe el jugador en una semilla (los números se usan tal cual).
+static func seed_from_text(t: String) -> int:
+	t = t.strip_edges()
+	if t == "":
+		return 0
+	if t.is_valid_int() and int(t) > 0:
+		return int(t) % 1000000000
+	var h := 0
+	for ch in t.to_lower().to_utf8_buffer():
+		h = (h * 31 + ch) % 999999937
+	return maxi(1, h)
+
+## Estado del RNG al empezar cada acto en partidas con semilla fija (no depende de lo jugado antes).
+static func act_seed(seed_v: int, act: int) -> int:
+	return _i32(seed_v * 7919 + act * 104729 + 1)
+
+
 # ---------- Nueva partida ----------
 static func new_run(char: String, opts: Dictionary = {}) -> Dictionary:
 	var seed_v: int = opts.get("seed", 0)
@@ -262,6 +282,7 @@ static func start_combat(G, ids: Array, opts: Dictionary = {}) -> Dictionary:
 		C.osty = DB.characters[G.char].osty.duplicate()
 	relic_hook(C, "onCombatStart")
 	Favors.on_combat_start(C)
+	apply_perm(C)
 	if G.nm and nmods(G).wound:
 		add_cards(C, "wound", 1, "draw")
 	for e in C.enemies:
@@ -269,6 +290,42 @@ static func start_combat(G, ids: Array, opts: Dictionary = {}) -> Dictionary:
 	start_turn(C)
 	Favors.on_first_turn(C)
 	return C
+
+## Bendiciones permanentes de la partida (eventos exclusivos de cada musa): G.perm = {estado: n, ostyMax, ostyPow}.
+static func apply_perm(C) -> void:
+	var perm = C.G.get("perm")
+	if perm == null:
+		return
+	for k in perm.keys():
+		var n: int = perm[k]
+		if k == "ostyMax":
+			if C.osty != null:
+				C.osty.max += n
+				C.osty.hp += n
+		elif k == "ostyPow":
+			if C.osty != null:
+				C.osty.pow += n
+		else:
+			add_status(C, C.pl, k, n)
+
+static func perm_text(G) -> String:
+	var perm = G.get("perm")
+	if perm == null or perm.is_empty():
+		return ""
+	var parts := []
+	for k in perm.keys():
+		if k == "ostyMax":
+			parts.append("Osty +%d PV máx." % perm[k])
+		elif k == "ostyPow":
+			parts.append("Osty +%d de Poder" % perm[k])
+		elif DB.st.has(k):
+			parts.append("+%d de %s" % [perm[k], st_name(k)])
+	return ", ".join(parts)
+
+static func add_perm(G, k: String, n: int) -> void:
+	if not G.has("perm") or G.perm == null:
+		G["perm"] = {}
+	G.perm[k] = G.perm.get(k, 0) + n
 
 static func living(C) -> Array:
 	var out := []
@@ -290,6 +347,7 @@ static func draw_cards(C, n: int) -> int:
 			C.discard.clear()
 			C.draw = shuffle(C.G, tmp)
 			_fx(C, "reshuffle")
+			relic_hook(C, "onShuffle")
 		C.hand.append(C.draw.pop_back())
 		drawn += 1
 	if drawn:
@@ -353,6 +411,11 @@ static func start_turn(C) -> void:
 			osty_heal(C, 1)   # y se cura 1 PV por turno
 	if S.get("ostyRegen", 0) and C.osty != null and C.osty.hp > 0:
 		osty_heal(C, S.ostyRegen)
+	if S.get("regen", 0):
+		var rg: int = S.regen
+		C.G.hp = mini(C.G.maxHp, C.G.hp + rg)
+		_fx(C, "heal", {"n": rg})
+		add_status(C, C.pl, "regen", -1)
 	relic_hook(C, "onTurnStart")
 	draw_cards(C, 5 + C.extraDraw)
 	if C.turn == 1 and C.firstTurnDraw:
@@ -365,8 +428,18 @@ static func lose_hp(C, n: int) -> void:
 	C.hpLost += n
 	_fx(C, "playerHit", {"amt": n, "blocked": 0, "direct": true})
 	if G.hp <= 0:
-		G.hp = 0
-		C.over = "lose"
+		_player_down(C)
+
+## PV a 0: derrota, salvo que la Pluma de Fénix (una vez por partida) te levante.
+static func _player_down(C) -> void:
+	var G = C.G
+	if has_relic(G, "pluma") and not G.get("plumaUsed", false):
+		G["plumaUsed"] = true
+		G.hp = maxi(1, ceili(G.maxHp * 0.3))
+		_fx(C, "heal", {"n": G.hp})
+		return
+	G.hp = 0
+	C.over = "lose"
 
 # Un Osty caído solo se cura si la carta lo revive explícitamente; si no, vuelve solo al inicio del turno.
 static func osty_heal(C, n: int, revive: bool = false) -> void:
@@ -395,8 +468,7 @@ static func deal_to_player(C, amt: int, src, no_thorns: bool = false) -> int:
 		C.G.hp -= amt
 		C.hpLost += amt
 		if C.G.hp <= 0:
-			C.G.hp = 0
-			C.over = "lose"
+			_player_down(C)
 	if blocked > 0:
 		_mt("block", blocked)
 	_fx(C, "playerHit", {"amt": amt, "blocked": blocked, "ostyAbs": osty_abs, "src": src})
@@ -428,8 +500,7 @@ static func deal_to_enemy(C, e, amt: int, o: Dictionary = {}) -> int:
 		C.G.hp -= t
 		_fx(C, "playerHit", {"amt": t, "blocked": 0, "direct": true})
 		if C.G.hp <= 0:
-			C.G.hp = 0
-			C.over = "lose"
+			_player_down(C)
 	if e.hp <= 0:
 		kill_enemy(C, e, o)
 	return amt
@@ -445,6 +516,7 @@ static func kill_enemy(C, e, o) -> void:
 	if e.def.tier == "boss":
 		_mt("boss_" + e.id)
 	_fx(C, "enemyDie", {"e": e})
+	relic_hook(C, "onKill", e)
 	if e.def.tier == "boss":
 		for x in C.enemies:
 			if x.hp > 0 and not is_same(x, e):
@@ -510,6 +582,28 @@ static func _ai_custom(C, e) -> String:
 				return "order"
 			var seq3 := ["royal", "rain", "ram", "jelly", "summon", "rain"]
 			return seq3[(e.turn - 1) % seq3.size()]
+		"drowncaptain":
+			if e.turn == 0:
+				return "abordaje"
+			var seq4 := ["canon", "andanada", "ancla", "ron", "abordaje"]
+			var k4: String = seq4[(e.turn - 1) % seq4.size()]
+			if k4 == "abordaje" and alive >= 3:
+				return "canon"
+			return k4
+		"mycelking":
+			if e.turn == 0:
+				return "colonia"
+			var seq5 := ["aplastar", "esporas", "pudrir", "festin", "colonia"]
+			var k5: String = seq5[(e.turn - 1) % seq5.size()]
+			if k5 == "colonia" and alive >= 3:
+				return "aplastar"
+			return k5
+		"waxcolossus":
+			if e.hp < e.maxHp * 0.5 and not e.get("enraged", false):
+				e["enraged"] = true
+				return "fundirse"
+			var seq6 := ["sello", "aplastar", "goteo", "cera", "endurecer"]
+			return seq6[e.turn % seq6.size()]
 	push_error("IA desconocida: " + e.id)
 	return e.def.moves.keys()[0]
 
@@ -708,6 +802,9 @@ static func spend_wind(C, n: int) -> int:
 	if n <= 0:
 		return 0
 	add_status(C, C.pl, "cuerda", -n)
+	if has_relic(C.G, "muelle_doble"):
+		C.pl.block += n
+		_fx(C, "block", {"n": n})
 	var tt := get_s(C.pl, "tictac")
 	if tt:
 		for i in n:
@@ -785,12 +882,25 @@ static func play_card(C, uid: int, target = null) -> bool:
 	C.hand.remove_at(idx)
 	C.playedThisTurn += 1
 	_mt("cards")
+	var stt: Dictionary = C.G.stats
+	if not stt.has("played"):
+		stt["played"] = {}
+	stt.played[inst.id] = stt.played.get(inst.id, 0) + 1
 	var prev_attack: bool = C.attacksThisTurn > 0
 	if d.type == "attack":
 		C.attacksThisTurn += 1
 	_fx(C, "play", {"card": inst, "d": d, "target": target})
 	relic_hook(C, "onCardPlayed", {"inst": inst, "d": d})
 	run_fx(C, d, target, X, prev_attack)
+	var echoes := 0
+	if has_relic(C.G, "cristal") and not C.get("echoUsed", false):
+		C["echoUsed"] = true
+		echoes += 1
+	if C.get("dupNext", false):
+		C.erase("dupNext")
+		echoes += 1
+	for _i in echoes:
+		_echo(C, d, target, X, prev_attack)
 	if d.get("gear", false):
 		replay_gear(C, d, target, X, prev_attack)
 	var cuts := get_s(C.pl, "cuts")
@@ -807,6 +917,16 @@ static func play_card(C, uid: int, target = null) -> bool:
 		C.over = "win"
 	return true
 
+## Repite el efecto de una carta ya jugada (sin volver a pagarla).
+static func _echo(C, d: Dictionary, target, X: int, prev_attack: bool) -> void:
+	if C.over != "" or living(C).is_empty():
+		return
+	var t = target
+	if needs_target(d) and (t == null or t.hp <= 0):
+		t = living(C)[0]
+	_fx(C, "replay", {"d": d})
+	run_fx(C, d, t, X, prev_attack)
+
 static func exhaust_card(C, inst: Dictionary, _played: bool = false) -> void:
 	C.exhaust.append(inst)
 	_fx(C, "exhaust", {"card": inst})
@@ -816,6 +936,8 @@ static func exhaust_card(C, inst: Dictionary, _played: bool = false) -> void:
 		_fx(C, "block", {"n": S.boneDance})
 	if S.get("darkEmbrace", 0):
 		draw_cards(C, S.darkEmbrace)
+	if has_relic(C.G, "grimorio") and not living(C).is_empty():
+		deal_to_enemy(C, pick(C.G, living(C)), 3, {"noReflect": true})
 
 static func run_fx(C, d: Dictionary, target, X: int, prev_attack: bool) -> void:
 	var f: Dictionary = d.fx
@@ -828,6 +950,9 @@ static func run_fx(C, d: Dictionary, target, X: int, prev_attack: bool) -> void:
 		tgts = [target]
 	if f.get("selfdmg", 0):
 		lose_hp(C, f.selfdmg)
+		if has_relic(C.G, "guantelete") and C.over == "":
+			pl.block += 4
+			_fx(C, "block", {"n": 4})
 	if f.get("energy", 0):
 		C.energy += f.energy
 	if f.get("str", 0):
@@ -1159,8 +1284,24 @@ static func _relic_candidates(G, rarity: String) -> Array:
 	return c
 
 static func random_relic(G):
+	if DB.extra:
+		return random_relic_tiered(G)
 	var c := _relic_candidates(G, "common")
 	return pick(G, c) if not c.is_empty() else null
+
+## Con contenido ampliado: 50% común, 33% poco común, 17% rara (si una rareza se agota, se prueba la siguiente).
+static func random_relic_tiered(G, bonus: float = 0.0):
+	var r := rnd(G)
+	var order := ["common", "uncommon", "rare"]
+	if r >= 0.83 - bonus:
+		order = ["rare", "uncommon", "common"]
+	elif r >= 0.5 - bonus:
+		order = ["uncommon", "common", "rare"]
+	for rar in order:
+		var c := _relic_candidates(G, rar)
+		if not c.is_empty():
+			return pick(G, c)
+	return null
 
 static func boss_relics(G) -> Array:
 	var c := _relic_candidates(G, "boss")
@@ -1176,3 +1317,91 @@ static func add_relic(G, id: String) -> void:
 	if meta_see_relic.is_valid():
 		meta_see_relic.call(id)
 	Relics.run(id, "onPickup", G, null)
+
+
+## Añade una carta al mazo desde recompensas, tiendas o eventos (el Huevo de Grifo la mejora).
+static func gain_card(G, id: String, up: bool = false) -> Dictionary:
+	var c := make_card(G, id, up)
+	if not c.up and has_relic(G, "huevo") and can_upgrade(c):
+		c.up = true
+	G.deck.append(c)
+	return c
+
+
+# ---------- Vista previa del daño entrante ----------
+## Daño total que harán los ataques anunciados este turno y cuánto llegaría a tus PV tras Bloqueo y Osty.
+static func incoming(C) -> Dictionary:
+	var total := 0
+	for e in living(C):
+		var it = e.intent
+		if it == null or not it.get("dmg", 0):
+			continue
+		total += intent_damage(C, e) * int(it.get("hits", 1))
+	var after_block := maxi(0, total - int(C.pl.block))
+	var osty_abs := 0
+	if C.osty != null and C.osty.hp > 0:
+		osty_abs = mini(C.osty.hp, after_block)
+	return {"total": total, "hp": after_block - osty_abs, "osty": osty_abs}
+
+
+# ---------- Deshacer (modo fácil) ----------
+## Copia del estado de combate antes de jugar una carta. No incluye el mapa (G.map) ni nada fuera del combate.
+static func snapshot(C) -> Dictionary:
+	var G = C.G
+	var fx = C.fx
+	C.G = null
+	C.fx = Callable()
+	var defs := {}
+	for e in C.enemies:
+		defs[e.uid] = e.def
+		e.def = null
+	var c2: Dictionary = C.duplicate(true)
+	for e in C.enemies:
+		e.def = defs[e.uid]
+	C.G = G
+	C.fx = fx
+	var g2 := {}
+	for k in ["hp", "maxHp", "gold", "deck", "potions", "uid", "rs", "stats", "plumaUsed"]:
+		if G.has(k):
+			var v = G[k]
+			g2[k] = v.duplicate(true) if (v is Dictionary or v is Array) else v
+	var alive := 0
+	for e in C.enemies:
+		if e.hp > 0:
+			alive += 1
+	return {"C": c2, "G": g2, "alive": alive, "n": C.enemies.size()}
+
+## ¿Se puede deshacer? Solo si no ha muerto ningún enemigo ni ha aparecido ninguno y el combate sigue.
+static func can_restore(C, snap: Dictionary) -> bool:
+	if snap.is_empty() or C.over != "" or C.prompt != null or C.phase != "player":
+		return false
+	return living(C).size() == snap.alive and C.enemies.size() == snap.n
+
+## Restaura el combate en el mismo diccionario C (la interfaz conserva sus referencias a C y a cada enemigo).
+static func restore(C, snap: Dictionary) -> void:
+	var src: Dictionary = snap.C
+	var by_uid := {}
+	for e in src.enemies:
+		by_uid[e.uid] = e
+	for e in C.enemies:
+		var s0 = by_uid.get(e.uid)
+		if s0 == null:
+			continue
+		var d = e.def
+		e.clear()
+		e.merge(s0.duplicate(true))
+		e.def = d
+	for k in src.keys():
+		if k in ["G", "fx", "enemies"]:
+			continue
+		var v = src[k]
+		C[k] = v.duplicate(true) if (v is Dictionary or v is Array) else v
+	for k in C.keys().duplicate():
+		if not src.has(k) and not (k in ["G", "fx", "enemies"]):
+			C.erase(k)
+	var G = C.G
+	for k in snap.G.keys():
+		var v2 = snap.G[k]
+		G[k] = v2.duplicate(true) if (v2 is Dictionary or v2 is Array) else v2
+	if not snap.G.has("plumaUsed"):
+		G.erase("plumaUsed")

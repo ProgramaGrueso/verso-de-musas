@@ -1,0 +1,224 @@
+{
+ "relics": {
+  "colmillo": {
+   "n": "Colmillo de Lobo",
+   "i": "🐺",
+   "rarity": "uncommon",
+   "d": "Cada vez que derrotas a un enemigo, recuperas 3 PV."
+  },
+  "medallon": {
+   "n": "Medallón del Boticario",
+   "i": "🏅",
+   "rarity": "uncommon",
+   "d": "Tienes 1 hueco de poción más."
+  },
+  "tinta": {
+   "n": "Tinta de Calamar",
+   "i": "🦑",
+   "rarity": "uncommon",
+   "d": "Al inicio del combate aplicas 1 Débil a todos los enemigos."
+  },
+  "caparazon": {
+   "n": "Caparazón Pulido",
+   "i": "🐢",
+   "rarity": "uncommon",
+   "d": "Empiezas cada combate con 2 de Metalizar."
+  },
+  "brujula": {
+   "n": "Brújula de Bronce",
+   "i": "🧭",
+   "rarity": "uncommon",
+   "d": "Cada vez que barajas tu descarte en el mazo de robo, ganas 5 de Bloqueo."
+  },
+  "reloj_arena": {
+   "n": "Reloj de Arena",
+   "i": "⏳",
+   "rarity": "uncommon",
+   "d": "En tu tercer turno de cada combate obtienes 2 de Energía."
+  },
+  "huevo": {
+   "n": "Huevo de Grifo",
+   "i": "🥚",
+   "rarity": "uncommon",
+   "d": "Las cartas que añades a tu mazo desde recompensas, tiendas y eventos llegan mejoradas."
+  },
+  "pluma": {
+   "n": "Pluma de Fénix",
+   "i": "🪶",
+   "rarity": "rare",
+   "d": "Una vez por partida, al caer a 0 PV te recuperas con el 30% de tus PV máx."
+  },
+  "cristal": {
+   "n": "Cristal de Eco",
+   "i": "💎",
+   "rarity": "rare",
+   "d": "La primera carta que juegas en cada combate se juega dos veces."
+  },
+  "amuleto": {
+   "n": "Amuleto de las Mareas",
+   "i": "🧿",
+   "rarity": "rare",
+   "d": "Cada vez que juegas un Poder, robas 1 carta y ganas 4 de Bloqueo."
+  },
+  "corona_espinas": {
+   "n": "Corona de Espinas",
+   "i": "🌹",
+   "rarity": "boss",
+   "d": "+1 de Energía por turno. Al inicio de cada combate añades 1 Quemadura a tu mazo de robo."
+  },
+  "reloj_roto": {
+   "n": "Reloj Detenido",
+   "i": "🕰️",
+   "rarity": "boss",
+   "d": "+1 de Energía por turno. Ya no puedes descansar en las hogueras (sí mejorar cartas)."
+  },
+  "estandarte": {
+   "n": "Estandarte Acorazado",
+   "i": "🚩",
+   "rarity": "common",
+   "char": "zafiro",
+   "d": "Al inicio del combate, si tienes la mitad de tus PV o menos, ganas 2 de Fuerza."
+  },
+  "guantelete": {
+   "n": "Guantelete Ígneo",
+   "i": "🧤",
+   "rarity": "uncommon",
+   "char": "zafiro",
+   "d": "Cada vez que pierdes PV por una de tus cartas, ganas 4 de Bloqueo."
+  },
+  "corazon_volcan": {
+   "n": "Corazón de Volcán",
+   "i": "🌋",
+   "rarity": "boss",
+   "char": "zafiro",
+   "d": "+1 de Energía por turno. Al inicio de cada combate pierdes 4 PV."
+  },
+  "bandolera": {
+   "n": "Bandolera de Cuchillas",
+   "i": "🔪",
+   "rarity": "common",
+   "char": "lia",
+   "d": "Al inicio de cada combate añades 2 Cuchillas a tu mano."
+  },
+  "colmillo_vibora": {
+   "n": "Colmillo de Víbora",
+   "i": "🐍",
+   "rarity": "uncommon",
+   "char": "lia",
+   "d": "Cada vez que aplicas Veneno a un enemigo, aplicas 1 más."
+  },
+  "capa_sombra": {
+   "n": "Capa de Sombras",
+   "i": "🦇",
+   "rarity": "boss",
+   "char": "lia",
+   "d": "+1 de Energía por turno. Robas 1 carta menos cada turno."
+  },
+  "craneo_cristal": {
+   "n": "Cráneo de Cristal",
+   "i": "💀",
+   "rarity": "common",
+   "char": "claudia",
+   "d": "Osty recupera 2 PV al inicio de cada turno."
+  },
+  "grimorio": {
+   "n": "Grimorio Prohibido",
+   "i": "📕",
+   "rarity": "uncommon",
+   "char": "claudia",
+   "d": "Cada vez que agotas una carta, infliges 3 de daño a un enemigo al azar."
+  },
+  "luna_violeta": {
+   "n": "Luna Violeta",
+   "i": "🌕",
+   "rarity": "boss",
+   "char": "claudia",
+   "d": "+1 de Energía por turno. Osty empieza cada combate con la mitad de sus PV."
+  },
+  "abanico_espejo": {
+   "n": "Abanico de Espejos",
+   "i": "🪭",
+   "rarity": "common",
+   "char": "aurora",
+   "d": "Empiezas cada combate con 3 de Calor."
+  },
+  "sol_naciente": {
+   "n": "Sol Naciente",
+   "i": "🌄",
+   "rarity": "uncommon",
+   "char": "aurora",
+   "d": "Al inicio del combate aplicas 2 de Resplandor a TODOS los enemigos."
+  },
+  "eclipse": {
+   "n": "Eclipse",
+   "i": "🌘",
+   "rarity": "boss",
+   "char": "aurora",
+   "d": "+1 de Energía por turno. Los enemigos empiezan cada combate con 8 de Bloqueo."
+  },
+  "muelle_doble": {
+   "n": "Muelle Doble",
+   "i": "🪀",
+   "rarity": "uncommon",
+   "char": "irene",
+   "d": "Cada vez que gastas Cuerda, ganas 1 de Bloqueo por cada punto gastado."
+  },
+  "caracola_abismal": {
+   "n": "Caracola Abismal",
+   "i": "🐙",
+   "rarity": "uncommon",
+   "char": "selene",
+   "d": "Empiezas cada combate con 1 Abismo canalizado."
+  }
+ },
+ "potions": {
+  "duplicar": {
+   "n": "Destilado de Eco",
+   "i": "🔁",
+   "c": "#c38bff",
+   "d": "Tu próxima carta este turno se juega dos veces."
+  },
+  "herrero": {
+   "n": "Elixir del Herrero",
+   "i": "⚒️",
+   "c": "#ffb15e",
+   "d": "Mejora todas las cartas de tu mano durante este combate."
+  },
+  "gambito": {
+   "n": "Tónico del Malabarista",
+   "i": "🃏",
+   "c": "#ff8fb8",
+   "d": "Descarta tu mano y roba tantas cartas como descartaste."
+  },
+  "agilidad": {
+   "n": "Poción de Agilidad",
+   "i": "🦶",
+   "c": "#8ef0c8",
+   "d": "Obtén 2 de Destreza."
+  },
+  "espinas": {
+   "n": "Tónico de Espinas",
+   "i": "🌵",
+   "c": "#9bd36a",
+   "d": "Obtén 4 de Espinas."
+  },
+  "savia": {
+   "n": "Savia Viva",
+   "i": "🌿",
+   "c": "#5fd47a",
+   "d": "Obtén 5 de Regeneración: al inicio de tus turnos recuperas PV."
+  },
+  "brea": {
+   "n": "Bomba de Brea",
+   "i": "💣",
+   "c": "#a0754a",
+   "d": "Inflige 12 de daño a TODOS los enemigos."
+  },
+  "memoria": {
+   "n": "Memoria Líquida",
+   "i": "🫗",
+   "c": "#7fc7ff",
+   "d": "Devuelve a tu mano la última carta de tu pila de descarte."
+  }
+ }
+}

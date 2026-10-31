@@ -38,12 +38,16 @@ static func rest() -> void:
 static func event() -> void:
 	Main.I.set_screen(EventScreen.new(), "event")
 
+static func history() -> void:
+	Main.I.set_screen(HistoryScreen.new(), "history")
+
 static func gallery(from_run: bool = false) -> void:
 	var s := GalleryScreen.new()
 	s.from_run = from_run
 	Main.I.set_screen(s, "gallery")
 
 static func game_over() -> void:
+	Meta.record_run(Meta.run, false)
 	Main.I.set_screen(EndScreen.new(), "end")
 
 static func victory() -> void:
@@ -51,6 +55,7 @@ static func victory() -> void:
 	Meta.clear_save()
 	var new_nm: bool = not G.easy and mini(10, G.get("nm", 0) + 1) > Meta.nm_unlocked(G.char)
 	Meta.win_run(G.char, G.get("nm", 0), G.easy)
+	Meta.record_run(G, true)
 	Meta.data.lastWinner = G.char
 	Meta.data.seenEnding = true
 	var e := EndingScreen.new()
@@ -67,6 +72,8 @@ static func node_done(was_boss: bool) -> void:
 			return
 		G.act += 1
 		G.pos = null
+		if G.get("seeded", false):
+			G.rs = Eng.act_seed(G.seed, G.act)   # misma semilla = mismos mapas en cada acto
 		G.map = RunGen.gen_map_game(G)
 		Favors.expire(G)
 		if G.act == 3:
@@ -85,9 +92,9 @@ static func enter_node(n: Dictionary) -> void:
 	G.floor += 1
 	Meta.add("floors")
 	match n.type:
-		"combat": combat(RunGen.encounter_for(G, "normal"), "normal")
-		"elite": combat(RunGen.encounter_for(G, "elite"), "elite")
-		"boss": combat(RunGen.encounter_for(G, "boss"), "boss")
+		"combat": combat(RunGen.encounter_game(G, "normal"), "normal")
+		"elite": combat(RunGen.encounter_game(G, "elite"), "elite")
+		"boss": combat(RunGen.encounter_game(G, "boss"), "boss")
 		"event": event()
 		"shop": shop()
 		"rest": rest()

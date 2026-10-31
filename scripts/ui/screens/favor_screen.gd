@@ -23,6 +23,9 @@ static func pick_entity(G) -> int:
 		G["entity"] = 0
 	else:
 		var n := randi() % (ENTITY.size() - 1) + 1
+		if G.get("seeded", false):
+			# con semilla fija (partidas con semilla y reto diario) la entidad también es la misma para todos
+			n = absi(Eng.act_seed(G.seed, G.act)) % (ENTITY.size() - 1) + 1
 		if n == G.entity:
 			n = n % (ENTITY.size() - 1) + 1
 		G["entity"] = n
