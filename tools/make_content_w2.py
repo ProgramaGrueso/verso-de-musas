@@ -96,7 +96,7 @@ ENCOUNTERS = {
           "hard": [["dockrat", "dockrat", "dockrat"], ["ghostpirate"], ["slime", "jelly"], ["eel", "dockrat"], ["crab", "dockrat"], ["ghostpirate", "dockrat"]],
           "elite": [["sirena"]], "boss": [["drowncaptain"]]},
     "2": {"easy": [["sporecap"], ["vinelasher"], ["brambwolf"], ["dryad"], ["thornbeast"]],
-          "hard": [["sporecap", "vinelasher"], ["mossgolem"], ["dryad", "sporecap"], ["vinelasher", "vinelasher", "sporecap"], ["brambwolf", "sporecap"], ["thornbeast", "sprout", "sprout"]],
+          "hard": [["sporecap", "vinelasher"], ["mossgolem"], ["dryad", "sporecap"], ["dryad", "brambwolf"], ["brambwolf", "sporecap"], ["thornbeast", "sprout", "sprout"]],
           "elite": [["mantis"]], "boss": [["mycelking"]]},
     "3": {"easy": [["drone", "drone"], ["wasp"], ["honeyslime"], ["workerbee"], ["beetle"]],
           "hard": [["drone", "drone", "drone"], ["wasp", "drone"], ["nurse", "wasp"], ["wasp", "wasp"], ["workerbee", "drone", "drone"], ["beetle", "drone"]],

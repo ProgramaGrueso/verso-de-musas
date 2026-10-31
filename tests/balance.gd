@@ -12,6 +12,7 @@ var rng := RandomNumberGenerator.new()
 var out := {}          # char -> {runs, wins, floors, acts}
 var fights := {}       # "tier:ids" -> {n, lost, hpLost}
 var killers := {}      # encuentro -> derrotas
+var run_log: Array = []   # {ch, won, relics}
 var relic_runs := {}   # reliquia -> {n, wins}
 var turn_cap_hits := 0
 
@@ -78,6 +79,7 @@ func _play_run(ch: String, nm: int, seed_v: int) -> void:
 	o.acts[G.act] += 1
 	if won:
 		o.wins += 1
+	run_log.append({"ch": ch, "won": won, "relics": G.relics.duplicate()})
 	for r in G.relics:
 		if not relic_runs.has(r):
 			relic_runs[r] = {"n": 0, "wins": 0}
@@ -338,9 +340,49 @@ func _report(nm: int, ms: int) -> void:
 	rk.sort_custom(func(a, b): return float(relic_runs[a].wins) / relic_runs[a].n > float(relic_runs[b].wins) / relic_runs[b].n)
 	for k in rk:
 		print("  %-20s %4d  %5.1f%%" % [k, relic_runs[k].n, 100.0 * relic_runs[k].wins / relic_runs[k].n])
+	_relic_uplift()
 	if turn_cap_hits:
 		print("\n(aviso: %d combates llegaron al tope de 60 turnos y se contaron como derrota)" % turn_cap_hits)
 	var f2 := FileAccess.open("user://balance.json", FileAccess.WRITE)
 	if f2:
 		f2.store_string(JSON.stringify({"nm": nm, "chars": out, "fights": fights, "killers": killers, "relics": relic_runs}, " "))
 		print("\nResumen JSON: ", ProjectSettings.globalize_path("user://balance.json"))
+
+
+func _rarity(r: String) -> String:
+	return str(DB.relics[r].get("rarity", "starter")) if DB.relics.has(r) else "?"
+
+
+## Compara cada reliquia con las partidas de la misma musa que tenían otra de su misma rareza
+## (así no pesa que las de jefe solo las tengan quienes ya vencieron a un jefe).
+func _relic_uplift() -> void:
+	var base := {}   # "musa|rareza" -> [n, wins]
+	for rl in run_log:
+		var seen := {}
+		for r in rl.relics:
+			var k: String = "%s|%s" % [rl.ch, _rarity(r)]
+			if seen.has(k):
+				continue
+			seen[k] = true
+			if not base.has(k):
+				base[k] = [0, 0]
+			base[k][0] += 1
+			if rl.won:
+				base[k][1] += 1
+	var rows := []
+	for r in relic_runs.keys():
+		var n: int = relic_runs[r].n
+		if n < 15 or _rarity(r) == "starter":
+			continue
+		var exp: float = 0.0
+		for rl in run_log:
+			if rl.relics.has(r):
+				var b: Array = base["%s|%s" % [rl.ch, _rarity(r)]]
+				exp += float(b[1]) / b[0]
+		var real: float = 100.0 * relic_runs[r].wins / n
+		rows.append([r, n, real, 100.0 * exp / n])
+	rows.sort_custom(func(a, b): return a[2] - a[3] > b[2] - b[3])
+	print("\n-- Reliquias frente a su grupo (misma musa y rareza), mín. 15 partidas --")
+	print("  %-20s %-9s %5s %7s %7s %7s" % ["reliquia", "rareza", "n", "gana%", "grupo%", "delta"])
+	for x in rows:
+		print("  %-20s %-9s %5d %6.1f%% %6.1f%% %+6.1f" % [x[0], _rarity(x[0]), x[1], x[2], x[3], x[2] - x[3]])
