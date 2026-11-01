@@ -90,6 +90,26 @@ func _ready() -> void:
 	if scenario == "screens":
 		await screens()
 		return
+	if scenario == "lore2":
+		for id in ["canto", "muelles", "capitana", "micelio", "cera"]:
+			if not Meta.data.gal.has(id):
+				Meta.data.gal.append(id)
+		Nav.gallery()
+		await wait(0.8)
+		await shot("40_gallery")
+		var ge = Main.I.screen
+		if ge.has_method("_view"):
+			ge._view(DB.lore.map(func(l): return l.id).find("cera"))
+			await wait(0.8)
+			await shot("41_gallery_cera")
+		var en := EndingScreen.new()
+		en.char = "claudia"
+		en.boss = "waxcolossus"
+		Main.I.set_screen(en, "ending")
+		await wait(5.0)
+		await shot("42_ending_wax")
+		get_tree().quit()
+		return
 	if scenario == "w2screens":
 		await w2screens()
 		return

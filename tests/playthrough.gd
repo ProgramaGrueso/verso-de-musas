@@ -6,6 +6,9 @@ var main: Control
 var char := "zafiro"
 var god := false
 var nm_level := 0
+var easy := false
+var fixed_seed := 0
+var undos := 0
 var runs_left := 1
 var finished := 0
 var stats := {"combats": 0, "wins": 0, "losses": 0, "events": 0, "shops": 0, "rests": 0}
@@ -22,6 +25,8 @@ func _ready() -> void:
 	var speed: float = float(args[2]) if args.size() > 2 else 8.0
 	god = args.size() > 3 and args[3].begins_with("god")
 	nm_level = int(args[4]) if args.size() > 4 else 0
+	easy = args.size() > 5 and args[5] == "easy"
+	fixed_seed = Eng.seed_from_text(args[6]) if args.size() > 6 else 0
 	Engine.time_scale = speed
 	CombatScreen.test_mode = true
 	Meta.settings.fast = true
@@ -35,7 +40,7 @@ func _ready() -> void:
 
 
 func _start_run() -> void:
-	var G := Eng.new_run(char, {"seed": rng.randi() % 100000 + 1, "nm": nm_level})
+	var G := Eng.new_run(char, {"seed": fixed_seed if fixed_seed != 0 else rng.randi() % 100000 + 1, "nm": nm_level, "easy": easy})
 	if god:
 		G.maxHp = 4000
 		G.hp = 4000
@@ -178,6 +183,11 @@ func _bot_combat() -> void:
 	if cands.is_empty():
 		cs._end_turn()
 		return
+	# modo fácil: de vez en cuando deshace la última carta (si se puede)
+	if G.easy and cs.undo_btn.visible and rng.randf() < 0.25:
+		cs.undo()
+		undos += 1
+		return
 	var inst: Dictionary = cands[rng.randi() % cands.size()]
 	var d := Eng.card_def(inst)
 	var lv := Eng.living(C)
@@ -275,6 +285,7 @@ func _bot_end() -> void:
 	print("partida %d terminada (%s). Estado: %s" % [finished, "victoria" if (Main.I.screen as EndScreen).victory else "derrota", JSON.stringify(stats)])
 	runs_left -= 1
 	if runs_left <= 0:
+		print("deshacer usado: ", undos)
 		print("OK: tiempo ", snappedf(t_total, 0.1), " s")
 		get_tree().quit()
 		return

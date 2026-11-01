@@ -6,6 +6,7 @@ var char := "zafiro"
 var nm := 0
 var done := Callable()
 var replay := false
+var boss := "queen"   # jefe del acto III vencido (cambia el primer texto)
 
 var _scenes: Array = []
 var _idx := -1
@@ -38,6 +39,8 @@ func _ready() -> void:
 		var txt: String = sc.text
 		if sc.has("alt") and sc.alt.has(char):
 			txt = sc.alt[char]
+		if sc.has("altBoss") and sc.altBoss.has(boss):
+			txt = sc.altBoss[boss]
 		_scenes.append({"img": sc.img.replace("{c}", char), "fx": sc.fx, "text": fill.call(txt)})
 	var n: Dictionary = DB.ending.nightmare
 	_scenes.append({"img": n.img, "fx": n.fx, "text": n.text, "dark": true})

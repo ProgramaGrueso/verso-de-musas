@@ -61,6 +61,7 @@ static func victory() -> void:
 	var e := EndingScreen.new()
 	e.char = G.char
 	e.nm = G.get("nm", 0)
+	e.boss = RunGen.boss_id(G)
 	e.done = func(): Main.I.set_screen(EndScreen.create_victory(G, new_nm), "end")
 	Main.I.set_screen(e, "ending")
 
