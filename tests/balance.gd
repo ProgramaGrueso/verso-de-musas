@@ -21,8 +21,9 @@ func _init() -> void:
 	Eng.meta_add = Callable()
 	Eng.meta_max = Callable()
 	Eng.meta_see_relic = Callable()
-	DB.load_all()
 	var args := OS.get_cmdline_user_args()
+	DB.extra = not (args.size() > 4 and args[4] == "base")   # «base»: sin el contenido de la oleada 2
+	DB.load_all()
 	var n_runs: int = int(args[0]) if args.size() > 0 else 40
 	var nm: int = int(args[1]) if args.size() > 1 else 0
 	var only: String = args[2] if args.size() > 2 and args[2] != "all" else ""
@@ -335,6 +336,7 @@ func _report(nm: int, ms: int) -> void:
 	nk.sort_custom(func(a, b): return float(fights[a].hpLost) / fights[a].n > float(fights[b].hpLost) / fights[b].n)
 	for k in nk.slice(0, 10):
 		print("  %-40s %5.1f PV  (%d)" % [k, float(fights[k].hpLost) / fights[k].n, fights[k].n])
+	_easy_vs_hard()
 	print("\n-- Reliquias (partidas que la tenían · % victorias), mín. 5 partidas --")
 	var rk: Array = relic_runs.keys().filter(func(k): return relic_runs[k].n >= 5)
 	rk.sort_custom(func(a, b): return float(relic_runs[a].wins) / relic_runs[a].n > float(relic_runs[b].wins) / relic_runs[b].n)
@@ -386,3 +388,32 @@ func _relic_uplift() -> void:
 	print("  %-20s %-9s %5s %7s %7s %7s" % ["reliquia", "rareza", "n", "gana%", "grupo%", "delta"])
 	for x in rows:
 		print("  %-20s %-9s %5d %6.1f%% %6.1f%% %+6.1f" % [x[0], _rarity(x[0]), x[1], x[2], x[3], x[2] - x[3]])
+
+
+## PV perdidos de media en los encuentros de la lista «fácil» frente a los de la «difícil» (solo con contenido ampliado).
+func _easy_vs_hard() -> void:
+	if not DB.extra:
+		return
+	for act in [1, 2, 3]:
+		var A: Dictionary = DB.encounters[act]
+		if not A.has("easy"):
+			continue
+		var easy_keys := {}
+		var hard_keys := {}
+		for e in A.easy:
+			easy_keys["normal:" + "+".join(e)] = true
+		for e in A.hard:
+			hard_keys["normal:" + "+".join(e)] = true
+		var res := {}
+		for name in ["easy", "hard"]:
+			var ks: Dictionary = easy_keys if name == "easy" else hard_keys
+			var n := 0
+			var lost := 0
+			for k in ks.keys():
+				if name == "easy" and hard_keys.has(k) or name == "hard" and easy_keys.has(k):
+					continue
+				if fights.has(k):
+					n += fights[k].n
+					lost += fights[k].hpLost
+			res[name] = [n, float(lost) / maxi(1, n)]
+		print("Acto %d: fáciles %.1f PV (%d combates) · difíciles %.1f PV (%d combates)" % [act, res.easy[1], res.easy[0], res.hard[1], res.hard[0]])
