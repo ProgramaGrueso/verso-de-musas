@@ -3,3 +3,4 @@
 /export/
 assets/music/*.m4a
 __pycache__/
+gen/w2_raw/

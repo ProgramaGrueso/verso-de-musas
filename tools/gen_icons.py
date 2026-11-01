@@ -2,7 +2,7 @@
 Uso: python3 tools/gen_icons.py [grupo ...]   grupos: relic potion node status intent ui orb
 Salida: gen/icons_raw/<kind>_<id>.png  y  assets/icons/<kind>_<id>.webp (192 px)."""
 import sys, json, pathlib, time
-sys.path.insert(0, "/mnt/Datos/IngenieriaInversa/VersoDeMusas/gen")
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "gen"))
 import comfy
 from PIL import Image
 
