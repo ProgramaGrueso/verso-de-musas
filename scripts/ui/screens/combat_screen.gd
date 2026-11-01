@@ -351,7 +351,7 @@ func _build_hud() -> void:
 	end_btn.pressed.connect(func(): Sfx.play("click"); _end_turn())
 	ui_layer.add_child(end_btn)
 	undo_btn = UIK.button("↶ Deshacer (Z)", "small")
-	undo_btn.position = Vector2(1090, 432)
+	undo_btn.position = Vector2(1090, 441)
 	undo_btn.focus_mode = Control.FOCUS_NONE
 	undo_btn.visible = false
 	undo_btn.pressed.connect(undo)

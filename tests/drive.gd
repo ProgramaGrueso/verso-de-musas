@@ -51,6 +51,8 @@ func _ready() -> void:
 		Meta.run = Gm
 		Gm.act = int(args[2]) if args.size() > 2 else 1
 		Gm.map = RunGen.gen_map_game(Gm)
+		if args.size() > 3:
+			Gm["bossId"] = args[3]   # fuerza el jefe para ver su retrato en el mapa
 		# avanza 3 salas para ver caminos recorridos
 		for i in 3:
 			var nx: Array = RunGen.next_nodes(Gm)
@@ -88,12 +90,15 @@ func _ready() -> void:
 	if scenario == "screens":
 		await screens()
 		return
+	if scenario == "w2screens":
+		await w2screens()
+		return
 	Nav.select()
 	await wait(0.4)
 	await shot("02_select")
 	var ch: String = args[2] if args.size() > 2 else "zafiro"
 	TitleScreen.last_char = ch
-	var G := Eng.new_run(ch, {"seed": 42})
+	var G := Eng.new_run(ch, {"seed": 42, "easy": args.size() > 4 and args[4] == "easy"})
 	Meta.run = G
 	G.map = RunGen.gen_map_game(G)
 	Nav.map(true)
@@ -199,6 +204,56 @@ func screens() -> void:
 	get_tree().quit()
 
 
+func w2screens() -> void:
+	# partidas para el historial: victoria, derrota, rendición, reto diario
+	var chars := ["zafiro", "lia", "claudia", "aurora", "irene", "selene", "claudia", "zafiro"]
+	for i in chars.size():
+		var Gh := Eng.new_run(chars[i], {"seed": 1000 + i, "easy": i == 3, "nm": 1 if i == 5 else 0})
+		Gh.map = RunGen.gen_map_game(Gh)
+		Gh.act = 1 + i % 3
+		Gh.floor = 5 + i * 3
+		Gh.stats["played"] = {Gh.deck[0].id: 12, Gh.deck[1].id: 7}
+		Eng.add_relic(Gh, "cristal" if i % 2 == 0 else "pluma")
+		if i == 1:
+			Gh["surrender"] = true
+		elif i != 2:
+			Gh["deathBy"] = "Mantis de Espinas"
+		if i == 6:
+			Gh["daily"] = Daily.key_today()
+			Gh["dailyMod"] = Daily.MODS.keys()[0]
+		Meta.record_run(Gh, i == 2 or i == 4)
+	Nav.history()
+	await wait(0.8)
+	await shot("30_history")
+	var hs = Main.I.screen
+	hs._show_detail(Meta.history()[0])
+	await wait(0.6)
+	await shot("31_history_detail")
+	Main.I.overlay_host.get_child(0).queue_free()
+	await wait(0.2)
+	var G := Eng.new_run("selene", {"seed": 9})
+	Meta.run = G
+	G.map = RunGen.gen_map_game(G)
+	G.act = 2
+	for evid in ["biblioteca", "kraken", "coliseo", "trono"]:
+		G.seenEvents = []
+		for e in DB.events:
+			if e.id != evid:
+				G.seenEvents.append(e.id)
+		Nav.event()
+		await wait(0.7)
+		await shot("32_event_" + evid)
+	G["deathBy"] = "Capitana Ahogada"
+	Nav.game_over()
+	await wait(0.6)
+	await shot("33_gameover")
+	G.hp = 50
+	Main.I.set_screen(EndScreen.create_victory(G, true), "end")
+	await wait(0.6)
+	await shot("34_victory")
+	get_tree().quit()
+
+
 func mouse_to(pos: Vector2) -> void:
 	var ev := InputEventMouseMotion.new()
 	ev.position = pos
@@ -219,7 +274,7 @@ func mouse_btn(pos: Vector2, pressed: bool) -> void:
 
 func drag_test(args: Array) -> void:
 	var ch: String = args[2] if args.size() > 2 else "zafiro"
-	var G := Eng.new_run(ch, {"seed": 42})
+	var G := Eng.new_run(ch, {"seed": 42, "easy": args.size() > 4 and args[4] == "easy"})
 	Meta.run = G
 	G.map = RunGen.gen_map_game(G)
 	Nav.combat(["dockrat", "jelly", "crab"], "normal")
