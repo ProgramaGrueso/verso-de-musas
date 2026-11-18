@@ -51,30 +51,56 @@ func _process(dt: float) -> void:
 		_save_timer -= dt
 		if _save_timer <= 0.0:
 			_dirty = false
-			_write(META_PATH, data)
+			_write(META_PATH, data, true)
 
 
 func _exit_tree() -> void:
 	if _dirty:
-		_write(META_PATH, data)
+		_write(META_PATH, data, true)
 
 
 # ---------- E/S ----------
-func _write(path: String, d) -> void:
-	var f := FileAccess.open(path, FileAccess.WRITE)
-	if f:
-		f.store_string(JSON.stringify(d))
+## Escritura atómica: primero el .tmp, después el rename. Si el proceso muere a mitad, el archivo
+## anterior sigue intacto (nunca queda un JSON truncado). Con keep_backup se guarda una copia .bak.
+func _write(path: String, d, keep_backup: bool = false) -> void:
+	var tmp := path + ".tmp"
+	var f := FileAccess.open(tmp, FileAccess.WRITE)
+	if f == null:
+		return
+	f.store_string(JSON.stringify(d))
+	f.flush()
+	f.close()
+	if keep_backup and FileAccess.file_exists(path):
+		DirAccess.copy_absolute(ProjectSettings.globalize_path(path), ProjectSettings.globalize_path(path + ".bak"))
+	var err := DirAccess.rename_absolute(ProjectSettings.globalize_path(tmp), ProjectSettings.globalize_path(path))
+	if err != OK:
+		# último recurso: borrar el destino y reintentar; si falla, el .tmp se ignora al cargar
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+		DirAccess.rename_absolute(ProjectSettings.globalize_path(tmp), ProjectSettings.globalize_path(path))
 
 
 func _read(path: String):
 	if not FileAccess.file_exists(path):
 		return null
-	var v = JSON.parse_string(FileAccess.get_file_as_string(path))
+	var json := JSON.new()
+	if json.parse(FileAccess.get_file_as_string(path)) != OK:
+		return null
+	var v = json.data
 	return DB._intify(v) if v != null else null
 
 
+## Lee el archivo y, si está corrupto o truncado, cae en su .bak. Devuelve null si ninguno sirve.
+func _read_backup(path: String):
+	var v = _read(path)
+	if v != null:
+		return v
+	if FileAccess.file_exists(path):
+		push_warning("Archivo corrupto, se usa la copia de seguridad: " + path)
+	return _read(path + ".bak")
+
+
 func _load_meta() -> void:
-	var d = _read(META_PATH)
+	var d = _read_backup(META_PATH)
 	if d is Dictionary:
 		for k in d.keys():
 			data[k] = d[k]
@@ -90,14 +116,14 @@ func _sanitize_nm() -> void:
 
 
 func _load_settings() -> void:
-	var d = _read(SETTINGS_PATH)
+	var d = _read_backup(SETTINGS_PATH)
 	if d is Dictionary:
 		for k in d.keys():
 			settings[k] = d[k]
 
 
 func save_settings() -> void:
-	_write(SETTINGS_PATH, settings)
+	_write(SETTINGS_PATH, settings, true)
 
 
 func _mark() -> void:
@@ -283,7 +309,7 @@ func _record_daily(G, won: bool) -> void:
 
 # ---------- Guardado de la partida ----------
 func has_save() -> bool:
-	return FileAccess.file_exists(SAVE_PATH) and _read(SAVE_PATH) != null
+	return _read_backup(SAVE_PATH) != null
 
 
 func save_run(G) -> void:
@@ -307,11 +333,11 @@ func save_run(G) -> void:
 	snap.map = {"rows": rows, "boss": {"visited": m.boss.visited}}
 	snap.pos = null if G.pos == null else {"r": G.pos.r, "i": idx.call(G.pos)}
 	snap["_epoch"] = SAVE_EPOCH
-	_write(SAVE_PATH, snap)
+	_write(SAVE_PATH, snap, true)
 
 
 func load_run():
-	var G = _read(SAVE_PATH)
+	var G = _read_backup(SAVE_PATH)
 	if G == null or G.get("_epoch", "") != SAVE_EPOCH:
 		return null
 	var rows := []
@@ -333,5 +359,6 @@ func load_run():
 
 
 func clear_save() -> void:
-	if FileAccess.file_exists(SAVE_PATH):
-		DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE_PATH))
+	for p in [SAVE_PATH, SAVE_PATH + ".bak", SAVE_PATH + ".tmp"]:
+		if FileAccess.file_exists(p):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(p))
