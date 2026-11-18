@@ -113,6 +113,8 @@ static func load_all() -> void:
 		events = events + _read("events_extra").events
 	var lo := _read("lore")
 	lore = lo.lore; nm_texts = lo.nm; ending = lo.ending
+	if extra and bal.has("nm_texts"):
+		nm_texts = bal.nm_texts   # escalera de Pesadilla rediseñada (solo con la Oleada 2)
 	var s := _read("states")
 	st = s.st; orb = s.orb; glos = s.glos
 	st.merge(_read("states_extra").st)

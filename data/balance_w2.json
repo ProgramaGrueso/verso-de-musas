@@ -259,5 +259,130 @@
    "wounds": 2,
    "d": "+1 de Energía por turno. Empiezas cada combate con 2 Heridas en tu mazo."
   }
- }
+ },
+ "nm": [
+  {
+   "hp": 1.0,
+   "dmg": 1.03,
+   "gold": 1.0,
+   "rest": 0.3,
+   "wound": false,
+   "doubt": false,
+   "eliteStr": 0,
+   "bossStr": 0,
+   "allStr": 0
+  },
+  {
+   "hp": 1.0,
+   "dmg": 1.03,
+   "gold": 0.85,
+   "rest": 0.3,
+   "wound": false,
+   "doubt": false,
+   "eliteStr": 0,
+   "bossStr": 0,
+   "allStr": 0
+  },
+  {
+   "hp": 1.03,
+   "dmg": 1.03,
+   "gold": 0.85,
+   "rest": 0.3,
+   "wound": false,
+   "doubt": false,
+   "eliteStr": 0,
+   "bossStr": 0,
+   "allStr": 0
+  },
+  {
+   "hp": 1.03,
+   "dmg": 1.03,
+   "gold": 0.85,
+   "rest": 0.25,
+   "wound": false,
+   "doubt": false,
+   "eliteStr": 0,
+   "bossStr": 0,
+   "allStr": 0
+  },
+  {
+   "hp": 1.03,
+   "dmg": 1.06,
+   "gold": 0.85,
+   "rest": 0.25,
+   "wound": false,
+   "doubt": false,
+   "eliteStr": 0,
+   "bossStr": 0,
+   "allStr": 0
+  },
+  {
+   "hp": 1.03,
+   "dmg": 1.06,
+   "gold": 0.85,
+   "rest": 0.25,
+   "wound": true,
+   "doubt": false,
+   "eliteStr": 0,
+   "bossStr": 0,
+   "allStr": 0
+  },
+  {
+   "hp": 1.06,
+   "dmg": 1.06,
+   "gold": 0.85,
+   "rest": 0.25,
+   "wound": true,
+   "doubt": false,
+   "eliteStr": 0,
+   "bossStr": 0,
+   "allStr": 0
+  },
+  {
+   "hp": 1.06,
+   "dmg": 1.06,
+   "gold": 0.85,
+   "rest": 0.25,
+   "wound": true,
+   "doubt": true,
+   "eliteStr": 0,
+   "bossStr": 0,
+   "allStr": 0
+  },
+  {
+   "hp": 1.06,
+   "dmg": 1.06,
+   "gold": 0.85,
+   "rest": 0.25,
+   "wound": true,
+   "doubt": true,
+   "eliteStr": 1,
+   "bossStr": 0,
+   "allStr": 0
+  },
+  {
+   "hp": 1.06,
+   "dmg": 1.06,
+   "gold": 0.85,
+   "rest": 0.25,
+   "wound": true,
+   "doubt": true,
+   "eliteStr": 1,
+   "bossStr": 1,
+   "allStr": 0
+  }
+ ],
+ "nm_texts": [
+  "",
+  "Los enemigos infligen +3% de daño.",
+  "Ganas un 15% menos de oro.",
+  "Los enemigos tienen +3% de PV.",
+  "La hoguera cura solo un 25% de tu vida.",
+  "Los enemigos infligen +6% de daño (en total).",
+  "Cada combate empieza con una Herida en tu mazo.",
+  "Los enemigos tienen +6% de PV (en total).",
+  "Empiezas cada partida con la maldición Duda.",
+  "Los élites empiezan con +1 de Fuerza.",
+  "Los jefes empiezan con +1 de Fuerza."
+ ]
 }

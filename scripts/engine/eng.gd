@@ -173,7 +173,13 @@ static func preview_dmg(C, d: Dictionary, target) -> int:
 
 
 # ---------- Modificadores de Pesadilla ----------
+## La escalera vive en data/balance_w2.json («nm»: 10 filas acumuladas) y solo se usa con DB.extra.
+## Sin ella (trazas de paridad) se devuelve la tabla original del web.
 static func nm_mods(n: int) -> Dictionary:
+	if DB.extra:
+		var t: Array = DB.bal.get("nm", [])
+		if n >= 1 and n <= t.size():
+			return t[n - 1]
 	return {
 		"hp": 1 + (0.25 if n >= 7 else 0.1 if n >= 1 else 0.0),
 		"dmg": 1 + (0.25 if n >= 9 else 0.1 if n >= 2 else 0.0),

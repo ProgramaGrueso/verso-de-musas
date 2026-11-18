@@ -155,6 +155,35 @@ BALANCE = {
         "pozo": {"hp": 18, "d": "Aumenta tus PV máx. en 18 y te curas por completo."},
         "nucleo": {"wounds": 2, "d": "+1 de Energía por turno. Empiezas cada combate con 2 Heridas en tu mazo."},
     },
+    # Escalera de Pesadilla (10 niveles, el techo del juego). Cada fila es el estado acumulado de ese
+    # nivel: una sola variable nueva por escalón y pasos pequeños, para que no haya muros. La versión
+    # anterior metía +10% PV en el 1, +10% daño en el 2 y +2 Fuerza en el 5: 30 de los 36 puntos de la
+    # curva caían en tres niveles y el 4 y el 6 no hacían nada. Se mide con `balance.gd -- 100 sweep`.
+    "nm": [
+        {"hp": 1.0,  "dmg": 1.03, "gold": 1.0,  "rest": 0.3,  "wound": False, "doubt": False, "eliteStr": 0, "bossStr": 0, "allStr": 0},
+        {"hp": 1.0,  "dmg": 1.03, "gold": 0.85, "rest": 0.3,  "wound": False, "doubt": False, "eliteStr": 0, "bossStr": 0, "allStr": 0},
+        {"hp": 1.03, "dmg": 1.03, "gold": 0.85, "rest": 0.3,  "wound": False, "doubt": False, "eliteStr": 0, "bossStr": 0, "allStr": 0},
+        {"hp": 1.03, "dmg": 1.03, "gold": 0.85, "rest": 0.25, "wound": False, "doubt": False, "eliteStr": 0, "bossStr": 0, "allStr": 0},
+        {"hp": 1.03, "dmg": 1.06, "gold": 0.85, "rest": 0.25, "wound": False, "doubt": False, "eliteStr": 0, "bossStr": 0, "allStr": 0},
+        {"hp": 1.03, "dmg": 1.06, "gold": 0.85, "rest": 0.25, "wound": True,  "doubt": False, "eliteStr": 0, "bossStr": 0, "allStr": 0},
+        {"hp": 1.06, "dmg": 1.06, "gold": 0.85, "rest": 0.25, "wound": True,  "doubt": False, "eliteStr": 0, "bossStr": 0, "allStr": 0},
+        {"hp": 1.06, "dmg": 1.06, "gold": 0.85, "rest": 0.25, "wound": True,  "doubt": True,  "eliteStr": 0, "bossStr": 0, "allStr": 0},
+        {"hp": 1.06, "dmg": 1.06, "gold": 0.85, "rest": 0.25, "wound": True,  "doubt": True,  "eliteStr": 1, "bossStr": 0, "allStr": 0},
+        {"hp": 1.06, "dmg": 1.06, "gold": 0.85, "rest": 0.25, "wound": True,  "doubt": True,  "eliteStr": 1, "bossStr": 1, "allStr": 0},
+    ],
+    "nm_texts": [
+        "",
+        "Los enemigos infligen +3% de daño.",
+        "Ganas un 15% menos de oro.",
+        "Los enemigos tienen +3% de PV.",
+        "La hoguera cura solo un 25% de tu vida.",
+        "Los enemigos infligen +6% de daño (en total).",
+        "Cada combate empieza con una Herida en tu mazo.",
+        "Los enemigos tienen +6% de PV (en total).",
+        "Empiezas cada partida con la maldición Duda.",
+        "Los élites empiezan con +1 de Fuerza.",
+        "Los jefes empiezan con +1 de Fuerza.",
+    ],
 }
 
 # ------------------------------------------------------------------ reliquias

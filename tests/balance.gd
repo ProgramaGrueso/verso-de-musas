@@ -3,9 +3,10 @@ extends SceneTree
 ## políticas por musa y resume el porcentaje de victorias, la dureza de cada jefe/élite y qué encuentros
 ## acaban con más partidas. Sirve para comparar antes/después de tocar números, no como IA buena.
 ##
-## Uso: godot --headless --path . --script tests/balance.gd -- [partidas_por_musa=40] [pesadilla=0] [musa=todas] [semilla=1]
+## Uso: godot --headless --path . --script tests/balance.gd -- [partidas_por_musa=40] [pesadilla=0|sweep] [musa=todas] [semilla=1]
 ## Ejemplo: godot --headless --path . --script tests/balance.gd -- 100 0
 ##          godot --headless --path . --script tests/balance.gd -- 50 5 selene
+##          godot --headless --path . --script tests/balance.gd -- 100 sweep all 1   (curva 0→10)
 ##          godot --headless --path . --script tests/balance.gd -- 40 0 all 1 base   (sin la oleada 2)
 ## Escribe el resumen en user://balance.json y una línea por partida en user://balance_runs.json
 ## (musa, semilla, acto, piso, causa de muerte, mazo y reliquias): así se comparan fases con el mismo criterio.
@@ -29,11 +30,16 @@ func _init() -> void:
 	DB.extra = not (args.size() > 4 and args[4] == "base")   # «base»: sin el contenido de la oleada 2
 	DB.load_all()
 	var n_runs: int = int(args[0]) if args.size() > 0 else 40
-	var nm: int = int(args[1]) if args.size() > 1 else 0
+	var nm_arg: String = args[1] if args.size() > 1 else "0"
 	var only: String = args[2] if args.size() > 2 and args[2] != "all" else ""
 	rng.seed = int(args[3]) if args.size() > 3 else 1
 	var chars: Array = DB.playable() if only == "" else [only]
 	var t0 := Time.get_ticks_msec()
+	if nm_arg == "sweep":
+		_sweep(chars, n_runs, t0)
+		quit(0)
+		return
+	var nm: int = int(nm_arg)
 	for ch in chars:
 		out[ch] = {"runs": 0, "wins": 0, "floors": 0, "acts": [0, 0, 0, 0]}
 		deck_avg[ch] = [0, 0]
@@ -41,6 +47,39 @@ func _init() -> void:
 			_play_run(ch, nm, rng.randi() % 1000000 + 1)
 	_report(nm, Time.get_ticks_msec() - t0)
 	quit(0)
+
+
+## Curva completa de la escalera (0→10) en una sola tabla: media por musa y coste de cada escalón.
+func _sweep(chars: Array, n_runs: int, t0: int) -> void:
+	var rows := {}
+	for lv in 11:
+		out = {}
+		for ch in chars:
+			out[ch] = {"runs": 0, "wins": 0, "floors": 0, "acts": [0, 0, 0, 0]}
+			deck_avg[ch] = [0, 0]
+			for i in n_runs:
+				_play_run(ch, lv, rng.randi() % 1000000 + 1)
+		var row := []
+		for ch in chars:
+			var o: Dictionary = out[ch]
+			row.append(100.0 * o.wins / maxi(1, o.runs))
+		rows[lv] = row
+	print("\n=== Barrido de Pesadilla · %d partidas por musa · %.1f s ===" % [n_runs, float(Time.get_ticks_msec() - t0) / 1000.0])
+	var head := "%-9s" % "nivel"
+	for ch in chars:
+		head += "%10s" % ch
+	print(head + "%10s%9s" % ["media", "escalón"])
+	var prev := -1.0
+	for lv in 11:
+		var row: Array = rows[lv]
+		var line := "%-9d" % lv
+		var sum := 0.0
+		for v in row:
+			line += "%9.1f%%" % v
+			sum += v
+		var mean: float = sum / row.size()
+		print(line + "%9.1f%%%9s" % [mean, "—" if prev < 0.0 else "%+.1f" % (mean - prev)])
+		prev = mean
 
 
 # ============================== partida ==============================
