@@ -104,6 +104,19 @@ done
 Objetivo razonable (sin banda definida): sin errores y sin quedarse a 0 %. ✅ Mínimo 1 %. El 65–79 % de
 las partidas muere en el Acto I, así que Pesadilla 5 hoy es casi “pasa el Acto I o nada”.
 
+Y no es el techo: la Pesadilla llega a **10** (se desbloquea por musa al ganar el nivel anterior, y el
+modo fácil no cuenta). Medido con el mismo bot y la misma semilla, 100 partidas por musa:
+
+| Nivel | Victorias | Piso medio |
+|---|---|---|
+| 5 | 1,0–6,0 % | 10,1–12,6 |
+| 7 | 0,0–3,0 % (solo Selene gana) | 7,3–9,7 |
+| 10 | **0,0 % en las 6** | 6,1–7,3 |
+
+Con los modificadores acumulativos (PV, daño, Duda, oro, hoguera, Herida por combate, Fuerza) la curva
+no es una rampa: a partir del 7 el bot muere casi siempre en el Acto I. Si la Pesadilla 1–20 de la Fase 3
+va en serio, hay que rediseñar los modificadores, no solo añadir niveles.
+
 ### Delta de la oleada 2 (mismo bot, semilla 1, 200 por musa, `base`)
 
 | Musa | `base` | con oleada 2 | Delta |
