@@ -4,8 +4,8 @@ Rama: `ccr-a7209c0c-soukyo`. Todo lo de abajo está **sin commitear** (working t
 el siguiente paso es revisar y hacer uno o varios commits). Este documento permite retomar sin releer
 la conversación. El plan sigue en `ROADMAP.md`; aquí va el estado real medido.
 
-Resumen: **Fase 0 cerrada salvo la pasada de interfaz con las 6 musas** y **Fase 1 con la curva ya dentro
-de banda en las 3 semillas**, pendiente de Pesadilla 5, comparativa `base`, referencia humana y commit.
+Resumen: **Fase 0 cerrada salvo la revisión visual a ojo** y **Fase 1 con la curva ya dentro de banda en
+las 3 semillas**, con Pesadilla 5 y comparativa `base` hechas; pendiente la referencia humana (18 partidas).
 
 ---
 
@@ -17,7 +17,7 @@ de banda en las 3 semillas**, pendiente de Pesadilla 5, comparativa `base`, refe
 |---|---|---|
 | `--import` y `.uid` | Hecho. No aparecieron `.uid` nuevos; ya estaban commiteados. | — |
 | `run_traces` 350 ok | Hecho: **350 ok, 0 fallan** (última ejecución tras todos los cambios). | `tests/run_traces.gd` |
-| `playthrough` 6 musas + fácil + semilla | **Parcial**: solo humo con Zafiro (100 s, murió en piso 6 del Acto I) *antes* de los cambios de balance. Falta repetirlo con las 6 y con `easy`/semilla. | `tests/playthrough.gd` |
+| `playthrough` 6 musas + fácil + semilla | **Hecho**: 6 musas en normal (todas murieron en el jefe del Acto I salvo Aurora, que llegó al 26), 1 en fácil con `god` y semilla (`dragon`) que **ganó usando 19 deshaceres**, y 1 normal con semilla. Sin `SCRIPT ERROR`; solo el aviso de recursos vivos al salir. Queda la revisión visual a ojo. | `tests/playthrough.gd` |
 | 7 puntos de riesgo | Cubiertos por tests automáticos: `risk` (deshacer/Eco/Pluma) **892 ok**, `events_test` **126.504 ok**, `history_test` OK, `ui_risk_test` OK, `save_test` OK. Falta la vuelta manual por interfaz. | `tests/risk.gd`, `events_test.gd`, `history_test.tscn`, `ui_risk_test.tscn` |
 | Guardado a prueba de balas | **Hecho**: escritura atómica `.tmp` + rename, copia `.bak` antes de sobrescribir, lectura con caída al `.bak`, `clear_save` borra los tres, y prueba de `kill -9` real. | `scripts/core/meta.gd`, `tests/save_test.gd`, `tests/crash_writer.*`, `tests/crash_reader.*` |
 | Volcado por partida | **Hecho**: `user://balance_runs.json` con musa, semilla, Pesadilla, acto, piso, causa de muerte, PV, oro, mazo y reliquias. | `tests/balance.gd` |
@@ -45,8 +45,8 @@ godot --headless --path . res://tests/crash_reader.tscn   # imprime CRASH_SAVE O
 | Reliquias outlier | `escamas` 3→2 Espinas, `caparazon` 2→1 Metalizar, `pozo` 25→18 PV, `nucleo` 1→2 Heridas, y buffs a las iniciales flojas (`brasa_carmesi`, `llave_maestra`). | ídem + `scripts/engine/relics.gd` |
 | Editar solo en el generador | Hecho: los JSON se regeneran con `python3 tools/make_content_w2.py`. También se alineó el prompt de `eclipse` para que regenerar no ensucie `gen/icons_w2.json`. | `tools/make_content_w2.py` |
 | `-- 200 0` × 3 semillas | **Hecho** (tabla abajo). | — |
-| `-- 100 5` Pesadilla | **Pendiente**. | — |
-| Comparativa `base` | **Pendiente**. | — |
+| `-- 100 5` Pesadilla | **Hecho**: 1,0–6,0 % de victorias, sin errores; las muertes se concentran en el Acto I (65–79 de 100). | — |
+| Comparativa `base` | **Hecho**: delta grande de la oleada (tabla abajo). | — |
 
 ### Cambios de diseño que hay que conocer
 
@@ -92,9 +92,39 @@ done
 - PV por encuentro (media): Acto I **2,8 / 9,5** (fácil corto: objetivo 3–5), Acto II 4,0 / 10,4 ✅,
   Acto III 3,7 / 8,6 ✅.
 
+### Pesadilla 5 (100 partidas por musa, semilla 1)
+
+| Musa | Victorias | Piso medio |
+|---|---|---|
+| Selene | 6,0 % | 12,6 |
+| Irene | 5,0 % | 10,1 |
+| Lia / Claudia / Aurora | 2,0 % | 11,3 / 11,3 / 11,4 |
+| Zafiro | 1,0 % | 10,8 |
+
+Objetivo razonable (sin banda definida): sin errores y sin quedarse a 0 %. ✅ Mínimo 1 %. El 65–79 % de
+las partidas muere en el Acto I, así que Pesadilla 5 hoy es casi “pasa el Acto I o nada”.
+
+### Delta de la oleada 2 (mismo bot, semilla 1, 200 por musa, `base`)
+
+| Musa | `base` | con oleada 2 | Delta |
+|---|---|---|---|
+| Claudia | 88,5 % | 38,5 % | −50,0 |
+| Lia | 5,0 % | 41,0 % | +36,0 |
+| Zafiro | 7,5 % | 36,0 % | +28,5 |
+| Irene | 4,5 % | 34,5 % | +30,0 |
+| Selene | 7,0 % | 39,5 % | +32,5 |
+| Aurora | 32,0 % | 42,5 % | +10,5 |
+
+`base` es el juego sin overrides **ni** contenido de la oleada 2, así que no sirve para validar los
+ajustes, solo para medir cuánto mueve la oleada. Lo que explica el salto no es el contenido nuevo sino
+los cambios de encuentros (en `base` `vinelasher+vinelasher+sporecap` cuesta 32,9 PV y termina 161
+partidas) y la vida inicial. Claudia va al revés porque en `base` Osty revivía cada turno: el override
+es justo lo que corrige ese 88,5 %.
+
 Comparativa con el punto de partida del roadmap (bot viejo): Claudia 70 %, Aurora 50 %, Selene 37,5 %,
-Lia 27,5 %, Zafiro 20 %, Irene 17,5 %. **No es directamente comparable**: el bot cambió a propósito.
-La comparación honesta es contra el mismo bot con `base` (pendiente).
+
+Lia 27,5 %, Zafiro 20 %, Irene 17,5 %. **No es directamente comparable**: el bot cambió a propósito y
+aquella medición era con el contenido nuevo. La comparación honesta es contra el mismo bot con `base`.
 
 ### Sobre las reliquias
 
@@ -110,46 +140,46 @@ No nerfear más a ciegas.
 
 ## 3. Pendiente, en orden sugerido
 
-1. **Revisar el diff y commitear** (no hay commits nuevos). Sugerencia de commits:
-   1. `fix(save): escritura atómica, copia .bak y tolerancia a corrupción` (`meta.gd`, `save_test.gd`, `crash_*`).
-   2. `test(balance): bot con políticas por musa y volcado por partida` (`balance.gd`).
-   3. `balance: overrides de la oleada 2 (Osty, jefes, élites, reliquias, vida inicial)` (`balance_w2.json`, `db.gd`, `eng.gd`, `relics.gd`, `make_content_w2.py`, `enemies_extra.json`).
-   4. `docs: traspaso de fase 0/1` (`HANDOFF_FASE01.md`, `ROADMAP.md`).
-2. **Pasada de interfaz con las 6 musas** (Fase 0): una normal y una en fácil con Zafiro (para el deshacer).
+1. **Revisión visual a ojo** (lo único que queda de la Fase 0). El bot ya pasó por las 6 musas y por una
+   partida completa con `god` + fácil + semilla; falta mirar la interfaz:
    ```sh
    XDG_DATA_HOME=/tmp/vdm_pt godot --path . res://tests/playthrough.tscn -- <musa> 1 20
-   XDG_DATA_HOME=/tmp/vdm_pt godot --path . res://tests/playthrough.tscn -- zafiro 1 20 god 0 easy
-   XDG_DATA_HOME=/tmp/vdm_pt godot --path . res://tests/playthrough.tscn -- <musa> 1 20 god 0 "" dragon
+   XDG_DATA_HOME=/tmp/vdm_pt godot --path . res://tests/playthrough.tscn -- zafiro 1 20 god 0 easy dragon
    ```
-   Revisar también a ojo los 7 puntos de riesgo y la revisión visual 1280×720 del handoff de la Oleada 2.
-3. **Pesadilla 5**: `godot --headless --path . --script tests/balance.gd -- 100 5` (objetivo razonable:
-   sin errores y sin que el bot se quede a 0 %; no hay banda definida todavía).
-4. **Comparativa `base`**: mismo bot y mismas semillas con el contenido original.
-   ```sh
-   godot --headless --path . --script tests/balance.gd -- 200 0 all 1 base
-   ```
-   Ojo: con `base` no existen los overrides ni la Oleada 2, así que sirve para medir el delta de la oleada,
-   no para validar los ajustes.
-5. **18 partidas humanas** (3 por musa) y decidir si Irene necesita otro empujón. Anotar piso y causa.
-6. **Cerrar los flecos numéricos** que queden tras las humanas: `crabking` está 2,5 puntos bajo la banda
+   Revisar los 7 puntos de riesgo y la revisión visual 1280×720 del handoff de la Oleada 2. Si el bot se
+   atasca, deja la captura en `user://stuck.png` y sale con código 1.
+2. **18 partidas humanas** (3 por musa) y decidir si Irene necesita otro empujón. Anotar piso y causa.
+   Es el hueco de la Fase 1.1: el bot sigue midiendo mejor que antes, pero no sustituye a un humano.
+3. **Cerrar los flecos numéricos** que queden tras las humanas: `crabking` está 2,5 puntos bajo la banda
    y el Acto I fácil cuesta 2,8 PV (objetivo 3–5); `hivemind`/`mantis`/`hornet`/`stag` siguen fáciles.
    Los números se tocan en `tools/make_content_w2.py` (`BALANCE` y `ENEMIES`) y se regeneran.
-7. **Arreglar la métrica de reliquias** antes de otra ronda de nerfs (ver arriba).
+4. **Arreglar la métrica de reliquias** antes de otra ronda de nerfs (ver arriba).
+5. **Decidir qué hacer con Pesadilla 5**: hoy es un muro en el Acto I (1–6 % de victorias) y no hay banda
+   definida. O se acepta como “modo experto”, o se define en la Fase 3 junto con Pesadilla 1–20.
 
 ---
 
-## 4. Archivos tocados
+## 4. Archivos tocados y commits
 
-Modificados:
-`data/enemies_extra.json`, `scripts/core/db.gd`, `scripts/core/meta.gd`, `scripts/engine/eng.gd`,
-`scripts/engine/relics.gd`, `tests/balance.gd`, `tests/save_test.gd`, `tools/make_content_w2.py`.
+Commits de la sesión (rama `ccr-a7209c0c-soukyo`):
 
-Nuevos:
-`data/balance_w2.json`, `tests/crash_reader.gd`, `tests/crash_reader.tscn`,
-`tests/crash_writer.gd`, `tests/crash_writer.tscn`, `HANDOFF_FASE01.md`, `ROADMAP.md` (estaba sin commitear).
+| Commit | Contenido |
+|---|---|
+| `a4eaf01` | `fix(save)`: escritura atómica, `.bak`, tolerancia a corrupción, tests de `kill -9`. |
+| `e9bd0ff` | `test(balance)`: bot con políticas por musa y volcado por partida. |
+| `610707a` | `balance`: overrides de la oleada 2 (`balance_w2.json`, `DB._deep`, Osty, jefes, élites, reliquias, vida). |
+| `62e0422` | `docs`: roadmap y este traspaso. |
 
-Comprobaciones verdes al pausar: `run_traces` 350/0, `risk` 892/0, `events_test` 126.504/0,
-`history_test` OK, `ui_risk_test` OK, `save_test` OK, `CRASH_SAVE OK`.
+Modificados: `data/enemies_extra.json`, `scripts/core/db.gd`, `scripts/core/meta.gd`,
+`scripts/engine/eng.gd`, `scripts/engine/relics.gd`, `tests/balance.gd`, `tests/save_test.gd`,
+`tests/playthrough.gd`, `tools/make_content_w2.py`.
+
+Nuevos: `data/balance_w2.json`, `tests/crash_reader.gd(.uid)`, `tests/crash_reader.tscn`,
+`tests/crash_writer.gd(.uid)`, `tests/crash_writer.tscn`, `HANDOFF_FASE01.md`, `ROADMAP.md`.
+
+Comprobaciones verdes: `run_traces` 350/0, `risk` 892/0, `events_test` 126.504/0, `history_test` OK,
+`ui_risk_test` OK, `save_test` OK, `CRASH_SAVE OK`, `seed_test` 0 fallan, `playthrough` 6 musas + fácil
+con victoria y 19 deshaceres, `balance` 1200 partidas × 3 semillas con 0 errores.
 
 ## 5. Trampas conocidas
 
@@ -160,6 +190,9 @@ Comprobaciones verdes al pausar: `run_traces` 350/0, `risk` 892/0, `events_test`
 - `tests/save_test.tscn` a veces falla al crear el swapchain de Vulkan si hay otra ventana de Godot;
   ejecutarlo con `--headless` (funciona igual).
 - El bot de `playthrough.gd` es aleatorio; sirve de humo de interfaz, no de balance. El de `balance.gd`
-  es el que mide.
+  es el que mide. Pierde casi siempre en el jefe del Acto I: para recorrer los tres actos hay que usar
+  `god` (4000 PV) y una velocidad alta (`20`–`30`).
+- `playthrough.gd` imprime el resumen de la partida al final (`combats/events/wins/losses`) y, si se
+  atasca, guarda `user://stuck.png` y sale con código 1.
 - `user://balance_runs.json` se sobrescribe en cada ejecución: si se quieren conservar los volcados,
   copiarlo antes (ruta: `~/.local/share/godot/app_userdata/Verso de Musas/balance_runs.json`).

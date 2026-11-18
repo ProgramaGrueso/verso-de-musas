@@ -3,11 +3,12 @@
 Estado: beta v0.9 (solo build de Windows). Este documento ordena el trabajo desde aquí hasta el lanzamiento.
 Se actualiza al cerrar cada fase: marcar casillas, anotar la fecha y enlazar el commit.
 
-> **Progreso 2026-11-18 (sesión pausada):** Fase 0 cerrada salvo la pasada de interfaz con las 6 musas;
-> Fase 1 con la curva ya en banda (media de 3×200 partidas: 39 / 39 / 40 / 41 / 33 / 36 %, diferencia
-> entre musas 8,3 puntos). Guardado atómico con `.bak`, volcado por partida y overrides de balance solo
-> con `DB.extra`. Detalle, decisiones y pendientes en [`HANDOFF_FASE01.md`](HANDOFF_FASE01.md).
-> **Nada de esta sesión está commiteado todavía.**
+> **Progreso 2026-11-18:** Fase 0 cerrada salvo la revisión visual a ojo (el bot ya pasó por las 6 musas,
+> por una partida en fácil con 19 deshaceres y por una con semilla). Fase 1 con la curva en banda
+> (media de 3×200 partidas: 39 / 39 / 40 / 41 / 33 / 36 %, diferencia entre musas 8,3 puntos),
+> Pesadilla 5 medida (1–6 % de victorias, sin errores) y comparativa `base` hecha. Guardado atómico con
+> `.bak`, volcado por partida y overrides de balance solo con `DB.extra`. Falta la referencia humana:
+> 3 partidas por musa. Detalle en [`HANDOFF_FASE01.md`](HANDOFF_FASE01.md).
 
 **Principio rector:** no añadir contenido nuevo hasta que la curva de dificultad y la sensación de juego
 estén bien. Con 244 cartas, 35 enemigos, 24 eventos, 54 reliquias y 16 pociones el problema ya no es
@@ -62,14 +63,16 @@ Resumen de prioridad:
 
 Objetivo: una base estable sobre la que medir. Sin esto, el resto son conjeturas.
 
-- [ ] `godot --headless --path . --import` y commit de los `.uid` nuevos.
-- [ ] `run_traces`: 350 ok, 0 fallan.
-- [ ] `playthrough` con las 6 musas; una partida con semilla y una en modo fácil (deshacer).
-- [ ] Repasar los 7 puntos de riesgo de `HANDOFF_OLEADA2.md`: deshacer, Eco, Pluma de Fénix, eventos
+- [x] `godot --headless --path . --import` y commit de los `.uid` nuevos.
+- [x] `run_traces`: 350 ok, 0 fallan.
+- [x] `playthrough` con las 6 musas; una partida con semilla y una en modo fácil (deshacer).
+      *(6/6 sin errores, todas menos Aurora murieron en el jefe del Acto I; la de fácil ganó con 19 deshaceres.)*
+- [x] Repasar los 7 puntos de riesgo de `HANDOFF_OLEADA2.md`: deshacer, Eco, Pluma de Fénix, eventos
       con `await`, Reloj Detenido, Medallón del Boticario e Historial.
-- [ ] Guardado a prueba de balas: copia de `user://save.json` antes de escribir, tolerancia a archivo
+      *(cubiertos por tests; queda la vuelta manual por interfaz.)*
+- [x] Guardado a prueba de balas: copia de `user://save.json` antes de escribir, tolerancia a archivo
       corrupto y prueba de matar el proceso en mitad de un combate.
-- [ ] Volcado por partida en `tests/balance.gd` (musa, semilla, piso, causa de muerte, mazo) para comparar
+- [x] Volcado por partida en `tests/balance.gd` (musa, semilla, piso, causa de muerte, mazo) para comparar
       fases con el mismo criterio.
 
 **Salida:** 0 errores en consola, 0 regresiones de paridad, las 6 musas completan una partida y el guardado
@@ -83,7 +86,7 @@ Objetivo: que la dificultad suba de forma legible y ninguna musa sea una trampa.
 
 ### 1.1 Arreglar la medición primero
 
-- [ ] Políticas de bot por musa en `tests/balance.gd`: Cuerda (Irene), orbes (Selene), Osty (Claudia),
+- [x] Políticas de bot por musa en `tests/balance.gd`: Cuerda (Irene), orbes (Selene), Osty (Claudia),
       Calor/Resplandor (Aurora).
 - [ ] 3 partidas humanas por musa (18 en total) como verdad de referencia; anotar piso y causa de muerte.
 - [ ] Decidir con esos datos qué es desequilibrio real y qué es “el bot no sabe jugarlo”.
@@ -102,17 +105,19 @@ Objetivo: que la dificultad suba de forma legible y ninguna musa sea una trampa.
 
 ### 1.3 Cambios
 
-- [ ] Suavizar `crabking` y `drowncaptain` (`data/enemies_extra.json`, `_ai_custom`).
-- [ ] Subir élites: `sirena`, `mantis`, `hornet`, `hivemind`, `royalguard`, `stag`, `treant`.
-- [ ] Encuentros `easy` con algo de coste real; `hard` sin picos de 18 PV en un normal.
-- [ ] Reliquias outlier y flojas (`medallon` 38,5 %, `capa_sombra` 40 %).
-- [ ] Editar siempre en `tools/make_content_w2.py` y regenerar; no a mano en los JSON.
+- [x] Suavizar `crabking` y `drowncaptain` (`data/enemies_extra.json`, `_ai_custom`).
+- [x] Subir élites: `sirena`, `mantis`, `hornet`, `hivemind`, `royalguard`, `stag`, `treant`.
+      *(los cuatro últimos siguen cortos: 1–7 % de derrotas.)*
+- [x] Encuentros `easy` con algo de coste real; `hard` sin picos de 18 PV en un normal.
+- [x] Reliquias outlier y flojas (`medallon` 38,5 %, `capa_sombra` 40 %).
+- [x] Editar siempre en `tools/make_content_w2.py` y regenerar; no a mano en los JSON.
 
 ### 1.4 Verificación
 
-- [ ] `-- 200 0` con tres semillas distintas.
-- [ ] `-- 100 5` para Pesadilla.
-- [ ] Comparativa contra `base` (sin Oleada 2) para medir el delta real de la oleada.
+- [x] `-- 200 0` con tres semillas distintas.
+- [x] `-- 100 5` para Pesadilla. *(1–6 % de victorias; sin banda definida.)*
+- [x] Comparativa contra `base` (sin Oleada 2) para medir el delta real de la oleada.
+      *(ver tabla en el handoff: +10 a +36 puntos salvo Claudia, que baja por el nerf de Osty.)*
 
 **Salida:** tabla antes/después en el commit, ninguna musa fuera de banda, ninguna reliquia con delta > +8.
 
