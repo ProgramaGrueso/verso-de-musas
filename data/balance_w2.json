@@ -1,0 +1,263 @@
+{
+ "osty_revives": 1,
+ "enemies": {
+  "crabking": {
+   "hp": [
+    136,
+    140
+   ],
+   "moves": {
+    "roar": {
+     "block": 12
+    },
+    "pincer": {
+     "dmg": 15
+    },
+    "spin": {
+     "dmg": 5
+    },
+    "twin": {
+     "dmg": 11
+    },
+    "shell": {
+     "block": 19
+    }
+   }
+  },
+  "ghostpirate": {
+   "hp": [
+    41,
+    45
+   ],
+   "moves": {
+    "slash": {
+     "dmg": 11
+    }
+   }
+  },
+  "rootmother": {
+   "hp": [
+    160,
+    164
+   ],
+   "moves": {
+    "crush": {
+     "dmg": 23
+    },
+    "harvest": {
+     "dmg": 8,
+     "heal": 12
+    }
+   }
+  },
+  "mossgolem": {
+   "hp": [
+    56,
+    60
+   ],
+   "moves": {
+    "smash": {
+     "dmg": 19
+    }
+   }
+  },
+  "chainwarden": {
+   "hp": [
+    72,
+    76
+   ],
+   "moves": {
+    "chain": {
+     "dmg": 11
+    },
+    "lash": {
+     "dmg": 6
+    }
+   }
+  },
+  "tentacle": {
+   "hp": [
+    96,
+    100
+   ],
+   "moves": {
+    "whip": {
+     "dmg": 18
+    },
+    "drain": {
+     "dmg": 11
+    },
+    "drown": {
+     "dmg": 9
+    }
+   }
+  },
+  "treant": {
+   "hp": [
+    118,
+    122
+   ],
+   "moves": {
+    "slam": {
+     "dmg": 23
+    },
+    "splinter": {
+     "dmg": 9
+    }
+   }
+  },
+  "stag": {
+   "hp": [
+    114,
+    118
+   ],
+   "moves": {
+    "gore": {
+     "dmg": 22
+    },
+    "gallop": {
+     "dmg": 13
+    }
+   }
+  },
+  "royalguard": {
+   "hp": [
+    146,
+    151
+   ],
+   "moves": {
+    "guard": {
+     "block": 24
+    },
+    "thrust": {
+     "dmg": 25
+    },
+    "sweep": {
+     "dmg": 11
+    },
+    "charge": {
+     "dmg": 35
+    }
+   }
+  },
+  "hivemind": {
+   "hp": [
+    132,
+    137
+   ],
+   "moves": {
+    "strike": {
+     "dmg": 33
+    },
+    "mind": {
+     "dmg": 10
+    },
+    "wave": {
+     "dmg": 5
+    }
+   }
+  },
+  "crab": {
+   "hp": [
+    36,
+    40
+   ],
+   "moves": {
+    "crush": {
+     "dmg": 13
+    }
+   }
+  },
+  "jelly": {
+   "hp": [
+    26,
+    30
+   ]
+  },
+  "honeyslime": {
+   "hp": [
+    46,
+    50
+   ],
+   "moves": {
+    "jet": {
+     "dmg": 14
+    }
+   }
+  },
+  "beetle": {
+   "hp": [
+    60,
+    65
+   ],
+   "moves": {
+    "ram": {
+     "dmg": 17
+    }
+   }
+  }
+ },
+ "cards": {
+  "aurora_climax": {
+   "fx": {
+    "heatDmg": 4
+   }
+  },
+  "aurora_supernova": {
+   "fx": {
+    "heatMul": 1.35
+   }
+  },
+  "aurora_warmth": {
+   "fx": {
+    "heat": 2
+   }
+  }
+ },
+ "chars": {
+  "zafiro": {
+   "hp": 94
+  },
+  "irene": {
+   "hp": 96
+  },
+  "selene": {
+   "hp": 94
+  },
+  "lia": {
+   "hp": 82
+  },
+  "aurora": {
+   "hp": 72
+  }
+ },
+ "relics": {
+  "brasa_carmesi": {
+   "heal": 11,
+   "d": "Al terminar un combate, recuperas 11 PV."
+  },
+  "prisma_solar": {
+   "dmg": 4
+  },
+  "llave_maestra": {
+   "wind": 5,
+   "d": "Empiezas cada combate con 5 de Cuerda."
+  },
+  "escamas": {
+   "thorns": 2,
+   "d": "Empiezas cada combate con 2 de Espinas."
+  },
+  "caparazon": {
+   "metallicize": 1,
+   "d": "Empiezas cada combate con 1 de Metalizar."
+  },
+  "pozo": {
+   "hp": 18,
+   "d": "Aumenta tus PV máx. en 18 y te curas por completo."
+  },
+  "nucleo": {
+   "wounds": 2,
+   "d": "+1 de Energía por turno. Empiezas cada combate con 2 Heridas en tu mazo."
+  }
+ }
+}

@@ -49,8 +49,8 @@
    "act": 1,
    "tier": "elite",
    "hp": [
-    84,
-    88
+    98,
+    102
    ],
    "h": 290,
    "moves": {
@@ -60,11 +60,11 @@
       "weak": 2,
       "vulnerable": 1
      },
-     "block": 8
+     "block": 10
     },
     "garra": {
      "name": "Garra",
-     "dmg": 16
+     "dmg": 19
     },
     "marea": {
      "name": "Resaca",
@@ -99,8 +99,8 @@
    "act": 1,
    "tier": "boss",
    "hp": [
-    100,
-    104
+    94,
+    98
    ],
    "h": 350,
    "moves": {
@@ -114,16 +114,16 @@
     },
     "canon": {
      "name": "Cañonazo",
-     "dmg": 12
+     "dmg": 10
     },
     "andanada": {
      "name": "Andanada",
-     "dmg": 3,
+     "dmg": 2,
      "hits": 4
     },
     "ancla": {
      "name": "Ancla de Hierro",
-     "dmg": 8,
+     "dmg": 7,
      "apply": {
       "frail": 1
      }
@@ -179,24 +179,24 @@
    "act": 2,
    "tier": "elite",
    "hp": [
-    98,
-    102
+    108,
+    112
    ],
    "h": 300,
    "moves": {
     "camo": {
      "name": "Camuflaje",
-     "block": 16,
-     "thorns": 2
+     "block": 18,
+     "thorns": 3
     },
     "scythe": {
      "name": "Guadañas",
-     "dmg": 9,
+     "dmg": 10,
      "hits": 2
     },
     "ambush": {
      "name": "Emboscada",
-     "dmg": 20,
+     "dmg": 23,
      "apply": {
       "vulnerable": 1
      }
@@ -313,19 +313,19 @@
    "act": 3,
    "tier": "elite",
    "hp": [
-    112,
-    117
+    134,
+    138
    ],
    "h": 300,
    "moves": {
     "buzz": {
      "name": "Zumbido",
      "selfStr": 2,
-     "block": 12
+     "block": 14
     },
     "sting": {
      "name": "Doble Aguijón",
-     "dmg": 10,
+     "dmg": 13,
      "hits": 2,
      "apply": {
       "weak": 1
@@ -333,7 +333,7 @@
     },
     "execute": {
      "name": "Ejecución",
-     "dmg": 30
+     "dmg": 42
     },
     "frenzy": {
      "name": "Frenesí",
@@ -448,6 +448,14 @@
     [
      "ghostpirate",
      "dockrat"
+    ],
+    [
+     "eel",
+     "eel"
+    ],
+    [
+     "ghostpirate",
+     "jelly"
     ]
    ],
    "elite": [

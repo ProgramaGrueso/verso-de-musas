@@ -4,8 +4,9 @@ extends RefCounted
 
 
 static func _solar(C) -> void:
+	var dmg: int = int(DB.relics.prisma_solar.get("dmg", 4))
 	for e in Eng.living(C):
-		Eng.deal_to_enemy(C, e, 4, {"noReflect": true})
+		Eng.deal_to_enemy(C, e, dmg, {"noReflect": true})
 
 
 ## Ejecuta el gancho `hook` de la reliquia `id`. ctx es C (combate) o G (onCombatEnd/onPickup).
@@ -23,7 +24,7 @@ static func run(id: String, hook: String, ctx, a = null) -> void:
 				Eng._fx(ctx, "block", {"n": 4})
 		"onCombatEnd":
 			if id == "brasa_carmesi":
-				ctx.hp = mini(ctx.maxHp, ctx.hp + 6)
+				ctx.hp = mini(ctx.maxHp, ctx.hp + int(DB.relics.brasa_carmesi.get("heal", 6)))
 		"onPickup":
 			if id == "fresa":
 				ctx.maxHp += 7
@@ -52,7 +53,7 @@ static func _on_combat_start(id: String, C) -> void:
 				C.osty.hp += 6
 				C.osty.pow += 1
 		"prisma_solar": _solar(C)
-		"llave_maestra": Eng.gain_wind(C, 4)
+		"llave_maestra": Eng.gain_wind(C, int(DB.relics.llave_maestra.get("wind", 4)))
 		"concha_marea": Eng.channel_orb(C, "ola")
 		"ancla": C.pl.block += 10
 		"vajra": Eng.add_status(C, C.pl, "strength", 1)
@@ -60,7 +61,7 @@ static func _on_combat_start(id: String, C) -> void:
 			for e in C.enemies:
 				Eng.add_status(C, e, "vulnerable", 1)
 		"piedra": Eng.add_status(C, C.pl, "dexterity", 1)
-		"escamas": Eng.add_status(C, C.pl, "thorns", 3)
+		"escamas": Eng.add_status(C, C.pl, "thorns", int(DB.relics.escamas.get("thorns", 3)))
 		"cuerno": C.firstTurnDraw += 1
 		"lupa_relojero": Eng.add_status(C, C.pl, "precision", 2)
 		"perla_negra": Eng.add_status(C, C.pl, "resonancia", 1)
@@ -71,8 +72,8 @@ static func _on_combat_start(id: String, C) -> void:
 				Eng.channel_orb(C, t)
 			Eng.add_cards(C, "wound", 1, "draw")
 		"nucleo":
-			C.maxEnergy += 1
-			Eng.add_cards(C, "wound", 1, "draw")
+			C.maxEnergy += int(DB.relics.nucleo.get("energy", 1))
+			Eng.add_cards(C, "wound", int(DB.relics.nucleo.get("wounds", 1)), "draw")
 		"ojo":
 			C.extraDraw += 1
 			Eng.add_cards(C, "doubt", 1, "draw")
@@ -80,7 +81,7 @@ static func _on_combat_start(id: String, C) -> void:
 		"tinta":
 			for e in C.enemies:
 				Eng.add_status(C, e, "weak", 1)
-		"caparazon": Eng.add_status(C, C.pl, "metallicize", 2)
+		"caparazon": Eng.add_status(C, C.pl, "metallicize", int(DB.relics.caparazon.get("metallicize", 2)))
 		"corona_espinas":
 			C.maxEnergy += 1
 			Eng.add_cards(C, "burn", 1, "draw")

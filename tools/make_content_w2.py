@@ -28,18 +28,18 @@ ENEMIES = {
                       "zap": {"name": "Chispazo", "dmg": 3, "hits": 2, "apply": {"weak": 1}}},
             "ai": {"t": "rnd", "keys": ["shock", "coil", "zap"], "w": [3, 2, 2]},
             "ap": "a long electric eel monster coiled in the air, glowing blue lightning running along its slimy dark body, needle teeth, crackling sparks"},
-    "sirena": {"name": "Sirena Abisal", "act": 1, "tier": "elite", "hp": [84, 88], "h": 290,
-               "moves": {"canto": {"name": "Canto Hechizante", "apply": {"weak": 2, "vulnerable": 1}, "block": 8},
-                         "garra": {"name": "Garra", "dmg": 16},
+    "sirena": {"name": "Sirena Abisal", "act": 1, "tier": "elite", "hp": [98, 102], "h": 290,
+               "moves": {"canto": {"name": "Canto Hechizante", "apply": {"weak": 2, "vulnerable": 1}, "block": 10},
+                         "garra": {"name": "Garra", "dmg": 19},
                          "marea": {"name": "Resaca", "dmg": 7, "hits": 2},
                          "lamento": {"name": "Lamento", "dmg": 5, "add": {"id": "doubt", "n": 1, "to": "discard"}}},
                "ai": {"t": "cyc", "seq": ["canto", "garra", "marea", "lamento", "garra"]},
                "ap": "a terrifying abyssal siren, a pale drowned woman-like sea creature with a long eel tail, webbed claws, black hollow eyes, seaweed hair, glowing teal runes on her skin, her chest and torso fully covered by dense wet seaweed, kelp and fish scales, modest, no nudity"},
-    "drowncaptain": {"name": "Capitana Ahogada", "act": 1, "tier": "boss", "hp": [100, 104], "h": 350,
+    "drowncaptain": {"name": "Capitana Ahogada", "act": 1, "tier": "boss", "hp": [94, 98], "h": 350,
                      "moves": {"abordaje": {"name": "¡Al abordaje!", "summon": {"id": "ghostpirate", "n": 1}, "block": 6},
-                               "canon": {"name": "Cañonazo", "dmg": 12},
-                               "andanada": {"name": "Andanada", "dmg": 3, "hits": 4},
-                               "ancla": {"name": "Ancla de Hierro", "dmg": 8, "apply": {"frail": 1}},
+                               "canon": {"name": "Cañonazo", "dmg": 10},
+                               "andanada": {"name": "Andanada", "dmg": 2, "hits": 4},
+                               "ancla": {"name": "Ancla de Hierro", "dmg": 7, "apply": {"frail": 1}},
                                "ron": {"name": "Ron Maldito", "selfStr": 1, "heal": 6}},
                      "ai": {"t": "custom"},
                      "ap": "a towering undead drowned pirate captain, a skeletal woman in a rotting tricorn hat and tattered captain coat dripping seawater, a cannon arm and a rusted anchor on a chain, ghostly green fire in her eye sockets, barnacles and coral on her bones"},
@@ -50,10 +50,10 @@ ENEMIES = {
                             "maul": {"name": "Zarpazo", "dmg": 6, "hits": 2}},
                   "ai": {"t": "first_alt", "first": "howl", "odd": "bite", "even": "maul"},
                   "ap": "a feral wolf made of thorny brambles and twisted vines, glowing green eyes, thorns instead of fur, snarling with wooden fangs"},
-    "mantis": {"name": "Mantis de Espinas", "act": 2, "tier": "elite", "hp": [98, 102], "h": 300,
-               "moves": {"camo": {"name": "Camuflaje", "block": 16, "thorns": 2},
-                         "scythe": {"name": "Guadañas", "dmg": 9, "hits": 2},
-                         "ambush": {"name": "Emboscada", "dmg": 20, "apply": {"vulnerable": 1}},
+    "mantis": {"name": "Mantis de Espinas", "act": 2, "tier": "elite", "hp": [108, 112], "h": 300,
+               "moves": {"camo": {"name": "Camuflaje", "block": 18, "thorns": 3},
+                         "scythe": {"name": "Guadañas", "dmg": 10, "hits": 2},
+                         "ambush": {"name": "Emboscada", "dmg": 23, "apply": {"vulnerable": 1}},
                          "molt": {"name": "Muda", "selfStr": 2}},
                "ai": {"t": "cyc", "seq": ["camo", "scythe", "ambush", "molt", "scythe"]},
                "ap": "a giant praying mantis monster covered in thorns and bark-like armor, huge scythe forelimbs, mossy green and dark red colors, menacing hunter pose"},
@@ -72,10 +72,10 @@ ENEMIES = {
                             "rally": {"name": "Reagrupar", "selfStr": 2, "healAll": 6}},
                   "ai": {"t": "cyc", "seq": ["carry", "pierce", "rally", "pierce"]},
                   "ap": "a giant armored worker bee warrior with thick amber chitin plates, carrying a honeycomb shield, sharp mandibles, golden and black"},
-    "hornet": {"name": "Avispón Verdugo", "act": 3, "tier": "elite", "hp": [112, 117], "h": 300,
-               "moves": {"buzz": {"name": "Zumbido", "selfStr": 2, "block": 12},
-                         "sting": {"name": "Doble Aguijón", "dmg": 10, "hits": 2, "apply": {"weak": 1}},
-                         "execute": {"name": "Ejecución", "dmg": 30},
+    "hornet": {"name": "Avispón Verdugo", "act": 3, "tier": "elite", "hp": [134, 138], "h": 300,
+               "moves": {"buzz": {"name": "Zumbido", "selfStr": 2, "block": 14},
+                         "sting": {"name": "Doble Aguijón", "dmg": 13, "hits": 2, "apply": {"weak": 1}},
+                         "execute": {"name": "Ejecución", "dmg": 42},
                          "frenzy": {"name": "Frenesí", "dmg": 4, "hits": 4}},
                "ai": {"t": "cyc", "seq": ["buzz", "sting", "execute", "frenzy"]},
                "ap": "a giant executioner hornet with a black and crimson carapace, a hooded executioner mask-like head, a huge barbed stinger like a blade, translucent wings"},
@@ -93,7 +93,7 @@ ENEMIES = {
 # Encuentros (solo con contenido ampliado): 3 primeros combates normales de cada acto "fáciles", el resto "difíciles".
 ENCOUNTERS = {
     "1": {"easy": [["jelly", "dockrat"], ["slime"], ["crab"], ["eel"], ["dockrat", "dockrat"]],
-          "hard": [["dockrat", "dockrat", "dockrat"], ["ghostpirate"], ["slime", "jelly"], ["eel", "dockrat"], ["crab", "dockrat"], ["ghostpirate", "dockrat"]],
+          "hard": [["dockrat", "dockrat", "dockrat"], ["ghostpirate"], ["slime", "jelly"], ["eel", "dockrat"], ["crab", "dockrat"], ["ghostpirate", "dockrat"], ["eel", "eel"], ["ghostpirate", "jelly"]],
           "elite": [["sirena"]], "boss": [["drowncaptain"]]},
     "2": {"easy": [["sporecap"], ["vinelasher"], ["brambwolf"], ["dryad"], ["thornbeast"]],
           "hard": [["sporecap", "vinelasher"], ["mossgolem"], ["dryad", "sporecap"], ["dryad", "brambwolf"], ["brambwolf", "sporecap"], ["thornbeast", "sprout", "sprout"]],
@@ -101,6 +101,60 @@ ENCOUNTERS = {
     "3": {"easy": [["drone", "drone"], ["wasp"], ["honeyslime"], ["workerbee"], ["beetle"]],
           "hard": [["drone", "drone", "drone"], ["wasp", "drone"], ["nurse", "wasp"], ["wasp", "wasp"], ["workerbee", "drone", "drone"], ["beetle", "drone"]],
           "elite": [["hornet"]], "boss": [["waxcolossus"]]},
+}
+
+# ------------------------------------------------------------------ equilibrio
+# Ajustes que solo se aplican con DB.extra = true (el juego con la Oleada 2). Las trazas de paridad
+# usan DB.extra = false, así que la referencia del web sigue intacta. Las claves de "enemies" se mezclan
+# recursivamente sobre el enemigo original: hp, moves, ai, etc.
+BALANCE = {
+    "osty_revives": 1,   # Osty tiene una sola segunda vida por combate (antes revivía cada turno)
+    "enemies": {
+        # Acto I: el Cangrejo Rey mata el 29% de las veces; se suaviza para que Irene/Zafiro pasen.
+        "crabking": {"hp": [136, 140], "moves": {
+            "roar": {"block": 12}, "pincer": {"dmg": 15}, "spin": {"dmg": 5}, "twin": {"dmg": 11}, "shell": {"block": 19}}},
+        # Normales que solo salen en los combates difíciles del Acto I.
+        "ghostpirate": {"hp": [41, 45], "moves": {"slash": {"dmg": 11}}},
+        # Acto II: la Madre Raíz es el jefe que más mata; el Gólem solo sale en difíciles.
+        "rootmother": {"hp": [160, 164], "moves": {"crush": {"dmg": 23}, "harvest": {"dmg": 8, "heal": 12}}},
+        "mossgolem": {"hp": [56, 60], "moves": {"smash": {"dmg": 19}}},
+        # Élites base: hoy son gratis (0-6%); se suben a la banda 8-12%.
+        "chainwarden": {"hp": [72, 76], "moves": {"chain": {"dmg": 11}, "lash": {"dmg": 6}}},
+        "tentacle": {"hp": [96, 100], "moves": {"whip": {"dmg": 18}, "drain": {"dmg": 11}, "drown": {"dmg": 9}}},
+        "treant": {"hp": [118, 122], "moves": {"slam": {"dmg": 23}, "splinter": {"dmg": 9}}},
+        "stag": {"hp": [114, 118], "moves": {"gore": {"dmg": 22}, "gallop": {"dmg": 13}}},
+        "royalguard": {"hp": [146, 151], "moves": {"guard": {"block": 24}, "thrust": {"dmg": 25}, "sweep": {"dmg": 11}, "charge": {"dmg": 35}}},
+        "hivemind": {"hp": [132, 137], "moves": {"strike": {"dmg": 33}, "mind": {"dmg": 10}, "wave": {"dmg": 5}}},
+        # Normales del Acto III: los «fáciles» cuestan 2,1 PV (objetivo 3-5).
+        "crab": {"hp": [36, 40], "moves": {"crush": {"dmg": 13}}},
+        "jelly": {"hp": [26, 30]},
+        "honeyslime": {"hp": [46, 50], "moves": {"jet": {"dmg": 14}}},
+        "beetle": {"hp": [60, 65], "moves": {"ram": {"dmg": 17}}},
+    },
+    "cards": {
+        # Aurora escala sin techo con el Calor; se recorta el remate, no la generación.
+        "aurora_climax": {"fx": {"heatDmg": 4}},
+        "aurora_supernova": {"fx": {"heatMul": 1.35}},
+        "aurora_warmth": {"fx": {"heat": 2}},
+    },
+    # Vida inicial: las tres musas que dependían de escalar despacio morían en el Acto I/II.
+    "chars": {
+        "zafiro": {"hp": 94},
+        "irene": {"hp": 96},
+        "selene": {"hp": 94},
+        "lia": {"hp": 82},
+        "aurora": {"hp": 72},
+    },
+    "relics": {
+        "brasa_carmesi": {"heal": 11, "d": "Al terminar un combate, recuperas 11 PV."},
+        "prisma_solar": {"dmg": 4},
+        "llave_maestra": {"wind": 5, "d": "Empiezas cada combate con 5 de Cuerda."},
+        # Outliers del simulador (+8 o más frente a su grupo).
+        "escamas": {"thorns": 2, "d": "Empiezas cada combate con 2 de Espinas."},
+        "caparazon": {"metallicize": 1, "d": "Empiezas cada combate con 1 de Metalizar."},
+        "pozo": {"hp": 18, "d": "Aumenta tus PV máx. en 18 y te curas por completo."},
+        "nucleo": {"wounds": 2, "d": "+1 de Energía por turno. Empiezas cada combate con 2 Heridas en tu mazo."},
+    },
 }
 
 # ------------------------------------------------------------------ reliquias
@@ -249,7 +303,7 @@ ICON_DESC = {
         "luna_violeta": "a violet full moon orb on a silver stand",
         "abanico_espejo": "a golden folding fan with mirror facets reflecting sunlight",
         "sol_naciente": "a golden sunrise emblem with radiant rays",
-        "eclipse": "a black sun eclipse disc with a golden corona",
+        "eclipse": "a bright golden ring of a total solar eclipse, brilliant gold corona flames around a black disc, glowing",
         "muelle_doble": "a pair of brass clockwork springs intertwined",
         "caracola_abismal": "a dark spiral seashell with a deep blue abyssal glow inside",
     },
@@ -293,6 +347,7 @@ def main():
     (ROOT / "data" / "events_extra.json").write_text(json.dumps({"events": events}, ensure_ascii=False, indent=1))
     (ROOT / "data" / "relics_extra.json").write_text(json.dumps({"relics": RELICS, "potions": POTIONS}, ensure_ascii=False, indent=1))
     (ROOT / "data" / "states_extra.json").write_text(json.dumps({"st": STATES}, ensure_ascii=False, indent=1))
+    (ROOT / "data" / "balance_w2.json").write_text(json.dumps(BALANCE, ensure_ascii=False, indent=1))
     (ROOT / "gen" / "jobs_w2.json").write_text(json.dumps(jobs, ensure_ascii=False, indent=1))
     (ROOT / "gen" / "icons_w2.json").write_text(json.dumps(ICON_DESC, ensure_ascii=False, indent=1))
     print(len(ENEMIES), "enemigos;", len(EVENTS), "eventos;", len(RELICS), "reliquias;", len(POTIONS), "pociones;", len(jobs), "imágenes")

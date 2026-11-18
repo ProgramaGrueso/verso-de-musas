@@ -24,6 +24,8 @@ static var st := {}
 static var orb := {}
 static var glos := {}
 static var music_gains := {}
+## Ajustes de equilibrio de la Oleada 2 (data/balance_w2.json). Solo con DB.extra: las trazas no los ven.
+static var bal := {}
 
 
 static func _intify(v):
@@ -48,6 +50,16 @@ static func _read(name: String) -> Dictionary:
 	var d = JSON.parse_string(txt)
 	assert(d != null, "JSON inválido: " + name)
 	return _intify(d)
+
+
+## Mezcla recursiva: los ajustes de equilibrio cambian solo las claves que indican (p. ej. un movimiento).
+static func _deep(base: Dictionary, over: Dictionary) -> Dictionary:
+	for k in over.keys():
+		if base.get(k) is Dictionary and over[k] is Dictionary:
+			base[k] = _deep(base[k], over[k])
+		else:
+			base[k] = over[k]
+	return base
 
 
 static func load_all() -> void:
@@ -75,6 +87,19 @@ static func load_all() -> void:
 	var en2 := _read("enemies_extra")
 	enemies.merge(en2.enemies)   # definiciones: no alteran ningún sorteo por sí solas
 	if extra:
+		bal = _read("balance_w2")
+		for id in bal.get("enemies", {}).keys():
+			if enemies.has(id):
+				enemies[id] = _deep(enemies[id].duplicate(true), bal.enemies[id])
+		for id in bal.get("cards", {}).keys():
+			if cards.has(id):
+				cards[id] = _deep(cards[id].duplicate(true), bal.cards[id])
+		for id in bal.get("chars", {}).keys():
+			if characters.has(id):
+				characters[id] = _deep(characters[id].duplicate(true), bal.chars[id])
+		for id in bal.get("relics", {}).keys():
+			if relics.has(id):
+				relics[id] = _deep(relics[id].duplicate(true), bal.relics[id])
 		for k in en2.encounters.keys():
 			var A: Dictionary = encounters[k]
 			var X: Dictionary = en2.encounters[k]

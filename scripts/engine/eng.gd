@@ -404,11 +404,13 @@ static func start_turn(C) -> void:
 			C.energy += orb_passive(C, o)
 			_fx(C, "orbTick")
 	if C.osty != null and C.turn > 1:
-		if C.osty.hp <= 0:
-			C.osty.hp = 1   # revive solo con 1 PV
+		var max_rev: int = 9999 if not DB.extra else int(DB.bal.get("osty_revives", 1))
+		if C.osty.hp <= 0 and int(C.get("ostyRevives", 0)) < max_rev:
+			C["ostyRevives"] = int(C.get("ostyRevives", 0)) + 1
+			C.osty.hp = 1   # segunda vida limitada por combate (equilibrio de la Oleada 2)
 			_fx(C, "ostyRevive")
-		else:
-			osty_heal(C, 1)   # y se cura 1 PV por turno
+		elif C.osty.hp > 0:
+			osty_heal(C, 1)   # se cura 1 PV por turno
 	if S.get("ostyRegen", 0) and C.osty != null and C.osty.hp > 0:
 		osty_heal(C, S.ostyRegen)
 	if S.get("regen", 0):
