@@ -167,6 +167,9 @@ func _bot_combat() -> void:
 		return
 	var C = cs.C
 	var G = Meta.run
+	if not cs.has_meta("counted"):
+		cs.set_meta("counted", true)
+		stats.combats += 1
 	if god and not cs.has_meta("god"):
 		cs.set_meta("god", true)
 		C.pl.status["strength"] = 25
@@ -282,6 +285,10 @@ func _bot_end() -> void:
 	if not _cool(0.6):
 		return
 	finished += 1
+	if (Main.I.screen as EndScreen).victory:
+		stats.wins += 1
+	else:
+		stats.losses += 1
 	print("partida %d terminada (%s). Estado: %s" % [finished, "victoria" if (Main.I.screen as EndScreen).victory else "derrota", JSON.stringify(stats)])
 	runs_left -= 1
 	if runs_left <= 0:
@@ -309,5 +316,7 @@ func _dump_and_quit() -> void:
 				print("  enemigo ", e.id, " hp=", e.hp, " intent=", e.intent)
 			print("  orbs=", C.orbs, " hand=", C.hand.size(), " pl.status=", C.pl.status)
 	var img := get_viewport().get_texture().get_image()
-	img.save_png("/tmp/claude-1000/-mnt-Datos-IngenieriaInversa/13d56692-3a79-41c8-a6bd-a72d6912fa55/scratchpad/stuck.png")
+	if img != null:
+		img.save_png("user://stuck.png")
+		print("captura: ", ProjectSettings.globalize_path("user://stuck.png"))
 	get_tree().quit(1)
