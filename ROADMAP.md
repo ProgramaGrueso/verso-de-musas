@@ -5,10 +5,10 @@ Se actualiza al cerrar cada fase: marcar casillas, anotar la fecha y enlazar el 
 
 > **Progreso 2026-11-18:** Fase 0 cerrada salvo la revisión visual a ojo (el bot ya pasó por las 6 musas,
 > por una partida en fácil con 19 deshaceres y por una con semilla). Fase 1 con la curva en banda
-> (media de 3×200 partidas: 39 / 39 / 40 / 41 / 33 / 36 %, diferencia entre musas 8,3 puntos),
-> Pesadilla 5 medida (1–6 % de victorias, sin errores) y comparativa `base` hecha. Guardado atómico con
-> `.bak`, volcado por partida y overrides de balance solo con `DB.extra`. Falta la referencia humana:
-> 3 partidas por musa. Detalle en [`HANDOFF_FASE01.md`](HANDOFF_FASE01.md).
+> (media de 3×200 partidas: 39 / 39 / 40 / 41 / 33 / 36 %, diferencia entre musas 8,3 puntos) y
+> comparativa `base` hecha. Pesadilla: escalera de 10 niveles rediseñada en datos, sin muros y con NM10
+> pasando de 0 % a ~8 %. Guardado atómico con `.bak`, volcado por partida y overrides solo con `DB.extra`.
+> Falta la referencia humana: 3 partidas por musa. Detalle en [`HANDOFF_FASE01.md`](HANDOFF_FASE01.md).
 
 **Principio rector:** no añadir contenido nuevo hasta que la curva de dificultad y la sensación de juego
 estén bien. Con 244 cartas, 35 enemigos, 24 eventos, 54 reliquias y 16 pociones el problema ya no es
@@ -115,7 +115,7 @@ Objetivo: que la dificultad suba de forma legible y ninguna musa sea una trampa.
 ### 1.4 Verificación
 
 - [x] `-- 200 0` con tres semillas distintas.
-- [x] `-- 100 5` para Pesadilla. *(1–6 % de victorias; sin banda definida.)*
+- [x] `-- 100 5` para Pesadilla. *(antes del rediseño: 1–6 %; la escalera nueva se mide con `-- 200 sweep`.)*
 - [x] Comparativa contra `base` (sin Oleada 2) para medir el delta real de la oleada.
       *(ver tabla en el handoff: +10 a +36 puntos salvo Claudia, que baja por el nerf de Osty.)*
 
@@ -172,11 +172,10 @@ feedback visual y sonoro.
 Objetivo: dar una razón para la partida 20.
 
 - [ ] **Logros** (~30) enganchados a las estadísticas que ya guarda `Meta.data.s`.
-- [ ] **Pesadilla 10 · rediseñar la escalera** (el techo es 10, no 20). Hoy los escalones están mal
-      repartidos: los niveles 1, 2 y 5 se llevan 30 de los 36 puntos de la curva y el 4 y el 6 no hacen
-      nada. Objetivo: un efecto por nivel, 2–5 puntos por escalón, con los modificadores en datos para no
-      tocar `nm_mods` a mano. Extender a 20 solo tendría sentido post-lanzamiento y exigiría lore, logros
-      y desenlace nuevos.
+- [x] **Pesadilla 10 · escalera rediseñada** (el techo es 10, no 20). Un efecto por nivel, en datos
+      (`balance_w2.json` → `nm`) y sin muros: ningún escalón cuesta más de ~6 puntos y NM10 pasa de 0 %
+      a ~8 % con el bot. Queda validarla con jugadores y decidir si ese 8 % es la banda correcta.
+      Extender a 20 solo tendría sentido post-lanzamiento y exigiría lore, logros y desenlace nuevos.
 - [ ] **Desbloqueo de contenido**: cartas y reliquias que entran al pool al cumplir hitos. Hoy todo está
       disponible desde el minuto uno, lo que quita la curva de descubrimiento.
 - [ ] **Reto diario con histórico**: racha local, tabla mensual, semilla compartible y “revancha”.

@@ -92,30 +92,12 @@ done
 - PV por encuentro (media): Acto I **2,8 / 9,5** (fácil corto: objetivo 3–5), Acto II 4,0 / 10,4 ✅,
   Acto III 3,7 / 8,6 ✅.
 
-### Pesadilla 5 (100 partidas por musa, semilla 1)
+### Pesadilla · escalera rediseñada (10 niveles)
 
-| Musa | Victorias | Piso medio |
-|---|---|---|
-| Selene | 6,0 % | 12,6 |
-| Irene | 5,0 % | 10,1 |
-| Lia / Claudia / Aurora | 2,0 % | 11,3 / 11,3 / 11,4 |
-| Zafiro | 1,0 % | 10,8 |
+La versión anterior tenía tres muros y dos niveles muertos. Medido con 100 partidas por musa y semilla 1
+(media de las 6 musas):
 
-Objetivo razonable (sin banda definida): sin errores y sin quedarse a 0 %. ✅ Mínimo 1 %. El 65–79 % de
-las partidas muere en el Acto I, así que Pesadilla 5 hoy es casi “pasa el Acto I o nada”.
-
-Y no es el techo: la Pesadilla llega a **10** (se desbloquea por musa al ganar el nivel anterior, y el
-modo fácil no cuenta). Medido con el mismo bot y la misma semilla, 100 partidas por musa:
-
-| Nivel | Victorias | Piso medio |
-|---|---|---|
-| 5 | 1,0–6,0 % | 10,1–12,6 |
-| 7 | 0,0–3,0 % (solo Selene gana) | 7,3–9,7 |
-| 10 | **0,0 % en las 6** | 6,1–7,3 |
-
-Desglose por nivel (media de las 6 musas, 100 partidas por musa y semilla 1), para ver dónde cruje:
-
-| Nivel | Efecto acumulado | Media | Coste del escalón |
+| Nivel | Efecto (versión antigua) | Media | Coste del escalón |
 |---|---|---|---|
 | 0 | — | 38,9 % | — |
 | 1 | +10 % PV | 27,7 % | −11,3 |
@@ -124,11 +106,53 @@ Desglose por nivel (media de las 6 musas, 100 partidas por musa y semilla 1), pa
 | 4 | −25 % oro | 10,3 % | +0,3 (ruido) |
 | 5 | élites/jefes +2 Fuerza | 3,0 % | −7,3 |
 | 6 | hoguera 20 % | 2,7 % | −0,3 |
+| 7 | +25 % PV | 0–3 % | — |
+| 10 | +1 Fuerza a todos, +4 a jefes | **0 %** (0 de 600) | — |
 
-**El problema no es el techo: es el reparto.** Los niveles 1, 2 y 5 se llevan 30 de los 36 puntos y el 4
-y el 6 no hacen nada. La Pesadilla termina en 10 y no se amplía a 20 (el logro «El Fin de la Canción» y
-el desenlace cierran ahí); lo que hay que rediseñar es la escalera: un efecto por nivel y 2–5 puntos por
-escalón, apuntando a ~10–15 % en el NM10 en vez de 0 %.
+**El problema no era el techo (10), era el reparto:** los niveles 1, 2 y 5 se llevaban 30 de los 36
+puntos y el 4 y el 6 no hacían nada. La Pesadilla termina en 10 —el logro «El Fin de la Canción» y el
+desenlace cierran ahí— y no se amplía a 20.
+
+**Escalera nueva** (`data/balance_w2.json` → `nm`; leída solo con `DB.extra`, un cambio por nivel):
+
+| Nivel | Efecto |
+|---|---|
+| 1 | Los enemigos infligen +3 % de daño |
+| 2 | Ganas un 15 % menos de oro |
+| 3 | Los enemigos tienen +3 % de PV |
+| 4 | La hoguera cura solo un 25 % |
+| 5 | Los enemigos infligen +6 % de daño (total) |
+| 6 | Cada combate empieza con una Herida |
+| 7 | Los enemigos tienen +6 % de PV (total) |
+| 8 | Empiezas con la maldición Duda |
+| 9 | Los élites empiezan con +1 de Fuerza |
+| 10 | Los jefes empiezan con +1 de Fuerza |
+
+Curva medida (200 partidas por musa, semilla 1 y 2; media de las 6 musas):
+
+| Nivel | Semilla 1 | Semilla 2 |
+|---|---|---|
+| 0 | 38,7 % | 36,5 % |
+| 1 | 36,3 % | 37,4 % |
+| 2 | 35,5 % | 35,2 % |
+| 3 | 31,2 % | 32,2 % |
+| 4 | 29,8 % | 30,8 % |
+| 5 | 26,9 % | 24,7 % |
+| 6 | 22,2 % | 21,6 % |
+| 7 | 17,6 % | 15,5 % |
+| 8 | 13,7 % | 13,2 % |
+| 9 | 11,6 % | 11,2 % |
+| 10 | 8,7 % | 7,2 % |
+
+- Ningún escalón cuesta más de ~6 puntos (antes había dos de 11 y uno de 7,3).
+- **NM10 ≈ 8 %**: se puede ganar, pero hay que jugarlo bien. En la versión anterior era 0 de 600.
+- Los niveles 2 y 4 (oro y hoguera) apenas mueven al bot porque valora poco la economía; a un humano le
+  pesan más. Las PV cuestan ~1,7 veces más que el daño, por eso la escalera reparte dos escalones de PV
+  y dos de daño en vez de cargar todo en los primeros niveles.
+
+Verificación: `balance.gd -- 200 sweep all 1` imprime la curva 0→10 en una tabla y `tests/nm_test.gd`
+comprueba 10 niveles, un cambio por escalón, monotonía y que ningún salto de PV/daño pase de 5 puntos.
+Las 350 trazas siguen intactas: sin `DB.extra` se usa la tabla antigua.
 
 ### Delta de la oleada 2 (mismo bot, semilla 1, 200 por musa, `base`)
 
@@ -180,11 +204,10 @@ No nerfear más a ciegas.
    y el Acto I fácil cuesta 2,8 PV (objetivo 3–5); `hivemind`/`mantis`/`hornet`/`stag` siguen fáciles.
    Los números se tocan en `tools/make_content_w2.py` (`BALANCE` y `ENEMIES`) y se regeneran.
 4. **Arreglar la métrica de reliquias** antes de otra ronda de nerfs (ver arriba).
-5. **Rediseñar la escalera de Pesadilla (10 niveles)**: el techo es 10 y no se amplía — el logro
-   `pesadilla10` («El Fin de la Canción») y el desenlace cierran ahí; llegar a 20 exigiría lore, logros y
-   final nuevos. Lo que falla es el reparto (ver tabla arriba): un efecto por nivel y 2–5 puntos por
-   escalón. Iría en `balance_w2.json` (tabla `nm` + textos) leída solo con `DB.extra`, para no tocar
-   `lore.json` ni las trazas. Herramientas: modo `sweep` en `balance.gd` y un `nm_test` de monotonía.
+5. **Validar la escalera nueva con humanos**: el rediseño está hecho y el bot pasa de 0 % a ~8 % en NM10,
+   pero la banda final es una decisión de diseño. Si a los jugadores de prueba les parece injusto, se
+   bajan los dos coeficientes de PV/daño o se mueve Duda al 9. Si les parece blando, se sube el daño del
+   nivel 5 y la Fuerza de jefes del 10.
 
 ---
 
@@ -198,17 +221,23 @@ Commits de la sesión (rama `ccr-a7209c0c-soukyo`):
 | `e9bd0ff` | `test(balance)`: bot con políticas por musa y volcado por partida. |
 | `610707a` | `balance`: overrides de la oleada 2 (`balance_w2.json`, `DB._deep`, Osty, jefes, élites, reliquias, vida). |
 | `62e0422` | `docs`: roadmap y este traspaso. |
+| `0cb52f2` | `test(playthrough)`: contadores del resumen y captura de atasco en `user://`. |
+| `c902ec0` | `docs`: cierra la pasada de interfaz y añade Pesadilla 5 y comparativa `base`. |
+| `1c490d1` | `docs`: mide Pesadilla 7 y 10. |
+| `ae1553b` | `docs`: corrige la meta (10, no 20) y añade el coste por nivel. |
+| `0eff052` | `balance(nm)`: escalera de Pesadilla rediseñada, en datos y sin muros. |
 
-Modificados: `data/enemies_extra.json`, `scripts/core/db.gd`, `scripts/core/meta.gd`,
-`scripts/engine/eng.gd`, `scripts/engine/relics.gd`, `tests/balance.gd`, `tests/save_test.gd`,
-`tests/playthrough.gd`, `tools/make_content_w2.py`.
+Modificados: `data/enemies_extra.json`, `data/balance_w2.json`, `scripts/core/db.gd`,
+`scripts/core/meta.gd`, `scripts/engine/eng.gd`, `scripts/engine/relics.gd`, `tests/balance.gd`,
+`tests/save_test.gd`, `tests/playthrough.gd`, `tools/make_content_w2.py`.
 
-Nuevos: `data/balance_w2.json`, `tests/crash_reader.gd(.uid)`, `tests/crash_reader.tscn`,
-`tests/crash_writer.gd(.uid)`, `tests/crash_writer.tscn`, `HANDOFF_FASE01.md`, `ROADMAP.md`.
+Nuevos: `tests/crash_reader.gd(.uid)`, `tests/crash_reader.tscn`, `tests/crash_writer.gd(.uid)`,
+`tests/crash_writer.tscn`, `tests/nm_test.gd(.uid)`, `HANDOFF_FASE01.md`, `ROADMAP.md`.
 
 Comprobaciones verdes: `run_traces` 350/0, `risk` 892/0, `events_test` 126.504/0, `history_test` OK,
-`ui_risk_test` OK, `save_test` OK, `CRASH_SAVE OK`, `seed_test` 0 fallan, `playthrough` 6 musas + fácil
-con victoria y 19 deshaceres, `balance` 1200 partidas × 3 semillas con 0 errores.
+`ui_risk_test` OK, `save_test` OK, `CRASH_SAVE OK`, `seed_test` 0 fallan, `nm_test` 0 fallan,
+`playthrough` 6 musas + fácil con victoria y 19 deshaceres + una a NM5, `balance` 1200 partidas × 3
+semillas y barridos de la escalera (200/musa, semillas 1 y 2) con 0 errores.
 
 ## 5. Trampas conocidas
 
