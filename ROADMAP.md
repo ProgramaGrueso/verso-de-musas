@@ -172,7 +172,11 @@ feedback visual y sonoro.
 Objetivo: dar una razón para la partida 20.
 
 - [ ] **Logros** (~30) enganchados a las estadísticas que ya guarda `Meta.data.s`.
-- [ ] **Pesadilla 1–20** con modificadores acumulativos (`nm_mods` hoy llega a 10).
+- [ ] **Pesadilla 10 · rediseñar la escalera** (el techo es 10, no 20). Hoy los escalones están mal
+      repartidos: los niveles 1, 2 y 5 se llevan 30 de los 36 puntos de la curva y el 4 y el 6 no hacen
+      nada. Objetivo: un efecto por nivel, 2–5 puntos por escalón, con los modificadores en datos para no
+      tocar `nm_mods` a mano. Extender a 20 solo tendría sentido post-lanzamiento y exigiría lore, logros
+      y desenlace nuevos.
 - [ ] **Desbloqueo de contenido**: cartas y reliquias que entran al pool al cumplir hitos. Hoy todo está
       disponible desde el minuto uno, lo que quita la curva de descubrimiento.
 - [ ] **Reto diario con histórico**: racha local, tabla mensual, semilla compartible y “revancha”.

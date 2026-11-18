@@ -113,9 +113,22 @@ modo fácil no cuenta). Medido con el mismo bot y la misma semilla, 100 partidas
 | 7 | 0,0–3,0 % (solo Selene gana) | 7,3–9,7 |
 | 10 | **0,0 % en las 6** | 6,1–7,3 |
 
-Con los modificadores acumulativos (PV, daño, Duda, oro, hoguera, Herida por combate, Fuerza) la curva
-no es una rampa: a partir del 7 el bot muere casi siempre en el Acto I. Si la Pesadilla 1–20 de la Fase 3
-va en serio, hay que rediseñar los modificadores, no solo añadir niveles.
+Desglose por nivel (media de las 6 musas, 100 partidas por musa y semilla 1), para ver dónde cruje:
+
+| Nivel | Efecto acumulado | Media | Coste del escalón |
+|---|---|---|---|
+| 0 | — | 38,9 % | — |
+| 1 | +10 % PV | 27,7 % | −11,3 |
+| 2 | +10 % daño | 16,2 % | −11,5 |
+| 3 | Duda | 10,0 % | −6,2 |
+| 4 | −25 % oro | 10,3 % | +0,3 (ruido) |
+| 5 | élites/jefes +2 Fuerza | 3,0 % | −7,3 |
+| 6 | hoguera 20 % | 2,7 % | −0,3 |
+
+**El problema no es el techo: es el reparto.** Los niveles 1, 2 y 5 se llevan 30 de los 36 puntos y el 4
+y el 6 no hacen nada. La Pesadilla termina en 10 y no se amplía a 20 (el logro «El Fin de la Canción» y
+el desenlace cierran ahí); lo que hay que rediseñar es la escalera: un efecto por nivel y 2–5 puntos por
+escalón, apuntando a ~10–15 % en el NM10 en vez de 0 %.
 
 ### Delta de la oleada 2 (mismo bot, semilla 1, 200 por musa, `base`)
 
@@ -167,8 +180,11 @@ No nerfear más a ciegas.
    y el Acto I fácil cuesta 2,8 PV (objetivo 3–5); `hivemind`/`mantis`/`hornet`/`stag` siguen fáciles.
    Los números se tocan en `tools/make_content_w2.py` (`BALANCE` y `ENEMIES`) y se regeneran.
 4. **Arreglar la métrica de reliquias** antes de otra ronda de nerfs (ver arriba).
-5. **Decidir qué hacer con Pesadilla 5**: hoy es un muro en el Acto I (1–6 % de victorias) y no hay banda
-   definida. O se acepta como “modo experto”, o se define en la Fase 3 junto con Pesadilla 1–20.
+5. **Rediseñar la escalera de Pesadilla (10 niveles)**: el techo es 10 y no se amplía — el logro
+   `pesadilla10` («El Fin de la Canción») y el desenlace cierran ahí; llegar a 20 exigiría lore, logros y
+   final nuevos. Lo que falla es el reparto (ver tabla arriba): un efecto por nivel y 2–5 puntos por
+   escalón. Iría en `balance_w2.json` (tabla `nm` + textos) leída solo con `DB.extra`, para no tocar
+   `lore.json` ni las trazas. Herramientas: modo `sweep` en `balance.gd` y un `nm_test` de monotonía.
 
 ---
 
