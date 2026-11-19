@@ -35,6 +35,8 @@ func _fxsig(type: String, d: Dictionary) -> String:
 
 
 func _on_fx(type: String, d: Dictionary) -> void:
+	if type == "relic":
+		return   # aviso solo de interfaz (resalta la reliquia); no forma parte de la paridad con el web
 	fxl.append(_fxsig(type, d))
 
 

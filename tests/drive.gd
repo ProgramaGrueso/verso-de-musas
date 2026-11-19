@@ -113,6 +113,12 @@ func _ready() -> void:
 	if scenario == "w2screens":
 		await w2screens()
 		return
+	if scenario == "juice":
+		await juice()
+		return
+	if scenario == "bossphase":
+		await bossphase()
+		return
 	Nav.select()
 	await wait(0.4)
 	await shot("02_select")
@@ -395,3 +401,184 @@ func keys_test() -> void:
 	await wait(2.0)
 	print("turno ", cs.C.turn, " hand ", cs.C.hand.size())
 	get_tree().quit()
+
+
+## Fase 2.1/2.2: golpe grande, ráfaga, veneno, bloqueo, orbes, reliquias, muerte segura, tooltip de enemigo,
+## transición de turno, slam de carta, hoguera con vista previa, movimiento reducido y muerte.
+## godot --path . res://tests/drive.tscn -- juice <dir>
+## Jefe que entra en fase 2 (fx «bossPhase»): banda grande + sacudida.
+func bossphase() -> void:
+	Meta.settings.calm = false
+	var G := Eng.new_run("selene", {"seed": 42})
+	Meta.run = G
+	G.map = RunGen.gen_map_game(G)
+	Nav.map(true)
+	await wait(0.6)
+	Nav.combat(["crabking"], "boss")
+	await wait(2.2)
+	var cs: CombatScreen = main.screen
+	var e: Dictionary = Eng.living(cs.C)[0]
+	Eng.deal_to_enemy(cs.C, e, int(e.hp * 0.6))
+	cs._render_all()
+	await shot_now("b01_boss_phase", 0.35)
+	await wait(1.0)
+	await shot_now("b02_boss_phase_late", 0.0)
+	get_tree().quit()
+
+
+func juice() -> void:
+	Meta.settings.calm = false
+	var G := Eng.new_run("selene", {"seed": 42})
+	Meta.run = G
+	G.map = RunGen.gen_map_game(G)
+	for r in ["ancla", "vajra", "canicas"]:
+		Eng.add_relic(G, r)
+	Nav.map(true)
+	await wait(0.6)
+	Nav.combat(["dockrat", "jelly", "crab"], "normal")
+	await wait(0.45)
+	await shot("j01_start_relics")
+	await wait(1.6)
+	var cs: CombatScreen = main.screen
+	var C: Dictionary = cs.C
+	var e0: Dictionary = Eng.living(C)[0]
+	var e1: Dictionary = Eng.living(C)[1]
+	e1.hp = 60
+	e1.maxHp = 60
+	Eng.deal_to_enemy(C, e1, 22)
+	cs._render_all()
+	await shot_now("j02_bighit", 0.12)
+	await wait(1.2)
+	for i in 4:
+		Eng.deal_to_enemy(C, e1, 6)
+	cs._render_all()
+	await shot_now("j03_multihit", 0.5)
+	await wait(1.2)
+	Eng.add_status(C, e0, "poison", 5)
+	cs._render_all()
+	await shot_now("j04_poison_apply", 0.2)
+	await wait(1.0)
+	cs._fx("enemyHit", {"e": e0, "amt": 5, "blocked": 0, "poison": true})
+	await shot_now("j05_poison_tick", 0.15)
+	await wait(1.0)
+	C.pl.block += 8
+	cs._fx("block", {"n": 8})
+	cs._render_all()
+	await shot_now("j06_block_gain", 0.2)
+	await wait(0.8)
+	Eng.deal_to_player(C, 6, e0)
+	cs._render_all()
+	await shot_now("j07_blocked", 0.1)
+	await wait(1.0)
+	Eng.channel_orb(C, "ola")
+	Eng.channel_orb(C, "perla")
+	cs._render_all()
+	await shot_now("j08_orb_channel", 0.15)
+	await wait(1.0)
+	Eng.evoke_front(C, 1)
+	cs._render_all()
+	await shot_now("j09_orb_evoke", 0.12)
+	await wait(1.0)
+	# muerte segura + tooltip de enemigo con mejoras/penalizaciones
+	G.hp = 4
+	C.pl.block = 0
+	Eng.add_status(C, e1, "strength", 2)
+	Eng.add_status(C, e1, "weak", 1)
+	cs._render_all()
+	await wait(1.2)
+	await shot("j10_lethal")
+	var ev: EnemyView = cs._enemy_view(e1)
+	Tip.show_for(ev.body)
+	await shot("j11_enemy_tip")
+	Tip.hide_all()
+	G.hp = G.maxHp
+	cs._render_all()
+	await wait(0.5)
+	# golpe grande a la musa
+	Eng.deal_to_player(C, 26, e0)
+	cs._render_all()
+	await shot_now("j12_player_bighit", 0.12)
+	await wait(1.4)
+	# slam de carta (prefiere una de coste 2 o un ataque)
+	var inst = null
+	for c in C.hand:
+		if Eng.can_play(C, c).ok and (inst == null or Eng.card_def(c).type == "attack"):
+			inst = c
+	C.energy = 5
+	if inst != null:
+		var d := Eng.card_def(inst)
+		cs._play_now(inst, Eng.living(C)[0] if Eng.needs_target(d) else null)
+		await shot_now("j13_card_slam", 0.33)
+		await wait(1.2)
+	# transición de turno
+	cs._end_turn()
+	await shot_now("j14_enemy_turn", 0.35)
+	for i in 40:
+		if not cs.busy:
+			break
+		await wait(0.2)
+	await shot_now("j15_your_turn", 0.15)
+	await wait(1.5)
+	# movimiento reducido: mismo golpe sin sacudida ni partículas
+	Meta.settings.calm = true
+	Eng.deal_to_enemy(C, Eng.living(C)[0], 18)
+	cs._render_all()
+	await shot_now("j16_calm_hit", 0.12)
+	Meta.settings.calm = false
+	await wait(1.0)
+	# hoguera: vista previa de la mejora al señalar una carta
+	Nav.rest()
+	await wait(0.8)
+	var bs := []
+	_find_buttons(Main.I, bs)
+	for b in bs:
+		if _has_label(b, "Mejorar") and not b.disabled:
+			b.pressed.emit()
+			break
+	await wait(0.8)
+	await shot("j17_rest_preview")
+	# cerrar el diálogo de mejora (si no, tapa la escena de muerte)
+	bs = []
+	_find_buttons(get_tree().root, bs)
+	for b in bs:
+		if (b.text == "Cancelar" or _has_label(b, "Cancelar")) and b.is_visible_in_tree():
+			b.pressed.emit()
+			break
+	await wait(0.5)
+	# muerte de la musa
+	Nav.combat(["dockrat"], "normal")
+	await wait(2.0)
+	cs = main.screen
+	G.hp = 3
+	Eng.deal_to_player(cs.C, 30, Eng.living(cs.C)[0])
+	cs._render_all()
+	cs._check_end()
+	await shot_now("j18_death", 0.25)
+	await wait(1.0)
+	await shot_now("j19_death_late", 0.0)
+	get_tree().quit()
+
+
+## Captura sin la espera larga de shot() (para pillar el efecto en pleno vuelo).
+func shot_now(name: String, after: float) -> void:
+	if after > 0.0:
+		await get_tree().create_timer(after, true, false, true).timeout
+	await RenderingServer.frame_post_draw
+	get_viewport().get_texture().get_image().save_png("%s/%s.png" % [out_dir, name])
+	print("shot ", name)
+
+
+func _find_buttons(n: Node, out: Array) -> void:
+	if n is Button:
+		out.append(n)
+	for c in n.get_children():
+		_find_buttons(c, out)
+
+
+func _has_label(n: Node, text: String) -> bool:
+	for c in n.get_children():
+		if c is Label and c.text == text:
+			return true
+		if _has_label(c, text):
+			return true
+	return false

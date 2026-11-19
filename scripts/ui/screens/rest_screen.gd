@@ -44,7 +44,7 @@ func _ready() -> void:
 		var cands: Array = G.deck.filter(func(c): return Eng.can_upgrade(c))
 		ref.b1.disabled = true
 		ref.b2.disabled = true
-		var pick: Array = await Dlg.pick_cards({"title": "Elige una carta para mejorar", "sub": "Al elegir una carta verás cómo queda mejorada.", "upgradePreview": true, "cards": cands, "n": 1, "cancel": "Cancelar", "confirmLabel": "Mejorar"})
+		var pick: Array = await Dlg.pick_cards({"title": "Elige una carta para mejorar", "sub": "Pasa el ratón (o el foco) por una carta para ver al lado cómo queda mejorada.", "upgradePreview": true, "cards": cands, "n": 1, "cancel": "Cancelar", "confirmLabel": "Mejorar"})
 		if pick.is_empty():
 			ref.b1.disabled = Eng.has_relic(G, "reloj_roto")
 			ref.b2.disabled = not G.deck.any(func(c): return Eng.can_upgrade(c))

@@ -10,7 +10,7 @@ const SAVE_PATH := "user://save.json"
 const SAVE_EPOCH := "godot1"
 
 var data := {"s": {}, "relics": [], "gal": [], "nmBy": {}, "seenEnding": false, "lastWinner": ""}
-var settings := {"music": 0.5, "sfx": 0.7, "confirm": true, "fast": false, "easy": false}
+var settings := {"music": 0.5, "sfx": 0.7, "confirm": true, "fast": false, "easy": false, "calm": false}
 var run = null   # partida en curso (G) o null
 var _queue: Array = []
 var _save_timer := 0.0

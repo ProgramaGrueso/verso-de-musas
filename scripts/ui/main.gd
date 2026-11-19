@@ -19,6 +19,9 @@ var _tb_act: Label
 var _tb_deck_n: Label
 var _tb_potions: HBoxContainer
 var _tb_relics: HFlowContainer
+var _tb_relics_key := "-"         # se reconstruyen solo si cambia la lista (así el pulso de una reliquia no se corta)
+var _relic_last := {}             # id -> ms del último pulso
+var _relic_tags := 0              # rótulos de reliquia visibles a la vez (se apilan)
 var _toast_tw: Tween
 var _full_btn: Button
 
@@ -427,13 +430,17 @@ func update_top() -> void:
 		_tb_act.text += "  [%s]" % fv.name
 	_tb_deck_n.text = str(G.deck.size())
 	# reliquias (bajo la cabecera)
-	for c in _tb_relics.get_children():
-		c.queue_free()
-	for id in G.relics:
-		var r: Dictionary = DB.relics[id]
-		var l: Control = Icons.frame("relic", id, 48, Color("#c9a24a"), true) if Icons.has("relic", id) else UIK.label(r.i, 28)
-		UIK.tip(l, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [r.n, r.d])
-		_tb_relics.add_child(l)
+	var rkey := ",".join(G.relics)
+	if rkey != _tb_relics_key:
+		_tb_relics_key = rkey
+		for c in _tb_relics.get_children():
+			c.queue_free()
+		for id in G.relics:
+			var r: Dictionary = DB.relics[id]
+			var l: Control = Icons.frame("relic", id, 48, Color("#c9a24a"), true) if Icons.has("relic", id) else UIK.label(r.i, 28)
+			UIK.tip(l, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [r.n, r.d])
+			l.set_meta("relic_id", id)
+			_tb_relics.add_child(l)
 	# pociones
 	for c in _tb_potions.get_children():
 		c.queue_free()
@@ -592,6 +599,68 @@ func _sorted_deck() -> Array:
 
 
 # ---------- Avisos ----------
+## Una reliquia acaba de hacer algo: su icono late y aparece un rótulo breve con su nombre y efecto.
+func pulse_relic(id: String) -> void:
+	if _tb_relics == null or not DB.relics.has(id) or not top.visible:
+		return
+	var now := Time.get_ticks_msec()
+	var last: int = _relic_last.get(id, -100000)
+	_relic_last[id] = now
+	if now - last < 400:   # ráfagas (varios golpes seguidos): un solo pulso
+		return
+	Sfx.play("relic", 0.8)
+	var icon: Control = null
+	for c in _tb_relics.get_children():
+		if not c.is_queued_for_deletion() and c.get_meta("relic_id", "") == id:
+			icon = c
+	if icon == null:
+		return
+	icon.pivot_offset = icon.size / 2.0
+	icon.modulate = Color(2.3, 2.0, 1.2)
+	var tw := icon.create_tween().set_parallel(true)
+	tw.tween_property(icon, "modulate", Color.WHITE, 0.7)
+	if not Juice.calm():
+		icon.scale = Vector2(1.55, 1.55)
+		tw.tween_property(icon, "scale", Vector2.ONE, 0.6).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+		Juice.ring(self, icon.global_position + icon.size / 2.0, UIK.GOLD, 16.0, 46.0, 0.45, 3.0)
+	# chip compacto (icono + nombre) en una columna a la izquierda, bajo la barra de reliquias;
+	# la descripción completa sigue en el tooltip del icono
+	var r: Dictionary = DB.relics[id]
+	var p := PanelContainer.new()
+	var sb := UIK.stylebox(Color("#120d1d", 0.92), UIK.GOLD, 2, 14, 8)
+	sb.content_margin_left = 6; sb.content_margin_right = 12; sb.content_margin_top = 3; sb.content_margin_bottom = 3
+	p.add_theme_stylebox_override("panel", sb)
+	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	p.z_index = 3500
+	var hb := HBoxContainer.new()
+	hb.add_theme_constant_override("separation", 6)
+	hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if Icons.has("relic", id):
+		var ic: Control = Icons.rect("relic", id, 24)
+		ic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		hb.add_child(ic)
+	var lb := UIK.rich("[b][color=#f0cf7a]%s[/color][/b] [color=#bfb6d6]¡se activa![/color]" % r.n, 14)
+	lb.autowrap_mode = TextServer.AUTOWRAP_OFF
+	lb.fit_content = true
+	lb.custom_minimum_size = Vector2(200, 0)
+	lb.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hb.add_child(lb)
+	p.add_child(hb)
+	add_child(p)
+	var slot := _relic_tags
+	_relic_tags += 1
+	p.position = Vector2(10, 128 + slot * 34)
+	p.modulate.a = 0.0
+	var pt := p.create_tween()
+	pt.tween_interval(slot * 0.12)
+	pt.tween_property(p, "modulate:a", 1.0, 0.15)
+	pt.tween_interval(1.3)
+	pt.tween_property(p, "modulate:a", 0.0, 0.35)
+	pt.tween_callback(func():
+		_relic_tags = maxi(0, _relic_tags - 1)
+		p.queue_free())
+
+
 func toast(msg: String) -> void:
 	toast_lbl.text = msg
 	if _toast_tw and _toast_tw.is_valid():

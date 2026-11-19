@@ -79,6 +79,7 @@ static func add_status(C, c, k: String, n: int) -> void:
 		return
 	if k == "poison" and n > 0 and not is_same(c, C.pl) and has_relic(C.G, "colmillo_vibora"):
 		n += 1
+		_fx(C, "relic", {"id": "colmillo_vibora"})
 	var s: Dictionary = c.status
 	s[k] = s.get(k, 0) + n
 	if k == "poison" and n > 0 and not is_same(c, C.pl):
@@ -198,8 +199,23 @@ static func nmods(G) -> Dictionary:
 
 # ---------- Reliquias ----------
 static func relic_hook(C, name: String, a = null) -> void:
+	var watch: bool = C.fx.is_valid()   # solo con interfaz: avisa de qué reliquia se disparó (no toca reglas ni RNG)
 	for id in C.G.relics:
+		var before := _relic_sig(C) if watch else ""
 		Relics.run(id, name, C, a)
+		if watch and _relic_sig(C) != before:
+			_fx(C, "relic", {"id": id})
+
+## Huella del estado visible para detectar si una reliquia hizo algo (solo lectura).
+static func _relic_sig(C) -> String:
+	var G = C.G
+	var en := []
+	for e in C.enemies:
+		en.append([e.hp, e.block, e.status])
+	var o = C.get("osty")
+	return str([G.hp, G.maxHp, G.gold, G.potions, C.energy, C.maxEnergy, C.pl.block, C.pl.status, C.hand.size(), C.draw.size(),
+		C.discard.size(), C.exhaust.size(), C.get("orbs", []).size(), C.get("orbMax", 0), C.get("firstTurnDraw", 0), en,
+		[o.hp, o.max, o.pow] if o != null else null])
 
 static func has_relic(G, id: String) -> bool:
 	return id in G.relics
@@ -443,6 +459,7 @@ static func _player_down(C) -> void:
 	var G = C.G
 	if has_relic(G, "pluma") and not G.get("plumaUsed", false):
 		G["plumaUsed"] = true
+		_fx(C, "relic", {"id": "pluma"})
 		G.hp = maxi(1, ceili(G.maxHp * 0.3))
 		_fx(C, "heal", {"n": G.hp})
 		return
@@ -812,6 +829,7 @@ static func spend_wind(C, n: int) -> int:
 	add_status(C, C.pl, "cuerda", -n)
 	if has_relic(C.G, "muelle_doble"):
 		C.pl.block += n
+		_fx(C, "relic", {"id": "muelle_doble"})
 		_fx(C, "block", {"n": n})
 	var tt := get_s(C.pl, "tictac")
 	if tt:
@@ -903,6 +921,7 @@ static func play_card(C, uid: int, target = null) -> bool:
 	var echoes := 0
 	if has_relic(C.G, "cristal") and not C.get("echoUsed", false):
 		C["echoUsed"] = true
+		_fx(C, "relic", {"id": "cristal"})
 		echoes += 1
 	if C.get("dupNext", false):
 		C.erase("dupNext")
@@ -945,6 +964,7 @@ static func exhaust_card(C, inst: Dictionary, _played: bool = false) -> void:
 	if S.get("darkEmbrace", 0):
 		draw_cards(C, S.darkEmbrace)
 	if has_relic(C.G, "grimorio") and not living(C).is_empty():
+		_fx(C, "relic", {"id": "grimorio"})
 		deal_to_enemy(C, pick(C.G, living(C)), 3, {"noReflect": true})
 
 static func run_fx(C, d: Dictionary, target, X: int, prev_attack: bool) -> void:
@@ -960,6 +980,7 @@ static func run_fx(C, d: Dictionary, target, X: int, prev_attack: bool) -> void:
 		lose_hp(C, f.selfdmg)
 		if has_relic(C.G, "guantelete") and C.over == "":
 			pl.block += 4
+			_fx(C, "relic", {"id": "guantelete"})
 			_fx(C, "block", {"n": 4})
 	if f.get("energy", 0):
 		C.energy += f.energy

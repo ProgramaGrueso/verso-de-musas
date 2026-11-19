@@ -273,6 +273,16 @@ static func pick_cards(opts: Dictionary) -> Array:
 		views[cv.inst.uid] = cv
 	v.add_child(grid)
 	var all_cards := _find_cards(grid)
+	if opts.get("upgradePreview", false):
+		# hoguera: al pasar el ratón (o el foco) por una carta se ve al lado cómo queda mejorada
+		var peek := {"n": null}
+		for cv in all_cards:
+			cv.hovered.connect(func(view: CardView, on: bool):
+				if peek.n != null and is_instance_valid(peek.n):
+					peek.n.queue_free()
+				peek.n = null
+				if on and view.is_inside_tree():
+					peek.n = _upgrade_peek(o, view, opts.get("C", null)))
 	if not all_cards.is_empty():
 		all_cards[0].grab_focus.call_deferred()
 	var row := _row(16)
@@ -308,12 +318,8 @@ static func _strip(t: String) -> String:
 	return rx.sub(t, "", true)
 
 
-static func upgrade_compare(inst: Dictionary, C = null) -> bool:
-	var o := _overlay()
-	o.cancel_result = false
-	var v := _center_col(o, 14)
-	v.add_child(_title("¿Mejorar esta carta?"))
-	var row := _row(36)
+## Qué cambia al mejorar una carta, en una línea («Coste 2 ➜ 1 · Inflige 9 de daño»).
+static func upgrade_note(inst: Dictionary, C = null) -> String:
 	var up_inst := inst.duplicate()
 	up_inst.up = true
 	var a := Eng.card_def(inst)
@@ -329,7 +335,52 @@ static func upgrade_compare(inst: Dictionary, C = null) -> bool:
 	for l in la:
 		if not (l in lb) and (l.contains("Agotar") or l.contains("Retener") or l.contains("Innata")):
 			parts.append("Pierde: " + l)
-	var note := " · ".join(parts) if not parts.is_empty() else "Mejora los valores de la carta."
+	return " · ".join(parts) if not parts.is_empty() else "Mejora los valores de la carta."
+
+
+## Vista previa flotante de la carta mejorada junto a la carta señalada (no roba el ratón).
+static func _upgrade_peek(o: Control, view: CardView, C) -> Control:
+	var up_inst: Dictionary = view.inst.duplicate()
+	up_inst.up = true
+	var box := PanelContainer.new()
+	var sb := UIK.stylebox(Color("#0d1a12", 0.96), Color("#7ef0a0"), 2, 14, 14)
+	sb.shadow_color = Color("#7ef0a0", 0.35)
+	sb.content_margin_left = 12; sb.content_margin_right = 12; sb.content_margin_top = 8; sb.content_margin_bottom = 10
+	box.add_theme_stylebox_override("panel", sb)
+	box.z_index = 200
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 6)
+	col.add_child(UIK.label("Mejorada ➜", 18, Color("#8dff9d"), "bold", HORIZONTAL_ALIGNMENT_CENTER))
+	var cc := CenterContainer.new()
+	cc.add_child(CardView.create(up_inst, C, 200.0, false))
+	col.add_child(cc)
+	var nl := UIK.label(upgrade_note(view.inst, C), 14, UIK.GOLD, "sans", HORIZONTAL_ALIGNMENT_CENTER)
+	nl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	nl.custom_minimum_size = Vector2(200, 0)
+	col.add_child(nl)
+	box.add_child(col)
+	Juice.mouse_ignore_all(box)
+	o.add_child(box)
+	box.reset_size()
+	var r := view.get_global_rect()
+	var bw := box.size.x
+	var x := r.end.x + 14.0 if r.end.x + 14.0 + bw <= 1274.0 else r.position.x - 14.0 - bw
+	var y := clampf(r.get_center().y - box.size.y / 2.0, 6.0, 714.0 - box.size.y)
+	box.global_position = Vector2(clampf(x, 6.0, 1274.0 - bw), y)
+	box.modulate.a = 0.0
+	box.create_tween().tween_property(box, "modulate:a", 1.0, 0.12)
+	return box
+
+
+static func upgrade_compare(inst: Dictionary, C = null) -> bool:
+	var o := _overlay()
+	o.cancel_result = false
+	var v := _center_col(o, 14)
+	v.add_child(_title("¿Mejorar esta carta?"))
+	var row := _row(36)
+	var up_inst := inst.duplicate()
+	up_inst.up = true
+	var note := upgrade_note(inst, C)
 	for pair in [["Ahora", inst], ["Mejorada", up_inst]]:
 		var col := VBoxContainer.new()
 		col.add_theme_constant_override("separation", 8)
@@ -408,6 +459,9 @@ static func options() -> void:
 	col.add_child(sfx_row)
 	col.add_child(_toggle_row("Jugar carta", Meta.settings.confirm, "Elegir y confirmar (más seguro)", "Un solo clic", func(x): Meta.settings.confirm = x; Meta.save_settings(), "hand"))
 	col.add_child(_toggle_row("Animaciones", Meta.settings.fast, "Rápidas", "Normales", func(x): Meta.settings.fast = x; Meta.save_settings(), "speed"))
+	var calm_row := _toggle_row("Reducir movimiento", Meta.settings.get("calm", false), "Sí (sin sacudidas ni partículas)", "No", func(x): Meta.settings.calm = x; Meta.save_settings(), "moon")
+	UIK.tip(calm_row.get_child(2), "[b][color=#f0cf7a]Reducir movimiento[/color][/b]\nApaga las sacudidas de pantalla, el hitstop de los golpes, los anillos y las partículas. Los colores y los sonidos se mantienen.")
+	col.add_child(calm_row)
 	var row := _row(14)
 	var mr := UIK.button("Reiniciar música")
 	mr.pressed.connect(func(): Sfx.restart_music())

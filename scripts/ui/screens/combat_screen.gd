@@ -8,6 +8,9 @@ const CARD_W := 168.0
 const CARD_H := 238.56
 const ARENA_POS := Vector2(0, 52)
 const NEW_PER_FRAME := 2       # cartas nuevas que se construyen por frame (evita tirones de la mano)
+const BIG_HIT := 15            # daño a partir del cual un golpe es «grande» (hitstop, sacudida, sonido)
+const POP_GAP := 0.13           # separación mínima entre números flotantes sobre el mismo objetivo
+const POP_FAN := [Vector2(0, 0), Vector2(-66, -26), Vector2(66, -18), Vector2(-36, -60), Vector2(40, -56), Vector2(0, -88)]
 const FLOOR := {"underdocks": [1.3, -385.0, "#17130f"], "overgrowth": [1.3, -400.0, "#15130d"], "hive": [1.55, -620.0, "#2a1a08"]}
 
 var ids: Array = []
@@ -52,6 +55,12 @@ var incoming_lbl: RichTextLabel
 var tipbar: Label
 var vignette: TextureRect
 var target_line: TargetLine
+var lethal_box: PanelContainer
+var turn_tint: TextureRect
+
+var _lethal := false
+var _pop_slots := {}            # objetivo -> {n, t}: escalonado de números flotantes
+var _stop_until := 0            # ms hasta el que dura el hitstop actual
 
 var _press_card: CardView = null
 var _press_pos := Vector2.ZERO
@@ -122,6 +131,14 @@ func _ready() -> void:
 	var vtw := vignette.create_tween().set_loops()
 	vtw.tween_property(vignette, "modulate:a", 0.45, 0.55).set_trans(Tween.TRANS_SINE)
 	vtw.tween_property(vignette, "modulate:a", 1.0, 0.55).set_trans(Tween.TRANS_SINE)
+	turn_tint = TextureRect.new()
+	turn_tint.texture = UIK.grad_tex([[0.0, Color(0.32, 0.0, 0.05, 0.55)], [0.3, Color(0.2, 0.0, 0.03, 0.0)], [0.7, Color(0.2, 0.0, 0.03, 0.0)], [1.0, Color(0.32, 0.0, 0.05, 0.6)]])
+	turn_tint.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	turn_tint.stretch_mode = TextureRect.STRETCH_SCALE
+	UIK.full_rect(turn_tint)
+	turn_tint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	turn_tint.modulate.a = 0.0
+	add_child(turn_tint)
 	hand_layer = Control.new()
 	UIK.full_rect(hand_layer)
 	hand_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -173,7 +190,7 @@ var _bg_base := Vector2.ZERO
 
 
 func _process(_dt: float) -> void:
-	if _bg_img != null:
+	if _bg_img != null and not Juice.calm():
 		var m := get_viewport().get_mouse_position()
 		var off := Vector2((m.x - 640.0) / 640.0, (m.y - 360.0) / 360.0) * Vector2(-14, -6)
 		var target := _bg_base + off
@@ -207,6 +224,8 @@ func _build_background() -> void:
 	var sh := UIK.shade(0.0, 0.0)
 	sh.texture = UIK.grad_tex([[0.0, Color(0, 0, 0, 0)], [0.55, Color(0, 0, 0, 0)], [0.9, Color(Color(f[2]), 1.0)]])
 	add_child(sh)
+	if Juice.calm():
+		return
 	var amb := UIK.embers([Color("#8fe8e0"), Color("#d8ff7a"), Color("#ffc65a")][G.act - 1], 26)
 	amb.position = Vector2(640, 520)
 	amb.emission_rect_extents = Vector2(660, 140)
@@ -258,6 +277,21 @@ func _build_player() -> void:
 	incoming_lbl.add_theme_color_override("font_outline_color", Color.BLACK)
 	UIK.tip(incoming_lbl, func(): return _incoming_tip())
 	player_box.add_child(incoming_lbl)
+	lethal_box = PanelContainer.new()
+	var lsb := UIK.stylebox(Color("#5a0812", 0.92), Color("#ff6a74"), 2, 12, 12)
+	lsb.shadow_color = Color("#ff2a3a", 0.55)
+	lsb.content_margin_left = 10; lsb.content_margin_right = 12; lsb.content_margin_top = 2; lsb.content_margin_bottom = 2
+	lethal_box.add_theme_stylebox_override("panel", lsb)
+	var lrow := Icons.with_text("ui", "heart_broken", "MUERTE SEGURA", 24, 17, Color.WHITE)
+	lrow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	lethal_box.add_child(lrow)
+	lethal_box.set_meta("lbl", lrow)
+	lethal_box.visible = false
+	UIK.tip(lethal_box, func(): return _lethal_tip())
+	player_box.add_child(lethal_box)
+	var ltw := lethal_box.create_tween().set_loops()
+	ltw.tween_property(lethal_box, "modulate", Color(1.35, 1.15, 1.15), 0.45).set_trans(Tween.TRANS_SINE)
+	ltw.tween_property(lethal_box, "modulate", Color(0.85, 0.85, 0.85), 0.45).set_trans(Tween.TRANS_SINE)
 	player_status = HFlowContainer.new()
 	player_status.position = Vector2(40, 386)
 	player_status.size = Vector2(260, 34)
@@ -430,39 +464,56 @@ func _player_center() -> Vector2:
 	return arena.global_position + player_box.position + sprite.position + sprite.size * Vector2(0.5, 0.35)
 
 
+## Número flotante. Los que caen sobre el mismo objetivo en ráfaga se escalonan en tiempo y posición (abanico).
 func _popup(pos: Vector2, text: String, kind: String) -> void:
-	var colors := {"dmg": Color.WHITE, "hurt": Color("#ff4d5a"), "blk": Color("#8ccbff"), "heal": Color("#7ef0a0"), "txt": UIK.GOLD}
-	var size := {"dmg": 44, "hurt": 44, "blk": 36, "heal": 44, "txt": 28}
+	var colors := {"dmg": Color.WHITE, "hurt": Color("#ff4d5a"), "blk": Color("#8ccbff"), "heal": Color("#7ef0a0"), "poison": Color("#b6f05a"), "txt": UIK.GOLD}
+	var outline := {"dmg": Color("#c1121f"), "poison": Color("#1d3a0c")}
+	var size := {"dmg": 44, "hurt": 44, "blk": 36, "heal": 44, "poison": 40, "txt": 28}
 	var fs: int = size[kind]
-	if kind == "dmg":
-		fs = clampi(36 + int(text.to_int() * -0.7), 36, 72)
+	if kind == "dmg" or kind == "hurt":
+		fs = clampi(36 + int(absi(text.to_int()) * 0.7), 36, 72)
+	# escalonado por objetivo: cada número espera POP_GAP al anterior y ocupa otra posición del abanico
+	var now := Time.get_ticks_msec() / 1000.0
+	var key := "%d:%d" % [roundi(pos.x / 80.0), roundi(pos.y / 80.0)]
+	var s: Dictionary = _pop_slots.get(key, {"n": 0, "t": 0.0})
+	if now > s.t + 0.45:
+		s.n = 0
+	var delay := maxf(0.0, s.t - now)
+	var i: int = s.n
+	s.n = i + 1
+	s.t = now + delay + POP_GAP
+	_pop_slots[key] = s
+	var off: Vector2 = POP_FAN[i % POP_FAN.size()] + Vector2(0, -16.0 * floorf(i / float(POP_FAN.size())))
 	var l := UIK.label(text, fs, colors[kind], "bold", HORIZONTAL_ALIGNMENT_CENTER)
-	l.size = Vector2(300, 60)
-	UIK.outlined(l, 8, Color("#c1121f") if kind == "dmg" else Color.BLACK)
-	l.pivot_offset = Vector2(150, 30)
-	l.position = pos - Vector2(150, 30) + Vector2(randf_range(-14, 14), 0)
+	l.size = Vector2(300, 80)
+	UIK.outlined(l, 8, outline.get(kind, Color.BLACK))
+	l.pivot_offset = Vector2(150, 40)
+	l.position = pos - Vector2(150, 40) + off
 	l.modulate.a = 0.0
-	l.scale = Vector2(0.6, 0.6)
 	fx_layer.add_child(l)
-	var delay := _pop_n * 0.14
-	_pop_n += 1
-	_reset_pop_n.call_deferred()
 	var tw := l.create_tween()
 	tw.tween_interval(delay)
-	tw.tween_property(l, "modulate:a", 1.0, 0.08)
-	tw.parallel().tween_property(l, "scale", Vector2(1.25, 1.25), 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tw.parallel().tween_property(l, "position:y", l.position.y - 24, 0.15)
+	if Juice.calm():
+		tw.tween_property(l, "modulate:a", 1.0, 0.1)
+		tw.tween_interval(0.6)
+		tw.tween_property(l, "modulate:a", 0.0, 0.4)
+		tw.tween_callback(l.queue_free)
+		return
+	l.scale = Vector2(0.5, 0.5)
+	l.rotation = deg_to_rad(randf_range(-6.0, 6.0)) if kind in ["dmg", "hurt"] else 0.0
+	var punch := 1.45 if fs >= 56 else 1.25
+	tw.tween_property(l, "modulate:a", 1.0, 0.06)
+	tw.parallel().tween_property(l, "scale", Vector2(punch, punch), 0.14).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.parallel().tween_property(l, "position:y", l.position.y - 24, 0.14)
 	tw.tween_property(l, "scale", Vector2.ONE, 0.12)
 	tw.tween_property(l, "position:y", l.position.y - 84, 0.8).set_ease(Tween.EASE_OUT)
 	tw.parallel().tween_property(l, "modulate:a", 0.0, 0.8).set_delay(0.25)
 	tw.tween_callback(l.queue_free)
 
 
-func _reset_pop_n() -> void:
-	_pop_n = 0
-
-
 func _burst(pos: Vector2, color: Color = Color("#ffd98a"), count: int = 24, rise: bool = false) -> void:
+	if Juice.calm():
+		return
 	var p := UIK.embers(color, count)
 	p.position = pos
 	p.emission_shape = CPUParticles2D.EMISSION_SHAPE_SPHERE
@@ -483,26 +534,70 @@ func _burst(pos: Vector2, color: Color = Color("#ffd98a"), count: int = 24, rise
 	get_tree().create_timer(1.2).timeout.connect(p.queue_free)
 
 
-func _banner(text: String, red: bool = false) -> void:
-	var b := UIK.label(text, 64, Color("#ff7078") if red else UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
-	b.size = Vector2(1280, 90)
-	b.position = Vector2(0, 190)
-	b.pivot_offset = Vector2(640, 45)
+## Rótulo de turno: banda oscura con filos de color que se abre, texto que entra y subtítulo opcional.
+func _banner(text: String, red: bool = false, sub: String = "", hold: float = 0.7) -> void:
+	var accent := Color("#ff7078") if red else UIK.GOLD
+	var band_col := Color("#2a0610", 0.86) if red else Color("#0c161d", 0.84)
+	var h := Control.new()
+	h.size = Vector2(1280, 130)
+	h.position = Vector2(0, 168)
+	h.pivot_offset = Vector2(640, 65)
+	h.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fx_layer.add_child(h)
+	var band := TextureRect.new()
+	band.texture = UIK.grad_tex([[0.0, Color(band_col, 0.0)], [0.22, band_col], [0.78, band_col], [1.0, Color(band_col, 0.0)]], true)
+	band.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	band.stretch_mode = TextureRect.STRETCH_SCALE
+	band.size = Vector2(1280, 130)
+	band.pivot_offset = Vector2(640, 65)
+	band.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	h.add_child(band)
+	for y in [6.0, 122.0]:
+		var edge := TextureRect.new()
+		edge.texture = UIK.grad_tex([[0.0, Color(accent, 0.0)], [0.5, accent], [1.0, Color(accent, 0.0)]], true)
+		edge.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		edge.stretch_mode = TextureRect.STRETCH_SCALE
+		edge.size = Vector2(900, 2)
+		edge.position = Vector2(190, y)
+		edge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		band.add_child(edge)
+	var b := UIK.label(text, 60, accent, "title", HORIZONTAL_ALIGNMENT_CENTER)
+	b.size = Vector2(1280, 86)
+	b.position = Vector2(0, 8 if sub != "" else 20)
+	b.pivot_offset = Vector2(640, 43)
 	UIK.outlined(b, 12)
-	b.modulate.a = 0.0
-	b.scale = Vector2(0.6, 0.6)
-	fx_layer.add_child(b)
-	var tw := b.create_tween()
-	tw.tween_property(b, "modulate:a", 1.0, 0.2)
-	tw.parallel().tween_property(b, "scale", Vector2(1.1, 1.1), 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tw.tween_property(b, "scale", Vector2.ONE, 0.1)
-	tw.tween_interval(0.7)
-	tw.tween_property(b, "modulate:a", 0.0, 0.3)
-	tw.parallel().tween_property(b, "scale", Vector2(1.2, 1.2), 0.3)
-	tw.tween_callback(b.queue_free)
+	h.add_child(b)
+	if sub != "":
+		var sl := UIK.label(sub, 20, Color("#e9e2f5"), "bold", HORIZONTAL_ALIGNMENT_CENTER)
+		sl.size = Vector2(1280, 28)
+		sl.position = Vector2(0, 88)
+		UIK.outlined(sl, 5)
+		h.add_child(sl)
+	h.modulate.a = 0.0
+	var tw := h.create_tween()
+	if Juice.calm():
+		tw.tween_property(h, "modulate:a", 1.0, 0.2)
+		tw.tween_interval(hold + 0.15)
+		tw.tween_property(h, "modulate:a", 0.0, 0.3)
+		tw.tween_callback(h.queue_free)
+		return
+	band.scale = Vector2(1.0, 0.05)
+	b.scale = Vector2(1.35, 1.35)
+	b.position.x = -80
+	tw.tween_property(h, "modulate:a", 1.0, 0.12)
+	tw.parallel().tween_property(band, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.parallel().tween_property(b, "scale", Vector2.ONE, 0.26).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.parallel().tween_property(b, "position:x", 0.0, 0.26).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_interval(hold)
+	tw.tween_property(h, "modulate:a", 0.0, 0.28)
+	tw.parallel().tween_property(b, "position:x", 80.0, 0.28).set_ease(Tween.EASE_IN)
+	tw.parallel().tween_property(band, "scale", Vector2(1.0, 0.05), 0.28).set_ease(Tween.EASE_IN)
+	tw.tween_callback(h.queue_free)
 
 
 func _screen_shake(strength: float = 8.0, dur: float = 0.25) -> void:
+	if Juice.calm():
+		return
 	if _shake_tw and _shake_tw.is_valid():
 		_shake_tw.kill()
 	arena.position = ARENA_POS
@@ -517,11 +612,15 @@ func _screen_shake(strength: float = 8.0, dur: float = 0.25) -> void:
 static var test_mode := false
 
 
+## Congela la acción unos milisegundos (golpes grandes, muertes). Varias seguidas se encadenan sin cortarse.
 func _hit_stop(secs: float) -> void:
-	if test_mode:
+	if test_mode or Juice.calm():
 		return
-	Engine.time_scale = 0.06
-	get_tree().create_timer(secs, true, false, true).timeout.connect(func(): Engine.time_scale = 1.0)
+	_stop_until = maxi(_stop_until, Time.get_ticks_msec() + int(secs * 1000.0))
+	Engine.time_scale = 0.05
+	get_tree().create_timer(secs, true, false, true).timeout.connect(func():
+		if Time.get_ticks_msec() >= _stop_until - 2:
+			Engine.time_scale = 1.0)
 
 
 func _exit_tree() -> void:
@@ -531,50 +630,80 @@ func _exit_tree() -> void:
 
 # ============================== eventos del motor ==============================
 func _fx(type: String, d: Dictionary) -> void:
+	if type == "relic":   # puede llegar en start_combat (antes de asignar C)
+		Main.I.pulse_relic.call_deferred(d.id)
+		return
 	if C.is_empty():
 		return
 	match type:
+		"bossPhase":   # el jefe entra en fase 2: banda grande + sacudida corta (sin ella en «reducir movimiento»)
+			var bv := _enemy_view(d.e)
+			var nm: String = str(d.e.get("name", "El jefe"))
+			var msg: String = str(d.get("msg", ""))
+			Sfx.play("danger")
+			Sfx.play("bigHit", 0.6)
+			_banner("%s · ¡Fase 2!" % nm, true, msg, 1.2)
+			_screen_shake(12.0, 0.3)
+			if bv != null:
+				bv.flash_hit(0.0, Color(2.4, 0.9, 0.9))
+				Juice.ring(self, bv.body_center(), Color("#ff5a5a"), 30.0, 140.0, 0.55, 7.0)
 		"enemyHit":
 			var ev := _enemy_view(d.e)
 			if ev == null:
 				return
 			if d.get("poison", false):
-				_popup(ev.body_center(), "-%d" % d.amt, "heal")
-				_burst(ev.body_center(), Color("#7ed957"), 10, true)
+				_popup(ev.body_center(), "-%d" % d.amt, "poison")
+				_burst(ev.body_center(), Color("#7ed957"), 12, true)
+				ev.flash_hit(0.0, Color(0.7, 1.7, 0.5))
 				Sfx.play("poison")
 			elif d.amt > 0:
+				var big: bool = d.amt >= BIG_HIT
 				_popup(ev.body_center(), "-%d" % d.amt, "dmg")
-				ev.flash_hit()
+				ev.flash_hit(1.7 if big else 1.0)
 				if not d.get("thorns", false):
-					_slash(ev.body_center(), d.amt >= 15)
-				Sfx.play("bigHit" if d.amt >= 15 else "hit")
-				if d.amt >= 15:
+					_slash(ev.body_center(), big)
+				Sfx.play("bigHit" if big else "hit")
+				if d.get("blocked", 0) > 0:
+					Sfx.play("blocked", 0.45)
+				if big:
 					_screen_shake(6.0 + minf(d.amt, 40) * 0.15, 0.3)
-					_hit_stop(0.05)
+					_hit_stop(0.07)
 			elif d.blocked:
 				_popup(ev.body_center(), "Bloqueado", "blk")
-				Sfx.play("block")
+				Juice.ring(fx_layer, ev.body_center(), Color("#8ccbff"), 24.0, 96.0, 0.32, 5.0)
+				Sfx.play("blocked")
 		"playerHit":
 			if d.amt > 0:
+				var big: bool = d.amt >= maxi(12, int(G.maxHp * 0.18))
 				_popup(_player_center(), "-%d" % d.amt, "hurt")
 				Sfx.play("hurt")
+				if big:
+					Sfx.play("bigHit", 0.7)
+				if d.get("blocked", 0) > 0:
+					Sfx.play("blocked", 0.45)
 				if sprite and not d.get("direct", false):
 					sprite.play("hurt")
-				_player_shake()
-				_flash_screen()
+				_player_flash()
+				_player_shake(big)
+				_flash_screen(big)
+				if big:
+					_hit_stop(0.065)
 			elif d.blocked:
 				_popup(_player_center(), "Bloqueado", "blk")
-				Sfx.play("block")
+				Juice.ring(fx_layer, _player_center(), Color("#8ccbff"), 30.0, 120.0, 0.34, 6.0)
+				Sfx.play("blocked")
 			if d.get("ostyAbs", 0):
 				_popup(osty_box.global_position + Vector2(45, 40), "-%d" % d.ostyAbs, "hurt")
 		"block":
 			_popup(_player_center(), "+%d" % d.n, "blk")
 			_burst(_player_center(), Color("#8ccbff"), 18, true)
-			Sfx.play("block")
+			Juice.ring(fx_layer, _player_center() + Vector2(0, 40), Color("#8ccbff", 0.8), 40.0, 110.0, 0.4, 4.0)
+			Sfx.play("blockUp")
 		"enemyBlock":
 			var ev2 := _enemy_view(d.e)
 			if ev2:
 				_popup(ev2.body_center(), "+%d" % d.n, "blk")
+				Sfx.play("blockUp", 0.6)
 		"heal":
 			_popup(_player_center(), "+%d" % d.n, "heal")
 			_burst(_player_center(), Color("#7ef0a0"), 16, true)
@@ -594,14 +723,20 @@ func _fx(type: String, d: Dictionary) -> void:
 			var pos: Vector2 = _player_center() if is_p else (_enemy_view(d.who).body_center() if _enemy_view(d.who) else Vector2(900, 400))
 			_popup(pos + Vector2(0, -50), "%s%d %s" % ["+" if d.n > 0 else "", d.n, Eng.st_name(d.k)], "txt")
 			var good: bool = Eng.st_neg(d.k, d.n) == false
-			_burst(pos, Color("#ffe08a") if good else Color("#b07cff"), 14, true)
-			Sfx.play("buff" if Eng.st_neg(d.k, d.n) == is_p else "debuff")
+			if d.k == "poison" and d.n > 0:
+				_burst(pos, Color("#9be35a"), 16, true)
+				Sfx.play("poisonApply")
+			else:
+				_burst(pos, Color("#ffe08a") if good else Color("#b07cff"), 14, true)
+				Sfx.play("buff" if Eng.st_neg(d.k, d.n) == is_p else "debuff")
 		"enemyDie":
 			var ev4 := _enemy_view(d.e)
 			if ev4:
 				ev4.die()
 				_burst(ev4.body_center())
+				Juice.ring(fx_layer, ev4.body_center(), Color("#ffe6a8"), 20.0, 150.0, 0.45, 7.0)
 			Sfx.play("die")
+			_hit_stop(0.08)
 		"enemySpawn":
 			Sfx.play("buff")
 		"reshuffle":
@@ -609,10 +744,16 @@ func _fx(type: String, d: Dictionary) -> void:
 		"ostyAttack":
 			Sfx.play("hit")
 		"orbChannel":
-			Sfx.play("buff")
+			Sfx.play("orbChannel")
 			_update_orbs()
+			var pc := _orb_pos(C.orbs.size() - 1)
+			Juice.ring(fx_layer, pc, Color("#9fd8ff"), 10.0, 48.0, 0.35, 4.0)
+			_burst(pc, Color("#9fd8ff"), 10, true)
 		"orbEvoke":
-			Sfx.play("hit")
+			Sfx.play("orbEvoke")
+			var pe := _orb_pos(0)
+			Juice.ring(fx_layer, pe, Color("#e8f6ff"), 14.0, 90.0, 0.4, 6.0)
+			_burst(pe, Color("#cfe9ff"), 18)
 			_update_orbs()
 		"orbTick":
 			_update_orbs()
@@ -627,6 +768,11 @@ func _fx(type: String, d: Dictionary) -> void:
 			Sfx.play("heal")
 		"handFull":
 			Main.I.toast("Tu mano está llena.")
+
+
+## Centro del hueco de orbe i en pantalla (la barra de orbes vive en la arena).
+func _orb_pos(i: int) -> Vector2:
+	return orb_bar.global_position + Vector2(maxi(0, i) * 50.0 + 22.0, 22.0)
 
 
 func _lunge_player(target) -> void:
@@ -661,25 +807,59 @@ func _slash(pos: Vector2, heavy: bool) -> void:
 	tw.tween_callback(l.queue_free)
 
 
-func _player_shake() -> void:
-	var base := player_box.position.x
+## Destello rojo-blanco del sprite de la musa al recibir daño (también con movimiento reducido).
+func _player_flash() -> void:
+	if sprite == null:
+		return
+	sprite.modulate = Color(2.4, 1.3, 1.3)
+	var tw := sprite.create_tween()
+	tw.tween_property(sprite, "modulate", Color(1.6, 0.45, 0.45), 0.07)
+	tw.tween_property(sprite, "modulate", Color.WHITE, 0.22)
+
+
+func _player_shake(big: bool = false) -> void:
+	if Juice.calm():
+		return
+	var base := 90.0   # posición de reposo de player_box (no la de mitad de animación)
+	var a := 18.0 if big else 12.0
 	var tw := player_box.create_tween()
-	tw.tween_property(player_box, "position:x", base - 12, 0.04)
-	tw.tween_property(player_box, "position:x", base + 10, 0.06)
-	tw.tween_property(player_box, "position:x", base - 6, 0.06)
+	tw.tween_property(player_box, "position:x", base - a, 0.04)
+	tw.tween_property(player_box, "position:x", base + a * 0.8, 0.06)
+	tw.tween_property(player_box, "position:x", base - a * 0.5, 0.06)
 	tw.tween_property(player_box, "position:x", base, 0.06)
-	_screen_shake(5.0, 0.25)
+	_screen_shake(9.0 if big else 5.0, 0.3 if big else 0.25)
 
 
-func _flash_screen() -> void:
+func _flash_screen(big: bool = false) -> void:
 	var f := ColorRect.new()
-	f.color = Color(1, 0.1, 0.15, 0.32)
+	f.color = Color(1, 0.1, 0.15, (0.42 if big else 0.32) * (0.5 if Juice.calm() else 1.0))
 	UIK.full_rect(f)
 	f.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	fx_layer.add_child(f)
 	var tw := f.create_tween()
 	tw.tween_property(f, "color:a", 0.0, 0.3)
 	tw.tween_callback(f.queue_free)
+
+
+## Golpe de la carta jugada al llegar a su objetivo: destello, anillo y chispas del color de su tipo.
+func _card_impact(pos: Vector2, type: String, heavy: bool) -> void:
+	var col: Color = {"attack": Color("#ff9a62"), "skill": Color("#8ccbff"), "power": Color("#ffd36a")}.get(type, UIK.GOLD)
+	Juice.ring(fx_layer, pos, col, 30.0, 170.0 if heavy else 110.0, 0.34, 8.0 if heavy else 5.0)
+	_burst(pos, col, 22 if heavy else 10)
+	if heavy:
+		Sfx.play("heavy")
+		_screen_shake(5.0, 0.2)
+
+
+func _is_heavy(d: Dictionary) -> bool:
+	return _anim_for(d) == "attack_heavy" or Eng.is_x(d.cost) or d.cost >= 2
+
+
+## Fin de turno: la mano se apaga y la escena se tiñe mientras actúan los enemigos.
+func _enemy_phase_look(on: bool) -> void:
+	var t := 0.25
+	hand_layer.create_tween().tween_property(hand_layer, "modulate", Color(0.5, 0.48, 0.56) if on else Color.WHITE, t)
+	turn_tint.create_tween().tween_property(turn_tint, "modulate:a", 1.0 if on else 0.0, t)
 
 
 # ============================== render ==============================
@@ -721,9 +901,39 @@ func _update_incoming() -> void:
 	var inc := Eng.incoming(C)
 	if inc.total <= 0:
 		incoming_lbl.text = ""
+		_set_lethal(false)
 		return
 	var res: String = "[color=#8bf0a4]todo bloqueado[/color]" if inc.hp <= 0 else "[color=#ff7b85]−%d PV[/color]" % inc.hp
 	incoming_lbl.text = "[center]%s %d  ➜  %s[/center]" % [Icons.bb("intent", "attack", 22), inc.total, res]
+	_set_lethal(inc.hp >= G.hp and G.hp > 0)
+
+
+## Muerte segura: el daño anunciado supera PV + Bloqueo (+ Osty). Aviso rojo, viñeta y un latido la primera vez.
+func _set_lethal(on: bool) -> void:
+	if lethal_box == null:
+		return
+	if on and not _lethal:
+		Sfx.play("danger")
+	_lethal = on
+	lethal_box.visible = on
+	if on:
+		var row: Control = lethal_box.get_meta("lbl")
+		var pluma: bool = Eng.has_relic(G, "pluma") and not G.get("plumaUsed", false)
+		(row.get_child(1) as Label).text = "GOLPE MORTAL · Pluma" if pluma else "MUERTE SEGURA"
+		lethal_box.reset_size()
+		lethal_box.position = Vector2((340.0 - lethal_box.size.x) / 2.0, 292)
+	vignette.visible = on or (float(G.hp) / G.maxHp <= 0.3 and G.hp > 0)
+
+
+func _lethal_tip() -> String:
+	if C.is_empty():
+		return ""
+	var inc := Eng.incoming(C)
+	var t := "[b][color=#ff8a94]Muerte segura[/color][/b]\nLos enemigos atacarán por [b]%d[/b]; tu Bloqueo (%d)%s no basta y perderías [b]%d PV[/b] de los [b]%d[/b] que te quedan." % [inc.total, C.pl.block, (" y Osty (%d)" % inc.osty) if inc.osty > 0 else "", inc.hp, G.hp]
+	if Eng.has_relic(G, "pluma") and not G.get("plumaUsed", false):
+		t += "\n[color=#f0cf7a]La Pluma de Fénix te levantaría una vez con el 30 % de tus PV.[/color]"
+	t += "\nBloquea, cúrate, debilita o remata al atacante antes de terminar el turno."
+	return t
 
 
 func _incoming_tip() -> String:
@@ -794,6 +1004,8 @@ func _update_enemies(first: bool) -> void:
 			v = EnemyView.new()
 			v.setup(e, k)
 			v.clicked.connect(_on_enemy_click)
+			var vv := v
+			UIK.tip(v.body, func(): return "" if (pending != null or _dragging) else vv.tip_text())
 			enemies_layer.add_child(v)
 			enemy_views[e.uid] = v
 			created = true
@@ -835,7 +1047,7 @@ func _update_hud() -> void:
 	_set_count(discard_btn, C.discard.size())
 	_set_count(exhaust_btn, C.exhaust.size())
 	exhaust_btn.visible = C.exhaust.size() > 0
-	end_btn.text = "Terminar turno  %d" % C.turn
+	end_btn.text = ("Turno enemigo…" if C.phase == "enemy" and C.over == "" else "Terminar turno  %d" % C.turn)
 	var any_playable := false
 	for c in C.hand:
 		if Eng.can_play(C, c).ok:
@@ -1503,12 +1715,24 @@ func _fly_ghost(uid: int, target = null) -> void:
 		vanish = true
 	elif d.flags.get("exhaust", false):
 		dest = exhaust_btn.position + exhaust_btn.size / 2.0
+	var heavy := _is_heavy(d)
+	var calm := Juice.calm()
 	var tw := g.create_tween()
+	# 0) se levanta un instante (anticipación)
+	if not calm:
+		tw.tween_property(g, "scale", v.scale * 1.12, 0.06).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	# 1) hacia el objetivo mientras se resuelve el efecto
-	tw.tween_property(g, "position", mid - g.size / 2.0, 0.28).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	tw.parallel().tween_property(g, "scale", Vector2(0.85, 0.85), 0.28)
-	tw.parallel().tween_property(g, "rotation", 0.0, 0.28)
-	tw.tween_interval(0.1)
+	tw.tween_property(g, "position", mid - g.size / 2.0, 0.24 if not calm else 0.28).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN if heavy else Tween.EASE_OUT)
+	tw.parallel().tween_property(g, "scale", Vector2(0.85, 0.85), 0.24)
+	tw.parallel().tween_property(g, "rotation", 0.0, 0.24)
+	# 2) slam: golpe de escala + destello del trazo + anillo/chispas del color del tipo
+	tw.tween_callback(_card_impact.bind(mid, String(d.type), heavy))
+	tw.tween_callback(func(): g.modulate = Color(1.8, 1.7, 1.35))
+	if not calm:
+		tw.tween_property(g, "scale", Vector2(1.08, 1.08) if heavy else Vector2(0.98, 0.98), 0.05).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tw.tween_property(g, "scale", Vector2(0.85, 0.85), 0.09)
+	tw.parallel().tween_property(g, "modulate", Color.WHITE, 0.16)
+	tw.tween_interval(0.06)
 	# 2) a la pila de descarte (o se desvanece si es un poder)
 	if vanish:
 		tw.tween_property(g, "modulate:a", 0.0, 0.3)
@@ -1580,7 +1804,10 @@ func _end_turn() -> void:
 	_render_all()
 	if await _check_end():
 		return
-	await _sleep(0.45)
+	_enemy_phase_look(true)
+	_banner("Turno enemigo", true, "", 0.35)
+	Sfx.play("enemyTurn")
+	await _sleep(0.8)
 	for e in C.enemies.duplicate():
 		if C.is_empty():
 			return
@@ -1605,13 +1832,15 @@ func _end_turn() -> void:
 	if await _check_end():
 		return
 	Eng.end_round(C)
+	_enemy_phase_look(false)
 	Eng.start_turn(C)
 	_render_all()
 	if await _check_end():   # p. ej. una Ola de Marea Alta puede matar al último enemigo al empezar el turno
 		return
 	busy = false
 	_render_all()
-	_banner("Tu turno")
+	_banner("Tu turno", false, "Turno %d" % C.turn)
+	Sfx.play("turn")
 
 
 func _check_end() -> bool:
@@ -1635,8 +1864,14 @@ func _check_end() -> bool:
 				if not (e.name in names):
 					names.append(e.name)
 		G["deathBy"] = ", ".join(names)
-		Sfx.play("lose")
+		_set_lethal(false)
+		_enemy_phase_look(false)
+		Sfx.play("playerDie")
+		_player_flash()
+		_flash_screen(true)
+		_hit_stop(0.08)
 		sprite.play("die")
+		get_tree().create_timer(0.7).timeout.connect(func(): Sfx.play("lose"))
 		await _sleep(2.3)
 		Nav.game_over()
 	return true

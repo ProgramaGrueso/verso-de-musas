@@ -38,6 +38,7 @@ var _bright := 1.0
 var rest := Vector2.ZERO   ## posición de reposo del cuerpo: todas las animaciones vuelven a ella (no a la posición de mitad de animación)
 var _x_tw: Tween
 var _y_tw: Tween
+var _intent_txt := ""   ## resumen de la intención (para el tooltip del cuerpo)
 
 
 func setup(p_e: Dictionary, k: float) -> void:
@@ -281,11 +282,38 @@ func _rebuild_intent(C) -> void:
 	intent_box.add_child(row)
 	row.mouse_filter = Control.MOUSE_FILTER_PASS
 	UIK.tip(row, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [it.name, " ".join(tips)])
+	_intent_txt = "[b]%s[/b]: %s" % [it.name, " ".join(tips)]
 	# flota suavemente
 	row.position.y = 0
 	var tw := row.create_tween().set_loops()
 	tw.tween_property(row, "position:y", -7.0, 0.9).set_trans(Tween.TRANS_SINE)
 	tw.tween_property(row, "position:y", 0.0, 0.9).set_trans(Tween.TRANS_SINE)
+
+
+## Tooltip del cuerpo: PV, Bloqueo, intención y cada mejora/penalización con su explicación.
+func tip_text() -> String:
+	if e.hp <= 0 or dying:
+		return ""
+	var col := "#ff9aa0" if e.def.tier == "boss" else ("#ffcf80" if e.def.tier == "elite" else "#f0cf7a")
+	var t := "[b][color=%s]%s[/color][/b]\n[color=#d8d2e6]PV %d/%d%s[/color]" % [col, e.name, e.hp, e.maxHp, ("  ·  Bloqueo %d" % e.block) if e.block > 0 else ""]
+	if e.intent != null and _intent_txt != "":
+		t += "\n[color=#ffb0b6]Intención[/color] · " + _intent_txt
+	var good := []
+	var bad := []
+	for k in e.status.keys():
+		var v: int = e.status[k]
+		if v == 0 or not DB.st.has(k):
+			continue
+		var ic: String = Icons.bb("status", k, 18) if Icons.has("status", k) else Eng.st_icon(k)
+		var line := "%s [b]%s %d[/b] · %s" % [ic, Eng.st_name(k), v, Eng.st_desc(k, v)]
+		(bad if Eng.st_neg(k, v) else good).append(line)
+	if not good.is_empty():
+		t += "\n\n[color=#7ef0a0]Mejoras[/color]\n" + "\n".join(good)
+	if not bad.is_empty():
+		t += "\n\n[color=#ff8a94]Penalizaciones[/color]\n" + "\n".join(bad)
+	if good.is_empty() and bad.is_empty():
+		t += "\n[color=#9a94ad]Sin mejoras ni penalizaciones.[/color]"
+	return t
 
 
 func _intent_icon(id: String) -> Control:
@@ -314,16 +342,21 @@ func _kill_x() -> void:
 	body.position.x = rest.x
 
 
-func flash_hit() -> void:
+## Destello (blanco → rojo → normal) y sacudida proporcional al golpe. strength 0 = solo destello.
+func flash_hit(strength: float = 1.0, tint: Color = Color(2.6, 2.6, 2.6)) -> void:
 	var tw := body.create_tween()
-	body.modulate = Color(2.6, 2.6, 2.6)
-	tw.tween_property(body, "modulate", Color.WHITE, 0.22)
+	body.modulate = tint
+	tw.tween_property(body, "modulate", Color(1.6, 0.55, 0.55) if tint.g > 2.0 else tint.lerp(Color.WHITE, 0.4), 0.06)
+	tw.tween_property(body, "modulate", Color.WHITE, 0.2)
+	if strength <= 0.0 or Juice.calm():
+		return
 	_kill_x()
+	var a := 12.0 * strength   # empuja hacia la derecha: lejos de la musa
 	_x_tw = body.create_tween()
-	_x_tw.tween_property(body, "position:x", rest.x - 12, 0.04)
-	_x_tw.tween_property(body, "position:x", rest.x + 10, 0.06)
-	_x_tw.tween_property(body, "position:x", rest.x - 6, 0.06)
-	_x_tw.tween_property(body, "position:x", rest.x, 0.06)
+	_x_tw.tween_property(body, "position:x", rest.x + a, 0.04)
+	_x_tw.tween_property(body, "position:x", rest.x - a * 0.7, 0.06)
+	_x_tw.tween_property(body, "position:x", rest.x + a * 0.4, 0.06)
+	_x_tw.tween_property(body, "position:x", rest.x, 0.07)
 
 
 func act_attack() -> void:
@@ -352,8 +385,9 @@ func die() -> void:
 		_idle_tw.kill()
 	for c in intent_box.get_children():
 		c.queue_free()
+	body.modulate = Color(3.0, 3.0, 3.0)
 	var tw := create_tween().set_parallel(true)
-	tw.tween_property(body, "modulate", Color(0.2, 0.2, 0.2, 0.0), 0.8)
+	tw.tween_property(body, "modulate", Color(0.2, 0.2, 0.2, 0.0), 0.8).set_delay(0.06)
 	tw.tween_property(body, "position:y", rest.y + 30, 0.8)
 	tw.tween_property(body, "scale", Vector2(0.8, 0.8), 0.8)
 	tw.chain().tween_callback(func(): visible = false)
