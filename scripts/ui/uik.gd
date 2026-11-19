@@ -168,6 +168,9 @@ static func tip(c: Control, text) -> void:
 	c.mouse_entered.connect(func(): Tip.show_for(c))
 	c.mouse_exited.connect(func(): Tip.hide_for(c))
 	c.tree_exiting.connect(func(): Tip.hide_for(c))
+	if c.focus_mode != Control.FOCUS_NONE:   # mando / teclado: el tooltip sale con el foco
+		c.focus_entered.connect(func(): Tip.show_at(c))
+		c.focus_exited.connect(func(): Tip.hide_for(c))
 
 
 # ---------- Fondos ----------

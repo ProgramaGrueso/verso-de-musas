@@ -52,6 +52,14 @@ func _ready() -> void:
 	var tip := Tip.new()
 	add_child(tip)
 	Meta.unlocked.connect(_on_unlock)
+	# todo ScrollContainer sigue al control con foco (mando/teclado llegan a lo que queda fuera de vista)
+	get_tree().node_added.connect(func(n: Node): if n is ScrollContainer: (n as ScrollContainer).follow_focus = true)
+	_insp_frame = Panel.new()
+	_insp_frame.visible = false
+	_insp_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_insp_frame.z_index = 3500
+	_insp_frame.add_theme_stylebox_override("panel", UIK.stylebox(Color(0, 0, 0, 0), UIK.GOLD, 3, 8, 10))
+	add_child(_insp_frame)
 	Nav.title()
 
 
@@ -59,6 +67,178 @@ var _stick_h := 0.0
 var _stick_v := 0.0
 var _trigger_lt := false
 var _trigger_rt := false
+
+# ---------- Inspeccionar con mando (R3): lee estados, intenciones, reliquias, pociones... ----------
+var _insp_on := false
+var _insp_list: Array = []
+var _insp_idx := 0
+var _insp_ov := 0
+var _insp_scr := ""
+var _insp_sh := 0.0
+var _insp_sv := 0.0
+var _insp_frame: Panel
+
+
+func _insp_collect(n: Node, out: Array) -> void:
+	if n == _insp_frame or n is Tip:
+		return
+	if n is Control:
+		var c := n as Control
+		if not c.visible:
+			return
+		if c.has_meta("tip") and c.is_visible_in_tree() and c.size.x > 2 and c.size.y > 2:
+			var tv = c.get_meta("tip")
+			if tv is Callable:
+				tv = tv.call()
+			var r := c.get_global_rect()
+			if str(tv) != "" and get_viewport_rect().grow(-1).intersects(r):
+				out.append(c)
+	for ch in n.get_children():
+		_insp_collect(ch, out)
+
+
+func _insp_start() -> void:
+	var root: Node = self
+	if overlay_host.get_child_count() > 0:
+		root = overlay_host.get_child(overlay_host.get_child_count() - 1)
+	var l := []
+	_insp_collect(root, l)
+	if l.is_empty():
+		Sfx.play("error")
+		toast("No hay nada que inspeccionar aquí.")
+		return
+	# el primero: el más cercano al centro de la pantalla
+	var best := 0
+	var bd := INF
+	var mid := get_viewport_rect().size / 2.0
+	for i in l.size():
+		var d: float = (l[i].get_global_rect().get_center() - mid).length()
+		if d < bd:
+			bd = d
+			best = i
+	_insp_list = l
+	_insp_on = true
+	_insp_ov = overlay_host.get_child_count()
+	_insp_scr = current
+	_insp_stop_input_state()
+	_insp_show(best)
+	toast("Inspeccionar: D-Pad / Stick mover · B o R3 salir")
+
+
+func _insp_stop_input_state() -> void:
+	_insp_sh = 0.0
+	_insp_sv = 0.0
+
+
+func _insp_show(i: int) -> void:
+	_insp_idx = i
+	var c: Control = _insp_list[i]
+	if not is_instance_valid(c):
+		_insp_end()
+		return
+	var r := c.get_global_rect().grow(5)
+	_insp_frame.global_position = r.position
+	_insp_frame.size = r.size
+	_insp_frame.visible = true
+	Tip.show_at(c)
+	Sfx.play("select_soft", 0.5)
+
+
+func _insp_end() -> void:
+	_insp_on = false
+	_insp_list = []
+	_insp_frame.visible = false
+	Tip.hide_all()
+
+
+func _insp_move(dir: Vector2) -> void:
+	var cur: Control = _insp_list[_insp_idx]
+	var c0 := cur.get_global_rect().get_center()
+	var best := -1
+	var bs := INF
+	for i in _insp_list.size():
+		if i == _insp_idx or not is_instance_valid(_insp_list[i]):
+			continue
+		var d: Vector2 = (_insp_list[i] as Control).get_global_rect().get_center() - c0
+		var dist := d.length()
+		if dist < 1.0:
+			continue
+		var cs := d.normalized().dot(dir)
+		if cs < 0.35:
+			continue
+		var sc := dist * (2.2 - cs)
+		if sc < bs:
+			bs = sc
+			best = i
+	if best >= 0:
+		_insp_show(best)
+
+
+func _insp_input(ev: InputEvent) -> bool:
+	if ev is InputEventJoypadButton:
+		if not ev.pressed:
+			return true
+		match ev.button_index:
+			JOY_BUTTON_DPAD_LEFT:
+				_insp_move(Vector2.LEFT)
+			JOY_BUTTON_DPAD_RIGHT:
+				_insp_move(Vector2.RIGHT)
+			JOY_BUTTON_DPAD_UP:
+				_insp_move(Vector2.UP)
+			JOY_BUTTON_DPAD_DOWN:
+				_insp_move(Vector2.DOWN)
+			JOY_BUTTON_B, JOY_BUTTON_A, JOY_BUTTON_RIGHT_STICK, JOY_BUTTON_START, JOY_BUTTON_BACK:
+				_insp_end()
+		return true
+	if ev is InputEventJoypadMotion:
+		if ev.axis == JOY_AXIS_LEFT_X:
+			if absf(ev.axis_value) > 0.5 and _insp_sh == 0.0:
+				_insp_sh = signf(ev.axis_value)
+				_insp_move(Vector2(_insp_sh, 0))
+			elif absf(ev.axis_value) < 0.25:
+				_insp_sh = 0.0
+		elif ev.axis == JOY_AXIS_LEFT_Y:
+			if absf(ev.axis_value) > 0.5 and _insp_sv == 0.0:
+				_insp_sv = signf(ev.axis_value)
+				_insp_move(Vector2(0, _insp_sv))
+			elif absf(ev.axis_value) < 0.25:
+				_insp_sv = 0.0
+		return true
+	return false
+
+
+# ---------- Scroll con el stick derecho ----------
+func _find_scrolls(n: Node, out: Array) -> void:
+	if n is ScrollContainer and (n as ScrollContainer).is_visible_in_tree():
+		out.append(n)
+	for ch in n.get_children():
+		_find_scrolls(ch, out)
+
+
+func _process(dt: float) -> void:
+	if _insp_on:
+		if overlay_host.get_child_count() != _insp_ov or current != _insp_scr:
+			_insp_end()
+		return
+	var ay := Input.get_joy_axis(0, JOY_AXIS_RIGHT_Y)
+	var ax := Input.get_joy_axis(0, JOY_AXIS_RIGHT_X)
+	if absf(ay) < 0.25 and absf(ax) < 0.25:
+		return
+	var root: Node = self
+	if overlay_host.get_child_count() > 0:
+		root = overlay_host.get_child(overlay_host.get_child_count() - 1)
+	var l := []
+	_find_scrolls(root, l)
+	for s in l:
+		var sc := s as ScrollContainer
+		var vmax := sc.get_v_scroll_bar().max_value - sc.get_v_scroll_bar().page
+		var hmax := sc.get_h_scroll_bar().max_value - sc.get_h_scroll_bar().page
+		if vmax > 1.0 and absf(ay) >= 0.25:
+			sc.scroll_vertical = int(clampf(sc.scroll_vertical + ay * 1100.0 * dt, 0.0, vmax))
+			return
+		if hmax > 1.0 and absf(ax) >= 0.25:
+			sc.scroll_horizontal = int(clampf(sc.scroll_horizontal + ax * 1100.0 * dt, 0.0, hmax))
+			return
 
 
 func _exit_tree() -> void:
@@ -68,6 +248,14 @@ func _exit_tree() -> void:
 
 
 func _input(ev: InputEvent) -> void:
+	if _insp_on:
+		if _insp_input(ev):
+			get_viewport().set_input_as_handled()
+		return
+	if ev is InputEventJoypadButton and ev.pressed and ev.button_index == JOY_BUTTON_RIGHT_STICK:
+		_insp_start()
+		get_viewport().set_input_as_handled()
+		return
 	if ev is InputEventJoypadButton and ev.pressed:
 		if _handle_joypad_button(ev.button_index):
 			get_viewport().set_input_as_handled()
@@ -100,6 +288,10 @@ func _handle_joypad_button(btn: int) -> bool:
 		if Meta.run != null and current in ["map", "combat", "reward", "shop", "rest", "event"]:
 			open_deck_dialog()
 			return true
+
+	if current == "map" and btn == JOY_BUTTON_X and screen != null and screen.has_method("_focus"):
+		screen._focus(true)   # X: centrar el mapa en tu posición
+		return true
 
 	if current == "combat" and screen is CombatScreen:
 		if (screen as CombatScreen).handle_gamepad_button(btn):

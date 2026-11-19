@@ -8,6 +8,25 @@ class Overlay extends Control:
 	var cancel_result = null
 	var allow_esc := true
 	var _closed := false
+	var _prev_focus: Control = null
+	var _locked: Array = []   # [control, focus_mode] de lo que queda detrás mientras este diálogo está abierto
+
+	func _enter_tree() -> void:
+		var vp := get_viewport()
+		if vp != null:
+			_prev_focus = vp.gui_get_focus_owner()
+		if Main.I != null:
+			_lock_behind(Main.I)
+
+	## Modal para el mando: lo de detrás no puede recibir foco (si no, el D-Pad se cuela bajo el diálogo).
+	func _lock_behind(n: Node) -> void:
+		if n == self:
+			return
+		if n is Control and (n as Control).focus_mode != Control.FOCUS_NONE:
+			_locked.append([n, (n as Control).focus_mode])
+			(n as Control).focus_mode = Control.FOCUS_NONE
+		for ch in n.get_children():
+			_lock_behind(ch)
 
 	func _init() -> void:
 		set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -25,6 +44,14 @@ class Overlay extends Control:
 		_closed = true
 		Tip.hide_all()
 		done.emit(result)
+		for pair in _locked:
+			if is_instance_valid(pair[0]):
+				(pair[0] as Control).focus_mode = pair[1]
+		_locked.clear()
+		# devuelve el foco a lo que lo tenía antes (si no, el mando se queda sin foco al cerrar un diálogo)
+		var pf := _prev_focus
+		if pf != null and is_instance_valid(pf) and not pf.is_queued_for_deletion():
+			pf.grab_focus.call_deferred()
 		queue_free()
 
 	func _unhandled_input(ev: InputEvent) -> void:
@@ -415,6 +442,7 @@ M: ver tu mazo · H o F1: esta ayuda · F11: pantalla completa.
 
 [b][color=#f0cf7a]Mando (Xbox / Gamepad)[/color][/b]
 Stick izquierdo / D-Pad: navegar cartas y menús · LB / RB: pasar cartas · A: jugar / confirmar · B: cancelar / volver · Y: terminar turno · X: mazo de robo · LT: poción · RT: descarte · Back / View: ver mazo · Start: menú de pausa.
+R3 (clic del stick derecho): inspeccionar estados, intenciones, reliquias y pociones (D-Pad mueve · B sale) · Stick derecho: desplazar listas largas.
 
 [b][color=#f0cf7a]Tus personajes[/color][/b]
 • [color=#ff8a93]Zafiro[/color]: Fuerza, Bloqueo y fuego. Sacrifica vida para golpear más fuerte.
@@ -451,12 +479,12 @@ static func pause_menu() -> void:
 	col.custom_minimum_size = Vector2(340, 0)
 	col.add_child(_title("Pausa", 32))
 	var first_b: Button = null
+	var firsts := []   # las lambdas capturan por valor: se acumula en un array
 	var add := func(t: String, kind: String, fn: Callable) -> Button:
 		var b := UIK.button(t, kind)
 		b.pressed.connect(fn)
 		col.add_child(b)
-		if first_b == null:
-			first_b = b
+		firsts.append(b)
 		return b
 	add.call("Seguir jugando", "green", func(): o.close(null))
 	add.call("Opciones", "", func(): Dlg.options())
@@ -489,5 +517,5 @@ static func pause_menu() -> void:
 	col.add_child(seed_row)
 	p.add_child(col)
 	v.add_child(p)
-	if first_b != null:
-		first_b.grab_focus.call_deferred()
+	if not firsts.is_empty():
+		firsts[0].grab_focus.call_deferred()

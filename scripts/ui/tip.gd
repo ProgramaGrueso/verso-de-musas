@@ -3,6 +3,7 @@ extends PanelContainer
 ## Tooltip global que sigue al ratón. Se crea una vez en Main.
 
 static var I: Tip
+var _pinned := false
 var _rt: RichTextLabel
 var _owner: Control = null
 
@@ -16,6 +17,23 @@ static func show_for(c: Control) -> void:
 	if str(t) == "":
 		return
 	I._owner = c
+	I._pinned = false
+	I._set_text(str(t))
+	I.visible = true
+	I._place()
+
+
+## Igual que show_for pero anclado al control (mando / foco), no al puntero.
+static func show_at(c: Control) -> void:
+	if I == null or not c.has_meta("tip"):
+		return
+	var t = c.get_meta("tip")
+	if t is Callable:
+		t = t.call()
+	if str(t) == "":
+		return
+	I._owner = c
+	I._pinned = true
 	I._set_text(str(t))
 	I.visible = true
 	I._place()
@@ -66,8 +84,17 @@ func _set_text(t: String) -> void:
 
 func _place() -> void:
 	reset_size()
-	var m := get_viewport().get_mouse_position()
 	var vs := get_viewport_rect().size
+	if _pinned and _owner != null and is_instance_valid(_owner):
+		var r := _owner.get_global_rect()
+		var q := Vector2(r.position.x + r.size.x / 2.0 - size.x / 2.0, r.end.y + 12)
+		if q.y + size.y > vs.y - 6:
+			q.y = r.position.y - size.y - 12
+		q.x = clampf(q.x, 6.0, maxf(6.0, vs.x - 6 - size.x))
+		q.y = clampf(q.y, 6.0, maxf(6.0, vs.y - 6 - size.y))
+		position = q
+		return
+	var m := get_viewport().get_mouse_position()
 	var p := m + Vector2(16, 20)
 	if p.x + size.x > vs.x - 6:
 		p.x = vs.x - 6 - size.x

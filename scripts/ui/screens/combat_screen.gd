@@ -867,7 +867,7 @@ func _update_tip() -> void:
 	elif sel_uid >= 0:
 		t = "Pulsa A (o Enter) para jugar · Y: Terminar turno · LB/RB: Cartas" if Meta.settings.confirm else "Y: Terminar turno · LB/RB: Cartas"
 	else:
-		t = "Elige carta con Stick / D-Pad / LB / RB · A: Seleccionar · Y: Terminar turno"
+		t = "Elige carta con Stick / D-Pad / LB / RB · A: Seleccionar · Y: Terminar turno · R3: Inspeccionar"
 	tipbar.text = t
 	tipbar.visible = t != ""
 

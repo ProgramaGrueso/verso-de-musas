@@ -123,9 +123,16 @@ func _ready() -> void:
 	for spec in [["▲", -380], ["Aquí", 0], ["▼", 380]]:
 		var b := UIK.button(spec[0], "small", 22)
 		var d: int = spec[1]
+		b.focus_mode = Control.FOCUS_NONE   # con mando: stick derecho desplaza, X centra
 		b.pressed.connect(func(): _scroll_by(d) if d != 0 else _focus(true))
 		nav.add_child(b)
 	add_child(nav)
+	var gh := UIK.label("Mando · X: centrar\nStick der.: desplazar\nR3: inspeccionar", 13, UIK.DIM)
+	gh.position = Vector2(1086, 410)
+	gh.size = Vector2(190, 60)
+	gh.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	gh.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(gh)
 	var leg := VBoxContainer.new()
 	leg.position = Vector2(14, 520)
 	for k in NODE_NAME.keys():

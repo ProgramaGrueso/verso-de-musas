@@ -12,6 +12,9 @@ var _nm_box: VBoxContainer
 var _avatars := {}
 var _go: Button
 var _mid: HBoxContainer
+var _back: Button
+var _bottom_first: Control
+var _bottom_last: Control
 var _glow_rect: ColorRect
 
 
@@ -94,12 +97,16 @@ func _ready() -> void:
 	bot.add_child(_go)
 	_render(false)
 	Sfx.music("menu", 1, TitleScreen.last_char if TitleScreen.last_char != "" else "zafiro")
-	for id in _avatars.keys():
-		var btn: Button = _avatars[id]
-		btn.focus_neighbor_bottom = _go.get_path()
+	var order := []
+	for m in chars:
+		order.append(_avatars[m.id])
+	for i in order.size():   # fila de avatares: izquierda/derecha recorren los personajes (no saltan a los ajustes de abajo)
+		var btn: Button = order[i]
+		btn.focus_neighbor_left = order[(i - 1 + order.size()) % order.size()].get_path()
+		btn.focus_neighbor_right = order[(i + 1) % order.size()].get_path()
 	_go.focus_neighbor_top = _avatars[pick].get_path()
-	_go.focus_neighbor_left = back.get_path()
-	back.focus_neighbor_right = _go.get_path()
+	_back = back
+	_wire_bottom()
 	_avatars[pick].grab_focus.call_deferred()
 
 
@@ -228,3 +235,18 @@ func _render_toggle() -> void:
 			_render_toggle())
 	UIK.tip(sd, "[b][color=#f0cf7a]Semilla[/color][/b]\nLa misma semilla genera los mismos mapas en los tres actos.")
 	_mid.add_child(sd)
+	_bottom_first = cb
+	_bottom_last = sd
+	_wire_bottom()
+
+
+## Fila inferior para el mando: avatares ↓ ajustes ↔ Volver … Comenzar.
+func _wire_bottom() -> void:
+	if _back == null or _go == null or _bottom_first == null:
+		return
+	_back.focus_neighbor_right = _bottom_first.get_path()
+	_bottom_first.focus_neighbor_left = _back.get_path()
+	_bottom_last.focus_neighbor_right = _go.get_path()
+	_go.focus_neighbor_left = _bottom_last.get_path()
+	for b in _avatars.values():
+		(b as Button).focus_neighbor_bottom = _bottom_first.get_path()
