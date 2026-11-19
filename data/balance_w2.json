@@ -21,7 +21,22 @@
     },
     "shell": {
      "block": 19
+    },
+    "guillotina": {
+     "name": "Guillotina",
+     "dmg": 18
     }
+   },
+   "phase2": {
+    "at": 50,
+    "str": 0,
+    "msg": "¡El Cangrejo Rey se enfurece!",
+    "seq": [
+     "guillotina",
+     "shell",
+     "spin",
+     "pincer"
+    ]
    }
   },
   "ghostpirate": {
@@ -47,7 +62,23 @@
     "harvest": {
      "dmg": 8,
      "heal": 12
+    },
+    "espinas": {
+     "name": "Bosque de Espinas",
+     "block": 12,
+     "thorns": 2
     }
+   },
+   "phase2": {
+    "at": 50,
+    "str": 0,
+    "msg": "¡La Madre Raíz se cubre de espinas!",
+    "seq": [
+     "espinas",
+     "crush",
+     "root",
+     "lash"
+    ]
    }
   },
   "mossgolem": {
@@ -194,6 +225,89 @@
     "ram": {
      "dmg": 17
     }
+   }
+  },
+  "drowncaptain": {
+   "moves": {
+    "metralla": {
+     "name": "Tormenta de Metralla",
+     "dmg": 2,
+     "hits": 5
+    }
+   },
+   "phase2": {
+    "at": 50,
+    "str": 0,
+    "msg": "¡La Capitana Ahogada iza la bandera negra!",
+    "seq": [
+     "metralla",
+     "ron",
+     "canon",
+     "ancla"
+    ]
+   }
+  },
+  "mycelking": {
+   "moves": {
+    "esporada": {
+     "name": "Esporada Final",
+     "dmg": 6,
+     "hits": 2,
+     "apply": {
+      "weak": 1
+     }
+    }
+   },
+   "phase2": {
+    "at": 50,
+    "str": 0,
+    "msg": "¡El Rey Micelio libera su esporada final!",
+    "seq": [
+     "esporada",
+     "aplastar",
+     "pudrir",
+     "esporas"
+    ]
+   }
+  },
+  "queen": {
+   "moves": {
+    "enjambre": {
+     "name": "Enjambre Real",
+     "dmg": 3,
+     "hits": 6
+    }
+   },
+   "phase2": {
+    "at": 50,
+    "str": 0,
+    "msg": "¡La Reina de la Colmena llama a su guardia!",
+    "seq": [
+     "order",
+     "enjambre",
+     "royal",
+     "rain",
+     "ram"
+    ]
+   }
+  },
+  "waxcolossus": {
+   "moves": {
+    "nucleo": {
+     "name": "Núcleo Ardiente",
+     "dmg": 34
+    }
+   },
+   "phase2": {
+    "at": 50,
+    "str": 0,
+    "msg": "¡El Coloso de Cera se funde en furia!",
+    "seq": [
+     "fundirse",
+     "sello",
+     "nucleo",
+     "goteo"
+    ]
    }
   }
  },

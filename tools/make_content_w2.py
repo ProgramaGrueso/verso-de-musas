@@ -186,6 +186,36 @@ BALANCE = {
     ],
 }
 
+# Fase 4 · Jefes con fases (solo DB.extra): al bajar de «at»% de PV el jefe entra en fase 2 una sola vez,
+# gana «str» Fuerza / «block» Bloqueo, avisa con «msg» (fx "bossPhase") y cambia a la secuencia «seq»
+# (empieza por el golpe nuevo, ya telegrafiado). Un movimiento con «summon» se salta si ya hay 3 vivos.
+BOSS_PHASES = {
+    # Medido con balance.gd -- 100 0: con +Fuerza e invocaciones la fase 2 era un muro (22 % de victorias frente a 40 %).
+    # La fase 2 cambia el ritmo (golpe nuevo telegrafiado, sin curas ni invocaciones), no infla las cifras.
+    "crabking": {"moves": {"guillotina": {"name": "Guillotina", "dmg": 18}},
+                 "phase2": {"at": 50, "str": 0, "msg": "¡El Cangrejo Rey se enfurece!",
+                            "seq": ["guillotina", "shell", "spin", "pincer"]}},
+    "drowncaptain": {"moves": {"metralla": {"name": "Tormenta de Metralla", "dmg": 2, "hits": 5}},
+                     "phase2": {"at": 50, "str": 0, "msg": "¡La Capitana Ahogada iza la bandera negra!",
+                                "seq": ["metralla", "ron", "canon", "ancla"]}},
+    "rootmother": {"moves": {"espinas": {"name": "Bosque de Espinas", "block": 12, "thorns": 2}},
+                   "phase2": {"at": 50, "str": 0, "msg": "¡La Madre Raíz se cubre de espinas!",
+                              "seq": ["espinas", "crush", "root", "lash"]}},
+    "mycelking": {"moves": {"esporada": {"name": "Esporada Final", "dmg": 6, "hits": 2, "apply": {"weak": 1}}},
+                  "phase2": {"at": 50, "str": 0, "msg": "¡El Rey Micelio libera su esporada final!",
+                             "seq": ["esporada", "aplastar", "pudrir", "esporas"]}},
+    "queen": {"moves": {"enjambre": {"name": "Enjambre Real", "dmg": 3, "hits": 6}},
+              "phase2": {"at": 50, "str": 0, "msg": "¡La Reina de la Colmena llama a su guardia!",
+                         "seq": ["order", "enjambre", "royal", "rain", "ram"]}},
+    "waxcolossus": {"moves": {"nucleo": {"name": "Núcleo Ardiente", "dmg": 34}},
+                    "phase2": {"at": 50, "str": 0, "msg": "¡El Coloso de Cera se funde en furia!",
+                               "seq": ["fundirse", "sello", "nucleo", "goteo"]}},
+}
+for _bid, _ph in BOSS_PHASES.items():
+    _cur = BALANCE["enemies"].setdefault(_bid, {})
+    _cur.setdefault("moves", {}).update(_ph["moves"])
+    _cur["phase2"] = _ph["phase2"]
+
 # ------------------------------------------------------------------ reliquias
 RELICS = {
     # --- generales, poco comunes

@@ -528,7 +528,37 @@ static func deal_to_enemy(C, e, amt: int, o: Dictionary = {}) -> int:
 			_player_down(C)
 	if e.hp <= 0:
 		kill_enemy(C, e, o)
+	elif _boss_phase(C, e) and C.phase == "player":
+		choose_intent(C, e)   # el golpe nuevo de la fase 2 se telegrafía al instante
 	return amt
+
+## Fase 4 · Jefes con fases (solo DB.extra; los datos viven en balance_w2.json → «phase2»).
+## Devuelve true solo en el instante en que el jefe pasa a la fase 2.
+static func _boss_phase(C, e) -> bool:
+	if not DB.extra or e.hp <= 0 or int(e.get("phase", 1)) >= 2 or not e.def.has("phase2"):
+		return false
+	var P: Dictionary = e.def.phase2
+	if e.hp * 100 >= e.maxHp * int(P.get("at", 50)):
+		return false
+	e["phase"] = 2
+	e["pturn"] = 0
+	_fx(C, "bossPhase", {"e": e, "msg": P.get("msg", "")})
+	if int(P.get("str", 0)):
+		add_status(C, e, "strength", int(P.str))
+	if int(P.get("block", 0)):
+		e.block += int(P.block)
+		_fx(C, "enemyBlock", {"e": e, "n": int(P.block)})
+	return true
+
+static func _phase_key(C, e) -> String:
+	var seq: Array = e.def.phase2.seq
+	var k: String = seq[0]
+	for _i in seq.size():
+		k = seq[int(e.pturn) % seq.size()]
+		e.pturn = int(e.pturn) + 1
+		if not (e.def.moves[k].has("summon") and living(C).size() >= 3):
+			break
+	return k
 
 static func kill_enemy(C, e, o) -> void:
 	e.hp = 0
@@ -555,6 +585,10 @@ static func kill_enemy(C, e, o) -> void:
 
 # ---------- IA de enemigos ----------
 static func _ai_key(C, e) -> String:
+	if DB.extra and e.def.has("phase2"):
+		_boss_phase(C, e)   # por si cruzó el umbral con veneno
+		if int(e.get("phase", 1)) >= 2:
+			return _phase_key(C, e)
 	var ai: Dictionary = e.def.ai
 	match ai.t:
 		"fixed":
