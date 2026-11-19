@@ -35,6 +35,58 @@ func _ready() -> void:
 			Meta.clear_save()
 		get_tree().quit()
 		return
+	if scenario == "fase3":   # logros, aviso emergente, Maestría, desbloqueos, compendio, diario y fin con resumen
+		var s: Dictionary = Meta.data.s
+		var seed_s := {"runs_zafiro": 3, "runs_lia": 1, "win_zafiro": 1, "wins": 1, "boss_reina": 1, "boss_kraken": 1, "elites": 2, "mp_zafiro": 4, "mp_lia": 1, "act2": 1}
+		for k in seed_s:
+			s[k] = seed_s[k]
+		var today := Daily.key_today()
+		Meta.data["daily"] = {Daily.shift(today, -1): {"win": true, "tries": 1}, Daily.shift(today, -2): {"win": true, "tries": 2},
+			Daily.shift(today, -4): {"win": false, "tries": 3, "floor": 12}, Daily.shift(today, -6): {"win": false, "lateWin": true, "tries": 1}}
+		Main.I.set_screen(TitleScreen.new(), "title")
+		Meta._check()   # dispara los avisos (logros + contenido)
+		await wait(0.9)
+		await shot("f3_01_banner")
+		await wait(3.8)
+		await shot("f3_02_banner2")
+		for t in ["ach", "mastery", "unl"]:
+			Nav.achievements(t)
+			await wait(0.6)
+			await shot("f3_03_logros_" + t)
+		CompendiumScreen.tab = "zafiro"
+		Nav.compendium()
+		await wait(0.6)
+		await shot("f3_04_compendio_cartas")
+		var csc: Array = Main.I.screen.find_children("*", "ScrollContainer", true, false)
+		if not csc.is_empty():
+			csc[0].scroll_vertical = 470   # baja hasta las poco comunes bloqueadas
+		await shot("f3_04b_compendio_bloqueadas")
+		CompendiumScreen.tab = "relics"
+		Nav.compendium()
+		await wait(0.6)
+		await shot("f3_05_compendio_reliquias")
+		Nav.gallery()
+		await wait(0.6)
+		await shot("f3_06_galeria")
+		Nav.daily()
+		await wait(0.6)
+		await shot("f3_07_diario")
+		var Ge := Eng.new_run("zafiro", {"seed": 777, "nm": 4})
+		Ge.floor = 51
+		Ge.act = 3
+		Ge["ach"] = ["primer_jefe", "voz_zafiro", "nm1"]
+		Ge["unl"] = ["zafiro_3"]
+		Meta.run = Ge
+		Main.I.set_screen(EndScreen.create_victory(Ge, true), "end")
+		await wait(1.0)
+		await shot("f3_08_fin_victoria")
+		print(Progress.share_text(Ge, true))
+		Meta.run = null
+		Nav.title()
+		await wait(0.6)
+		await shot("f3_09_titulo")
+		get_tree().quit()
+		return
 	if scenario == "favor":
 		var Gf := Eng.new_run("zafiro", {"seed": 42})
 		Meta.run = Gf

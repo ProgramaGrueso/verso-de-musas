@@ -41,6 +41,31 @@ static func event() -> void:
 static func history() -> void:
 	Main.I.set_screen(HistoryScreen.new(), "history")
 
+static func achievements(tab: String = "ach") -> void:
+	var s := AchievementsScreen.new()
+	s.tab = tab
+	Main.I.set_screen(s, "achievements")
+
+static func compendium(from_run: bool = false) -> void:
+	var s := CompendiumScreen.new()
+	s.from_run = from_run
+	Main.I.set_screen(s, "compendium")
+
+static func daily() -> void:
+	Main.I.set_screen(DailyScreen.new(), "daily")
+
+## Revancha: misma musa, semilla, Pesadilla y modo (el reto diario repite su día).
+static func rematch(G) -> void:
+	if str(G.get("daily", "")) != "":
+		DailyScreen.start(str(G.daily))
+		return
+	var H := Eng.new_run(G.char, {"easy": G.get("easy", false), "nm": int(G.get("nm", 0)), "seed": int(G.seed)})
+	H["seeded"] = true
+	Meta.run = H
+	Meta.clear_save()
+	H.map = RunGen.gen_map_game(H)
+	favor()
+
 static func gallery(from_run: bool = false) -> void:
 	var s := GalleryScreen.new()
 	s.from_run = from_run
@@ -77,8 +102,8 @@ static func node_done(was_boss: bool) -> void:
 			G.rs = Eng.act_seed(G.seed, G.act)   # misma semilla = mismos mapas en cada acto
 		G.map = RunGen.gen_map_game(G)
 		Favors.expire(G)
-		if G.act == 3:
-			Meta.add("act3")
+		Meta.max_stat("bestAct_" + G.char, G.act)   # desbloqueos por musa («derrota al jefe del Acto I»)
+		Meta.add("act%d" % G.act)   # act2 / act3 (Galería y logros)
 		G.hp = G.maxHp   # se recupera por completo entre zonas
 		favor()
 		return

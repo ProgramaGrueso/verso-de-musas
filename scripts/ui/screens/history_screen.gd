@@ -141,11 +141,13 @@ func _daily_box() -> Control:
 		t += "\nIntentos: %d · %s" % [res.get("tries", 0), "[color=#8bf0a4]¡Superado![/color]" if res.get("win", false) else "Mejor piso: %d" % res.get("floor", 0)]
 	var won_days := 0
 	var d = Meta.data.get("daily", {})
+	var since := Daily.shift(key, -29)   # el histórico guarda más de un año: aquí solo el último mes
 	if d is Dictionary:
 		for k in d.keys():
-			if d[k].get("win", false):
+			if str(k) >= since and d[k] is Dictionary and d[k].get("win", false):
 				won_days += 1
-	t += "\nRetos superados en los últimos 30 días: %d" % won_days
+	var stk := Meta.daily_streak()
+	t += "\nRetos superados en los últimos 30 días: %d · racha %d (mejor %d)" % [won_days, stk.cur, maxi(int(stk.best), int(Meta.data.s.get("dailyStreakBest", 0)))]
 	var r := UIK.rich(t, 16)
 	r.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	r.custom_minimum_size = Vector2(570, 0)

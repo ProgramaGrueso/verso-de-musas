@@ -10,6 +10,8 @@ const WIND_MAX := 10
 static var meta_add := Callable()
 static var meta_max := Callable()
 static var meta_see_relic := Callable()
+## Cartas/reliquias aún bloqueadas por progreso (Meta.locked_ids). Sin asignar (trazas, balance) no hay bloqueos.
+static var meta_locked := Callable()
 static var _def_cache := {}
 
 
@@ -257,6 +259,10 @@ static func new_run(char: String, opts: Dictionary = {}) -> Dictionary:
 		G.deck.append(make_card(G, id))
 	if G.nm and nmods(G).doubt:
 		G.deck.append(make_card(G, "doubt"))
+	if DB.extra and meta_locked.is_valid():
+		var lk: Array = meta_locked.call()
+		if not lk.is_empty():
+			G["locked"] = lk   # foto al empezar: lo que se desbloquee entra en la siguiente partida
 	_mt("runs")
 	if meta_see_relic.is_valid():
 		meta_see_relic.call(DB.characters[char].startRelic)
@@ -570,6 +576,10 @@ static func kill_enemy(C, e, o) -> void:
 			_mt("flawlessElite")
 	if e.def.tier == "boss":
 		_mt("boss_" + e.id)
+		if not (C.hpLost > 0):
+			_mt("flawlessBoss")
+		if C.turn <= 3:
+			_mt("fastBoss")
 	_fx(C, "enemyDie", {"e": e})
 	relic_hook(C, "onKill", e)
 	if e.def.tier == "boss":
@@ -942,6 +952,7 @@ static func play_card(C, uid: int, target = null) -> bool:
 	C.hand.remove_at(idx)
 	C.playedThisTurn += 1
 	_mt("cards")
+	_mx("maxTurnCards", C.playedThisTurn)
 	var stt: Dictionary = C.G.stats
 	if not stt.has("played"):
 		stt["played"] = {}
@@ -1307,14 +1318,21 @@ static func use_potion(C, slot: int, target = null) -> bool:
 
 
 # ---------- Recompensas ----------
+## Quita del pool lo que el jugador aún no ha desbloqueado (G.locked). Sin bloqueos devuelve el mismo array.
+static func unlocked(G, ids: Array) -> Array:
+	var lk = G.get("locked")
+	if lk == null or lk.is_empty():
+		return ids
+	return ids.filter(func(id): return not (id in lk))
+
 static func reward_cards(G, n: int, bonus_rare: float = 0.0, neutral_chance: float = 0.16) -> Array:
 	var out := []
 	for i in n:
 		var r := rnd(G)
 		var rar := "common" if r < 0.6 - bonus_rare else ("uncommon" if r < 0.97 - bonus_rare / 2 else "rare")
-		var pl: Array = DB.pool[G.char]
+		var pl: Array = unlocked(G, DB.pool[G.char])
 		if DB.extra and neutral_chance > 0.0 and rnd(G) < neutral_chance:
-			pl = DB.neutral
+			pl = unlocked(G, DB.neutral)
 		var cands := pl.filter(func(id): return DB.cards[id].rarity == rar and not (id in out))
 		if cands.is_empty():
 			cands = pl.filter(func(id): return not (id in out))
@@ -1342,7 +1360,7 @@ static func _relic_candidates(G, rarity: String) -> Array:
 	var c := []
 	for id in DB.relics.keys():
 		var r: Dictionary = DB.relics[id]
-		if r.rarity == rarity and not (id in G.relics) and (not r.has("char") or r.char == G.char):
+		if r.rarity == rarity and not (id in G.relics) and (not r.has("char") or r.char == G.char) and not (id in G.get("locked", [])):
 			c.append(id)
 	return c
 

@@ -54,7 +54,7 @@ func _ready() -> void:
 	add_child(toast_lbl)
 	var tip := Tip.new()
 	add_child(tip)
-	Meta.unlocked.connect(_on_unlock)
+	add_child(UnlockBanner.new())   # avisos de Galería, logros y contenido nuevo (Fase 3)
 	# todo ScrollContainer sigue al control con foco (mando/teclado llegan a lo que queda fuera de vista)
 	get_tree().node_added.connect(func(n: Node): if n is ScrollContainer: (n as ScrollContainer).follow_focus = true)
 	_insp_frame = Panel.new()
@@ -394,7 +394,7 @@ func set_screen(node: Control, name: String) -> void:
 
 func update_top() -> void:
 	var G = Meta.run
-	var show_top: bool = G != null and not (current in ["title", "select", "gallery", "ending", "end", "history"])
+	var show_top: bool = G != null and not (current in ["title", "select", "gallery", "ending", "end", "history", "achievements", "compendium", "daily"])
 	top.visible = show_top
 	if not show_top:
 		return
@@ -669,35 +669,3 @@ func toast(msg: String) -> void:
 	_toast_tw = create_tween()
 	_toast_tw.tween_interval(1.9)
 	_toast_tw.tween_property(toast_lbl, "modulate:a", 0.0, 0.4)
-
-
-var _unlock_free_at := 0.0
-
-
-func _on_unlock(l: Dictionary) -> void:
-	# los avisos de desbloqueo se encolan de 5 en 5 s
-	var now := Time.get_ticks_msec() / 1000.0
-	var start := maxf(now, _unlock_free_at)
-	_unlock_free_at = start + 5.0
-	if start > now:
-		await get_tree().create_timer(start - now).timeout
-	var d := PanelContainer.new()
-	d.add_theme_stylebox_override("panel", UIK.stylebox(Color("#120d1d"), UIK.GOLD, 2, 12, 12))
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 12)
-	d.add_child(row)
-	row.add_child(UIK.label(l.ico, 40))
-	var col := VBoxContainer.new()
-	col.add_child(UIK.label("Nueva imagen en la Galería", 14, UIK.DIM))
-	col.add_child(UIK.label(l.title, 20, UIK.GOLD, "bold"))
-	row.add_child(col)
-	d.position = Vector2(900, 70)
-	d.z_index = 3500
-	d.modulate.a = 0.0
-	add_child(d)
-	Sfx.play("win")
-	var tw := d.create_tween()
-	tw.tween_property(d, "modulate:a", 1.0, 0.3)
-	tw.tween_interval(4.0)
-	tw.tween_property(d, "modulate:a", 0.0, 0.5)
-	tw.tween_callback(d.queue_free)

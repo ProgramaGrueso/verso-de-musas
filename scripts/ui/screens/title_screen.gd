@@ -85,7 +85,9 @@ func _ready() -> void:
 		first = nueva
 	var dkey := Daily.key_today()
 	var dres := Meta.daily_result(dkey)
-	add.call("Reto diario" + ("  ✔" if dres.get("win", false) else ""), "", func(): _daily(dkey))
+	var stk := Meta.daily_streak()
+	add.call("Reto diario" + ("  ✔" if dres.get("win", false) else "") + ("  · racha %d" % stk.cur if stk.cur > 1 else ""), "", func(): Nav.daily())
+	add.call("Logros  %d/%d" % [Progress.ach_count(Meta.data), Progress.achievements().size()], "", func(): Nav.achievements())
 	add.call("Historial", "", func(): Nav.history())
 	add.call("Galería  %d/%d" % [Meta.data.gal.size(), DB.lore.size()], "", func(): Nav.gallery())
 	add.call("Cómo jugar", "", func(): Dlg.help())
@@ -116,21 +118,6 @@ func _ready() -> void:
 	UIK.fade_in(self, 0.4)
 
 
-## Reto diario: misma musa, semilla y modificador para todo el mundo hoy.
+## Reto diario: confirma y arranca el de ese día (el calendario está en DailyScreen).
 func _daily(key: String) -> void:
-	var inf := Daily.info(key)
-	var m: Dictionary = DB.characters[inf.char]
-	var res := Meta.daily_result(key)
-	var t: String = "[b][color=#f0cf7a]Reto del %s[/color][/b]\n\nMusa: [b]%s[/b], %s\nModificador: [b][color=#caa5ff]%s[/color][/b] — %s\n[font_size=18]Mismos mapas y la misma semilla para todo el mundo. Sin Pesadilla ni modo fácil.[/font_size]" % [
-		key, m.name, m.role, Daily.mod_name(inf.mod), Daily.mod_desc(inf.mod)]
-	if not res.is_empty():
-		t += "\n[font_size=18]Intentos: %d · %s[/font_size]" % [res.get("tries", 0), "¡ya lo has superado!" if res.get("win", false) else "mejor piso %d" % res.get("floor", 0)]
-	if Meta.has_save():
-		t += "\n[font_size=18][color=#ff7b85]Se perderá la partida guardada.[/color][/font_size]"
-	if not await Dlg.confirm(t, "Empezar", "Ahora no"):
-		return
-	var G := Daily.new_run(key)
-	Meta.run = G
-	Meta.clear_save()
-	Meta.daily_started(key, G.char)
-	Nav.favor()
+	DailyScreen.start(key)

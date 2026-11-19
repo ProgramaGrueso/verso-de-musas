@@ -94,7 +94,7 @@ static func choose(G, id: String) -> String:
 				if G.potions.has(null):
 					G.potions[G.potions.find(null)] = Eng.pick(G, DB.potions.keys())
 		"carta":
-			var pl: Array = DB.pool[G.char]
+			var pl: Array = Eng.unlocked(G, DB.pool[G.char])
 			var c := pl.filter(func(x): return DB.cards[x].rarity == "uncommon")
 			G.deck.append(Eng.make_card(G, Eng.pick(G, c if not c.is_empty() else pl), true))
 	return d.name

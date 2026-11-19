@@ -33,6 +33,13 @@ func _ready() -> void:
 			e.replay = true
 			Main.I.set_screen(e, "ending"))
 		head.add_child(r)
+	var cmp := UIK.button("Compendio", "small")
+	cmp.pressed.connect(func(): Nav.compendium(from_run))
+	head.add_child(cmp)
+	var lg := UIK.button("Logros", "small")
+	lg.pressed.connect(func(): Nav.achievements())
+	lg.visible = not (Meta.run != null and from_run)
+	head.add_child(lg)
 	var back := UIK.button("← Volver", "small")
 	back.pressed.connect(func(): Nav.map() if (Meta.run != null and from_run) else Nav.title())
 	head.add_child(back)

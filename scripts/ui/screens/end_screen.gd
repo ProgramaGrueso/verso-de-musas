@@ -58,6 +58,9 @@ func _ready() -> void:
 	r.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	r.custom_minimum_size = Vector2(860, 0)
 	col.add_child(r)
+	var earned := _earned()
+	if earned != null:
+		col.add_child(earned)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 16)
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -76,8 +79,75 @@ func _ready() -> void:
 	var b := UIK.button("Menú principal", bk)
 	b.pressed.connect(func(): Meta.run = null; Nav.title())
 	row.add_child(b)
+	# Fase 3: revancha con la misma semilla, resumen para compartir y logros
+	var row2 := HBoxContainer.new()
+	row2.add_theme_constant_override("separation", 12)
+	row2.alignment = BoxContainer.ALIGNMENT_CENTER
+	col.add_child(row2)
+	var rv := UIK.button("Revancha", "small")
+	UIK.tip(rv, "Repite la partida con la misma musa, semilla y Pesadilla (el reto diario repite su día).")
+	rv.pressed.connect(func(): Nav.rematch(G))
+	row2.add_child(rv)
+	var cp := UIK.button("Copiar resumen", "small")
+	UIK.tip(cp, "Copia la musa, la semilla y el resultado para compartirlos.")
+	cp.pressed.connect(func():
+		DisplayServer.clipboard_set(Progress.share_text(G, victory))
+		Main.I.toast("Resumen copiado: ¡reta a alguien con tu semilla!"))
+	row2.add_child(cp)
+	var lg := UIK.button("Logros  %d/%d" % [Progress.ach_count(Meta.data), Progress.achievements().size()], "small")
+	lg.pressed.connect(func(): Meta.run = null; Nav.achievements())
+	row2.add_child(lg)
 	a.grab_focus.call_deferred()
 	UIK.fade_in(self, 0.5)
+
+
+## Logros y contenido conseguidos en esta partida (Meta los apunta en G.ach / G.unl) y Maestría al ganar.
+func _earned() -> Control:
+	var ach: Array = G.get("ach", [])
+	var unl: Array = G.get("unl", [])
+	var mastery := ""
+	if victory and not G.easy:
+		var r := Progress.mastery_rank(Meta.data, G.char)
+		mastery = "Maestría de %s: [b][color=%s]%s[/color][/b] (%d puntos, +%d)" % [DB.characters[G.char].name, Progress.rank_color(r).to_html(false), Progress.rank_name(r),
+			Progress.mastery_points(Meta.data, G.char), Progress.mastery_gain(int(G.get("nm", 0)), false)]
+	if ach.is_empty() and unl.is_empty() and mastery == "":
+		return null
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", 6)
+	v.alignment = BoxContainer.ALIGNMENT_CENTER
+	if not ach.is_empty() or not unl.is_empty():
+		var row := HBoxContainer.new()
+		row.alignment = BoxContainer.ALIGNMENT_CENTER
+		row.add_theme_constant_override("separation", 8)
+		for id in ach.slice(0, 9):
+			var a := Progress.find_ach(id)
+			if a.is_empty():
+				continue
+			var md := Medal.make(a, 52, true)
+			md.mouse_filter = Control.MOUSE_FILTER_PASS
+			UIK.tip(md, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [a.n, a.d])
+			row.add_child(md)
+		for gid in unl.slice(0, 4):
+			for g in Progress.groups():
+				if g.id == gid:
+					var ic := Progress.group_icon(g)
+					var w: Control = Medal.disc("muse:" + str(ic[1]), 52, true, UIK.GREEN) if ic[0] == "muse" else Icons.frame(ic[0], ic[1], 52)
+					w.mouse_filter = Control.MOUSE_FILTER_PASS
+					UIK.tip(w, "[b][color=#8bf0a4]Nuevo contenido[/color][/b]\n%s" % UnlockBanner._cap(Progress.group_text(g)))
+					row.add_child(w)
+		v.add_child(row)
+		var parts := []
+		if not ach.is_empty():
+			parts.append("%d logro%s nuevo%s" % [ach.size(), "" if ach.size() == 1 else "s", "" if ach.size() == 1 else "s"])
+		if not unl.is_empty():
+			parts.append("%d desbloqueo%s de contenido" % [unl.size(), "" if unl.size() == 1 else "s"])
+		v.add_child(UIK.rich("[center][color=#f0cf7a]%s[/color] en esta partida[/center]" % " y ".join(parts), 17))
+	if mastery != "":
+		v.add_child(UIK.rich("[center]%s[/center]" % mastery, 17))
+	for c in v.get_children():
+		if c is RichTextLabel:
+			c.custom_minimum_size = Vector2(860, 0)
+	return v
 
 
 func _boss_name() -> String:

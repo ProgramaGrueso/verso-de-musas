@@ -108,7 +108,7 @@ static func _is_curse(c) -> bool:
 
 ## Hasta n cartas distintas de la musa con alguna de esas rarezas.
 static func _muse_cards(G, rarities: Array, n: int) -> Array:
-	var pl: Array = DB.pool[G.char].filter(func(id): return DB.cards[id].rarity in rarities)
+	var pl: Array = Eng.unlocked(G, DB.pool[G.char]).filter(func(id): return DB.cards[id].rarity in rarities)
 	return Eng.shuffle(G, pl.duplicate()).slice(0, n)
 
 ## Mejora n cartas al azar; devuelve sus nombres.
@@ -123,7 +123,7 @@ static func _rand_upgrade(G, n: int) -> Array:
 ## Sustituye la carta por otra aleatoria de la musa; devuelve el nombre de la nueva.
 static func _transform(G, inst: Dictionary) -> String:
 	G.deck = G.deck.filter(func(x): return x.uid != inst.uid)
-	var pl: Array = DB.pool[G.char].filter(func(id): return id != inst.id)
+	var pl: Array = Eng.unlocked(G, DB.pool[G.char]).filter(func(id): return id != inst.id)
 	var nid: String = Eng.pick(G, pl)
 	Eng.gain_card(G, nid)
 	return DB.cards[nid].name

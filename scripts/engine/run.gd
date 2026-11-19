@@ -303,7 +303,7 @@ static func gen_shop(G) -> Dictionary:
 	if DB.extra:
 		var seen := []
 		for rar in ["common", "uncommon", "common"]:
-			var cands := DB.neutral.filter(func(id): return DB.cards[id].rarity == rar and not (id in seen))
+			var cands := Eng.unlocked(G, DB.neutral).filter(func(id): return DB.cards[id].rarity == rar and not (id in seen))
 			if cands.is_empty():
 				continue
 			var nid: String = Eng.pick(G, cands)

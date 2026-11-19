@@ -2,6 +2,8 @@ extends Node
 ## Progreso entre partidas (estadísticas, Galería, Pesadilla), ajustes y guardado de la partida en curso.
 
 signal unlocked(lore)
+signal achieved(a)            # logro conseguido (Progress.achievements)
+signal content_unlocked(g)    # grupo de cartas/reliquias desbloqueado (Progress.groups)
 
 const META_PATH := "user://meta.json"
 const SETTINGS_PATH := "user://settings.json"
@@ -22,6 +24,7 @@ func _ready() -> void:
 	Eng.meta_add = add
 	Eng.meta_max = max_stat
 	Eng.meta_see_relic = see_relic
+	Eng.meta_locked = locked_ids
 	_load_meta()
 	_load_settings()
 	_setup_input_map()
@@ -105,6 +108,8 @@ func _load_meta() -> void:
 		for k in d.keys():
 			data[k] = d[k]
 	_sanitize_nm()
+	_backfill_progress()
+	Progress.check(data)   # en silencio: lo ya merecido no llena la pantalla de avisos al arrancar
 
 
 ## La Pesadilla de un personaje no puede superar sus victorias (cada victoria sube un solo nivel).
@@ -196,6 +201,70 @@ func _check() -> void:
 		_mark()
 		for l in fresh:
 			unlocked.emit(l)
+	_check_progress()
+
+
+# ---------- Logros, desbloqueos y Maestría (Fase 3, ver Progress) ----------
+func _check_progress() -> void:
+	var r := Progress.check(data)
+	if r.unl.is_empty() and r.ach.is_empty():
+		return
+	_mark()
+	if run is Dictionary:   # lo conseguido en esta partida se resume al terminarla
+		for a in r.ach:
+			run["ach"] = run.get("ach", []) + [a.id]
+		for g in r.unl:
+			run["unl"] = run.get("unl", []) + [g.id]
+	for g in r.unl:
+		content_unlocked.emit(g)
+	for a in r.ach:
+		achieved.emit(a)
+
+
+## Cartas y reliquias bloqueadas ahora mismo (Eng.new_run las guarda en la partida).
+func locked_ids() -> Array:
+	return Progress.locked_ids(data)
+
+
+## Una sola vez: deduce del progreso anterior lo que la Fase 3 necesita (Maestría, actos, hazañas del historial).
+func _backfill_progress() -> void:
+	if int(data.get("progV", 0)) >= 1:
+		return
+	data["progV"] = 1
+	var s: Dictionary = data.s
+	for c in DB.playable():
+		var w := int(s.get("win_" + c, 0))
+		if w > 0:
+			s["mp_" + c] = maxi(int(s.get("mp_" + c, 0)), w)
+			s["bestAct_" + c] = 4
+	for h in history():
+		var c := str(h.get("char", ""))
+		var act := 4 if h.get("win", false) else int(h.get("act", 1))
+		s["bestAct_" + c] = maxi(int(s.get("bestAct_" + c, 0)), act)
+		if act >= 2:
+			s["act2"] = maxi(int(s.get("act2", 0)), 1)
+		if h.get("win", false) and not h.get("easy", false):
+			if int(h.get("nm", 0)) >= 1:
+				s["nmWin_" + c] = maxi(int(s.get("nmWin_" + c, 0)), int(h.nm))
+			_feats(h.get("deck", []).size(), h.get("relics", []).size(), -1, -1, -1)
+	if data.get("daily") is Dictionary:
+		s["dailyStreakBest"] = maxi(int(s.get("dailyStreakBest", 0)), Daily.streak(data.daily).best)
+	_mark()
+
+
+## Hazañas de una victoria sin modo fácil (los negativos se ignoran: el historial no guarda oro ni PV).
+func _feats(deck_n: int, relic_n: int, gold: int, hp: int, max_hp: int) -> void:
+	var s: Dictionary = data.s
+	if deck_n <= 15:
+		s["feat_smallDeck"] = int(s.get("feat_smallDeck", 0)) + 1
+	if deck_n >= 40:
+		s["feat_bigDeck"] = int(s.get("feat_bigDeck", 0)) + 1
+	if relic_n <= 4:
+		s["feat_fewRelics"] = int(s.get("feat_fewRelics", 0)) + 1
+	if gold >= 500:
+		s["feat_rich"] = int(s.get("feat_rich", 0)) + 1
+	if max_hp > 0 and hp >= ceili(max_hp * 0.9):
+		s["feat_healthy"] = int(s.get("feat_healthy", 0)) + 1
 
 
 func take_unlocked() -> Array:
@@ -221,12 +290,17 @@ func win_run(char: String, nm: int, easy: bool = false) -> void:
 		data.s.nm = maxi(data.s.get("nm", 0), nm)
 	if not easy:
 		data.nmBy[char] = maxi(data.nmBy.get(char, 0), mini(10, nm + 1))
+		if nm >= 1:
+			data.s["nmWin_" + char] = maxi(int(data.s.get("nmWin_" + char, 0)), nm)
+	data.s["mp_" + char] = int(data.s.get("mp_" + char, 0)) + Progress.mastery_gain(nm, easy)
+	data.s["bestAct_" + char] = 4
 	_mark()
 	_check()
 
 
 # ---------- Historial de partidas y reto diario ----------
 const HISTORY_MAX := 60
+const DAILY_KEEP := 400
 
 
 ## Guarda un resumen de la partida terminada (victoria, derrota o rendición). Solo una vez por partida.
@@ -263,9 +337,13 @@ func record_run(G, won: bool) -> void:
 		data["cardsPlayed"] = {}
 	for id in played.keys():
 		data.cardsPlayed[id] = data.cardsPlayed.get(id, 0) + played[id]
+	st["bestAct_" + G.char] = maxi(int(st.get("bestAct_" + G.char, 0)), 4 if won else int(G.act))
+	if won and not G.easy:
+		_feats(G.deck.size(), G.relics.size(), int(G.gold), int(G.hp), int(G.maxHp))
 	if str(G.get("daily", "")) != "":
 		_record_daily(G, won)
 	_mark()
+	_check()
 
 
 func history() -> Array:
@@ -286,10 +364,10 @@ func daily_started(key: String, char: String) -> void:
 	var r: Dictionary = data.daily.get(key, {"tries": 0, "win": false, "floor": 0, "char": char})
 	r.tries = int(r.get("tries", 0)) + 1
 	data.daily[key] = r
-	# conserva solo los últimos 30 días
+	# conserva algo más de un año (calendario mensual y racha); cada día ocupa unos pocos bytes
 	var keys: Array = data.daily.keys()
 	keys.sort()
-	while keys.size() > 30:
+	while keys.size() > DAILY_KEEP:
 		data.daily.erase(keys.pop_front())
 	_mark()
 
@@ -299,12 +377,23 @@ func _record_daily(G, won: bool) -> void:
 	if not data.has("daily") or not (data.daily is Dictionary):
 		data["daily"] = {}
 	var r: Dictionary = data.daily.get(key, {"tries": 1, "win": false, "floor": 0, "char": G.char})
-	if won:
+	# fuera de plazo (revancha de un día pasado): cuenta en el calendario, no en la racha ni en los logros
+	var late: bool = G.get("dailyLate", false)
+	if won and late:
+		r["lateWin"] = true
+	elif won:
 		r.win = true
 	r.floor = maxi(int(r.get("floor", 0)), int(G.floor))
 	data.daily[key] = r
-	if won:
+	if won and not late:
+		data.s["dailyStreakBest"] = maxi(int(data.s.get("dailyStreakBest", 0)), Daily.streak(data.daily).best)
 		add("dailyWins")
+
+
+## Racha del reto diario: {cur, best} (días seguidos superados el mismo día).
+func daily_streak() -> Dictionary:
+	var d = data.get("daily", {})
+	return Daily.streak(d if d is Dictionary else {})
 
 
 # ---------- Guardado de la partida ----------
