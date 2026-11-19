@@ -129,17 +129,17 @@ Objetivo: que se entienda y se sienta bien. Es la fase con más impacto por hora
 
 ### 2.1 Juice (combate)
 
-- [ ] Hitstop de 60–80 ms en golpes grandes.
-- [ ] Flash + sacudida al recibir daño; números de daño escalonados.
-- [ ] Sonidos distintos para Bloqueo, Veneno, orbe, carta pesada y muerte.
-- [ ] “Slam” al jugar carta y transición clara de fin de turno.
+- [x] Hitstop de 60–80 ms en golpes grandes.
+- [x] Flash + sacudida al recibir daño; números de daño escalonados.
+- [x] Sonidos distintos para Bloqueo, Veneno, orbe, carta pesada y muerte.
+- [x] “Slam” al jugar carta y transición clara de fin de turno.
 
 ### 2.2 Legibilidad
 
-- [ ] Resaltar la reliquia que se dispara (muchas son invisibles hoy).
-- [ ] Tooltip de buffs/debuffs enemigos al pasar el ratón.
-- [ ] Aviso de “muerte segura” si el daño entrante supera PV + Bloqueo.
-- [ ] Previsualización de la mejora de carta antes de gastar la hoguera.
+- [x] Resaltar la reliquia que se dispara (muchas son invisibles hoy).
+- [x] Tooltip de buffs/debuffs enemigos al pasar el ratón.
+- [x] Aviso de “muerte segura” si el daño entrante supera PV + Bloqueo.
+- [x] Previsualización de la mejora de carta antes de gastar la hoguera.
 
 ### 2.3 Inspección
 
@@ -158,7 +158,7 @@ Objetivo: que se entienda y se sienta bien. Es la fase con más impacto por hora
 ### 2.5 Accesibilidad
 
 - [ ] Escala de texto.
-- [ ] Opción “reducir movimiento”.
+- [x] Opción “reducir movimiento”.
 - [ ] Auditoría de navegación completa con mando (mapa, recompensas, tienda, eventos).
 - [ ] Remapeo básico de teclas.
 
@@ -171,16 +171,18 @@ feedback visual y sonoro.
 
 Objetivo: dar una razón para la partida 20.
 
-- [ ] **Logros** (~30) enganchados a las estadísticas que ya guarda `Meta.data.s`.
+- [x] **Logros** (~30) enganchados a las estadísticas que ya guarda `Meta.data.s`. Hecho 2026-11-19: 37 logros
+      en 8 categorías (`data/progress.json`, `Progress`), pantalla con medallones, avisos emergentes y
+      **Maestría** por musa (6 rangos). Ver `HANDOFF_FASE3.md`.
 - [x] **Pesadilla 10 · escalera rediseñada** (el techo es 10, no 20). Un efecto por nivel, en datos
       (`balance_w2.json` → `nm`) y sin muros: ningún escalón cuesta más de ~6 puntos y NM10 pasa de 0 %
       a ~8 % con el bot. Queda validarla con jugadores y decidir si ese 8 % es la banda correcta.
       Extender a 20 solo tendría sentido post-lanzamiento y exigiría lore, logros y desenlace nuevos.
-- [ ] **Desbloqueo de contenido**: cartas y reliquias que entran al pool al cumplir hitos. Hoy todo está
+- [x] **Desbloqueo de contenido** (21 grupos de la Oleada 1/2; con `DB.extra=false` no se bloquea nada; Compendio con condición): cartas y reliquias que entran al pool al cumplir hitos. Hoy todo está
       disponible desde el minuto uno, lo que quita la curva de descubrimiento.
-- [ ] **Reto diario con histórico**: racha local, tabla mensual, semilla compartible y “revancha”.
+- [x] **Reto diario con histórico** (pantalla con calendario, racha, copiar reto y revancha de días pasados): racha local, tabla mensual, semilla compartible y “revancha”.
       El marcador online puede esperar a que haya jugadores.
-- [ ] **Resumen de partida compartible**: musa + semilla + resultado (la semilla ya se copia desde la pausa).
+- [x] **Resumen de partida compartible** («Copiar resumen» y «Revancha» en la pantalla final): musa + semilla + resultado (la semilla ya se copia desde la pausa).
 
 **Salida:** un jugador nuevo tiene objetivos a 1, 5 y 20 partidas; el diario tiene una razón para volver
 mañana.
@@ -191,7 +193,7 @@ mañana.
 
 Objetivo: más decisiones, no más cartas.
 
-- [ ] **Jefes con fases** o cambio de patrón a mitad de vida; hoy se resuelven igual del turno 1 al 10.
+- [x] **Jefes con fases** o cambio de patrón a mitad de vida (2026-11-19, solo `DB.extra`: los 6 jefes pasan a fase 2 bajo 50 % PV con aviso, golpe nuevo telegrafiado y secuencia propia; victorias 39 % vs 40 % sin fases; ver `HANDOFF_FASE4.md`). Banner de fase 2 en UI: hecho (`combat_screen.gd`, Fase 2).
 - [ ] **Variedad de élites** por acto y 1–2 eventos raros por acto que solo salgan una vez por partida.
 - [ ] **Poda del pool**: con los datos de elección del bot, buffear o retirar lo que nadie coge.
 - [ ] **Sinergias por musa**: asegurar 2 arquetipos viables por musa y que la recompensa no fuerce uno solo.
