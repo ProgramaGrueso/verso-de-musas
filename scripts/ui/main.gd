@@ -25,6 +25,8 @@ var _full_btn: Button
 
 func _ready() -> void:
 	I = self
+	for k in ["sans", "bold", "title"]:   # precarga fuentes (evita tirón en la primera pantalla)
+		UIK.font(k)
 	UIK.full_rect(self)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var bg := ColorRect.new()
@@ -57,6 +59,12 @@ var _stick_h := 0.0
 var _stick_v := 0.0
 var _trigger_lt := false
 var _trigger_rt := false
+
+
+func _exit_tree() -> void:
+	UIK._fonts.clear()   # libera las fuentes cacheadas (evita 'resources still in use' al salir)
+	Tip.I = null
+	I = null
 
 
 func _input(ev: InputEvent) -> void:

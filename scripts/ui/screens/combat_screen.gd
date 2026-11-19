@@ -176,7 +176,11 @@ func _process(_dt: float) -> void:
 	if _bg_img != null:
 		var m := get_viewport().get_mouse_position()
 		var off := Vector2((m.x - 640.0) / 640.0, (m.y - 360.0) / 360.0) * Vector2(-14, -6)
-		_bg_img.position = _bg_img.position.lerp(_bg_base + off, 0.08)
+		var target := _bg_base + off
+		if _bg_img.position.distance_squared_to(target) > 0.01:   # ya asentado: no tocar (permite bajo consumo)
+			_bg_img.position = _bg_img.position.lerp(target, 0.08)
+		else:
+			_bg_img.position = target
 
 
 func _build_background() -> void:

@@ -36,6 +36,8 @@ static func hide_all() -> void:
 func _init() -> void:
 	I = self
 	visible = false
+	set_process(false)   # solo corre mientras el tooltip esta visible
+	visibility_changed.connect(func(): set_process(visible))
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	z_index = 4000
 	var s := UIK.stylebox(Color("#120d1d"), UIK.GOLD, 2, 10, 14)
