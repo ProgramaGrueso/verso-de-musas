@@ -70,5 +70,173 @@
   "seed": 73166,
   "prompt": "painterly dark fantasy game emblem illustration, an ornate open treasure chest glowing gold on dark bronze, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
   "out": "assets/icons/mapnode_treasure.webp"
+ },
+ {
+  "kind": "medal",
+  "name": "medal_primera_victoria",
+  "w": 384,
+  "h": 384,
+  "seed": 73200,
+  "prompt": "painterly dark fantasy game emblem illustration, a golden lyre with a radiant dawn star rising behind it on deep violet, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/lore/ach_primera_victoria.webp"
+ },
+ {
+  "kind": "medal",
+  "name": "medal_primer_jefe",
+  "w": 384,
+  "h": 384,
+  "seed": 73211,
+  "prompt": "painterly dark fantasy game emblem illustration, a greatsword piercing a theater mask before a red stage curtain on blood red, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/lore/ach_primer_jefe.webp"
+ },
+ {
+  "kind": "medal",
+  "name": "medal_voz_zafiro",
+  "w": 384,
+  "h": 384,
+  "seed": 73222,
+  "prompt": "painterly dark fantasy game emblem illustration, a crimson knight greatsword wreathed in flames on dark steel red, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/lore/ach_voz_zafiro.webp"
+ },
+ {
+  "kind": "medal",
+  "name": "medal_voz_lia",
+  "w": 384,
+  "h": 384,
+  "seed": 73233,
+  "prompt": "painterly dark fantasy game emblem illustration, two crossed green hunting daggers dripping venom on forest green, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/lore/ach_voz_lia.webp"
+ },
+ {
+  "kind": "medal",
+  "name": "medal_voz_claudia",
+  "w": 384,
+  "h": 384,
+  "seed": 73244,
+  "prompt": "painterly dark fantasy game emblem illustration, a small loyal skeleton companion holding a warm candle on bone amber, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/lore/ach_voz_claudia.webp"
+ },
+ {
+  "kind": "medal",
+  "name": "medal_voz_aurora",
+  "w": 384,
+  "h": 384,
+  "seed": 73255,
+  "prompt": "painterly dark fantasy game emblem illustration, a blazing radiant sun with swirling heat waves on deep orange gold, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/lore/ach_voz_aurora.webp"
+ },
+ {
+  "kind": "medal",
+  "name": "medal_voz_irene",
+  "w": 384,
+  "h": 384,
+  "seed": 73266,
+  "prompt": "painterly dark fantasy game emblem illustration, taut golden strings wound around a brass gear on deep indigo, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/lore/ach_voz_irene.webp"
+ },
+ {
+  "kind": "medal",
+  "name": "medal_voz_selene",
+  "w": 384,
+  "h": 384,
+  "seed": 73277,
+  "prompt": "painterly dark fantasy game emblem illustration, three glowing magic orbs orbiting a crescent moon on deep night blue, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/lore/ach_voz_selene.webp"
+ },
+ {
+  "kind": "medal",
+  "name": "medal_nm1",
+  "w": 384,
+  "h": 384,
+  "seed": 73288,
+  "prompt": "painterly dark fantasy game emblem illustration, an inverted golden musical note under a thin eclipsed moon on dark violet, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/lore/ach_nm1.webp"
+ },
+ {
+  "kind": "medal",
+  "name": "medal_nm5",
+  "w": 384,
+  "h": 384,
+  "seed": 73299,
+  "prompt": "painterly dark fantasy game emblem illustration, a blood moon at midnight behind five curved thorns on dark crimson, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/lore/ach_nm5.webp"
+ },
+ {
+  "kind": "medal",
+  "name": "medal_nm10",
+  "w": 384,
+  "h": 384,
+  "seed": 73310,
+  "prompt": "painterly dark fantasy game emblem illustration, a black eclipsed moon crowning a golden lyre with ten thorns on near black, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/lore/ach_nm10.webp"
+ },
+ {
+  "kind": "medal",
+  "name": "medal_fiel",
+  "w": 384,
+  "h": 384,
+  "seed": 73321,
+  "prompt": "painterly dark fantasy game emblem illustration, a steadfast votive candle burning bright at dawn on warm amber, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/lore/ach_fiel.webp"
+ },
+ {
+  "kind": "boss2",
+  "name": "boss2_crabking",
+  "ref": "crabking",
+  "w": 768,
+  "h": 768,
+  "seed": 73300,
+  "prompt": "Keep the same crab king character, same design, pose and left-facing orientation. Transform into enraged phase 2: shell cracked with glowing lava-red fissures, eyes burning red, one giant claw raised like a guillotine blade, red fury aura, darker mood.",
+  "out": "assets/enemies/crabking_fase2.webp"
+ },
+ {
+  "kind": "boss2",
+  "name": "boss2_drowncaptain",
+  "ref": "drowncaptain",
+  "w": 768,
+  "h": 768,
+  "seed": 73311,
+  "prompt": "Keep the same drowned captain character, same design, pose and left-facing orientation. Transform into enraged phase 2: tattered black flag raised behind her, ghostly green-black storm aura, spectral glowing cutlass, furious expression, dripping seawater.",
+  "out": "assets/enemies/drowncaptain_fase2.webp"
+ },
+ {
+  "kind": "boss2",
+  "name": "boss2_rootmother",
+  "ref": "rootmother",
+  "w": 768,
+  "h": 768,
+  "seed": 73322,
+  "prompt": "Keep the same root mother character, same design, pose and left-facing orientation. Transform into enraged phase 2: body covered in sharp thorny brambles, thick bark armor plates, glowing amber sap, a crown of long thorns.",
+  "out": "assets/enemies/rootmother_fase2.webp"
+ },
+ {
+  "kind": "boss2",
+  "name": "boss2_mycelking",
+  "ref": "mycelking",
+  "w": 768,
+  "h": 768,
+  "seed": 73333,
+  "prompt": "Keep the same mycelium king character, same design, pose and left-facing orientation. Transform into enraged phase 2: mushroom cap cracked releasing glowing toxic spores, bioluminescent veins across the body, dense spore cloud aura.",
+  "out": "assets/enemies/mycelking_fase2.webp"
+ },
+ {
+  "kind": "boss2",
+  "name": "boss2_queen",
+  "ref": "queen",
+  "w": 768,
+  "h": 768,
+  "seed": 73344,
+  "prompt": "Keep the same hive queen character, same design, pose and left-facing orientation. Transform into enraged phase 2: wings spread wide, golden royal armor plates, a swarm of small bees circling her, angry glowing eyes.",
+  "out": "assets/enemies/queen_fase2.webp"
+ },
+ {
+  "kind": "boss2",
+  "name": "boss2_waxcolossus",
+  "ref": "waxcolossus",
+  "w": 768,
+  "h": 768,
+  "seed": 73355,
+  "prompt": "Keep the same wax colossus character, same design, pose and left-facing orientation. Transform into enraged phase 2: half-melted wax body with a burning fire core visible in the chest, molten wax dripping, inner orange fire glow.",
+  "out": "assets/enemies/waxcolossus_fase2.webp"
  }
 ]
