@@ -7,6 +7,7 @@ const HAND_W := 970.0
 const CARD_W := 168.0
 const CARD_H := 238.56
 const ARENA_POS := Vector2(0, 52)
+const NEW_PER_FRAME := 2       # cartas nuevas que se construyen por frame (evita tirones de la mano)
 const FLOOR := {"underdocks": [1.3, -385.0, "#17130f"], "overgrowth": [1.3, -400.0, "#15130d"], "hive": [1.55, -620.0, "#2a1a08"]}
 
 var ids: Array = []
@@ -56,6 +57,8 @@ var _press_card: CardView = null
 var _press_pos := Vector2.ZERO
 var _dragging := false
 var _drag_view: CardView = null
+var _sync_pending := false      # queda mano por crear: se reparte entre frames
+var _sync_waiting := false
 var _pop_n := 0
 var _shake_tw: Tween
 var _undo := {}               # modo fácil: estado antes de la última carta jugada
@@ -869,6 +872,7 @@ func _update_tip() -> void:
 func _sync_hand() -> void:
 	if C.is_empty():
 		return
+	_sync_pending = false
 	# retira las que ya no están
 	var live := {}
 	for c in C.hand:
@@ -882,11 +886,16 @@ func _sync_hand() -> void:
 	if sel_uid >= 0 and not live.has(sel_uid):
 		sel_uid = -1
 		pending = null if (pending != null and pending.kind == "card") else pending
-	# crea nuevas
+	# crea nuevas (como mucho NEW_PER_FRAME por frame: 10 Cuchillas de golpe daban un tirón)
 	var idx := 0
+	var created := 0
 	for inst in C.hand:
 		var v: CardView = card_views.get(inst.uid)
 		if v == null:
+			if created >= NEW_PER_FRAME:
+				_sync_pending = true
+				idx += 1
+				continue
 			v = CardView.create(inst, C, CARD_W)
 			v.focus_mode = Control.FOCUS_NONE
 			v.num_key = idx + 1 if idx < 9 else 0
@@ -900,6 +909,7 @@ func _sync_hand() -> void:
 			v.rotation = deg_to_rad(-30)
 			v.modulate.a = 0.0
 			seen[inst.uid] = true
+			created += 1
 		else:
 			v.num_key = idx + 1 if idx < 9 else 0
 			v.refresh(C)
@@ -910,6 +920,19 @@ func _sync_hand() -> void:
 		v.set_selected(sel_uid == inst.uid)
 		idx += 1
 	_layout_hand(true)
+	if _sync_pending:
+		_sync_hand_next_frame()
+
+
+## Termina de repartir las cartas nuevas en el frame siguiente (sin acumular esperas).
+func _sync_hand_next_frame() -> void:
+	if _sync_waiting:
+		return
+	_sync_waiting = true
+	await get_tree().process_frame
+	_sync_waiting = false
+	if is_inside_tree() and not C.is_empty():
+		_sync_hand()
 
 
 func _discard_anim(v: CardView) -> void:

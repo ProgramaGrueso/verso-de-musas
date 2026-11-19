@@ -23,6 +23,8 @@ func _ready() -> void:
 	add_child(col)
 	var t := UIK.label(ev.title, 36, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(t, 6)
+	# un título largo no debe ensanchar la columna: se parte en varias líneas
+	t.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	col.add_child(t)
 	_text = UIK.rich("[center]%s[/center]" % EventsLogic.text_for(G, ev), 20, Color("#e8e4f4"))
 	_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -63,6 +65,9 @@ func _ready() -> void:
 	if first_opt != null:
 		first_opt.grab_focus.call_deferred()
 	UIK.fade_in(self, 0.3)
+	# con el ancho ya resuelto, cada cartel crece si su texto ocupa más de una línea
+	await get_tree().process_frame
+	_fit_banners()
 
 
 func _build_art(ev: Dictionary) -> void:
@@ -116,6 +121,7 @@ static func _banner(title: String, hint: String) -> Button:
 	b.add_theme_stylebox_override("disabled", d)
 	b.mouse_entered.connect(func(): if not b.disabled: Sfx.play("select_soft", 0.4))
 	b.pressed.connect(func(): Sfx.play("click"))
+	b.set_meta("base_h", 78.0 if hint != "" else 54.0)
 	var r := UIK.rich("[b][color=#f0cf7a]%s[/color][/b]%s" % [title, ("\n" + _tint(hint)) if hint != "" else ""], 19, Color("#e8f2f2"))
 	r.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	r.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -126,6 +132,20 @@ static func _banner(title: String, hint: String) -> Button:
 	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	b.add_child(r)
 	return b
+
+
+## Ajusta la altura de cada cartel al texto ya partido en líneas por el ancho de la columna.
+func _fit_banners() -> void:
+	for c in _opts.get_children():
+		if not (c is Button):
+			continue
+		var b := c as Button
+		var r := b.get_child(0) as RichTextLabel
+		if r == null:
+			continue
+		var need := r.get_content_height() + 16.0
+		var base: float = b.get_meta("base_h", 54.0)
+		b.custom_minimum_size.y = maxf(base, ceilf(need))
 
 
 ## Colorea cifras de oro (dorado) y de PV (rojo si se pierden, verde si se ganan).
