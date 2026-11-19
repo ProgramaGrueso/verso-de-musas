@@ -1,0 +1,74 @@
+[
+ {
+  "kind": "frame",
+  "name": "frame",
+  "w": 384,
+  "h": 384,
+  "seed": 73001,
+  "cut": true,
+  "prompt": "an empty ornate antique gold circular ring frame with fine filigree, perfectly round, front view, centered, nothing inside the ring, isolated on a plain flat white background, game UI asset, no text"
+ },
+ {
+  "kind": "node",
+  "name": "node_combat",
+  "w": 384,
+  "h": 384,
+  "seed": 73100,
+  "prompt": "painterly dark fantasy game emblem illustration, two crossed swords clashing with sparks on deep violet, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/icons/mapnode_combat.webp"
+ },
+ {
+  "kind": "node",
+  "name": "node_elite",
+  "w": 384,
+  "h": 384,
+  "seed": 73111,
+  "prompt": "painterly dark fantasy game emblem illustration, a horned demonic skull with glowing red eyes on dark crimson, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/icons/mapnode_elite.webp"
+ },
+ {
+  "kind": "node",
+  "name": "node_boss",
+  "w": 384,
+  "h": 384,
+  "seed": 73122,
+  "prompt": "painterly dark fantasy game emblem illustration, a dark royal crown with red jewels and thorns on blood red, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/icons/mapnode_boss.webp"
+ },
+ {
+  "kind": "node",
+  "name": "node_rest",
+  "w": 384,
+  "h": 384,
+  "seed": 73133,
+  "prompt": "painterly dark fantasy game emblem illustration, a warm campfire with glowing embers on deep orange, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/icons/mapnode_rest.webp"
+ },
+ {
+  "kind": "node",
+  "name": "node_shop",
+  "w": 384,
+  "h": 384,
+  "seed": 73144,
+  "prompt": "painterly dark fantasy game emblem illustration, a plump coin sack spilling gold coins on dark amber, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/icons/mapnode_shop.webp"
+ },
+ {
+  "kind": "node",
+  "name": "node_event",
+  "w": 384,
+  "h": 384,
+  "seed": 73155,
+  "prompt": "painterly dark fantasy game emblem illustration, a glowing rune portal shaped like a question mark on deep teal, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/icons/mapnode_event.webp"
+ },
+ {
+  "kind": "node",
+  "name": "node_treasure",
+  "w": 384,
+  "h": 384,
+  "seed": 73166,
+  "prompt": "painterly dark fantasy game emblem illustration, an ornate open treasure chest glowing gold on dark bronze, centered, rich detail, dramatic rim lighting, subtle glow, dark moody vignette background, no text, no watermark, no border",
+  "out": "assets/icons/mapnode_treasure.webp"
+ }
+]
