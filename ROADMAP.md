@@ -159,7 +159,14 @@ Objetivo: que se entienda y se sienta bien. Es la fase con más impacto por hora
 
 - [ ] Escala de texto.
 - [x] Opción “reducir movimiento”.
-- [ ] Auditoría de navegación completa con mando (mapa, recompensas, tienda, eventos).
+- [x] **Ningún texto se sale de su caja** (2026-11-19, `7f8c825`): autoajuste de botones (`UIK.fit_button`),
+      `UIK.wrap/fit_title/button_row`, herramientas `tests/ui_layout_test` (42 pantallas y 19 diálogos ×
+      2 resoluciones) y `tests/ui_shot` (capturas). Ver `HANDOFF.md`.
+- [x] **Mando en la tienda** (2026-11-19, `7f8c825`): comprar ya no deja la pantalla sin foco
+      (`tests/shop_pad_test`). La auditoría del resto sigue abierta abajo.
+- [ ] Auditoría de navegación completa con mando (mapa, recompensas, eventos): la tienda se arregló; falta
+      rehacer la pasada completa con `tests/gamepad_test` + `tests/focus_reach` y añadir un test de foco por
+      pantalla que se reconstruya (recompensa, hoguera, eventos).
 - [ ] Remapeo básico de teclas.
 
 **Salida:** 5 personas nuevas terminan el Acto I sin ayuda externa y ninguna acción de combate queda sin
