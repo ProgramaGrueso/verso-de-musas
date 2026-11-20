@@ -31,10 +31,16 @@ static func tex(kind: String, id: String) -> Texture2D:
 	return load(p) if ResourceLoader.exists(p) else null
 
 
+## Igual que tex pero con respaldo a otro kind si el archivo no existe (p. ej. "mapnode" -> "node").
+static func tex_or(kind: String, fallback_kind: String, id: String) -> Texture2D:
+	var t := tex(kind, id)
+	return t if t != null else tex(fallback_kind, id)
+
+
 ## Icono cuadrado simple (sin marco) para usar en layouts.
-static func rect(kind: String, id: String, size: float) -> TextureRect:
+static func rect(kind: String, id: String, size: float, fallback_kind: String = "") -> TextureRect:
 	var t := TextureRect.new()
-	t.texture = tex(kind, id)
+	t.texture = tex_or(kind, fallback_kind, id) if fallback_kind != "" else tex(kind, id)
 	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	t.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	t.custom_minimum_size = Vector2(size, size)
@@ -74,10 +80,15 @@ static func bb(kind: String, id: String, size: int = 20) -> String:
 
 ## Icono + texto en una fila (para HP, oro...).
 static func with_text(kind: String, id: String, text: String, size: float, font_size: int, color: Color, font_kind: String = "bold") -> HBoxContainer:
+	# compatibilidad: 7.º argumento "mapnode"/"node" se interpreta como kind de respaldo del icono
+	var fb := ""
+	if font_kind in ["mapnode", "node", "relic", "potion", "boss", "enemy", "ui", "status", "intent"]:
+		fb = font_kind
+		font_kind = "bold"
 	var h := HBoxContainer.new()
 	h.add_theme_constant_override("separation", 6)
 	h.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var ic := rect(kind, id, size)
+	var ic := rect(kind, id, size, fb)
 	ic.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	h.add_child(ic)
 	var l := UIK.label(text, font_size, color, font_kind)

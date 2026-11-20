@@ -136,7 +136,7 @@ func _ready() -> void:
 	var leg := VBoxContainer.new()
 	leg.position = Vector2(14, 520)
 	for k in NODE_NAME.keys():
-		var l := Icons.with_text("node", k, NODE_NAME[k], 24, 16, Color.WHITE)
+		var l := Icons.with_text("mapnode", k, NODE_NAME[k], 28, 16, Color.WHITE, "node")
 		UIK.outlined(l.get_node("Text"), 5)
 		leg.add_child(l)
 	add_child(leg)
@@ -166,7 +166,7 @@ func _add_node(inner: Control, n: Dictionary) -> void:
 	b.size = Vector2(sz, sz)
 	b.position = p - Vector2(half, half)
 	b.pivot_offset = Vector2(half, half)
-	b.icon = Icons.tex("node", n.type)
+	b.icon = Icons.tex_or("mapnode", "node", n.type)
 	b.expand_icon = true
 	b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	b.add_theme_constant_override("icon_max_width", int(sz * 0.74))

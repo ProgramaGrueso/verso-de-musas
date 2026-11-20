@@ -39,6 +39,7 @@ var rest := Vector2.ZERO   ## posición de reposo del cuerpo: todas las animacio
 var _x_tw: Tween
 var _y_tw: Tween
 var _intent_txt := ""   ## resumen de la intención (para el tooltip del cuerpo)
+var _phase2 := false    ## retrato de fase 2 ya aplicado (Fase 4)
 
 
 func setup(p_e: Dictionary, k: float) -> void:
@@ -184,6 +185,7 @@ func body_center() -> Vector2:
 
 func refresh(C) -> void:
 	if e.hp > 0:
+		_check_phase2()
 		_rebuild_intent(C)
 		block_badge.visible = e.block > 0
 		block_lbl.text = str(e.block)
@@ -195,6 +197,17 @@ func refresh(C) -> void:
 			c.queue_free()
 		block_badge.visible = false
 	hp_bar.set_values(e.hp, e.maxHp)
+
+
+## Fase 4 · al entrar en fase 2 usa el retrato <id>_fase2.webp si existe; si no, conserva el original.
+func _check_phase2() -> void:
+	if _phase2 or int(e.get("phase", 1)) < 2 or not (img is TextureRect):
+		return
+	var tex := UIK.tex("res://assets/enemies/%s_fase2.webp" % e.id)
+	if tex == null:
+		return
+	_phase2 = true
+	img.texture = tex
 
 
 func _rebuild_status() -> void:

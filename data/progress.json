@@ -11,23 +11,23 @@
     {"id": "coleccion", "n": "Colección", "icon": "relic:ojo"}
   ],
   "achievements": [
-    {"id": "primer_jefe", "cat": "inicio", "n": "Telón del Primer Acto", "d": "Derrota a tu primer jefe.", "art": "lore:muelles", "icon": "node:boss", "v": {"sum": "boss_"}, "t": 1},
+    {"id": "primer_jefe", "cat": "inicio", "n": "Telón del Primer Acto", "d": "Derrota a tu primer jefe.", "art": "lore:ach_primer_jefe", "icon": "node:boss", "v": {"sum": "boss_"}, "t": 1},
     {"id": "primer_elite", "cat": "inicio", "n": "Cazadora de Élites", "d": "Derrota a un élite.", "art": "lore:savia", "icon": "node:elite", "v": {"stat": "elites"}, "t": 1},
     {"id": "acto2", "cat": "inicio", "n": "Más Allá del Puerto", "d": "Llega al Acto II.", "art": "bg:overgrowth", "icon": "ui:target", "v": {"stat": "act2"}, "t": 1},
-    {"id": "primera_victoria", "cat": "inicio", "n": "La Canción Sigue", "d": "Gana una partida.", "art": "lore:reina", "icon": "node:boss", "v": {"stat": "wins"}, "t": 1},
+    {"id": "primera_victoria", "cat": "inicio", "n": "La Canción Sigue", "d": "Gana una partida.", "art": "lore:ach_primera_victoria", "icon": "node:boss", "v": {"stat": "wins"}, "t": 1},
     {"id": "cinco_partidas", "cat": "inicio", "n": "Oído Afinado", "d": "Termina 5 partidas, ganes o pierdas.", "art": "lore:canto", "icon": "ui:music", "v": {"sum": "runs_"}, "t": 5},
 
-    {"id": "voz_zafiro", "cat": "musas", "n": "El Acero Canta", "d": "Gana una partida con Zafiro.", "art": "lore:zafiro", "icon": "relic:brasa_carmesi", "v": {"stat": "win_zafiro"}, "t": 1},
-    {"id": "voz_lia", "cat": "musas", "n": "Silbido Final", "d": "Gana una partida con Lia.", "art": "lore:lia", "icon": "relic:anillo_cazadora", "v": {"stat": "win_lia"}, "t": 1},
-    {"id": "voz_claudia", "cat": "musas", "n": "Nombres Recordados", "d": "Gana una partida con Claudia.", "art": "lore:claudia", "icon": "relic:sello_osty", "v": {"stat": "win_claudia"}, "t": 1},
-    {"id": "voz_aurora", "cat": "musas", "n": "Amanecer Eterno", "d": "Gana una partida con Aurora.", "art": "lore:aurora", "icon": "relic:prisma_solar", "v": {"stat": "win_aurora"}, "t": 1},
-    {"id": "voz_irene", "cat": "musas", "n": "Cuerda Infinita", "d": "Gana una partida con Irene.", "art": "lore:irene", "icon": "relic:llave_maestra", "v": {"stat": "win_irene"}, "t": 1},
-    {"id": "voz_selene", "cat": "musas", "n": "Pleamar", "d": "Gana una partida con Selene.", "art": "lore:selene", "icon": "relic:concha_marea", "v": {"stat": "win_selene"}, "t": 1},
+    {"id": "voz_zafiro", "cat": "musas", "n": "El Acero Canta", "d": "Gana una partida con Zafiro.", "art": "lore:ach_voz_zafiro", "icon": "relic:brasa_carmesi", "v": {"stat": "win_zafiro"}, "t": 1},
+    {"id": "voz_lia", "cat": "musas", "n": "Silbido Final", "d": "Gana una partida con Lia.", "art": "lore:ach_voz_lia", "icon": "relic:anillo_cazadora", "v": {"stat": "win_lia"}, "t": 1},
+    {"id": "voz_claudia", "cat": "musas", "n": "Nombres Recordados", "d": "Gana una partida con Claudia.", "art": "lore:ach_voz_claudia", "icon": "relic:sello_osty", "v": {"stat": "win_claudia"}, "t": 1},
+    {"id": "voz_aurora", "cat": "musas", "n": "Amanecer Eterno", "d": "Gana una partida con Aurora.", "art": "lore:ach_voz_aurora", "icon": "relic:prisma_solar", "v": {"stat": "win_aurora"}, "t": 1},
+    {"id": "voz_irene", "cat": "musas", "n": "Cuerda Infinita", "d": "Gana una partida con Irene.", "art": "lore:ach_voz_irene", "icon": "relic:llave_maestra", "v": {"stat": "win_irene"}, "t": 1},
+    {"id": "voz_selene", "cat": "musas", "n": "Pleamar", "d": "Gana una partida con Selene.", "art": "lore:ach_voz_selene", "icon": "relic:concha_marea", "v": {"stat": "win_selene"}, "t": 1},
     {"id": "acorde", "cat": "musas", "n": "Acorde Completo", "d": "Gana una partida con cada una de las seis musas.", "art": "lore:seis", "icon": "ui:sound", "v": {"min": ["win_zafiro", "win_lia", "win_claudia", "win_aurora", "win_irene", "win_selene"]}, "t": 1},
 
-    {"id": "nm1", "cat": "pesadilla", "n": "Melodía Invertida", "d": "Gana una partida en Pesadilla 1 o superior.", "art": "lore:pesadilla1", "icon": "ui:moon", "v": {"stat": "nm"}, "t": 1},
-    {"id": "nm5", "cat": "pesadilla", "n": "Medianoche", "d": "Gana una partida en Pesadilla 5 o superior.", "art": "lore:pesadilla3", "icon": "ui:moon", "v": {"stat": "nm"}, "t": 5},
-    {"id": "nm10", "cat": "pesadilla", "n": "La Canción se Hereda", "d": "Gana una partida en Pesadilla 10.", "art": "lore:pesadilla10", "icon": "ui:moon", "v": {"stat": "nm"}, "t": 10},
+    {"id": "nm1", "cat": "pesadilla", "n": "Melodía Invertida", "d": "Gana una partida en Pesadilla 1 o superior.", "art": "lore:ach_nm1", "icon": "ui:moon", "v": {"stat": "nm"}, "t": 1},
+    {"id": "nm5", "cat": "pesadilla", "n": "Medianoche", "d": "Gana una partida en Pesadilla 5 o superior.", "art": "lore:ach_nm5", "icon": "ui:moon", "v": {"stat": "nm"}, "t": 5},
+    {"id": "nm10", "cat": "pesadilla", "n": "La Canción se Hereda", "d": "Gana una partida en Pesadilla 10.", "art": "lore:ach_nm10", "icon": "ui:moon", "v": {"stat": "nm"}, "t": 10},
     {"id": "nm_coral", "cat": "pesadilla", "n": "Pesadilla Coral", "d": "Gana en Pesadilla 1 o superior con las seis musas.", "art": "lore:pesadilla6", "icon": "ui:moon", "v": {"min": ["nmWin_zafiro", "nmWin_lia", "nmWin_claudia", "nmWin_aurora", "nmWin_irene", "nmWin_selene"]}, "t": 1},
 
     {"id": "intocable", "cat": "jefes", "n": "Intocable", "d": "Derrota a un jefe sin perder PV en ese combate.", "art": "lore:sinrasguno", "icon": "status:reflect", "v": {"stat": "flawlessBoss"}, "t": 1},
@@ -48,7 +48,7 @@
     {"id": "tesoro", "cat": "hazanas", "n": "Bolsillos Llenos", "d": "Gana con 500 de oro o más sin gastar (sin modo fácil).", "art": "lore:oro2", "icon": "ui:gold", "v": {"stat": "feat_rich"}, "t": 1},
     {"id": "ileso", "cat": "hazanas", "n": "Sin un Rasguño", "d": "Gana con el 90 % de tus PV o más (sin modo fácil).", "art": "bg:ev_fuente", "icon": "ui:hp", "v": {"stat": "feat_healthy"}, "t": 1},
 
-    {"id": "fiel", "cat": "diario", "n": "Fiel al Día", "d": "Supera un reto diario el mismo día.", "art": "bg:ev_poza_lunar", "icon": "status:tictac", "v": {"stat": "dailyWins"}, "t": 1},
+    {"id": "fiel", "cat": "diario", "n": "Fiel al Día", "d": "Supera un reto diario el mismo día.", "art": "lore:ach_fiel", "icon": "status:tictac", "v": {"stat": "dailyWins"}, "t": 1},
     {"id": "constancia", "cat": "diario", "n": "Constancia", "d": "Supera el reto diario 3 días seguidos.", "art": "bg:ev_recuerdo", "icon": "status:noon", "v": {"stat": "dailyStreakBest"}, "t": 3},
     {"id": "semana", "cat": "diario", "n": "Semana Perfecta", "d": "Supera el reto diario 7 días seguidos.", "art": "bg:ev_trono", "icon": "status:noon", "v": {"stat": "dailyStreakBest"}, "t": 7},
 
