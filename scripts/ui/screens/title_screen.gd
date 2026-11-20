@@ -3,6 +3,7 @@ extends Control
 ## Menú principal.
 
 const COL_W := 500.0   # ancho de la columna del menú (logo, subtítulo y botones comparten eje)
+const FIT_MARGIN := 6.0  # aire mínimo arriba y abajo de la columna cuando no cabe holgada
 
 static var last_char := ""
 
@@ -66,7 +67,7 @@ func _ready() -> void:
 	var add := func(t: String, kind: String, fn: Callable) -> Button:
 		var b := UIK.button(t, kind, 19 if compact else 22)
 		if compact and kind.contains("big"):
-			b.add_theme_font_size_override("font_size", 26)
+			b.add_theme_font_size_override("font_size", UIK.ts(26))
 		if compact:
 			for st in ["normal", "hover", "pressed", "disabled", "focus"]:
 				var sb := b.get_theme_stylebox(st) as StyleBoxFlat
@@ -99,7 +100,9 @@ func _ready() -> void:
 	add.call("Cómo jugar", "", func(): Dlg.help())
 	add.call("Opciones", "", func(): Dlg.options())
 	add.call("Salir", "", func(): get_tree().quit())
+	var cred_bottom := 690.0   # pie de la firma de la musa (sube si hay aviso de Pesadilla debajo)
 	if Meta.nm_unlocked(ch) > 0:
+		cred_bottom = 662.0
 		var nml := UIK.label("Modo Pesadilla disponible (hasta nivel %d con %s)" % [Meta.nm_unlocked(ch), m.name], 16, Color("#caa5ff"), "bold")
 		nml.position = Vector2(COL_W + 86, 666)   # a la derecha del menú: deja libre la fila de abajo
 		add_child(nml)
@@ -113,6 +116,12 @@ func _ready() -> void:
 	cred.add_child(nm)
 	cred.add_child(rl)
 	add_child(cred)
+	# la firma se apoya en `cred_bottom` y crece hacia arriba: al 130 % el rol caía sobre el aviso de Pesadilla
+	var place_cred := func():
+		cred.size = Vector2(480, 0)
+		cred.position.y = cred_bottom - cred.get_combined_minimum_size().y
+	cred.minimum_size_changed.connect(place_cred)
+	place_cred.call_deferred()
 	var names := []
 	for c in chars:
 		names.append(DB.characters[c].name)
@@ -127,24 +136,46 @@ func _ready() -> void:
 	UIK.fade_in(self, 0.4)
 
 
-## Con muchas opciones (partida guardada, pesadilla, racha…) el menú puede pasar de 720 px: el logo es el que
-## cede, para que nunca se salga ni empuje los botones fuera de la pantalla.
+## Con muchas opciones (partida guardada, pesadilla, racha…) o con el texto al 115/130 % el menú puede pasar
+## de 720 px. Cede primero el logo (hasta 40), luego el aire entre botones y por último su relleno vertical,
+## para que nunca se salga ni empuje «Salir» fuera de la pantalla. Se compara con 720 fijo: la columna ya ha
+## crecido a su mínimo cuando esto corre, así que `col.size.y` no sirve de tope.
 func _fit_column() -> void:
 	var col: VBoxContainer = get_node_or_null("Menu") as VBoxContainer
 	if col == null:
 		return
+	var room := 720.0 - 2.0 * FIT_MARGIN
 	var logo: Label = null
+	var menu: VBoxContainer = null
 	for c in col.get_children():
 		if c is Label and c.has_meta("logo"):
 			logo = c
-	var over := col.size.y - col.get_combined_minimum_size().y
-	if over >= 0.0 or logo == null:
-		return
-	var fs := int(logo.get_theme_font_size("font_size"))
-	while fs > 40 and col.get_combined_minimum_size().y > col.size.y:
-		fs -= 2
-		logo.add_theme_font_size_override("font_size", fs)
+		elif c is VBoxContainer:
+			menu = c
+	var too_tall := func() -> bool:
 		col.update_minimum_size()
+		return col.get_combined_minimum_size().y > room
+	if logo != null:
+		var fs := int(logo.get_theme_font_size("font_size"))
+		while fs > 40 and too_tall.call():
+			fs -= 2
+			logo.add_theme_font_size_override("font_size", fs)
+	if menu != null and too_tall.call():
+		menu.add_theme_constant_override("separation", 2)
+		col.add_theme_constant_override("separation", 4)
+	if menu != null:
+		var pad := 7
+		while pad >= 2 and too_tall.call():
+			for b in menu.get_children():
+				for st in ["normal", "hover", "pressed", "disabled", "focus"]:
+					var sb := (b as Button).get_theme_stylebox(st) as StyleBoxFlat
+					if sb != null:
+						sb.content_margin_top = pad
+						sb.content_margin_bottom = pad
+				(b as Button).update_minimum_size()
+			pad -= 1
+	col.size = Vector2(COL_W, 720)   # vuelve a su alto de diseño (si creció, encoge a lo que pide)
+	col.position.y = 0.0
 
 
 ## Reto diario: confirma y arranca el de ese día (el calendario está en DailyScreen).

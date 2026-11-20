@@ -109,8 +109,19 @@ static func chrome(parent: Control, bg_key: String, title: String, sub: String) 
 	var tl := UIK.label(title, 34, UIK.GOLD, "title")
 	UIK.outlined(tl, 4)
 	hv.add_child(tl)
-	hv.add_child(UIK.label(sub, 17, UIK.DIM))
+	var sl := UIK.label(sub, 17, UIK.DIM)
+	hv.add_child(sl)
 	head.add_child(hv)
+	# título + subtítulo caben en los 70 px de la cabecera (lo de debajo, pestañas o lista, empieza en y≈88): al
+	# 115/130 % el que cede es el título, que es decorativo; el subtítulo conserva el tamaño elegido
+	var tf := tl.get_theme_font("font")
+	var sf := sl.get_theme_font("font")
+	var ss := sl.get_theme_font_size("font_size")
+	var fs := tl.get_theme_font_size("font_size")
+	while fs > 22 and tf.get_height(fs) + sf.get_height(ss) > head.size.y:
+		fs -= 1
+	if fs != tl.get_theme_font_size("font_size"):
+		tl.add_theme_font_size_override("font_size", fs)
 	return head
 
 

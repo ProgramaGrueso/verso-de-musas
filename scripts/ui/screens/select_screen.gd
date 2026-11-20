@@ -16,6 +16,21 @@ var _back: Button
 var _bottom_first: Control
 var _bottom_last: Control
 var _glow_rect: ColorRect
+var _av_row: HBoxContainer
+var _bot: HBoxContainer
+var _cb: CheckButton
+var _sd: Button
+var _seed_max := 14      # letras de la semilla que enseña el botón (baja si la fila no cabe)
+var _cb_fs := 0          # fuente de «Modo fácil» (0 = la de diseño escalada)
+var _sd_fs := 0          # fuente del botón de semilla (0 = la de diseño escalada)
+var _placing := false
+
+const AV_Y := 566.0     # fila de avatares (sube si la de abajo crece con el tamaño de texto)
+const NM_Y := 470.0     # bloque de Pesadilla (sube si no cabe sobre los avatares)
+const BOT_MARGIN := 8.0 # hueco entre la fila de botones y el borde inferior
+const BOT_W := 1200.0   # ancho de la fila inferior
+const PANEL_Y := 60.0   # ficha de la musa (sube hasta PANEL_MIN_Y si no cabe sobre la Pesadilla)
+const PANEL_MIN_Y := 30.0
 
 
 func _ready() -> void:
@@ -38,17 +53,17 @@ func _ready() -> void:
 	sh2.texture = UIK.grad_tex([[0.0, Color(0, 0, 0, 0)], [0.7, Color(0, 0, 0, 0)], [1.0, Color(0, 0, 0, 0.85)]])
 	add_child(sh2)
 	_panel = VBoxContainer.new()
-	_panel.position = Vector2(56, 60)
-	_panel.size = Vector2(560, 400)
+	_panel.position = Vector2(56, PANEL_Y)
+	_panel.size = Vector2(640, 400)   # 640 (antes 560): al 130 % la descripción ocupa una o dos líneas menos
 	_panel.add_theme_constant_override("separation", 6)
 	add_child(_panel)
 	_nm_box = VBoxContainer.new()
-	_nm_box.position = Vector2(56, 470)
+	_nm_box.position = Vector2(56, NM_Y)
 	_nm_box.size = Vector2(700, 100)
 	_nm_box.add_theme_constant_override("separation", 6)
 	add_child(_nm_box)
 	var av := HBoxContainer.new()
-	av.position = Vector2(0, 566)
+	av.position = Vector2(0, AV_Y)
 	av.size = Vector2(1280, 80)
 	av.alignment = BoxContainer.ALIGNMENT_CENTER
 	av.add_theme_constant_override("separation", 14)
@@ -80,11 +95,17 @@ func _ready() -> void:
 		UIK.tip(b, "[b][color=#f0cf7a]%s[/color][/b]" % m.name)
 		av.add_child(b)
 		_avatars[m.id] = b
+	_av_row = av
 	var bot := HBoxContainer.new()
 	bot.position = Vector2(40, 650)
 	bot.size = Vector2(1200, 62)
 	bot.add_theme_constant_override("separation", 20)
 	add_child(bot)
+	_bot = bot
+	# al 115/130 % «Comenzar» mide más de 62 px: la fila se apoya en el borde inferior y lo de encima sube
+	bot.resized.connect(_place_rows)
+	_nm_box.minimum_size_changed.connect(_place_rows.call_deferred)
+	_panel.minimum_size_changed.connect(_place_rows.call_deferred)
 	var back := UIK.button("← Volver")
 	back.pressed.connect(func(): Nav.title())
 	bot.add_child(back)
@@ -93,7 +114,6 @@ func _ready() -> void:
 	_mid.alignment = BoxContainer.ALIGNMENT_CENTER
 	_mid.add_theme_constant_override("separation", 14)
 	bot.add_child(_mid)
-	_fit_bottom.call_deferred()
 	_go = UIK.button("Comenzar", "big green")
 	_go.pressed.connect(_start)
 	bot.add_child(_go)
@@ -111,18 +131,60 @@ func _ready() -> void:
 	_back = back
 	_wire_bottom()
 	_avatars[pick].grab_focus.call_deferred()
+	_place_rows.call_deferred()
 
 
-## La fila inferior (Volver · ajustes · Comenzar) tiene que caber en 1200 px: si el texto de la semilla es largo,
-## esos botones bajan la fuente en vez de salirse o pisar «Comenzar».
-func _fit_bottom() -> void:
-	var bot: HBoxContainer = _back.get_parent()
-	if bot == null:
+## Coloca de abajo arriba: botones a BOT_MARGIN del borde, avatares encima y el bloque de Pesadilla encima de
+## los avatares (nunca más abajo de su sitio de diseño a 100 %).
+func _place_rows() -> void:
+	if _bot == null or _av_row == null or _placing:
 		return
-	for c in bot.get_children():
-		if c is Button:
-			UIK.fit_button(c)
-	bot.update_minimum_size()
+	_placing = true
+	_fit_bottom()
+	_bot.size = Vector2(BOT_W, 0.0)   # vuelve a su mínimo (al 130 % o con la semilla larga pudo crecer)
+	_placing = false
+	var bh := maxf(_bot.size.y, _bot.get_combined_minimum_size().y)
+	_bot.position.y = 720.0 - BOT_MARGIN - bh
+	_av_row.position.y = minf(AV_Y, _bot.position.y - _av_row.size.y)
+	var nh := _nm_box.get_combined_minimum_size().y
+	_nm_box.position.y = minf(NM_Y, _av_row.position.y - 2.0 - nh)
+	# la ficha de arriba (rol, nombre, PV, descripción, reliquia) termina antes del bloque de Pesadilla: sube
+	# hasta PANEL_MIN_Y y, si aún no cabe (al 130 % con las descripciones largas), cede el nombre decorativo
+	var limit := _nm_box.position.y - 6.0
+	var ph := _panel.get_combined_minimum_size().y
+	var nl := _panel.get_node_or_null("MuseName") as Label
+	if nl != null:
+		var fs := nl.get_theme_font_size("font_size")
+		while fs > 60 and PANEL_MIN_Y + ph > limit:
+			fs -= 4
+			nl.add_theme_font_size_override("font_size", fs)
+			ph = _panel.get_combined_minimum_size().y
+	_panel.position.y = clampf(limit - ph, PANEL_MIN_Y, PANEL_Y)
+	_panel.size.y = 0.0
+
+
+## La fila inferior (Volver · Modo fácil · Semilla · Comenzar) tiene que caber en 1200 px: con una semilla
+## larga o el texto al 130 % pedía hasta 1340 y «Comenzar» se salía por la derecha. Cede primero el texto de la
+## semilla (hasta 6 letras + «…»), luego la fuente de «Modo fácil» y la de la semilla (hasta 14).
+func _fit_bottom() -> void:
+	if _bot == null or _sd == null or not is_instance_valid(_sd) or not is_instance_valid(_cb):
+		return
+	var guard := 0
+	while _bot.get_combined_minimum_size().x > BOT_W and guard < 24:
+		guard += 1
+		if _seed_max > 6 and (seed_txt.length() > _seed_max):
+			_seed_max -= 2
+			_sd.text = _seed_label()
+		elif _cb.get_theme_font_size("font_size") > 14:
+			_cb_fs = _cb.get_theme_font_size("font_size") - 2
+			_cb.add_theme_font_size_override("font_size", _cb_fs)
+		elif _sd.get_theme_font_size("font_size") > 14:
+			_sd_fs = _sd.get_theme_font_size("font_size") - 2
+			_sd.set_meta("fit_base", _sd_fs)
+			_sd.add_theme_font_size_override("font_size", _sd_fs)
+		else:
+			break
+		_bot.update_minimum_size()
 
 
 func on_escape() -> void:
@@ -152,13 +214,16 @@ func _start() -> void:
 func _render(animate: bool) -> void:
 	var m: Dictionary = DB.characters[pick]
 	_bg.texture = UIK.tex("res://assets/ui/%s_select.webp" % pick)
-	for c in _panel.get_children():
+	for c in _panel.get_children():   # fuera ya del árbol: si no, la ficha vieja cuenta en el alto de la nueva
+		_panel.remove_child(c)
 		c.queue_free()
 	var glow := Color(m.glow)
 	if m.implemented:
 		var r: Dictionary = DB.relics[m.startRelic]
 		_panel.add_child(UIK.label(m.role, 20, UIK.GOLD))
 		var nm_l := UIK.label(m.name, 92, Color.WHITE, "title")
+		nm_l.name = "MuseName"
+		nm_l.add_theme_font_size_override("font_size", 92)   # rótulo decorativo: no crece con el tamaño de texto
 		nm_l.custom_minimum_size = Vector2(520, 0)
 		nm_l.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		nm_l.add_theme_color_override("font_shadow_color", Color(glow, 0.6))
@@ -176,16 +241,17 @@ func _render(animate: bool) -> void:
 		pc.add_theme_stylebox_override("panel", sb)
 		var d := UIK.rich(m.desc, 18, Color("#ece6ff"))
 		d.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		d.custom_minimum_size = Vector2(520, 0)
+		d.custom_minimum_size = Vector2(600, 0)
 		pc.add_child(d)
 		_panel.add_child(pc)
 		var rr := UIK.rich("%s [b][color=#f0cf7a]%s[/color][/b]: %s" % [Icons.bb("relic", m.startRelic, 30), r.n, r.d], 16, UIK.DIM)
 		rr.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		rr.custom_minimum_size = Vector2(520, 0)
+		rr.custom_minimum_size = Vector2(600, 0)
 		_panel.add_child(rr)
 	else:
 		_panel.add_child(UIK.label("Próximamente", 20, UIK.GOLD))
 		var nm2 := UIK.label(m.name, 92, Color.WHITE, "title")
+		nm2.add_theme_font_size_override("font_size", 92)
 		nm2.custom_minimum_size = Vector2(520, 0)
 		_panel.add_child(nm2)
 		_panel.add_child(UIK.label("Esta musa aún no está disponible.", 18, Color("#ece6ff")))
@@ -207,7 +273,9 @@ func _render(animate: bool) -> void:
 
 
 func _render_nm() -> void:
+	var had := _focused_text_in(_nm_box)   # ◀/▶ con el mando: el botón se rehace y el foco no se pierde
 	for c in _nm_box.get_children():
+		_nm_box.remove_child(c)
 		c.queue_free()
 	var m: Dictionary = DB.characters[pick]
 	if not m.implemented:
@@ -225,6 +293,12 @@ func _render_nm() -> void:
 		st.add_child(lab)
 		st.add_child(up)
 		_nm_box.add_child(st)
+		# ◀ ↔ ▶ (el rótulo de en medio no es enfocable: sin esto ◀ quedaba fuera del alcance del D-Pad) y ↓ a
+		# los avatares
+		dn.focus_neighbor_right = up.get_path()
+		up.focus_neighbor_left = dn.get_path()
+		for x in [dn, up]:
+			(x as Control).focus_neighbor_bottom = _avatars[pick].get_path()
 		var fx := ("[b]Nv.%d[/b] %s%s" % [nm, DB.nm_texts[nm], " [i](y los niveles anteriores)[/i]" if nm > 1 else ""]) if nm > 0 else "Nivel disponible para %s: hasta %d." % [m.name, nm_max]
 		var r := UIK.rich(fx, 17, Color("#ece6ff"))
 		r.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -235,50 +309,90 @@ func _render_nm() -> void:
 		no_nm.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		no_nm.custom_minimum_size = Vector2(640, 0)
 		_nm_box.add_child(no_nm)
+	_refocus_in(_nm_box, had)
 
 
 func _render_toggle() -> void:
+	var f := get_viewport().gui_get_focus_owner() if is_inside_tree() else null
+	var had_cb := f != null and f == _cb
+	var had_sd := f != null and f == _sd
 	for c in _mid.get_children():
+		_mid.remove_child(c)
 		c.queue_free()
 	var cb := CheckButton.new()
 	cb.text = "Modo fácil"
 	cb.button_pressed = easy and nm == 0
 	cb.disabled = nm > 0
 	cb.add_theme_font_override("font", UIK.font("bold"))
-	cb.add_theme_font_size_override("font_size", 20)
+	cb.add_theme_font_size_override("font_size", _cb_fs if _cb_fs > 0 else UIK.ts(20))
+	if cb.disabled:
+		cb.focus_mode = Control.FOCUS_NONE   # con Pesadilla no se puede activar: el mando no se para en él
 	cb.toggled.connect(func(p): easy = p; Meta.settings.easy = p; Meta.save_settings(); Sfx.play("select"))
 	UIK.tip(cb, "[b][color=#f0cf7a]Modo fácil[/color][/b]\nMás vida, enemigos más débiles y puedes deshacer la última carta jugada. No se combina con la Pesadilla.")
 	_mid.add_child(cb)
 	var sd := UIK.button(_seed_label(), "small")
 	sd.set_meta("fit_base", 16)
+	if _sd_fs > 0:   # la fila ya tuvo que encoger esta fuente: el botón nuevo nace igual
+		sd.set_meta("fit_base", _sd_fs)
+		sd.add_theme_font_size_override("font_size", _sd_fs)
 	sd.pressed.connect(func():
 		var t = await Dlg.text_input("Semilla", "Escribe un número o una palabra para repetir los mismos mapas (por ejemplo, la semilla de una partida de un amigo). Déjalo vacío para una partida aleatoria.", seed_txt, "aleatoria")
 		if t != null:
 			seed_txt = str(t).strip_edges()
-			_render_toggle())
+			_render_toggle()
+			_sd.grab_focus.call_deferred())   # el botón viejo (al que el diálogo devolvería el foco) ya no existe
 	UIK.tip(sd, "[b][color=#f0cf7a]Semilla[/color][/b]\nLa misma semilla genera los mismos mapas en los tres actos.")
 	_mid.add_child(sd)
-	_bottom_first = cb
+	_cb = cb
+	_sd = sd
+	_bottom_first = sd if cb.disabled else cb
 	_bottom_last = sd
 	_wire_bottom()
+	_place_rows.call_deferred()
+	if had_sd:
+		sd.grab_focus()
+	elif had_cb:
+		(cb if not cb.disabled else sd).grab_focus()
+
+
+## Texto del botón de `box` que tiene el foco (para recuperarlo tras rehacer `box`); "" si el foco está fuera.
+func _focused_text_in(box: Control) -> String:
+	var f := get_viewport().gui_get_focus_owner() if is_inside_tree() else null
+	return (f as Button).text if f is Button and box.is_ancestor_of(f) else ""
+
+
+func _refocus_in(box: Control, text: String) -> void:
+	if text == "":
+		return
+	for b in box.find_children("*", "Button", true, false):
+		if (b as Button).text == text and (b as Control).focus_mode != Control.FOCUS_NONE:
+			(b as Control).grab_focus()
+			return
 
 
 ## Texto del botón de semilla: una semilla escrita a mano puede ser larga; se recorta para que el botón siga
 ## siendo «small» y quepa junto a «Modo fácil» y «Comenzar».
 func _seed_label() -> String:
 	var s := seed_txt if seed_txt != "" else "aleatoria"
-	if s.length() > 14:
-		s = s.left(12) + "…"
+	if s.length() > _seed_max:
+		s = s.left(_seed_max - 2) + "…"
 	return "Semilla: " + s
 
 
-## Fila inferior para el mando: avatares ↓ ajustes ↔ Volver … Comenzar.
+## Fila inferior para el mando: avatares ↓ Volver ↔ Modo fácil ↔ Semilla ↔ Comenzar (en ese orden; antes
+## «Modo fácil» → derecha no tenía vecino y la búsqueda geométrica subía a los avatares: Semilla y Comenzar
+## no se alcanzaban). Con Pesadilla «Modo fácil» está apagado y se salta.
 func _wire_bottom() -> void:
 	if _back == null or _go == null or _bottom_first == null:
 		return
 	_back.focus_neighbor_right = _bottom_first.get_path()
 	_bottom_first.focus_neighbor_left = _back.get_path()
+	if _bottom_first != _bottom_last:
+		_bottom_first.focus_neighbor_right = _bottom_last.get_path()
+		_bottom_last.focus_neighbor_left = _bottom_first.get_path()
 	_bottom_last.focus_neighbor_right = _go.get_path()
 	_go.focus_neighbor_left = _bottom_last.get_path()
+	for b in [_back, _bottom_first, _bottom_last, _go]:
+		(b as Control).focus_neighbor_top = _avatars[pick].get_path()
 	for b in _avatars.values():
 		(b as Button).focus_neighbor_bottom = _bottom_first.get_path()

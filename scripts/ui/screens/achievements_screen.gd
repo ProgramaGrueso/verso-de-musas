@@ -168,16 +168,22 @@ func _muse_card(c: String) -> Control:
 	var ic := Medal.disc("muse:" + c, 54, true, glow)
 	ic.position = Vector2(14, 14)
 	card.add_child(ic)
+	# bloque de texto apoyado en el borde inferior: al 115/130 % crece hacia arriba (sobre el arte) en vez de
+	# salirse por abajo del panel, que recorta
 	var v := VBoxContainer.new()
-	v.position = Vector2(18, 128)
-	v.size = Vector2(356, 124)
+	v.anchor_left = 0.0; v.anchor_right = 1.0; v.anchor_top = 1.0; v.anchor_bottom = 1.0
+	v.offset_left = 18; v.offset_right = -16; v.offset_top = -134; v.offset_bottom = -10
+	v.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	v.alignment = BoxContainer.ALIGNMENT_END
 	v.add_theme_constant_override("separation", 2)
 	card.add_child(v)
 	var nl := UIK.label(m.name, 28, Color.WHITE, "bold")
 	UIK.outlined(nl, 5)
+	UIK.fit_title(nl, 350, 18)
 	v.add_child(nl)
 	var rl := UIK.label(Progress.rank_name(r) if r >= 0 else "Sin rango todavía", 20, Progress.rank_color(r), "title")
 	UIK.outlined(rl, 4)
+	UIK.fit_title(rl, 350, 14)
 	v.add_child(rl)
 	var pips := HBoxContainer.new()
 	pips.add_theme_constant_override("separation", 6)
@@ -197,6 +203,8 @@ func _muse_card(c: String) -> Control:
 		t += " · rango máximo"
 	var tl := UIK.label(t, 15, Color("#e4dcf5"))
 	UIK.outlined(tl, 3)
+	tl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART   # «… · faltan N para <rango>» pasa de 356 px al 130 %
+	tl.custom_minimum_size = Vector2(350, 0)
 	v.add_child(tl)
 	return card
 
