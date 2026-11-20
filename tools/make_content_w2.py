@@ -133,6 +133,30 @@ ART_COPIES = {"spectralbosun": "ghostpirate", "rootwarden": "dryad", "royalbeetl
 # Ajustes que solo se aplican con DB.extra = true (el juego con la Oleada 2). Las trazas de paridad
 # usan DB.extra = false, así que la referencia del web sigue intacta. Las claves de "enemies" se mezclan
 # recursivamente sobre el enemigo original: hp, moves, ai, etc.
+# ---- Escalera de dificultad: base endurecido + 10 pasos acumulativos (ver BALANCE["nm"]) ----
+NM_BASE = {"hp": 1.04, "dmg": 1.05, "gold": 1.0, "rest": 0.3, "wound": 0, "doubt": False,
+           "eliteStr": 0, "bossStr": 0, "allStr": 0, "eliteHp": 1.10, "bossHp": 1.0, "eliteBlock": 0,
+           "bossBlock": 0, "plHp": 1.0, "pots": 3}
+# (cambios sobre el nivel anterior, texto ES). Los textos dicen el valor final acumulado.
+NM_STEPS = [
+    ({"dmg": 1.08}, "Los enemigos infligen un 3% más de daño."),
+    ({"hp": 1.05, "gold": 0.85}, "Los enemigos tienen un 1% más de PV y ganas un 15% menos de oro."),
+    ({"eliteStr": 1, "eliteBlock": 6}, "Los élites empiezan con 1 de Fuerza y 6 de Bloqueo."),
+    ({"dmg": 1.10}, "Los enemigos infligen otro 2% más de daño."),
+    ({"hp": 1.075, "pots": 2}, "Los enemigos tienen otro 2% más de PV y solo tienes 2 ranuras de poción."),
+    ({"wound": 1}, "Cada combate empieza con una Herida en tu mazo."),
+    ({"dmg": 1.11, "rest": 0.22}, "Los enemigos infligen otro 1% más de daño y la hoguera cura solo un 22% de tu vida."),
+    ({"hp": 1.085, "doubt": True}, "Los enemigos tienen un 1% más de PV y empiezas cada partida con la maldición Duda."),
+    ({"bossStr": 1, "bossBlock": 4}, "Los jefes empiezan con 1 de Fuerza y 4 de Bloqueo."),
+    ({"plHp": 0.98, "eliteStr": 2, "pots": 1}, "Tus PV máx. bajan un 2%, solo tienes 1 ranura de poción y los élites empiezan con 2 de Fuerza."),
+]
+NM_ROWS = []
+_cur = dict(NM_BASE)
+for _ch, _tx in NM_STEPS:
+    _cur = {**_cur, **_ch}
+    NM_ROWS.append(dict(_cur))
+NM_TEXTS = [""] + [t for _, t in NM_STEPS]
+
 BALANCE = {
     "osty_revives": 1,   # Osty tiene una sola segunda vida por combate (antes revivía cada turno)
     "enemies": {
@@ -187,35 +211,14 @@ BALANCE = {
         "pozo": {"hp": 18, "d": "Aumenta tus PV máx. en 18 y te curas por completo."},
         "nucleo": {"wounds": 2, "d": "+1 de Energía por turno. Empiezas cada combate con 2 Heridas en tu mazo."},
     },
-    # Escalera de Pesadilla (10 niveles, el techo del juego). Cada fila es el estado acumulado de ese
-    # nivel: una sola variable nueva por escalón y pasos pequeños, para que no haya muros. La versión
-    # anterior metía +10% PV en el 1, +10% daño en el 2 y +2 Fuerza en el 5: 30 de los 36 puntos de la
-    # curva caían en tres niveles y el 4 y el 6 no hacían nada. Se mide con `balance.gd -- 100 sweep`.
-    "nm": [
-        {"hp": 1.0,  "dmg": 1.03, "gold": 1.0,  "rest": 0.3,  "wound": False, "doubt": False, "eliteStr": 0, "bossStr": 0, "allStr": 0},
-        {"hp": 1.0,  "dmg": 1.03, "gold": 0.85, "rest": 0.3,  "wound": False, "doubt": False, "eliteStr": 0, "bossStr": 0, "allStr": 0},
-        {"hp": 1.03, "dmg": 1.03, "gold": 0.85, "rest": 0.3,  "wound": False, "doubt": False, "eliteStr": 0, "bossStr": 0, "allStr": 0},
-        {"hp": 1.03, "dmg": 1.03, "gold": 0.85, "rest": 0.25, "wound": False, "doubt": False, "eliteStr": 0, "bossStr": 0, "allStr": 0},
-        {"hp": 1.03, "dmg": 1.06, "gold": 0.85, "rest": 0.25, "wound": False, "doubt": False, "eliteStr": 0, "bossStr": 0, "allStr": 0},
-        {"hp": 1.03, "dmg": 1.06, "gold": 0.85, "rest": 0.25, "wound": True,  "doubt": False, "eliteStr": 0, "bossStr": 0, "allStr": 0},
-        {"hp": 1.06, "dmg": 1.06, "gold": 0.85, "rest": 0.25, "wound": True,  "doubt": False, "eliteStr": 0, "bossStr": 0, "allStr": 0},
-        {"hp": 1.06, "dmg": 1.06, "gold": 0.85, "rest": 0.25, "wound": True,  "doubt": True,  "eliteStr": 0, "bossStr": 0, "allStr": 0},
-        {"hp": 1.06, "dmg": 1.06, "gold": 0.85, "rest": 0.25, "wound": True,  "doubt": True,  "eliteStr": 1, "bossStr": 0, "allStr": 0},
-        {"hp": 1.06, "dmg": 1.06, "gold": 0.85, "rest": 0.25, "wound": True,  "doubt": True,  "eliteStr": 1, "bossStr": 1, "allStr": 0},
-    ],
-    "nm_texts": [
-        "",
-        "Los enemigos infligen +3% de daño.",
-        "Ganas un 15% menos de oro.",
-        "Los enemigos tienen +3% de PV.",
-        "La hoguera cura solo un 25% de tu vida.",
-        "Los enemigos infligen +6% de daño (en total).",
-        "Cada combate empieza con una Herida en tu mazo.",
-        "Los enemigos tienen +6% de PV (en total).",
-        "Empiezas cada partida con la maldición Duda.",
-        "Los élites empiezan con +1 de Fuerza.",
-        "Los jefes empiezan con +1 de Fuerza.",
-    ],
+    # Escalera de Pesadilla (10 niveles, el techo del juego) sobre un base ya endurecido (nm_base).
+    # Juan jugó el normal y le pareció un paseo; los pasos de +3 % eran invisibles. Ahora cada fila
+    # (estado acumulado) trae un cambio que se nota: más daño/PV en cada tramo y un mod con carácter
+    # (élites con Fuerza y bloqueo, hoguera débil, Herida, Duda, ranuras de poción, PV máx.).
+    # Se mide con `balance.gd -- N sweep`; la calibración final es a mano.
+    "nm_base": NM_BASE,
+    "nm": NM_ROWS,
+    "nm_texts": NM_TEXTS,
 }
 
 # Fase 4 · Jefes con fases (solo DB.extra): al bajar de «at»% de PV el jefe entra en fase 2 una sola vez,

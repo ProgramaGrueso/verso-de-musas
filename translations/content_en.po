@@ -3056,7 +3056,6 @@ msgid "Los enemigos infligen +10% de daño."
 msgstr "Enemies deal +10% damage."
 
 #: data/lore.json nm/3
-#: data/balance_w2.json nm_texts/8
 msgid "Empiezas cada partida con la maldición Duda."
 msgstr "Start every run with the Doubt curse."
 
@@ -3090,36 +3089,40 @@ msgid "Los enemigos normales llegan con +1 de Fuerza y los jefes con +4."
 msgstr "Normal enemies arrive with +1 Strength, and bosses with +4."
 
 #: data/balance_w2.json nm_texts/1
-msgid "Los enemigos infligen +3% de daño."
-msgstr "Enemies deal +3% damage."
+msgid "Los enemigos infligen un 3% más de daño."
+msgstr "Enemies deal 3% more damage."
 
 #: data/balance_w2.json nm_texts/2
-msgid "Ganas un 15% menos de oro."
-msgstr "Gain 15% less gold."
+msgid "Los enemigos tienen un 1% más de PV y ganas un 15% menos de oro."
+msgstr "Enemies have 1% more HP and you earn 15% less gold."
 
 #: data/balance_w2.json nm_texts/3
-msgid "Los enemigos tienen +3% de PV."
-msgstr "Enemies have +3% HP."
+msgid "Los élites empiezan con 1 de Fuerza y 6 de Bloqueo."
+msgstr "Elites start with 1 Strength and 6 Block."
 
 #: data/balance_w2.json nm_texts/4
-msgid "La hoguera cura solo un 25% de tu vida."
-msgstr "Campfires heal only 25% of your health."
+msgid "Los enemigos infligen otro 2% más de daño."
+msgstr "Enemies deal another 2% more damage."
 
 #: data/balance_w2.json nm_texts/5
-msgid "Los enemigos infligen +6% de daño (en total)."
-msgstr "Enemies deal +6% damage (in total)."
+msgid "Los enemigos tienen otro 2% más de PV y solo tienes 2 ranuras de poción."
+msgstr "Enemies have another 2% more HP and you only have 2 potion slots."
 
 #: data/balance_w2.json nm_texts/7
-msgid "Los enemigos tienen +6% de PV (en total)."
-msgstr "Enemies have +6% HP (in total)."
+msgid "Los enemigos infligen otro 1% más de daño y la hoguera cura solo un 22% de tu vida."
+msgstr "Enemies deal another 1% more damage and the campfire heals only 22% of your HP."
+
+#: data/balance_w2.json nm_texts/8
+msgid "Los enemigos tienen un 1% más de PV y empiezas cada partida con la maldición Duda."
+msgstr "Enemies have 1% more HP and you start every run with the Doubt curse."
 
 #: data/balance_w2.json nm_texts/9
-msgid "Los élites empiezan con +1 de Fuerza."
-msgstr "Elites start with +1 Strength."
+msgid "Los jefes empiezan con 1 de Fuerza y 4 de Bloqueo."
+msgstr "Bosses start with 1 Strength and 4 Block."
 
 #: data/balance_w2.json nm_texts/10
-msgid "Los jefes empiezan con +1 de Fuerza."
-msgstr "Bosses start with +1 Strength."
+msgid "Tus PV máx. bajan un 2%, solo tienes 1 ranura de poción y los élites empiezan con 2 de Fuerza."
+msgstr "Your max HP drops by 2%, you only have 1 potion slot and elites start with 2 Strength."
 
 #: data/lore.json ending/scenes/0/text
 msgid "La Reina Hambrienta cayó, y su corona se deshizo en miles de abejas de luz. Por primera vez en siglos, la Aguja guardó silencio."
@@ -4192,31 +4195,31 @@ msgstr "+2 Strength in every combat, but you have 25 less Max HP."
 msgid "Tus ataques infligen {n} de daño extra."
 msgstr "Your attacks deal {n} extra damage."
 
-#: scripts/engine/eng.gd:361
+#: scripts/engine/eng.gd:375
 msgid "Osty +{n} PV máx."
 msgstr "Osty +{n} Max HP"
 
-#: scripts/engine/eng.gd:363
+#: scripts/engine/eng.gd:377
 msgid "Osty +{n} de Poder"
 msgstr "Osty +{n} Power"
 
-#: scripts/engine/eng.gd:365
+#: scripts/engine/eng.gd:379
 msgid "+{n} de {st}"
 msgstr "+{n} {st}"
 
-#: scripts/engine/eng.gd:586
+#: scripts/engine/eng.gd:600
 msgid "¡Aturdido!"
 msgstr "Stunned!"
 
-#: scripts/engine/eng.gd:972
+#: scripts/engine/eng.gd:996
 msgid "No puedes jugar ahora."
 msgstr "You can't play right now."
 
-#: scripts/engine/eng.gd:975
+#: scripts/engine/eng.gd:999
 msgid "Esta carta no se puede jugar."
 msgstr "This card can't be played."
 
-#: scripts/engine/eng.gd:977
+#: scripts/engine/eng.gd:1001
 msgid "No tienes suficiente energía."
 msgstr "Not enough energy."
 
@@ -5491,3 +5494,27 @@ msgstr "Skill"
 #: scripts/ui/card_text.gd:9
 msgid "Estado"
 msgstr "Status"
+
+#~ msgid "Los enemigos infligen +3% de daño."
+#~ msgstr "Enemies deal +3% damage."
+
+#~ msgid "Ganas un 15% menos de oro."
+#~ msgstr "Gain 15% less gold."
+
+#~ msgid "Los enemigos tienen +3% de PV."
+#~ msgstr "Enemies have +3% HP."
+
+#~ msgid "La hoguera cura solo un 25% de tu vida."
+#~ msgstr "Campfires heal only 25% of your health."
+
+#~ msgid "Los enemigos infligen +6% de daño (en total)."
+#~ msgstr "Enemies deal +6% damage (in total)."
+
+#~ msgid "Los enemigos tienen +6% de PV (en total)."
+#~ msgstr "Enemies have +6% HP (in total)."
+
+#~ msgid "Los élites empiezan con +1 de Fuerza."
+#~ msgstr "Elites start with +1 Strength."
+
+#~ msgid "Los jefes empiezan con +1 de Fuerza."
+#~ msgstr "Bosses start with +1 Strength."

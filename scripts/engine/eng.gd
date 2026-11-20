@@ -194,6 +194,8 @@ static func preview_dmg(C, d: Dictionary, target) -> int:
 static func nm_mods(n: int) -> Dictionary:
 	if DB.extra:
 		var t: Array = DB.bal.get("nm", [])
+		if n == 0 and DB.bal.has("nm_base"):
+			return DB.bal.nm_base   # el juego base ya no es un paseo (solo con la Oleada 2)
 		if n >= 1 and n <= t.size():
 			return t[n - 1]
 	return {
@@ -267,6 +269,13 @@ static func new_run(char: String, opts: Dictionary = {}) -> Dictionary:
 	G.rs = seed_v
 	G.easy = G.easy and G.nm == 0
 	G.maxHp = DB.characters[char].hp + (25 if G.easy else 0)
+	if DB.extra:
+		var m0 := nmods(G)
+		G.maxHp = floori(G.maxHp * m0.get("plHp", 1.0) + 0.5)
+		var ps: int = m0.get("pots", 3)
+		G.potions = []
+		for _i in ps:
+			G.potions.append(null)
 	G.hp = G.maxHp
 	for id in DB.starters[char]:
 		G.deck.append(make_card(G, id))
@@ -286,9 +295,12 @@ static func new_run(char: String, opts: Dictionary = {}) -> Dictionary:
 static func spawn_enemy(C, id: String) -> Dictionary:
 	var def: Dictionary = DB.enemies[id]
 	var G = C.G
-	var hp: int = floori(rint(G, def.hp[0], def.hp[1]) * nmods(G).hp + 0.5)
+	var m := nmods(G)
+	var hpm: float = m.hp * (m.get("eliteHp", 1.0) if def.tier == "elite" else (m.get("bossHp", 1.0) if def.tier == "boss" else 1.0))
+	var hp: int = floori(rint(G, def.hp[0], def.hp[1]) * hpm + 0.5)
 	G.uid += 1
-	var e := {"uid": G.uid, "id": id, "def": def, "name": def.name, "hp": hp, "maxHp": hp, "block": def.get("startBlock", 0),
+	var sb: int = def.get("startBlock", 0) + (m.get("eliteBlock", 0) if def.tier == "elite" else (m.get("bossBlock", 0) if def.tier == "boss" else 0))
+	var e := {"uid": G.uid, "id": id, "def": def, "name": def.name, "hp": hp, "maxHp": hp, "block": sb,
 		"status": {}, "turn": 0, "hist": [], "intent": null, "moveKey": null}
 	if DB.extra and def.get("shellCap", 0):
 		e.status["carapace"] = int(def.shellCap)
@@ -304,7 +316,7 @@ static func start_combat(G, ids: Array, opts: Dictionary = {}) -> Dictionary:
 	for id in ids:
 		C.enemies.append(spawn_enemy(C, id))
 	_sync_root_shields(C)
-	if G.nm:
+	if G.nm or DB.extra:
 		var m := nmods(G)
 		for e in C.enemies:
 			var st_: int = (m.bossStr if e.def.tier == "boss" else (m.eliteStr if e.def.tier == "elite" else 0)) + m.allStr
@@ -328,8 +340,8 @@ static func start_combat(G, ids: Array, opts: Dictionary = {}) -> Dictionary:
 	relic_hook(C, "onCombatStart")
 	Favors.on_combat_start(C)
 	apply_perm(C)
-	if G.nm and nmods(G).wound:
-		add_cards(C, "wound", 1, "draw")
+	if (G.nm or DB.extra) and nmods(G).wound:
+		add_cards(C, "wound", int(nmods(G).wound), "draw")
 	for e in C.enemies:
 		choose_intent(C, e)
 	start_turn(C)
@@ -751,7 +763,7 @@ static func intent_damage(C, e) -> int:
 	var d := calc_damage(it.dmg - (glow_cut(get_s(e, "glow")) if get_s(e, "glow") else 0), e.status, C.pl.status)
 	if C.G.easy:
 		d = maxi(1, floori(d * 0.8))
-	elif C.G.nm:
+	elif C.G.nm or DB.extra:
 		d = maxi(1, floori(d * nmods(C.G).dmg + 0.5))
 	return d
 

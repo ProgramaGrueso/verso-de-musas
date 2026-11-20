@@ -74,3 +74,13 @@ tools/build_linux.sh [release|debug]
 - **Carta de Irene de coste 3 con «texto basura»** que Juan vio jugando: no reproducida; Obra Maestra, Perpetuum Mobile y Autómata Colosal generan texto correcto en ES/EN. Falta nombre/captura/idioma.
 - **Hecho hoy:** perfil real reiniciado (copia en ~/automation/backups/verso-perfil-2026-11-20), plantillas Linux instaladas, precio decidido (10 USD, 5 USD el primer mes).
 
+
+## Balance: escalera de dificultad (2026-11-20)
+Juan jugó el normal y lo sintió en ~10/100. Solo con `DB.extra` (trazas intactas). Generador: `tools/make_content_w2.py` (`NM_BASE`, `NM_STEPS`, textos en `NM_TEXTS`).
+- **Base (nm0) endurecido**: `nm_base` en balance_w2.json (`nm_mods(0)` lo devuelve con extra): PV enemigos x1.04, daño x1.05, élites +10 % PV. Bots: 41 % -> ~24 % global; todas las musas con algún arquetipo >= 20 %.
+- **Escalera nm1..nm10** (acumulativa, 1-3 cambios por paso): daño/PV enemigos, oro -15 %, élites con Fuerza y Bloqueo inicial, 2 ranuras de poción, Herida por combate, hoguera 22 %, Duda, jefes con Fuerza y Bloqueo, PV máx. -2 %, 1 ranura de poción, élites Fuerza 2.
+- Claves nuevas en `eng.gd` (`nm_mods`): `eliteHp`, `bossHp`, `eliteBlock`, `bossBlock`, `plHp`, `pots`, `wound` ahora es un número de Heridas.
+- Simulador paralelo (bots, N=400/musa): 24 -> 20 -> 17 -> 13 -> 11 -> 9,6 -> 7 -> 4,6 -> 3,2 -> 2 -> 1 %. Con 11 niveles x 6 musas, `godot --headless ... balance.gd -- N <nivel> <musa> <semilla>` en paralelo tarda ~1 min por N=300.
+- **La calibración final depende de que Juan pruebe a mano** (un humano gana mucho más que el bot). Si aún es fácil, subir `NM_BASE` (hp/dmg) o eliteStr/bossStr y regenerar.
+- UI pendiente (no tocada): el selector de Pesadilla (`select_screen.gd:302`) muestra `DB.nm_texts[nm]` y «(y los niveles anteriores)»; con 1 ranura de poción y PV máx. menores conviene comprobar a mano la barra de pociones.
+- `tests/nm_test.gd` ahora admite 1-3 cambios por paso y comprueba las claves nuevas.
