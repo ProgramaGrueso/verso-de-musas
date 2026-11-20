@@ -1,0 +1,5493 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Verso de Musas (contenido)\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: data/cards.json cards/zafiro_strike/name
+#: data/cards.json cards/lia_strike/name
+msgid "Tajo"
+msgstr "Slash"
+
+#: data/cards.json cards/zafiro_defend/name
+#: data/cards.json cards/lia_defend/name
+#: data/cards.json cards/claudia_defend/name
+#: data/enemies.json enemies/royalguard/moves/guard/name
+msgid "Guardia"
+msgstr "Guard"
+
+#: data/cards.json cards/zafiro_bash/name
+msgid "Golpe Carmesí"
+msgstr "Crimson Strike"
+
+#: data/cards.json cards/zafiro_twin/name
+msgid "Tajo Doble"
+msgstr "Double Slash"
+
+#: data/cards.json cards/zafiro_cleave/name
+msgid "Hoja Giratoria"
+msgstr "Whirling Blade"
+
+#: data/cards.json cards/zafiro_slam/name
+msgid "Embate de Escudo"
+msgstr "Shield Bash"
+
+#: data/cards.json cards/zafiro_flex/name
+msgid "Temple"
+msgstr "Temper"
+
+#: data/cards.json cards/zafiro_pommel/name
+msgid "Cabezazo"
+msgstr "Headbutt"
+
+#: data/cards.json cards/zafiro_clothes/name
+msgid "Tajada Brutal"
+msgstr "Brutal Cleave"
+
+#: data/cards.json cards/zafiro_shrug/name
+msgid "Coraza Ardiente"
+msgstr "Blazing Plate"
+
+#: data/cards.json cards/zafiro_blood/name
+msgid "Sangre por Fuego"
+msgstr "Blood for Fire"
+
+#: data/cards.json cards/zafiro_flamebarrier/name
+msgid "Cresta Ardiente"
+msgstr "Burning Crest"
+
+#: data/cards.json cards/zafiro_heavy/name
+msgid "Mandoble"
+msgstr "Greatsword"
+
+#: data/cards.json cards/zafiro_inflame/name
+msgid "Brasa Viva"
+msgstr "Living Ember"
+
+#: data/cards.json cards/zafiro_combust/name
+#: data/states.json st/combust/n
+msgid "Hierro Candente"
+msgstr "Red-Hot Iron"
+
+#: data/cards.json cards/zafiro_metal/name
+#: data/states.json st/metallicize/n
+msgid "Metalizar"
+msgstr "Metallicize"
+
+#: data/cards.json cards/zafiro_whirl/name
+msgid "Ira Divina"
+msgstr "Divine Wrath"
+
+#: data/cards.json cards/zafiro_offering/name
+msgid "Ofrenda"
+msgstr "Offering"
+
+#: data/cards.json cards/zafiro_uppercut/name
+msgid "Gancho"
+msgstr "Hook"
+
+#: data/cards.json cards/zafiro_entrench/name
+msgid "Fortificar"
+msgstr "Fortify"
+
+#: data/cards.json cards/zafiro_carnage/name
+msgid "Carnicería"
+msgstr "Carnage"
+
+#: data/cards.json cards/zafiro_demon/name
+#: data/states.json st/demon/n
+msgid "Forma Demoníaca"
+msgstr "Demon Form"
+
+#: data/cards.json cards/zafiro_barricade/name
+#: data/states.json st/barricade/n
+msgid "Barricada"
+msgstr "Barricade"
+
+#: data/cards.json cards/zafiro_limit/name
+msgid "Juicio Final"
+msgstr "Final Judgment"
+
+#: data/cards.json cards/zafiro_reaper/name
+msgid "Ímpetu"
+msgstr "Momentum"
+
+#: data/cards.json cards/zafiro_bludgeon/name
+msgid "Impacto Brutal"
+msgstr "Brutal Impact"
+
+#: data/cards.json cards/zafiro_immolate/name
+msgid "Inmolar"
+msgstr "Immolate"
+
+#: data/cards.json cards/lia_neutralize/name
+msgid "Neutralizar"
+msgstr "Neutralize"
+
+#: data/cards.json cards/lia_survivor/name
+msgid "Sobrevivir"
+msgstr "Survive"
+
+#: data/cards.json cards/lia_shiv/name
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:159
+#: scripts/ui/card_text.gd:161
+msgid "Cuchilla"
+msgstr "Shiv"
+
+#: data/cards.json cards/lia_blade/name
+msgid "Danza de Cuchillas"
+msgstr "Blade Dance"
+
+#: data/cards.json cards/lia_poison/name
+msgid "Puñalada Venenosa"
+msgstr "Poisoned Stab"
+
+#: data/cards.json cards/lia_quick/name
+msgid "Tajo Veloz"
+msgstr "Quick Slash"
+
+#: data/cards.json cards/lia_sucker/name
+msgid "Golpe Bajo"
+msgstr "Low Blow"
+
+#: data/cards.json cards/lia_back/name
+msgid "Voltereta"
+msgstr "Somersault"
+
+#: data/cards.json cards/lia_spray/name
+msgid "Lluvia de Dagas"
+msgstr "Dagger Rain"
+
+#: data/cards.json cards/lia_dash/name
+msgid "Estocada Evasiva"
+msgstr "Evasive Thrust"
+
+#: data/cards.json cards/lia_acro/name
+msgid "Acrobacia"
+msgstr "Acrobatics"
+
+#: data/cards.json cards/lia_prepare/name
+msgid "Preparar"
+msgstr "Prepare"
+
+#: data/cards.json cards/lia_noxious/name
+#: data/enemies.json enemies/sporecap/moves/cloud/name
+#: data/states.json st/noxious/n
+msgid "Nube Tóxica"
+msgstr "Toxic Cloud"
+
+#: data/cards.json cards/lia_catalyst/name
+msgid "Catalizador"
+msgstr "Catalyst"
+
+#: data/cards.json cards/lia_accuracy/name
+#: data/states.json st/accuracy/n
+msgid "Precisión"
+msgstr "Accuracy"
+
+#: data/cards.json cards/lia_eviscerate/name
+msgid "Eviscerar"
+msgstr "Eviscerate"
+
+#: data/cards.json cards/lia_corrosive/name
+msgid "Ola Corrosiva"
+msgstr "Corrosive Wave"
+
+#: data/cards.json cards/lia_footwork/name
+msgid "Pasos de Danza"
+msgstr "Dance Steps"
+
+#: data/cards.json cards/lia_adrenaline/name
+msgid "Adrenalina"
+msgstr "Adrenaline"
+
+#: data/cards.json cards/lia_backstab/name
+msgid "Puñalada Trasera"
+msgstr "Backstab"
+
+#: data/cards.json cards/lia_storm/name
+msgid "Tormenta de Acero"
+msgstr "Storm of Steel"
+
+#: data/cards.json cards/lia_bane/name
+msgid "Perdición"
+msgstr "Doom"
+
+#: data/cards.json cards/lia_cuts/name
+#: data/states.json st/cuts/n
+msgid "Mil Cortes"
+msgstr "A Thousand Cuts"
+
+#: data/cards.json cards/lia_diedie/name
+msgid "Corte Mortal"
+msgstr "Deadly Cut"
+
+#: data/cards.json cards/lia_tox/name
+msgid "Veneno Letal"
+msgstr "Lethal Poison"
+
+#: data/cards.json cards/claudia_strike/name
+#: data/enemies.json enemies/sporecap/moves/hit/name
+#: data/enemies.json enemies/treant/moves/slam/name
+#: data/enemies.json enemies/hivemind/moves/strike/name
+msgid "Golpe"
+msgstr "Strike"
+
+#: data/cards.json cards/claudia_osty/name
+msgid "Osty, ¡Ataca!"
+msgstr "Osty, Attack!"
+
+#: data/cards.json cards/claudia_bone/name
+msgid "Muro de Huesos"
+msgstr "Bone Wall"
+
+#: data/cards.json cards/claudia_double/name
+msgid "Zarpazo Doble"
+msgstr "Double Swipe"
+
+#: data/cards.json cards/claudia_wail/name
+#: data/enemies_extra.json enemies/sirena/moves/lamento/name
+msgid "Lamento"
+msgstr "Lament"
+
+#: data/cards.json cards/claudia_touch/name
+msgid "Toque Gélido"
+msgstr "Chilling Touch"
+
+#: data/cards.json cards/claudia_pact/name
+msgid "Pacto Oscuro"
+msgstr "Dark Pact"
+
+#: data/cards.json cards/claudia_siphon/name
+msgid "Drenar"
+msgstr "Drain"
+
+#: data/cards.json cards/claudia_shade/name
+msgid "Sombra Gélida"
+msgstr "Frost Shade"
+
+#: data/cards.json cards/claudia_omen/name
+msgid "Presagio"
+msgstr "Omen"
+
+#: data/cards.json cards/claudia_hand/name
+msgid "Mano Cadavérica"
+msgstr "Corpse Hand"
+
+#: data/cards.json cards/claudia_legion/name
+msgid "Legión de Huesos"
+msgstr "Bone Legion"
+
+#: data/cards.json cards/claudia_might/name
+msgid "Poder de Osty"
+msgstr "Osty's Might"
+
+#: data/cards.json cards/claudia_dance/name
+#: data/states.json st/boneDance/n
+msgid "Danza Macabra"
+msgstr "Danse Macabre"
+
+#: data/cards.json cards/claudia_harvest/name
+msgid "Cosecha de Almas"
+msgstr "Soul Harvest"
+
+#: data/cards.json cards/claudia_pyre/name
+msgid "Pira Espectral"
+msgstr "Spectral Pyre"
+
+#: data/cards.json cards/claudia_gaze/name
+msgid "Mirada Sepulcral"
+msgstr "Grave Gaze"
+
+#: data/cards.json cards/claudia_charge/name
+msgid "Embestida de Osty"
+msgstr "Osty's Charge"
+
+#: data/cards.json cards/claudia_embrace/name
+#: data/states.json st/darkEmbrace/n
+msgid "Abrazo Oscuro"
+msgstr "Dark Embrace"
+
+#: data/cards.json cards/claudia_reviv/name
+msgid "Resurrección"
+msgstr "Resurrection"
+
+#: data/cards.json cards/claudia_army/name
+#: data/states.json st/ostyCleave/n
+msgid "Ejército de Sombras"
+msgstr "Army of Shadows"
+
+#: data/cards.json cards/claudia_necro/name
+#: data/states.json st/ostyRegen/n
+msgid "Nigromancia"
+msgstr "Necromancy"
+
+#: data/cards.json cards/claudia_abyss/name
+msgid "Llamado del Abismo"
+msgstr "Call of the Abyss"
+
+#: data/cards.json cards/claudia_coven/name
+msgid "Aquelarre"
+msgstr "Coven"
+
+#: data/cards.json cards/claudia_moon/name
+#: data/relics_extra.json relics/luna_violeta/n
+msgid "Luna Violeta"
+msgstr "Violet Moon"
+
+#: data/cards.json cards/aurora_strike/name
+msgid "Abanico Solar"
+msgstr "Solar Fan"
+
+#: data/cards.json cards/aurora_defend/name
+msgid "Velo de Luz"
+msgstr "Veil of Light"
+
+#: data/cards.json cards/aurora_flare/name
+msgid "Destello Radiante"
+msgstr "Radiant Flash"
+
+#: data/cards.json cards/aurora_step/name
+msgid "Paso de Danza"
+msgstr "Dance Step"
+
+#: data/cards.json cards/aurora_whirl/name
+msgid "Giro de Espejos"
+msgstr "Mirror Spin"
+
+#: data/cards.json cards/aurora_refract/name
+msgid "Refracción"
+msgstr "Refraction"
+
+#: data/cards.json cards/aurora_sandstorm/name
+msgid "Remolino de Arena"
+msgstr "Sand Whirl"
+
+#: data/cards.json cards/aurora_mirage/name
+msgid "Espejismo Solar"
+msgstr "Solar Mirage"
+
+#: data/cards.json cards/aurora_warmth/name
+msgid "Rayo de Alba"
+msgstr "Dawn Ray"
+
+#: data/cards.json cards/aurora_dazzle/name
+msgid "Deslumbrar"
+msgstr "Dazzle"
+
+#: data/cards.json cards/aurora_fan_slash/name
+msgid "Tajo Ámbar"
+msgstr "Amber Slash"
+
+#: data/cards.json cards/aurora_grace/name
+msgid "Cadencia de Oro"
+msgstr "Golden Cadence"
+
+#: data/cards.json cards/aurora_blindfold/name
+msgid "Ceguera Fugaz"
+msgstr "Fleeting Blindness"
+
+#: data/cards.json cards/aurora_climax/name
+msgid "Clímax Solar"
+msgstr "Solar Climax"
+
+#: data/cards.json cards/aurora_prism/name
+#: data/states.json st/prism/n
+msgid "Prisma Concentrado"
+msgstr "Focused Prism"
+
+#: data/cards.json cards/aurora_incandescence/name
+#: data/states.json st/incand/n
+msgid "Incandescencia"
+msgstr "Incandescence"
+
+#: data/cards.json cards/aurora_cascade/name
+msgid "Cascada de Luz"
+msgstr "Cascade of Light"
+
+#: data/cards.json cards/aurora_veil/name
+msgid "Danza de las Siete Velas"
+msgstr "Dance of the Seven Candles"
+
+#: data/cards.json cards/aurora_scorch/name
+msgid "Quemadura Solar"
+msgstr "Sunburn"
+
+#: data/cards.json cards/aurora_pyramid/name
+msgid "Cénit"
+msgstr "Zenith"
+
+#: data/cards.json cards/aurora_refraction_wall/name
+#: data/states.json st/reflect/n
+msgid "Muro Reflector"
+msgstr "Reflecting Wall"
+
+#: data/cards.json cards/aurora_frenzy/name
+msgid "Frenesí de Fuego"
+msgstr "Fire Frenzy"
+
+#: data/cards.json cards/aurora_supernova/name
+msgid "Supernova"
+msgstr "Supernova"
+
+#: data/cards.json cards/aurora_apotheosis/name
+msgid "Danza del Solio Supremo"
+msgstr "Dance of the Supreme Throne"
+
+#: data/cards.json cards/aurora_perpetual_noon/name
+#: data/states.json st/noon/n
+msgid "Mediodía Eterno"
+msgstr "Eternal Noon"
+
+#: data/cards.json cards/aurora_transcendence/name
+msgid "Éxtasis Solar"
+msgstr "Solar Ecstasy"
+
+#: data/cards.json cards/aurora_corona/name
+#: data/states.json st/corona/n
+msgid "Corona de Fuego"
+msgstr "Crown of Fire"
+
+#: data/cards.json cards/irene_strike/name
+msgid "Palma Rígida"
+msgstr "Stiff Palm"
+
+#: data/cards.json cards/irene_defend/name
+msgid "Reverencia Mecánica"
+msgstr "Mechanical Curtsy"
+
+#: data/cards.json cards/irene_wind/name
+msgid "Dar Cuerda"
+msgstr "Wind Up"
+
+#: data/cards.json cards/irene_gear/name
+msgid "Engranaje Gemelo"
+msgstr "Twin Gear"
+
+#: data/cards.json cards/irene_cog_slap/name
+msgid "Bofetada de Latón"
+msgstr "Brass Slap"
+
+#: data/cards.json cards/irene_tick/name
+msgid "Tic"
+msgstr "Tick"
+
+#: data/cards.json cards/irene_pendulum/name
+msgid "Péndulo"
+msgstr "Pendulum"
+
+#: data/cards.json cards/irene_porcelain/name
+msgid "Escudo de Porcelana"
+msgstr "Porcelain Shield"
+
+#: data/cards.json cards/irene_spring/name
+#: data/states.json st/resorte/n
+msgid "Resorte"
+msgstr "Coil Spring"
+
+#: data/cards.json cards/irene_chime/name
+msgid "Campanada"
+msgstr "Chime"
+
+#: data/cards.json cards/irene_stitch/name
+msgid "Puntada"
+msgstr "Stitch"
+
+#: data/cards.json cards/irene_oil/name
+msgid "Aceitar las Juntas"
+msgstr "Oil the Joints"
+
+#: data/cards.json cards/irene_creak/name
+msgid "Crujido"
+msgstr "Creak"
+
+#: data/cards.json cards/irene_whirr/name
+#: data/enemies.json enemies/drone/moves/buzz/name
+#: data/enemies_extra.json enemies/hornet/moves/buzz/name
+msgid "Zumbido"
+msgstr "Whirr"
+
+#: data/cards.json cards/irene_clockwork/name
+msgid "Maquinaria"
+msgstr "Machinery"
+
+#: data/cards.json cards/irene_tictac/name
+#: data/states.json st/tictac/n
+msgid "Tic-Tac"
+msgstr "Tick-Tock"
+
+#: data/cards.json cards/irene_precision/name
+#: data/states.json st/precision/n
+msgid "Precisión de Relojero"
+msgstr "Watchmaker's Precision"
+
+#: data/cards.json cards/irene_overwind/name
+msgid "Sobrecuerda"
+msgstr "Overwind"
+
+#: data/cards.json cards/irene_music_box/name
+msgid "Caja de Música"
+msgstr "Music Box"
+
+#: data/cards.json cards/irene_automaton/name
+msgid "Autómata"
+msgstr "Automaton"
+
+#: data/cards.json cards/irene_gearstorm/name
+msgid "Tormenta de Engranajes"
+msgstr "Gear Storm"
+
+#: data/cards.json cards/irene_release/name
+msgid "Liberar el Resorte"
+msgstr "Release the Spring"
+
+#: data/cards.json cards/irene_masterwork/name
+msgid "Obra Maestra"
+msgstr "Masterpiece"
+
+#: data/cards.json cards/irene_perpetuum/name
+#: data/states.json st/perpetuum/n
+msgid "Perpetuum Mobile"
+msgstr "Perpetuum Mobile"
+
+#: data/cards.json cards/irene_maestro/name
+#: data/states.json st/maestro/n
+msgid "Mecanismo Maestro"
+msgstr "Master Mechanism"
+
+#: data/cards.json cards/irene_overdrive/name
+msgid "Sobrecarga"
+msgstr "Overload"
+
+#: data/cards.json cards/irene_masterkey/name
+#: data/relics.json relics/llave_maestra/n
+msgid "Llave Maestra"
+msgstr "Master Key"
+
+#: data/cards.json cards/selene_strike/name
+msgid "Golpe de Corriente"
+msgstr "Current Strike"
+
+#: data/cards.json cards/selene_defend/name
+msgid "Cortina de Agua"
+msgstr "Water Curtain"
+
+#: data/cards.json cards/selene_wave/name
+msgid "Invocar Ola"
+msgstr "Summon Wave"
+
+#: data/cards.json cards/selene_reflux/name
+msgid "Reflujo"
+msgstr "Ebb"
+
+#: data/cards.json cards/selene_ripple/name
+msgid "Chapoteo"
+msgstr "Splash"
+
+#: data/cards.json cards/selene_frost/name
+msgid "Marejada Fría"
+msgstr "Cold Swell"
+
+#: data/cards.json cards/selene_tidepool/name
+msgid "Poza de Marea"
+msgstr "Tide Pool"
+
+#: data/cards.json cards/selene_pearl/name
+msgid "Perla Nacarada"
+msgstr "Nacre Pearl"
+
+#: data/cards.json cards/selene_current/name
+msgid "Corriente"
+msgstr "Current"
+
+#: data/cards.json cards/selene_break/name
+msgid "Rompeolas"
+msgstr "Breakwater"
+
+#: data/cards.json cards/selene_undertow/name
+#: data/enemies_extra.json enemies/sirena/moves/marea/name
+msgid "Resaca"
+msgstr "Undertow"
+
+#: data/cards.json cards/selene_depth/name
+msgid "Sondeo"
+msgstr "Sounding"
+
+#: data/cards.json cards/selene_surge/name
+msgid "Oleada"
+msgstr "Surge"
+
+#: data/cards.json cards/selene_whirlpool/name
+msgid "Remolino"
+msgstr "Whirlpool"
+
+#: data/cards.json cards/selene_abyss/name
+msgid "Abismo Insondable"
+msgstr "Fathomless Abyss"
+
+#: data/cards.json cards/selene_depthcharge/name
+msgid "Carga de Profundidad"
+msgstr "Depth Charge"
+
+#: data/cards.json cards/selene_resonance/name
+#: data/states.json st/resonancia/n
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:79
+msgid "Resonancia"
+msgstr "Resonance"
+
+#: data/cards.json cards/selene_high_tide/name
+#: data/states.json st/marea_alta/n
+msgid "Marea Alta"
+msgstr "High Tide"
+
+#: data/cards.json cards/selene_undercurrent/name
+#: data/states.json st/corriente/n
+msgid "Corriente Submarina"
+msgstr "Undercurrent"
+
+#: data/cards.json cards/selene_conch/name
+msgid "Concha Expandida"
+msgstr "Expanding Shell"
+
+#: data/cards.json cards/selene_tsunami/name
+msgid "Tsunami"
+msgstr "Tsunami"
+
+#: data/cards.json cards/selene_deluge/name
+msgid "Diluvio"
+msgstr "Deluge"
+
+#: data/cards.json cards/selene_multitide/name
+msgid "Multimarea"
+msgstr "Multitide"
+
+#: data/cards.json cards/selene_maremoto/name
+msgid "Maremoto"
+msgstr "Seaquake"
+
+#: data/cards.json cards/selene_pearl_crown/name
+msgid "Corona de Perlas"
+msgstr "Pearl Crown"
+
+#: data/cards.json cards/selene_loop/name
+msgid "Bucle de Marea"
+msgstr "Tidal Loop"
+
+#: data/cards.json cards/selene_moon/name
+msgid "Luna Llena"
+msgstr "Full Moon"
+
+#: data/cards.json cards/wound/name
+msgid "Herida"
+msgstr "Wound"
+
+#: data/cards.json cards/burn/name
+msgid "Quemadura"
+msgstr "Burn"
+
+#: data/cards.json cards/slime/name
+msgid "Baba"
+msgstr "Slime"
+
+#: data/cards.json cards/doubt/name
+msgid "Duda"
+msgstr "Doubt"
+
+#: data/cards_extra.json cards/zafiro_dragon_breath/name
+msgid "Aliento de Dragón"
+msgstr "Dragon's Breath"
+
+#: data/cards_extra.json cards/zafiro_shoulder/name
+msgid "Espaldarazo"
+msgstr "Accolade"
+
+#: data/cards_extra.json cards/zafiro_warcry/name
+msgid "Grito de Batalla"
+msgstr "Battle Cry"
+
+#: data/cards_extra.json cards/zafiro_shatter/name
+msgid "Sacudida de Coraza"
+msgstr "Armor Shake"
+
+#: data/cards_extra.json cards/zafiro_old_blood/name
+msgid "Sangre Vieja"
+msgstr "Old Blood"
+
+#: data/cards_extra.json cards/zafiro_quake/name
+msgid "Golpe Sísmico"
+msgstr "Seismic Strike"
+
+#: data/cards_extra.json cards/zafiro_living_wall/name
+msgid "Muro Viviente"
+msgstr "Living Wall"
+
+#: data/cards_extra.json cards/zafiro_ember_armor/name
+msgid "Armadura de Brasas"
+msgstr "Ember Armor"
+
+#: data/cards_extra.json cards/zafiro_guillotine/name
+msgid "Guillotina Roja"
+msgstr "Red Guillotine"
+
+#: data/cards_extra.json cards/lia_hidden_knife/name
+msgid "Cuchillo Escondido"
+msgstr "Hidden Knife"
+
+#: data/cards_extra.json cards/lia_ambush/name
+#: data/enemies_extra.json enemies/mantis/moves/ambush/name
+msgid "Emboscada"
+msgstr "Ambush"
+
+#: data/cards_extra.json cards/lia_toxic_dew/name
+msgid "Rocío Tóxico"
+msgstr "Toxic Dew"
+
+#: data/cards_extra.json cards/lia_blade_dance/name
+msgid "Danza de Filos"
+msgstr "Dance of Edges"
+
+#: data/cards_extra.json cards/lia_steel_burst/name
+msgid "Ráfaga de Acero"
+msgstr "Steel Flurry"
+
+#: data/cards_extra.json cards/lia_paralysis/name
+msgid "Aguja Paralizante"
+msgstr "Paralyzing Needle"
+
+#: data/cards_extra.json cards/lia_shadow_agile/name
+msgid "Sombra Ágil"
+msgstr "Nimble Shadow"
+
+#: data/cards_extra.json cards/lia_plague/name
+msgid "Plaga Total"
+msgstr "Total Plague"
+
+#: data/cards_extra.json cards/lia_blade_waltz/name
+msgid "Vals de Cuchillas"
+msgstr "Shiv Waltz"
+
+#: data/cards_extra.json cards/claudia_osty_claw/name
+msgid "Zarpa de Osty"
+msgstr "Osty's Claw"
+
+#: data/cards_extra.json cards/claudia_bone_whisper/name
+msgid "Murmullo de Huesos"
+msgstr "Bone Murmur"
+
+#: data/cards_extra.json cards/claudia_minor_harvest/name
+msgid "Cosecha Menor"
+msgstr "Lesser Harvest"
+
+#: data/cards_extra.json cards/claudia_skeletal_guard/name
+msgid "Guardián Esquelético"
+msgstr "Skeletal Guardian"
+
+#: data/cards_extra.json cards/claudia_twin_bite/name
+msgid "Mordida Doble"
+msgstr "Double Bite"
+
+#: data/cards_extra.json cards/claudia_requiem/name
+#: data/progress.json achievements/25/n
+msgid "Réquiem"
+msgstr "Requiem"
+
+#: data/cards_extra.json cards/claudia_blood_ritual/name
+msgid "Ritual de Sangre"
+msgstr "Blood Ritual"
+
+#: data/cards_extra.json cards/claudia_bone_throne/name
+msgid "Trono de Huesos"
+msgstr "Throne of Bones"
+
+#: data/cards_extra.json cards/claudia_violet_eclipse/name
+msgid "Eclipse Violeta"
+msgstr "Violet Eclipse"
+
+#: data/cards_extra.json cards/aurora_ember_petal/name
+msgid "Pétalo Ardiente"
+msgstr "Burning Petal"
+
+#: data/cards_extra.json cards/aurora_gilded_veil/name
+msgid "Velo Dorado"
+msgstr "Golden Veil"
+
+#: data/cards_extra.json cards/aurora_flame_spin/name
+msgid "Giro Ardiente"
+msgstr "Blazing Spin"
+
+#: data/cards_extra.json cards/aurora_blinding_gleam/name
+msgid "Resplandor Cegador"
+msgstr "Blinding Glow"
+
+#: data/cards_extra.json cards/aurora_dawn_dance/name
+msgid "Danza del Amanecer"
+msgstr "Dawn Dance"
+
+#: data/cards_extra.json cards/aurora_ray_rain/name
+msgid "Lluvia de Rayos"
+msgstr "Ray Shower"
+
+#: data/cards_extra.json cards/aurora_burning_mirror/name
+msgid "Espejo Ardiente"
+msgstr "Burning Mirror"
+
+#: data/cards_extra.json cards/aurora_golden_eclipse/name
+msgid "Eclipse Dorado"
+msgstr "Golden Eclipse"
+
+#: data/cards_extra.json cards/aurora_sun_hymn/name
+msgid "Himno del Sol"
+msgstr "Hymn of the Sun"
+
+#: data/cards_extra.json cards/irene_loose_gear/name
+msgid "Engranaje Suelto"
+msgstr "Loose Gear"
+
+#: data/cards_extra.json cards/irene_reinforced_spring/name
+msgid "Muelle Reforzado"
+msgstr "Reinforced Spring"
+
+#: data/cards_extra.json cards/irene_pendulum_blow/name
+msgid "Golpe de Péndulo"
+msgstr "Pendulum Strike"
+
+#: data/cards_extra.json cards/irene_quick_wind/name
+msgid "Cuerda Rápida"
+msgstr "Quick Wind-Up"
+
+#: data/cards_extra.json cards/irene_clockwork_chain/name
+msgid "Cadena de Relojería"
+msgstr "Clockwork Chain"
+
+#: data/cards_extra.json cards/irene_clock_tower/name
+msgid "Torre del Reloj"
+msgstr "Clock Tower"
+
+#: data/cards_extra.json cards/irene_spring_discharge/name
+msgid "Descarga de Muelle"
+msgstr "Spring Release"
+
+#: data/cards_extra.json cards/irene_fine_clockwork/name
+msgid "Relojería Fina"
+msgstr "Fine Clockwork"
+
+#: data/cards_extra.json cards/irene_colossal_automaton/name
+msgid "Autómata Colosal"
+msgstr "Colossal Automaton"
+
+#: data/cards_extra.json cards/irene_clock_heart/name
+msgid "Corazón de Reloj"
+msgstr "Clockwork Heart"
+
+#: data/cards_extra.json cards/selene_stray_drop/name
+msgid "Gota Rebelde"
+msgstr "Rebel Drop"
+
+#: data/cards_extra.json cards/selene_mist_veil/name
+msgid "Velo de Bruma"
+msgstr "Veil of Mist"
+
+#: data/cards_extra.json cards/selene_shining_conch/name
+msgid "Caracola Brillante"
+msgstr "Shining Conch"
+
+#: data/cards_extra.json cards/selene_rising_tide/name
+msgid "Marea Creciente"
+msgstr "Rising Tide"
+
+#: data/cards_extra.json cards/selene_pearl_whirl/name
+msgid "Torbellino de Perlas"
+msgstr "Pearl Whirlwind"
+
+#: data/cards_extra.json cards/selene_abyssal_echo/name
+msgid "Eco Abismal"
+msgstr "Abyssal Echo"
+
+#: data/cards_extra.json cards/selene_silver_current/name
+msgid "Corriente de Plata"
+msgstr "Silver Current"
+
+#: data/cards_extra.json cards/selene_siren_song/name
+msgid "Canto de Sirena"
+msgstr "Siren Song"
+
+#: data/cards_extra.json cards/selene_colossal_wave/name
+msgid "Ola Colosal"
+msgstr "Colossal Wave"
+
+#: data/cards_extra.json cards/selene_endless_tide/name
+msgid "Marea Perpetua"
+msgstr "Perpetual Tide"
+
+#: data/cards_extra.json cards/neu_second_wind/name
+msgid "Segundo Aliento"
+msgstr "Second Wind"
+
+#: data/cards_extra.json cards/neu_focus/name
+msgid "Concentración"
+msgstr "Concentration"
+
+#: data/cards_extra.json cards/neu_improvised_guard/name
+msgid "Guardia Improvisada"
+msgstr "Makeshift Guard"
+
+#: data/cards_extra.json cards/neu_sure_strike/name
+msgid "Golpe Certero"
+msgstr "True Strike"
+
+#: data/cards_extra.json cards/neu_trip/name
+msgid "Zancadilla"
+msgstr "Trip Up"
+
+#: data/cards_extra.json cards/neu_ration/name
+msgid "Ración de Campaña"
+msgstr "Field Ration"
+
+#: data/cards_extra.json cards/neu_scavenge/name
+msgid "Rebusca"
+msgstr "Rummage"
+
+#: data/cards_extra.json cards/neu_purge/name
+msgid "Purga"
+msgstr "Purge"
+
+#: data/cards_extra.json cards/neu_lucky_blow/name
+msgid "Golpe de Suerte"
+msgstr "Lucky Strike"
+
+#: data/cards_extra.json cards/neu_hunters_mark/name
+msgid "Marca del Cazador"
+msgstr "Hunter's Mark"
+
+#: data/cards_extra.json cards/neu_courage_rush/name
+msgid "Descarga de Valor"
+msgstr "Surge of Valor"
+
+#: data/cards_extra.json cards/neu_stand_firm/name
+msgid "Plantar Cara"
+msgstr "Stand Firm"
+
+#: data/cards_extra.json cards/neu_smoke_bomb/name
+msgid "Bomba de Humo"
+msgstr "Smoke Bomb"
+
+#: data/cards_extra.json cards/neu_camp_tonic/name
+msgid "Tónico de Campamento"
+msgstr "Camp Tonic"
+
+#: data/cards_extra.json cards/neu_all_or_nothing/name
+msgid "Todo o Nada"
+msgstr "All or Nothing"
+
+#: data/cards_extra.json cards/neu_desperate_charge/name
+msgid "Carga Desesperada"
+msgstr "Desperate Charge"
+
+#: data/cards_extra.json cards/neu_barrage/name
+#: data/enemies_extra.json enemies/drowncaptain/moves/andanada/name
+msgid "Andanada"
+msgstr "Broadside"
+
+#: data/cards_extra.json cards/neu_shockwave/name
+msgid "Onda de Choque"
+msgstr "Shockwave"
+
+#: data/cards_extra.json cards/neu_strategic_pause/name
+msgid "Pausa Estratégica"
+msgstr "Strategic Pause"
+
+#: data/cards_extra.json cards/neu_second_chance/name
+msgid "Segunda Oportunidad"
+msgstr "Second Chance"
+
+#: data/cards_extra.json cards/neu_destiny_blow/name
+msgid "Golpe del Destino"
+msgstr "Stroke of Fate"
+
+#: data/cards_extra.json cards/neu_vigil/name
+msgid "Vigilia"
+msgstr "Vigil"
+
+#: data/cards_extra.json cards/neu_resolve/name
+msgid "Resolución"
+msgstr "Resolve"
+
+#: data/characters.json characters/zafiro/name
+msgid "Zafiro"
+msgstr "Zafiro"
+
+#: data/characters.json characters/lia/name
+msgid "Lia"
+msgstr "Lia"
+
+#: data/characters.json characters/claudia/name
+msgid "Claudia"
+msgstr "Claudia"
+
+#: data/characters.json characters/aurora/name
+msgid "Aurora"
+msgstr "Aurora"
+
+#: data/characters.json characters/irene/name
+msgid "Irene"
+msgstr "Irene"
+
+#: data/characters.json characters/selene/name
+msgid "Selene"
+msgstr "Selene"
+
+#: data/characters.json characters/zafiro/role
+msgid "La Caballera Carmesí"
+msgstr "The Crimson Knight"
+
+#: data/characters.json characters/lia/role
+msgid "La Cazadora Juguetona"
+msgstr "The Playful Huntress"
+
+#: data/characters.json characters/claudia/role
+msgid "La Nigromante Gótica"
+msgstr "The Gothic Necromancer"
+
+#: data/characters.json characters/aurora/role
+msgid "La Bailarina Solar"
+msgstr "The Sun Dancer"
+
+#: data/characters.json characters/irene/role
+msgid "La Muñeca de Cuerda"
+msgstr "The Wind-Up Doll"
+
+#: data/characters.json characters/selene/role
+msgid "La Doncella de Marea"
+msgstr "The Tide Maiden"
+
+#: data/characters.json characters/zafiro/desc
+msgid "Última espada de los Acorazados. Aplasta a sus enemigos con acero y fuego. Gana Fuerza y Bloqueo; sacrifica vida para golpear más fuerte."
+msgstr "Last blade of the Ironclad Order. She crushes her foes with steel and fire. Gains Strength and Block; trades her own life to hit even harder."
+
+#: data/characters.json characters/lia/desc
+msgid "Cazadora de los Bosques Verdes. Apuñala y envenena todo lo que se cruce, sonriendo. Cuchillas rápidas, Veneno y mucho robo de cartas."
+msgstr "Huntress of the Greenwood. She stabs and poisons anything that crosses her path, with a smile. Quick Shivs, Poison and plenty of card draw."
+
+#: data/characters.json characters/claudia/desc
+msgid "Nigromante de la luna violeta. Invoca a su fiel mano izquierda, Osty, que absorbe daño y ataca cada turno. Agota cartas para ganar poder."
+msgstr "Necromancer of the violet moon. She summons her faithful left hand, Osty, who soaks up damage and attacks every turn. Exhausts cards to grow in power."
+
+#: data/characters.json characters/aurora/desc
+msgid "Sacerdotisa y danzarina de los templos del solio dorado. No bloquea con acero, sino que ciega con sus abanicos de espejos y refracta la luz del amanecer en ráfagas de calor fulminante."
+msgstr "Priestess and dancer of the temples of the golden throne. She doesn't block with steel: she blinds with her mirrored fans and refracts the light of dawn into blasts of searing heat."
+
+#: data/characters.json characters/irene/desc
+msgid "Una muñeca de porcelana y latón que despertó sin recordar quién le dio cuerda. Acumula Cuerda y, con sus cartas de Engranaje, repite cada golpe con precisión de relojería."
+msgstr "A doll of porcelain and brass who woke up with no memory of who wound her. She builds up Wind-Up and, with her Gear cards, repeats every blow with clockwork precision."
+
+#: data/characters.json characters/selene/desc
+msgid "Nacida de la espuma y de una canción de cuna. Canaliza orbes de agua —Ola, Bruma, Abismo y Perla— que golpean, protegen y crecen cada turno, hasta que decide estallarlos."
+msgstr "Born of sea foam and a lullaby. She channels water orbs (Wave, Mist, Abyss and Pearl) that strike, shield and grow every turn, until she decides to burst them."
+
+#: data/enemies.json enemies/dockrat/name
+msgid "Rata de Muelle"
+msgstr "Dock Rat"
+
+#: data/enemies.json enemies/slime/name
+msgid "Limo de Alcantarilla"
+msgstr "Sewer Slime"
+
+#: data/enemies.json enemies/crab/name
+msgid "Cangrejo Oxidado"
+msgstr "Rusty Crab"
+
+#: data/enemies.json enemies/jelly/name
+msgid "Medusa de Sentina"
+msgstr "Bilge Jellyfish"
+
+#: data/enemies.json enemies/ghostpirate/name
+msgid "Pirata Ahogado"
+msgstr "Drowned Pirate"
+
+#: data/enemies.json enemies/minicrab/name
+msgid "Cangrejito"
+msgstr "Crablet"
+
+#: data/enemies.json enemies/chainwarden/name
+msgid "Guardián de Cadenas"
+msgstr "Chain Warden"
+
+#: data/enemies.json enemies/tentacle/name
+msgid "Tentáculo Abisal"
+msgstr "Abyssal Tentacle"
+
+#: data/enemies.json enemies/crabking/name
+msgid "Cangrejo Rey"
+msgstr "Crab King"
+
+#: data/enemies.json enemies/sporecap/name
+msgid "Hongo Esporífero"
+msgstr "Spore Shroom"
+
+#: data/enemies.json enemies/vinelasher/name
+msgid "Zarcillo Azotador"
+msgstr "Lashing Tendril"
+
+#: data/enemies.json enemies/thornbeast/name
+msgid "Bestia de Espinas"
+msgstr "Thorn Beast"
+
+#: data/enemies.json enemies/mossgolem/name
+msgid "Gólem de Musgo"
+msgstr "Moss Golem"
+
+#: data/enemies.json enemies/dryad/name
+msgid "Dríade Marchita"
+msgstr "Withered Dryad"
+
+#: data/enemies.json enemies/sprout/name
+msgid "Brote"
+msgstr "Sprout"
+
+#: data/enemies.json enemies/treant/name
+msgid "Árbol Ancestral"
+msgstr "Ancient Tree"
+
+#: data/enemies.json enemies/stag/name
+msgid "Venado Corrupto"
+msgstr "Corrupted Stag"
+
+#: data/enemies.json enemies/rootmother/name
+msgid "Madre Raíz"
+msgstr "Root Mother"
+
+#: data/enemies.json enemies/drone/name
+msgid "Zángano"
+msgstr "Drone"
+
+#: data/enemies.json enemies/wasp/name
+msgid "Avispa Soldado"
+msgstr "Soldier Wasp"
+
+#: data/enemies.json enemies/honeyslime/name
+msgid "Limo de Miel"
+msgstr "Honey Slime"
+
+#: data/enemies.json enemies/nurse/name
+msgid "Nodriza"
+msgstr "Nursemaid"
+
+#: data/enemies.json enemies/beetle/name
+msgid "Escarabajo Acorazado"
+msgstr "Armored Beetle"
+
+#: data/enemies.json enemies/royalguard/name
+msgid "Guardia Real"
+msgstr "Royal Guard"
+
+#: data/enemies.json enemies/hivemind/name
+msgid "Mente Colmena"
+msgstr "Hive Mind"
+
+#: data/enemies.json enemies/queen/name
+msgid "Reina de la Colmena"
+msgstr "Hive Queen"
+
+#: data/enemies.json enemies/dockrat/moves/bite/name
+msgid "Mordisco"
+msgstr "Bite"
+
+#: data/enemies.json enemies/dockrat/moves/gnaw/name
+msgid "Roer"
+msgstr "Gnaw"
+
+#: data/enemies.json enemies/dockrat/moves/squeak/name
+msgid "Chillido"
+msgstr "Screech"
+
+#: data/enemies.json enemies/slime/moves/spit/name
+msgid "Escupitajo"
+msgstr "Spit"
+
+#: data/enemies.json enemies/slime/moves/tackle/name
+#: data/enemies.json enemies/thornbeast/moves/charge/name
+#: data/enemies.json enemies/beetle/moves/ram/name
+#: data/enemies.json enemies/queen/moves/ram/name
+msgid "Embestida"
+msgstr "Ram"
+
+#: data/enemies.json enemies/slime/moves/glop/name
+msgid "Gelatina"
+msgstr "Jelly"
+
+#: data/enemies.json enemies/crab/moves/claw/name
+msgid "Pinza"
+msgstr "Pincer"
+
+#: data/enemies.json enemies/crab/moves/shell/name
+msgid "Caparazón"
+msgstr "Shell"
+
+#: data/enemies.json enemies/crab/moves/crush/name
+msgid "Machacar"
+msgstr "Pound"
+
+#: data/enemies.json enemies/jelly/moves/sting/name
+msgid "Picadura"
+msgstr "Sting"
+
+#: data/enemies.json enemies/jelly/moves/pulse/name
+msgid "Pulso Tóxico"
+msgstr "Toxic Pulse"
+
+#: data/enemies.json enemies/jelly/moves/drift/name
+msgid "Deriva"
+msgstr "Drift"
+
+#: data/enemies.json enemies/ghostpirate/moves/howl/name
+#: data/enemies_extra.json enemies/brambwolf/moves/howl/name
+msgid "Aullido"
+msgstr "Howl"
+
+#: data/enemies.json enemies/ghostpirate/moves/slash/name
+msgid "Sablazo"
+msgstr "Saber Slash"
+
+#: data/enemies.json enemies/ghostpirate/moves/volley/name
+msgid "Ráfaga"
+msgstr "Flurry"
+
+#: data/enemies.json enemies/minicrab/moves/nip/name
+msgid "Pellizco"
+msgstr "Pinch"
+
+#: data/enemies.json enemies/chainwarden/moves/chain/name
+msgid "Cadenazo"
+msgstr "Chain Lash"
+
+#: data/enemies.json enemies/chainwarden/moves/lash/name
+msgid "Látigo"
+msgstr "Whip"
+
+#: data/enemies.json enemies/chainwarden/moves/bulwark/name
+msgid "Baluarte"
+msgstr "Bulwark"
+
+#: data/enemies.json enemies/tentacle/moves/whip/name
+#: data/enemies.json enemies/rootmother/moves/lash/name
+msgid "Azote"
+msgstr "Scourge"
+
+#: data/enemies.json enemies/tentacle/moves/drain/name
+msgid "Succión"
+msgstr "Suction"
+
+#: data/enemies.json enemies/tentacle/moves/drown/name
+msgid "Ahogar"
+msgstr "Drown"
+
+#: data/enemies.json enemies/crabking/moves/roar/name
+msgid "Rugido"
+msgstr "Roar"
+
+#: data/enemies.json enemies/crabking/moves/summon/name
+#: data/enemies.json enemies/hivemind/moves/swarm/name
+#: data/enemies.json enemies/queen/moves/summon/name
+msgid "Convocar"
+msgstr "Summon"
+
+#: data/enemies.json enemies/crabking/moves/pincer/name
+msgid "Tenaza"
+msgstr "Clamp"
+
+#: data/enemies.json enemies/crabking/moves/spin/name
+msgid "Torbellino"
+msgstr "Maelstrom"
+
+#: data/enemies.json enemies/crabking/moves/twin/name
+msgid "Pinza Doble"
+msgstr "Double Pincer"
+
+#: data/enemies.json enemies/crabking/moves/shell/name
+#: data/enemies.json enemies/beetle/moves/plate/name
+#: data/states_extra.json st/carapace/n
+msgid "Coraza"
+msgstr "Carapace"
+
+#: data/enemies.json enemies/sporecap/moves/spores/name
+msgid "Esporas"
+msgstr "Spores"
+
+#: data/enemies.json enemies/vinelasher/moves/lash/name
+msgid "Azotar"
+msgstr "Lash"
+
+#: data/enemies.json enemies/vinelasher/moves/tangle/name
+msgid "Enredar"
+msgstr "Entangle"
+
+#: data/enemies.json enemies/vinelasher/moves/choke/name
+msgid "Estrangular"
+msgstr "Strangle"
+
+#: data/enemies.json enemies/thornbeast/moves/bristle/name
+msgid "Erizarse"
+msgstr "Bristle"
+
+#: data/enemies.json enemies/thornbeast/moves/stomp/name
+msgid "Pisotón"
+msgstr "Stomp"
+
+#: data/enemies.json enemies/mossgolem/moves/charge/name
+msgid "Cargar"
+msgstr "Charge Up"
+
+#: data/enemies.json enemies/mossgolem/moves/smash/name
+#: data/enemies.json enemies/rootmother/moves/crush/name
+#: data/enemies_extra.json enemies/mycelking/moves/aplastar/name
+msgid "Aplastar"
+msgstr "Crush"
+
+#: data/enemies.json enemies/mossgolem/moves/punch/name
+msgid "Puñetazo"
+msgstr "Punch"
+
+#: data/enemies.json enemies/dryad/moves/hex/name
+#: scripts/ui/card_text.gd:9
+msgid "Maldición"
+msgstr "Curse"
+
+#: data/enemies.json enemies/dryad/moves/whip/name
+msgid "Latigazo"
+msgstr "Whiplash"
+
+#: data/enemies.json enemies/dryad/moves/mend/name
+msgid "Savia"
+msgstr "Sap"
+
+#: data/enemies.json enemies/sprout/moves/poke/name
+msgid "Picotazo"
+msgstr "Peck"
+
+#: data/enemies.json enemies/treant/moves/roots/name
+msgid "Raíces"
+msgstr "Roots"
+
+#: data/enemies.json enemies/treant/moves/splinter/name
+#: data/enemies_extra.json enemies/rootwarden/moves/astillas/name
+msgid "Astillas"
+msgstr "Splinters"
+
+#: data/enemies.json enemies/treant/moves/vines/name
+msgid "Enredadera"
+msgstr "Creeper"
+
+#: data/enemies.json enemies/stag/moves/gore/name
+#: data/enemies.json enemies/beetle/moves/horn/name
+#: data/enemies_extra.json enemies/royalbeetle/moves/cornada/name
+msgid "Cornada"
+msgstr "Gore"
+
+#: data/enemies.json enemies/stag/moves/gallop/name
+msgid "Galope"
+msgstr "Gallop"
+
+#: data/enemies.json enemies/stag/moves/bellow/name
+msgid "Berrido"
+msgstr "Bellow"
+
+#: data/enemies.json enemies/rootmother/moves/summon/name
+msgid "Brotar"
+msgstr "Sprout Forth"
+
+#: data/enemies.json enemies/rootmother/moves/root/name
+msgid "Enraizar"
+msgstr "Take Root"
+
+#: data/enemies.json enemies/rootmother/moves/harvest/name
+msgid "Cosecha"
+msgstr "Harvest"
+
+#: data/enemies.json enemies/drone/moves/sting/name
+msgid "Picar"
+msgstr "Prick"
+
+#: data/enemies.json enemies/wasp/moves/stab/name
+#: data/enemies.json enemies/nurse/moves/sting/name
+msgid "Aguijón"
+msgstr "Stinger"
+
+#: data/enemies.json enemies/wasp/moves/rush/name
+msgid "Carga"
+msgstr "Charge"
+
+#: data/enemies.json enemies/wasp/moves/venom/name
+msgid "Aguijón Venenoso"
+msgstr "Venom Stinger"
+
+#: data/enemies.json enemies/honeyslime/moves/sticky/name
+msgid "Pegajoso"
+msgstr "Sticky"
+
+#: data/enemies.json enemies/honeyslime/moves/jet/name
+msgid "Chorro"
+msgstr "Squirt"
+
+#: data/enemies.json enemies/honeyslime/moves/harden/name
+#: data/enemies_extra.json enemies/waxcolossus/moves/endurecer/name
+msgid "Endurecer"
+msgstr "Harden"
+
+#: data/enemies.json enemies/nurse/moves/feed/name
+msgid "Alimentar"
+msgstr "Feed"
+
+#: data/enemies.json enemies/nurse/moves/call/name
+msgid "Zumbar"
+msgstr "Buzz"
+
+#: data/enemies.json enemies/royalguard/moves/thrust/name
+msgid "Lanzazo"
+msgstr "Spear Thrust"
+
+#: data/enemies.json enemies/royalguard/moves/sweep/name
+msgid "Barrido"
+msgstr "Sweep"
+
+#: data/enemies.json enemies/royalguard/moves/charge/name
+msgid "Carga Real"
+msgstr "Royal Charge"
+
+#: data/enemies.json enemies/hivemind/moves/mind/name
+msgid "Pulso Mental"
+msgstr "Mind Pulse"
+
+#: data/enemies.json enemies/hivemind/moves/wave/name
+msgid "Ola Psíquica"
+msgstr "Psychic Wave"
+
+#: data/enemies.json enemies/queen/moves/royal/name
+msgid "Aguijón Real"
+msgstr "Royal Stinger"
+
+#: data/enemies.json enemies/queen/moves/rain/name
+msgid "Lluvia de Aguijones"
+msgstr "Stinger Rain"
+
+#: data/enemies.json enemies/queen/moves/order/name
+msgid "Orden Real"
+msgstr "Royal Decree"
+
+#: data/enemies.json enemies/queen/moves/jelly/name
+msgid "Jalea Real"
+msgstr "Royal Jelly"
+
+#: data/enemies_extra.json enemies/eel/name
+msgid "Anguila Voltaica"
+msgstr "Voltaic Eel"
+
+#: data/enemies_extra.json enemies/sirena/name
+msgid "Sirena Abisal"
+msgstr "Abyssal Siren"
+
+#: data/enemies_extra.json enemies/spectralbosun/name
+msgid "Contramaestre Espectral"
+msgstr "Spectral Bosun"
+
+#: data/enemies_extra.json enemies/drowncaptain/name
+msgid "Capitana Ahogada"
+msgstr "Drowned Captain"
+
+#: data/enemies_extra.json enemies/brambwolf/name
+msgid "Lobo de Zarzas"
+msgstr "Bramble Wolf"
+
+#: data/enemies_extra.json enemies/mantis/name
+msgid "Mantis de Espinas"
+msgstr "Thorn Mantis"
+
+#: data/enemies_extra.json enemies/rootwarden/name
+msgid "Guardiana de Raíces"
+msgstr "Root Warden"
+
+#: data/enemies_extra.json enemies/mycelking/name
+msgid "Rey Micelio"
+msgstr "Mycelium King"
+
+#: data/enemies_extra.json enemies/workerbee/name
+msgid "Obrera Acorazada"
+msgstr "Armored Worker"
+
+#: data/enemies_extra.json enemies/hornet/name
+msgid "Avispón Verdugo"
+msgstr "Executioner Hornet"
+
+#: data/enemies_extra.json enemies/royalbeetle/name
+msgid "Escarabajo Real"
+msgstr "Royal Beetle"
+
+#: data/enemies_extra.json enemies/waxcolossus/name
+msgid "Coloso de Cera"
+msgstr "Wax Colossus"
+
+#: data/enemies_extra.json enemies/eel/moves/shock/name
+msgid "Descarga"
+msgstr "Discharge"
+
+#: data/enemies_extra.json enemies/eel/moves/coil/name
+msgid "Enroscarse"
+msgstr "Coil"
+
+#: data/enemies_extra.json enemies/eel/moves/zap/name
+msgid "Chispazo"
+msgstr "Zap"
+
+#: data/enemies_extra.json enemies/sirena/moves/canto/name
+msgid "Canto Hechizante"
+msgstr "Spellbinding Song"
+
+#: data/enemies_extra.json enemies/sirena/moves/garra/name
+msgid "Garra"
+msgstr "Claw"
+
+#: data/enemies_extra.json enemies/spectralbosun/moves/apuntar/name
+msgid "Apuntar el Cañón"
+msgstr "Aim the Cannon"
+
+#: data/enemies_extra.json enemies/spectralbosun/moves/canon/name
+msgid "Cañonazo Rompible (16)"
+msgstr "Breakable Cannon Shot (16)"
+
+#: data/enemies_extra.json enemies/spectralbosun/moves/andanada/name
+msgid "Andanada Fantasma"
+msgstr "Phantom Broadside"
+
+#: data/enemies_extra.json enemies/spectralbosun/moves/sable/name
+msgid "Sablazo Espectral"
+msgstr "Spectral Saber"
+
+#: data/enemies_extra.json enemies/drowncaptain/moves/abordaje/name
+msgid "¡Al abordaje!"
+msgstr "Board 'em!"
+
+#: data/enemies_extra.json enemies/drowncaptain/moves/canon/name
+msgid "Cañonazo"
+msgstr "Cannon Shot"
+
+#: data/enemies_extra.json enemies/drowncaptain/moves/ancla/name
+msgid "Ancla de Hierro"
+msgstr "Iron Anchor"
+
+#: data/enemies_extra.json enemies/drowncaptain/moves/ron/name
+msgid "Ron Maldito"
+msgstr "Cursed Rum"
+
+#: data/enemies_extra.json enemies/brambwolf/moves/bite/name
+msgid "Dentellada"
+msgstr "Snap"
+
+#: data/enemies_extra.json enemies/brambwolf/moves/maul/name
+msgid "Zarpazo"
+msgstr "Swipe"
+
+#: data/enemies_extra.json enemies/mantis/moves/camo/name
+msgid "Camuflaje"
+msgstr "Camouflage"
+
+#: data/enemies_extra.json enemies/mantis/moves/scythe/name
+msgid "Guadañas"
+msgstr "Scythes"
+
+#: data/enemies_extra.json enemies/mantis/moves/molt/name
+msgid "Muda"
+msgstr "Molt"
+
+#: data/enemies_extra.json enemies/rootwarden/moves/raices/name
+#: data/states_extra.json st/rootShield/n
+msgid "Escudo de Raíces"
+msgstr "Root Shield"
+
+#: data/enemies_extra.json enemies/rootwarden/moves/golpe/name
+msgid "Golpe de Corteza"
+msgstr "Bark Blow"
+
+#: data/enemies_extra.json enemies/rootwarden/moves/lianas/name
+msgid "Lianas"
+msgstr "Vines"
+
+#: data/enemies_extra.json enemies/mycelking/moves/colonia/name
+msgid "Colonia"
+msgstr "Colony"
+
+#: data/enemies_extra.json enemies/mycelking/moves/esporas/name
+msgid "Nube de Esporas"
+msgstr "Spore Cloud"
+
+#: data/enemies_extra.json enemies/mycelking/moves/pudrir/name
+msgid "Putrefacción"
+msgstr "Rot"
+
+#: data/enemies_extra.json enemies/mycelking/moves/festin/name
+msgid "Festín Fúngico"
+msgstr "Fungal Feast"
+
+#: data/enemies_extra.json enemies/workerbee/moves/carry/name
+msgid "Acarrear"
+msgstr "Haul"
+
+#: data/enemies_extra.json enemies/workerbee/moves/pierce/name
+msgid "Perforar"
+msgstr "Pierce"
+
+#: data/enemies_extra.json enemies/workerbee/moves/rally/name
+msgid "Reagrupar"
+msgstr "Regroup"
+
+#: data/enemies_extra.json enemies/hornet/moves/sting/name
+msgid "Doble Aguijón"
+msgstr "Double Stinger"
+
+#: data/enemies_extra.json enemies/hornet/moves/execute/name
+msgid "Ejecución"
+msgstr "Execution"
+
+#: data/enemies_extra.json enemies/hornet/moves/frenzy/name
+msgid "Frenesí"
+msgstr "Frenzy"
+
+#: data/enemies_extra.json enemies/royalbeetle/moves/placa/name
+msgid "Placas Reales"
+msgstr "Royal Plates"
+
+#: data/enemies_extra.json enemies/royalbeetle/moves/embestida/name
+msgid "Embestida Real"
+msgstr "Royal Ram"
+
+#: data/enemies_extra.json enemies/royalbeetle/moves/esquirlas/name
+msgid "Esquirlas de Quitina"
+msgstr "Chitin Shards"
+
+#: data/enemies_extra.json enemies/waxcolossus/moves/sello/name
+msgid "Sello de Cera"
+msgstr "Wax Seal"
+
+#: data/enemies_extra.json enemies/waxcolossus/moves/aplastar/name
+msgid "Puño de Panal"
+msgstr "Honeycomb Fist"
+
+#: data/enemies_extra.json enemies/waxcolossus/moves/goteo/name
+msgid "Goteo Ardiente"
+msgstr "Burning Drip"
+
+#: data/enemies_extra.json enemies/waxcolossus/moves/cera/name
+msgid "Cera Fundida"
+msgstr "Molten Wax"
+
+#: data/enemies_extra.json enemies/waxcolossus/moves/fundirse/name
+msgid "Fundición"
+msgstr "Meltdown"
+
+#: data/balance_w2.json enemies/crabking/moves/guillotina/name
+msgid "Guillotina"
+msgstr "Guillotine"
+
+#: data/balance_w2.json enemies/rootmother/moves/espinas/name
+msgid "Bosque de Espinas"
+msgstr "Forest of Thorns"
+
+#: data/balance_w2.json enemies/drowncaptain/moves/metralla/name
+msgid "Tormenta de Metralla"
+msgstr "Grapeshot Storm"
+
+#: data/balance_w2.json enemies/mycelking/moves/esporada/name
+msgid "Esporada Final"
+msgstr "Final Sporeburst"
+
+#: data/balance_w2.json enemies/queen/moves/enjambre/name
+msgid "Enjambre Real"
+msgstr "Royal Swarm"
+
+#: data/balance_w2.json enemies/waxcolossus/moves/nucleo/name
+msgid "Núcleo Ardiente"
+msgstr "Burning Core"
+
+#: data/balance_w2.json enemies/crabking/phase2/msg
+msgid "¡El Cangrejo Rey se enfurece!"
+msgstr "The Crab King flies into a rage!"
+
+#: data/balance_w2.json enemies/rootmother/phase2/msg
+msgid "¡La Madre Raíz se cubre de espinas!"
+msgstr "The Root Mother bristles with thorns!"
+
+#: data/balance_w2.json enemies/drowncaptain/phase2/msg
+msgid "¡La Capitana Ahogada iza la bandera negra!"
+msgstr "The Drowned Captain hoists the black flag!"
+
+#: data/balance_w2.json enemies/mycelking/phase2/msg
+msgid "¡El Rey Micelio libera su esporada final!"
+msgstr "The Mycelium King unleashes his final sporeburst!"
+
+#: data/balance_w2.json enemies/queen/phase2/msg
+msgid "¡La Reina de la Colmena llama a su guardia!"
+msgstr "The Hive Queen calls her guard!"
+
+#: data/balance_w2.json enemies/waxcolossus/phase2/msg
+msgid "¡El Coloso de Cera se funde en furia!"
+msgstr "The Wax Colossus melts into a fury!"
+
+#: data/enemies.json acts/0/name
+msgid "Los Bajos Muelles"
+msgstr "The Low Docks"
+
+#: data/enemies.json acts/1/name
+msgid "La Maleza"
+msgstr "The Thicket"
+
+#: data/enemies.json acts/2/name
+msgid "La Colmena"
+msgstr "The Hive"
+
+#: data/enemies.json acts/0/sub
+msgid "Acto I"
+msgstr "Act I"
+
+#: data/enemies.json acts/1/sub
+msgid "Acto II"
+msgstr "Act II"
+
+#: data/enemies.json acts/2/sub
+msgid "Acto III"
+msgstr "Act III"
+
+#: data/relics.json relics/brasa_carmesi/n
+msgid "Brasa Carmesí"
+msgstr "Crimson Ember"
+
+#: data/relics.json relics/anillo_cazadora/n
+msgid "Anillo de la Cazadora"
+msgstr "Huntress's Ring"
+
+#: data/relics.json relics/sello_osty/n
+msgid "Sello de Osty"
+msgstr "Osty's Seal"
+
+#: data/relics.json relics/prisma_solar/n
+msgid "Prisma Solar"
+msgstr "Solar Prism"
+
+#: data/relics.json relics/concha_marea/n
+msgid "Concha de Marea"
+msgstr "Tide Shell"
+
+#: data/relics.json relics/ancla/n
+msgid "Ancla Oxidada"
+msgstr "Rusty Anchor"
+
+#: data/relics.json relics/linterna/n
+msgid "Linterna de Sentina"
+msgstr "Bilge Lantern"
+
+#: data/relics.json relics/vajra/n
+msgid "Hoja de Vajra"
+msgstr "Vajra Blade"
+
+#: data/relics.json relics/canicas/n
+msgid "Bolsa de Canicas"
+msgstr "Bag of Marbles"
+
+#: data/relics.json relics/piedra/n
+msgid "Piedra Lisa"
+msgstr "Smooth Stone"
+
+#: data/relics.json relics/orichalcum/n
+msgid "Oricalco"
+msgstr "Orichalcum"
+
+#: data/relics.json relics/escamas/n
+msgid "Escamas de Bronce"
+msgstr "Bronze Scales"
+
+#: data/relics.json relics/fresa/n
+msgid "Fresa Dorada"
+msgstr "Golden Strawberry"
+
+#: data/relics.json relics/flor/n
+msgid "Flor Feliz"
+msgstr "Happy Flower"
+
+#: data/relics.json relics/idolo_dorado/n
+msgid "Ídolo Dorado"
+msgstr "Golden Idol"
+
+#: data/relics.json relics/tarjeta/n
+msgid "Tarjeta de Socio"
+msgstr "Membership Card"
+
+#: data/relics.json relics/cuerno/n
+msgid "Cuerno de Caza"
+msgstr "Hunting Horn"
+
+#: data/relics.json relics/vela/n
+msgid "Vela Eterna"
+msgstr "Eternal Candle"
+
+#: data/relics.json relics/resorte_reserva/n
+msgid "Resorte de Reserva"
+msgstr "Spare Spring"
+
+#: data/relics.json relics/lupa_relojero/n
+msgid "Lupa de Relojero"
+msgstr "Watchmaker's Loupe"
+
+#: data/relics.json relics/perla_negra/n
+msgid "Perla Negra"
+msgstr "Black Pearl"
+
+#: data/relics.json relics/cuenco_marea/n
+msgid "Cuenco de Marea"
+msgstr "Tide Bowl"
+
+#: data/relics.json relics/corazon_laton/n
+msgid "Corazón de Latón"
+msgstr "Brass Heart"
+
+#: data/relics.json relics/cetro_maremoto/n
+msgid "Cetro del Maremoto"
+msgstr "Seaquake Scepter"
+
+#: data/relics.json relics/nucleo/n
+msgid "Núcleo de Energía"
+msgstr "Energy Core"
+
+#: data/relics.json relics/ojo/n
+msgid "Ojo del Abismo"
+msgstr "Eye of the Abyss"
+
+#: data/relics.json relics/pozo/n
+msgid "Pozo de Vida"
+msgstr "Wellspring of Life"
+
+#: data/relics.json relics/brasa_carmesi/d
+msgid "Al terminar un combate, recuperas 6 PV."
+msgstr "At the end of combat, heal 6 HP."
+
+#: data/relics.json relics/anillo_cazadora/d
+msgid "Robas 2 cartas extra en el primer turno de cada combate."
+msgstr "Draw 2 extra cards on the first turn of each combat."
+
+#: data/relics.json relics/sello_osty/d
+msgid "Osty empieza cada combate con +6 PV máx. y +1 de Poder."
+msgstr "Osty starts each combat with +6 Max HP and +1 Power."
+
+#: data/relics.json relics/prisma_solar/d
+msgid "Al inicio del combate y cada vez que juegues 3 cartas en un mismo turno, infliges 4 de daño solar a TODOS los enemigos."
+msgstr "At the start of combat, and every time you play 3 cards in a single turn, deal 4 solar damage to ALL enemies."
+
+#: data/relics.json relics/llave_maestra/d
+msgid "Empiezas cada combate con 4 de Cuerda."
+msgstr "Start each combat with 4 Wind-Up."
+
+#: data/relics.json relics/concha_marea/d
+msgid "Empiezas cada combate con 1 Ola canalizada."
+msgstr "Start each combat with 1 Wave Channeled."
+
+#: data/relics.json relics/ancla/d
+msgid "Empiezas cada combate con 10 de Bloqueo."
+msgstr "Start each combat with 10 Block."
+
+#: data/relics.json relics/linterna/d
+msgid "Obtén 1 de Energía extra en el primer turno."
+msgstr "Gain 1 extra Energy on the first turn."
+
+#: data/relics.json relics/vajra/d
+msgid "Empiezas cada combate con 1 de Fuerza."
+msgstr "Start each combat with 1 Strength."
+
+#: data/relics.json relics/canicas/d
+msgid "Al inicio del combate aplicas 1 Vulnerable a todos los enemigos."
+msgstr "At the start of combat, apply 1 Vulnerable to all enemies."
+
+#: data/relics.json relics/piedra/d
+msgid "Empiezas cada combate con 1 de Destreza."
+msgstr "Start each combat with 1 Dexterity."
+
+#: data/relics.json relics/orichalcum/d
+msgid "Si no tienes Bloqueo al final de tu turno, obtienes 6."
+msgstr "If you have no Block at the end of your turn, gain 6."
+
+#: data/relics.json relics/escamas/d
+msgid "Empiezas cada combate con 3 de Espinas."
+msgstr "Start each combat with 3 Thorns."
+
+#: data/relics.json relics/fresa/d
+msgid "Aumenta tus PV máx. en 7."
+msgstr "Raise your Max HP by 7."
+
+#: data/relics.json relics/flor/d
+msgid "Cada 3 turnos obtienes 1 de Energía."
+msgstr "Every 3 turns, gain 1 Energy."
+
+#: data/relics.json relics/idolo_dorado/d
+msgid "Ganas un 25% más de oro tras los combates."
+msgstr "Gain 25% more gold after combat."
+
+#: data/relics.json relics/tarjeta/d
+msgid "Los precios de la tienda se reducen a la mitad."
+msgstr "Shop prices are cut in half."
+
+#: data/relics.json relics/cuerno/d
+msgid "Empiezas cada combate con 1 carta extra en la mano (primer turno)."
+msgstr "Start each combat with 1 extra card in hand (first turn)."
+
+#: data/relics.json relics/vela/d
+msgid "Al inicio de cada turno obtienes 1 de Bloqueo."
+msgstr "At the start of each turn, gain 1 Block."
+
+#: data/relics.json relics/resorte_reserva/d
+msgid "Al inicio de tu turno, si no tienes Cuerda, ganas 2."
+msgstr "At the start of your turn, if you have no Wind-Up, gain 2."
+
+#: data/relics.json relics/lupa_relojero/d
+msgid "Tus cartas de Engranaje infligen 2 de daño extra."
+msgstr "Your Gear cards deal 2 extra damage."
+
+#: data/relics.json relics/perla_negra/d
+msgid "Empiezas cada combate con 1 de Resonancia."
+msgstr "Start each combat with 1 Resonance."
+
+#: data/relics.json relics/cuenco_marea/d
+msgid "Tienes 1 hueco de orbe más."
+msgstr "Gain 1 extra orb slot."
+
+#: data/relics.json relics/corazon_laton/d
+msgid "+1 de Energía por turno. Pierdes 2 de Cuerda al final de tu turno."
+msgstr "+1 Energy per turn. Lose 2 Wind-Up at the end of your turn."
+
+#: data/relics.json relics/cetro_maremoto/d
+msgid "Empiezas cada combate con Ola, Bruma y Perla canalizadas y 1 Herida en tu mazo."
+msgstr "Start each combat with Wave, Mist and Pearl Channeled, and 1 Wound in your deck."
+
+#: data/relics.json relics/nucleo/d
+msgid "+1 de Energía por turno. Empiezas cada combate con 1 Herida en tu mazo."
+msgstr "+1 Energy per turn. Start each combat with 1 Wound in your deck."
+
+#: data/relics.json relics/ojo/d
+msgid "Robas 1 carta extra por turno. Empiezas cada combate con 1 Duda en tu mazo."
+msgstr "Draw 1 extra card per turn. Start each combat with 1 Doubt in your deck."
+
+#: data/relics.json relics/pozo/d
+msgid "Aumenta tus PV máx. en 25 y te curas por completo."
+msgstr "Raise your Max HP by 25 and fully heal."
+
+#: data/relics_extra.json relics/colmillo/n
+msgid "Colmillo de Lobo"
+msgstr "Wolf Fang"
+
+#: data/relics_extra.json relics/medallon/n
+msgid "Medallón del Boticario"
+msgstr "Apothecary's Medallion"
+
+#: data/relics_extra.json relics/tinta/n
+msgid "Tinta de Calamar"
+msgstr "Squid Ink"
+
+#: data/relics_extra.json relics/caparazon/n
+msgid "Caparazón Pulido"
+msgstr "Polished Shell"
+
+#: data/relics_extra.json relics/brujula/n
+msgid "Brújula de Bronce"
+msgstr "Bronze Compass"
+
+#: data/relics_extra.json relics/reloj_arena/n
+msgid "Reloj de Arena"
+msgstr "Hourglass"
+
+#: data/relics_extra.json relics/huevo/n
+msgid "Huevo de Grifo"
+msgstr "Griffin Egg"
+
+#: data/relics_extra.json relics/pluma/n
+msgid "Pluma de Fénix"
+msgstr "Phoenix Feather"
+
+#: data/relics_extra.json relics/cristal/n
+msgid "Cristal de Eco"
+msgstr "Echo Crystal"
+
+#: data/relics_extra.json relics/amuleto/n
+msgid "Amuleto de las Mareas"
+msgstr "Amulet of the Tides"
+
+#: data/relics_extra.json relics/corona_espinas/n
+msgid "Corona de Espinas"
+msgstr "Crown of Thorns"
+
+#: data/relics_extra.json relics/reloj_roto/n
+msgid "Reloj Detenido"
+msgstr "Stopped Clock"
+
+#: data/relics_extra.json relics/estandarte/n
+msgid "Estandarte Acorazado"
+msgstr "Ironclad Banner"
+
+#: data/relics_extra.json relics/guantelete/n
+msgid "Guantelete Ígneo"
+msgstr "Igneous Gauntlet"
+
+#: data/relics_extra.json relics/corazon_volcan/n
+msgid "Corazón de Volcán"
+msgstr "Volcano Heart"
+
+#: data/relics_extra.json relics/bandolera/n
+msgid "Bandolera de Cuchillas"
+msgstr "Shiv Bandolier"
+
+#: data/relics_extra.json relics/colmillo_vibora/n
+msgid "Colmillo de Víbora"
+msgstr "Viper Fang"
+
+#: data/relics_extra.json relics/capa_sombra/n
+msgid "Capa de Sombras"
+msgstr "Cloak of Shadows"
+
+#: data/relics_extra.json relics/craneo_cristal/n
+msgid "Cráneo de Cristal"
+msgstr "Crystal Skull"
+
+#: data/relics_extra.json relics/grimorio/n
+msgid "Grimorio Prohibido"
+msgstr "Forbidden Grimoire"
+
+#: data/relics_extra.json relics/abanico_espejo/n
+msgid "Abanico de Espejos"
+msgstr "Mirror Fan"
+
+#: data/relics_extra.json relics/sol_naciente/n
+msgid "Sol Naciente"
+msgstr "Rising Sun"
+
+#: data/relics_extra.json relics/eclipse/n
+msgid "Eclipse"
+msgstr "Eclipse"
+
+#: data/relics_extra.json relics/muelle_doble/n
+msgid "Muelle Doble"
+msgstr "Double Spring"
+
+#: data/relics_extra.json relics/caracola_abismal/n
+msgid "Caracola Abismal"
+msgstr "Abyssal Conch"
+
+#: data/relics_extra.json relics/colmillo/d
+msgid "Cada vez que derrotas a un enemigo, recuperas 3 PV."
+msgstr "Whenever you defeat an enemy, heal 3 HP."
+
+#: data/relics_extra.json relics/medallon/d
+msgid "Tienes 1 hueco de poción más."
+msgstr "Gain 1 extra potion slot."
+
+#: data/relics_extra.json relics/tinta/d
+msgid "Al inicio del combate aplicas 1 Débil a todos los enemigos."
+msgstr "At the start of combat, apply 1 Weak to all enemies."
+
+#: data/relics_extra.json relics/caparazon/d
+msgid "Empiezas cada combate con 2 de Metalizar."
+msgstr "Start each combat with 2 Metallicize."
+
+#: data/relics_extra.json relics/brujula/d
+msgid "Cada vez que barajas tu descarte en el mazo de robo, ganas 5 de Bloqueo."
+msgstr "Whenever you shuffle your discard pile into your draw pile, gain 5 Block."
+
+#: data/relics_extra.json relics/reloj_arena/d
+msgid "En tu tercer turno de cada combate obtienes 2 de Energía."
+msgstr "On your third turn of each combat, gain 2 Energy."
+
+#: data/relics_extra.json relics/huevo/d
+msgid "Las cartas que añades a tu mazo desde recompensas, tiendas y eventos llegan mejoradas."
+msgstr "Cards you add to your deck from rewards, shops and events come upgraded."
+
+#: data/relics_extra.json relics/pluma/d
+msgid "Una vez por partida, al caer a 0 PV te recuperas con el 30% de tus PV máx."
+msgstr "Once per run, when you drop to 0 HP, you recover with 30% of your Max HP."
+
+#: data/relics_extra.json relics/cristal/d
+msgid "La primera carta que juegas en cada combate se juega dos veces."
+msgstr "The first card you play in each combat is played twice."
+
+#: data/relics_extra.json relics/amuleto/d
+msgid "Cada vez que juegas un Poder, robas 1 carta y ganas 4 de Bloqueo."
+msgstr "Whenever you play a Power, draw 1 card and gain 4 Block."
+
+#: data/relics_extra.json relics/corona_espinas/d
+msgid "+1 de Energía por turno. Al inicio de cada combate añades 1 Quemadura a tu mazo de robo."
+msgstr "+1 Energy per turn. At the start of each combat, add 1 Burn to your draw pile."
+
+#: data/relics_extra.json relics/reloj_roto/d
+msgid "+1 de Energía por turno. Ya no puedes descansar en las hogueras (sí mejorar cartas)."
+msgstr "+1 Energy per turn. You can no longer rest at campfires (you can still upgrade cards)."
+
+#: data/relics_extra.json relics/estandarte/d
+msgid "Al inicio del combate, si tienes la mitad de tus PV o menos, ganas 2 de Fuerza."
+msgstr "At the start of combat, if you're at half HP or less, gain 2 Strength."
+
+#: data/relics_extra.json relics/guantelete/d
+msgid "Cada vez que pierdes PV por una de tus cartas, ganas 4 de Bloqueo."
+msgstr "Whenever you lose HP from one of your cards, gain 4 Block."
+
+#: data/relics_extra.json relics/corazon_volcan/d
+msgid "+1 de Energía por turno. Al inicio de cada combate pierdes 4 PV."
+msgstr "+1 Energy per turn. Lose 4 HP at the start of each combat."
+
+#: data/relics_extra.json relics/bandolera/d
+msgid "Al inicio de cada combate añades 2 Cuchillas a tu mano."
+msgstr "At the start of each combat, add 2 Shivs to your hand."
+
+#: data/relics_extra.json relics/colmillo_vibora/d
+msgid "Cada vez que aplicas Veneno a un enemigo, aplicas 1 más."
+msgstr "Whenever you apply Poison to an enemy, apply 1 more."
+
+#: data/relics_extra.json relics/capa_sombra/d
+msgid "+1 de Energía por turno. Robas 1 carta menos cada turno."
+msgstr "+1 Energy per turn. Draw 1 fewer card each turn."
+
+#: data/relics_extra.json relics/craneo_cristal/d
+msgid "Osty recupera 2 PV al inicio de cada turno."
+msgstr "Osty heals 2 HP at the start of each turn."
+
+#: data/relics_extra.json relics/grimorio/d
+msgid "Cada vez que agotas una carta, infliges 3 de daño a un enemigo al azar."
+msgstr "Whenever you Exhaust a card, deal 3 damage to a random enemy."
+
+#: data/relics_extra.json relics/luna_violeta/d
+msgid "+1 de Energía por turno. Osty empieza cada combate con la mitad de sus PV."
+msgstr "+1 Energy per turn. Osty starts each combat at half HP."
+
+#: data/relics_extra.json relics/abanico_espejo/d
+msgid "Empiezas cada combate con 3 de Calor."
+msgstr "Start each combat with 3 Heat."
+
+#: data/relics_extra.json relics/sol_naciente/d
+msgid "Al inicio del combate aplicas 2 de Resplandor a TODOS los enemigos."
+msgstr "At the start of combat, apply 2 Glow to ALL enemies."
+
+#: data/relics_extra.json relics/eclipse/d
+msgid "+1 de Energía por turno. Los enemigos empiezan cada combate con 8 de Bloqueo."
+msgstr "+1 Energy per turn. Enemies start each combat with 8 Block."
+
+#: data/relics_extra.json relics/muelle_doble/d
+msgid "Cada vez que gastas Cuerda, ganas 1 de Bloqueo por cada punto gastado."
+msgstr "Whenever you spend Wind-Up, gain 1 Block for each point spent."
+
+#: data/relics_extra.json relics/caracola_abismal/d
+msgid "Empiezas cada combate con 1 Abismo canalizado."
+msgstr "Start each combat with 1 Abyss Channeled."
+
+#: data/balance_w2.json relics/brasa_carmesi/d
+msgid "Al terminar un combate, recuperas 11 PV."
+msgstr "At the end of combat, heal 11 HP."
+
+#: data/balance_w2.json relics/llave_maestra/d
+msgid "Empiezas cada combate con 5 de Cuerda."
+msgstr "Start each combat with 5 Wind-Up."
+
+#: data/balance_w2.json relics/escamas/d
+msgid "Empiezas cada combate con 2 de Espinas."
+msgstr "Start each combat with 2 Thorns."
+
+#: data/balance_w2.json relics/caparazon/d
+msgid "Empiezas cada combate con 1 de Metalizar."
+msgstr "Start each combat with 1 Metallicize."
+
+#: data/balance_w2.json relics/pozo/d
+msgid "Aumenta tus PV máx. en 18 y te curas por completo."
+msgstr "Raise your Max HP by 18 and fully heal."
+
+#: data/balance_w2.json relics/nucleo/d
+msgid "+1 de Energía por turno. Empiezas cada combate con 2 Heridas en tu mazo."
+msgstr "+1 Energy per turn. Start each combat with 2 Wounds in your deck."
+
+#: data/relics.json potions/fuego/n
+msgid "Frasco de Fuego"
+msgstr "Fire Flask"
+
+#: data/relics.json potions/escudo/n
+msgid "Poción de Escudo"
+msgstr "Shield Potion"
+
+#: data/relics.json potions/fuerza/n
+msgid "Elixir de Fuerza"
+msgstr "Strength Elixir"
+
+#: data/relics.json potions/energia/n
+msgid "Poción de Energía"
+msgstr "Energy Potion"
+
+#: data/relics.json potions/curacion/n
+msgid "Poción de Curación"
+msgstr "Healing Potion"
+
+#: data/relics.json potions/veneno/n
+msgid "Frasco de Veneno"
+msgstr "Poison Flask"
+
+#: data/relics.json potions/niebla/n
+msgid "Niebla Debilitante"
+msgstr "Weakening Fog"
+
+#: data/relics.json potions/rapidez/n
+msgid "Poción de Rapidez"
+msgstr "Swift Potion"
+
+#: data/relics.json potions/fuego/d
+msgid "Inflige 20 de daño a un enemigo."
+msgstr "Deal 20 damage to an enemy."
+
+#: data/relics.json potions/escudo/d
+msgid "Obtén 12 de Bloqueo."
+msgstr "Gain 12 Block."
+
+#: data/relics.json potions/fuerza/d
+msgid "Obtén 2 de Fuerza."
+msgstr "Gain 2 Strength."
+
+#: data/relics.json potions/energia/d
+msgid "Obtén 2 de Energía."
+msgstr "Gain 2 Energy."
+
+#: data/relics.json potions/curacion/d
+msgid "Recuperas el 25% de tus PV máx."
+msgstr "Heal 25% of your Max HP."
+
+#: data/relics.json potions/veneno/d
+msgid "Aplica 8 de Veneno a un enemigo."
+msgstr "Apply 8 Poison to an enemy."
+
+#: data/relics.json potions/niebla/d
+msgid "Aplica 3 Débil y 3 Vulnerable a un enemigo."
+msgstr "Apply 3 Weak and 3 Vulnerable to an enemy."
+
+#: data/relics.json potions/rapidez/d
+msgid "Robas 3 cartas."
+msgstr "Draw 3 cards."
+
+#: data/relics_extra.json potions/duplicar/n
+msgid "Destilado de Eco"
+msgstr "Echo Distillate"
+
+#: data/relics_extra.json potions/herrero/n
+msgid "Elixir del Herrero"
+msgstr "Blacksmith's Elixir"
+
+#: data/relics_extra.json potions/gambito/n
+msgid "Tónico del Malabarista"
+msgstr "Juggler's Tonic"
+
+#: data/relics_extra.json potions/agilidad/n
+msgid "Poción de Agilidad"
+msgstr "Agility Potion"
+
+#: data/relics_extra.json potions/espinas/n
+msgid "Tónico de Espinas"
+msgstr "Thorn Tonic"
+
+#: data/relics_extra.json potions/savia/n
+msgid "Savia Viva"
+msgstr "Living Sap"
+
+#: data/relics_extra.json potions/brea/n
+msgid "Bomba de Brea"
+msgstr "Tar Bomb"
+
+#: data/relics_extra.json potions/memoria/n
+msgid "Memoria Líquida"
+msgstr "Liquid Memory"
+
+#: data/relics_extra.json potions/duplicar/d
+msgid "Tu próxima carta este turno se juega dos veces."
+msgstr "Your next card this turn is played twice."
+
+#: data/relics_extra.json potions/herrero/d
+msgid "Mejora todas las cartas de tu mano durante este combate."
+msgstr "Upgrade all cards in your hand for the rest of this combat."
+
+#: data/relics_extra.json potions/gambito/d
+msgid "Descarta tu mano y roba tantas cartas como descartaste."
+msgstr "Discard your hand, then draw that many cards."
+
+#: data/relics_extra.json potions/agilidad/d
+msgid "Obtén 2 de Destreza."
+msgstr "Gain 2 Dexterity."
+
+#: data/relics_extra.json potions/espinas/d
+msgid "Obtén 4 de Espinas."
+msgstr "Gain 4 Thorns."
+
+#: data/relics_extra.json potions/savia/d
+msgid "Obtén 5 de Regeneración: al inicio de tus turnos recuperas PV."
+msgstr "Gain 5 Regeneration: heal HP at the start of your turns."
+
+#: data/relics_extra.json potions/brea/d
+msgid "Inflige 12 de daño a TODOS los enemigos."
+msgstr "Deal 12 damage to ALL enemies."
+
+#: data/relics_extra.json potions/memoria/d
+msgid "Devuelve a tu mano la última carta de tu pila de descarte."
+msgstr "Return the top card of your discard pile to your hand."
+
+#: data/events.json events/0/title
+msgid "Altar Olvidado"
+msgstr "Forgotten Altar"
+
+#: data/events.json events/1/title
+msgid "Fuente Luminosa"
+msgstr "Luminous Fountain"
+
+#: data/events.json events/2/title
+msgid "Forjador Errante"
+msgstr "Wandering Smith"
+
+#: data/events.json events/3/title
+msgid "Cofre Maldito"
+msgstr "Cursed Chest"
+
+#: data/events.json events/4/title
+msgid "Hongos Brillantes"
+msgstr "Glowing Mushrooms"
+
+#: data/events.json events/5/title
+msgid "Mercader Fantasma"
+msgstr "Phantom Merchant"
+
+#: data/events.json events/6/title
+msgid "Rival Misterioso"
+msgstr "Mysterious Rival"
+
+#: data/events.json events/0/text
+msgid "Entre la niebla hallas un altar cubierto de runas. Parece pedir algo a cambio de su poder."
+msgstr "Through the fog you find an altar covered in runes. It seems to want something in exchange for its power."
+
+#: data/events.json events/1/text
+msgid "Una fuente de agua luminosa brota de entre las rocas. Sus aguas parecen tener propiedades extrañas."
+msgstr "A spring of glowing water bubbles up between the rocks. Its waters seem to have strange properties."
+
+#: data/events.json events/2/text
+msgid "Un herrero ambulante con su yunque portátil te ofrece sus servicios."
+msgstr "A traveling blacksmith with a portable anvil offers you his services."
+
+#: data/events.json events/3/text
+msgid "Un cofre ornamentado emite un susurro inquietante. El oro asoma entre sus grietas."
+msgstr "An ornate chest gives off an unsettling whisper. Gold peeks out between its cracks."
+
+#: data/events.json events/4/text
+msgid "Un círculo de hongos luminosos crece junto al camino. Parecen comestibles... quizá."
+msgstr "A circle of glowing mushrooms grows by the path. They look edible... maybe."
+
+#: data/events.json events/5/text
+msgid "Una figura translúcida te saluda con una sonrisa vacía y abre su capa llena de curiosidades."
+msgstr "A translucent figure greets you with a hollow smile and opens a cloak full of curiosities."
+
+#: data/events.json events/6/text
+msgid "Un guerrero encapuchado bloquea el camino y desenvaina su arma: \"Muéstrame de qué estás hecha\"."
+msgstr "A hooded warrior blocks the path and draws his weapon: \"Show me what you're made of.\""
+
+#: data/events_extra.json events/0/title
+msgid "Biblioteca Sumergida"
+msgstr "Sunken Library"
+
+#: data/events_extra.json events/1/title
+msgid "El Jugador de Dados"
+msgstr "The Dice Player"
+
+#: data/events_extra.json events/2/title
+msgid "Espejo de las Musas"
+msgstr "Mirror of the Muses"
+
+#: data/events_extra.json events/3/title
+msgid "Peregrina Herida"
+msgstr "Wounded Pilgrim"
+
+#: data/events_extra.json events/4/title
+msgid "Un Recuerdo"
+msgstr "A Memory"
+
+#: data/events_extra.json events/5/title
+msgid "Barco Naufragado"
+msgstr "Shipwreck"
+
+#: data/events_extra.json events/6/title
+msgid "Ojo en la Marea"
+msgstr "Eye in the Tide"
+
+#: data/events_extra.json events/7/title
+msgid "Árbol de los Susurros"
+msgstr "Whispering Tree"
+
+#: data/events_extra.json events/8/title
+msgid "Círculo de Hadas"
+msgstr "Fairy Ring"
+
+#: data/events_extra.json events/9/title
+msgid "Panal Rebosante"
+msgstr "Overflowing Honeycomb"
+
+#: data/events_extra.json events/10/title
+msgid "Trono Vacío"
+msgstr "Empty Throne"
+
+#: data/events_extra.json events/11/title
+msgid "Arena de los Acorazados"
+msgstr "Arena of the Ironclad"
+
+#: data/events_extra.json events/12/title
+msgid "Madriguera del Zorro Plateado"
+msgstr "Silver Fox's Den"
+
+#: data/events_extra.json events/13/title
+msgid "Osario Olvidado"
+msgstr "Forgotten Ossuary"
+
+#: data/events_extra.json events/14/title
+msgid "Templo del Solio"
+msgstr "Temple of the Throne"
+
+#: data/events_extra.json events/15/title
+msgid "Taller del Relojero"
+msgstr "Watchmaker's Workshop"
+
+#: data/events_extra.json events/16/title
+msgid "Poza Lunar"
+msgstr "Moon Pool"
+
+#: data/events_extra.json events/17/title
+msgid "Campana de la Bruma"
+msgstr "Bell in the Mist"
+
+#: data/events_extra.json events/18/title
+msgid "El Corazón Hueco"
+msgstr "The Hollow Heart"
+
+#: data/events_extra.json events/19/title
+msgid "La Cera Recuerda"
+msgstr "The Wax Remembers"
+
+#: data/events_extra.json events/0/text
+msgid "Estanterías medio hundidas guardan tomos que no se han mojado jamás. Uno de ellos se abre solo a tu paso."
+msgstr "Half-sunken shelves hold tomes that have never once gotten wet. One of them opens by itself as you pass."
+
+#: data/events_extra.json events/1/text
+msgid "Un hombrecillo de sonrisa dorada agita un cubilete junto al camino. \"¿Una partida? La suerte es la única musa que nunca miente.\""
+msgstr "A little man with a golden smile rattles a dice cup by the path. \"Fancy a game? Luck is the only muse who never lies.\""
+
+#: data/events_extra.json events/2/text
+msgid "Un espejo de marco dorado flota sobre el suelo. Tu reflejo no te imita: te observa, curioso."
+msgstr "A gilt-framed mirror floats above the ground. Your reflection doesn't copy you: it watches you, curious."
+
+#: data/events_extra.json events/3/text
+msgid "Una peregrina descansa junto a un farol apagado, con la pierna vendada. \"Llevo días caminando hacia la torre... ¿me ayudarías?\""
+msgstr "A pilgrim rests beside an unlit lantern, her leg bandaged. \"I've been walking toward the tower for days... would you help me?\""
+
+#: data/events_extra.json events/4/text
+msgid "Algo en este lugar te resulta dolorosamente familiar."
+msgstr "Something about this place feels painfully familiar."
+
+#: data/events_extra.json events/5/text
+msgid "El casco de un galeón asoma entre las aguas negras del muelle. Algo brilla en la bodega... y algo se mueve en el camarote."
+msgstr "The hull of a galleon juts out of the dock's black water. Something glitters in the hold... and something moves in the cabin."
+
+#: data/events_extra.json events/6/text
+msgid "Bajo el agua, un ojo enorme se abre y te sigue. Un tentáculo emerge despacio y se queda inmóvil, esperando."
+msgstr "Beneath the water, an enormous eye opens and follows you. A tentacle slowly rises and goes still, waiting."
+
+#: data/events_extra.json events/7/text
+msgid "Las ramas de este árbol murmuran secretos en una lengua antigua. Algunos frutos brillan entre las hojas."
+msgstr "This tree's branches murmur secrets in an ancient tongue. A few fruits glimmer among the leaves."
+
+#: data/events_extra.json events/8/text
+msgid "Un anillo de setas luminosas rodea un claro. Diminutas luces bailan y ríen, invitándote a entrar."
+msgstr "A ring of glowing toadstools circles a clearing. Tiny lights dance and giggle, inviting you in."
+
+#: data/events_extra.json events/9/text
+msgid "Un panal del tamaño de una casa gotea miel dorada. El zumbido de su interior es tranquilo... por ahora."
+msgstr "A honeycomb the size of a house drips golden honey. The buzzing inside is calm... for now."
+
+#: data/events_extra.json events/10/text
+msgid "En una sala de cera endurecida se alza un trono sin dueño. Una corona descansa sobre el asiento, esperando una cabeza."
+msgstr "In a hall of hardened wax stands a throne with no owner. A crown rests on the seat, waiting for a head."
+
+#: data/events_extra.json events/11/text
+msgid "Reconoces la arena donde entrenabas de joven. Los muñecos de práctica siguen en pie, cubiertos de óxido."
+msgstr "You recognize the arena where you trained in your youth. The practice dummies still stand, covered in rust."
+
+#: data/events_extra.json events/12/text
+msgid "Un rastro de huellas plateadas lleva a una madriguera. Dentro hay un pequeño tesoro de cazadora... y una piedra de afilar."
+msgstr "A trail of silver paw prints leads to a den. Inside lies a small huntress's treasure... and a whetstone."
+
+#: data/events_extra.json events/13/text
+msgid "Miles de huesos descansan ordenados en nichos. Osty se acerca a ellos con algo parecido al cariño."
+msgstr "Thousands of bones rest neatly in their niches. Osty drifts toward them with something like affection."
+
+#: data/events_extra.json events/14/text
+msgid "Un pequeño templo dorado resiste entre las ruinas. En su altar arde todavía la llama de las danzarinas."
+msgstr "A small golden temple endures among the ruins. On its altar, the dancers' flame still burns."
+
+#: data/events_extra.json events/15/text
+msgid "Un taller polvoriento lleno de muñecas a medio montar. Sobre la mesa, herramientas que parecen hechas para tus manos."
+msgstr "A dusty workshop full of half-assembled dolls. On the bench lie tools that seem made for your hands."
+
+#: data/events_extra.json events/16/text
+msgid "Una poza de agua inmóvil refleja una luna que no está en el cielo. Al acercarte, el agua empieza a cantar."
+msgstr "A pool of perfectly still water reflects a moon that isn't in the sky. As you draw near, the water begins to sing."
+
+#: data/events_extra.json events/17/text
+msgid "Una campana verde oscilante cuelga de un mástil sin barco. No la mueve el viento. Dentro del bronce, una luz parpadea al ritmo de tus pasos."
+msgstr "A swaying green bell hangs from a mast with no ship. It isn't the wind that moves it. Inside the bronze, a light flickers in time with your steps."
+
+#: data/events_extra.json events/18/text
+msgid "En el tronco de un roble abierto late un corazón de madera. Sus raíces se apartan con suavidad; saben que has venido a elegir qué llevarte."
+msgstr "Inside the split trunk of an oak beats a wooden heart. Its roots gently part; they know you've come to choose what to take."
+
+#: data/events_extra.json events/19/text
+msgid "Un banco de cera tibia conserva la forma de las cartas que tocas. Las figuras cambian bajo tus dedos como si el panal recordara otra versión de tu viaje."
+msgstr "A bench of warm wax keeps the shape of every card you touch. The figures shift beneath your fingers, as if the hive remembered another version of your journey."
+
+#: data/events_extra.json events/4/textBy/zafiro
+msgid "Entre la bruma ves el estandarte de los Acorazados ondeando sobre una muralla que ya no existe. Por un instante oyes a tus hermanos de armas llamarte por tu nombre."
+msgstr "Through the mist you see the Ironclad banner waving over a wall that no longer exists. For a moment, you hear your brothers-in-arms calling your name."
+
+#: data/events_extra.json events/4/textBy/lia
+msgid "Un zorro plateado te observa desde la maleza, igual que aquel que te enseñó a cazar en los Bosques Verdes. Sonríe, si es que los zorros sonríen."
+msgstr "A silver fox watches you from the undergrowth, just like the one who taught you to hunt in the Greenwood. It smiles, if foxes can smile."
+
+#: data/events_extra.json events/4/textBy/claudia
+msgid "La luna violeta se refleja en un charco y, en su fondo, una niña juega con una mano de huesos. Osty se agita, inquieto."
+msgstr "The violet moon is reflected in a puddle, and in its depths a little girl plays with a hand made of bones. Osty stirs, uneasy."
+
+#: data/events_extra.json events/4/textBy/aurora
+msgid "Un rayo de sol se cuela entre las ruinas y dibuja en el suelo los pasos de la primera danza que aprendiste en el templo del solio."
+msgstr "A sunbeam slips through the ruins and traces on the ground the steps of the first dance you learned at the temple of the throne."
+
+#: data/events_extra.json events/4/textBy/irene
+msgid "Un tictac familiar suena a tu espalda. Por un momento recuerdas unas manos cálidas girando tu llave... y luego, nada."
+msgstr "A familiar tick-tock sounds behind you. For a moment you remember warm hands turning your key... and then, nothing."
+
+#: data/events_extra.json events/4/textBy/selene
+msgid "La espuma canta la nana con la que naciste. Las olas te llaman por un nombre que habías olvidado."
+msgstr "The sea foam sings the lullaby you were born with. The waves call you by a name you had forgotten."
+
+#: data/lore.json lore/0/title
+msgid "El Canto Primero"
+msgstr "The First Song"
+
+#: data/lore.json lore/1/title
+msgid "La Aguja del Compositor"
+msgstr "The Composer's Spire"
+
+#: data/lore.json lore/2/title
+msgid "Los Tres Movimientos"
+msgstr "The Three Movements"
+
+#: data/lore.json lore/3/title
+msgid "Preludio del Agua"
+msgstr "Prelude of Water"
+
+#: data/lore.json lore/4/title
+msgid "La Capitana de la Marea Baja"
+msgstr "The Captain of the Low Tide"
+
+#: data/lore.json lore/5/title
+msgid "La Moneda que Canta"
+msgstr "The Singing Coin"
+
+#: data/lore.json lore/6/title
+msgid "El Canto de la Vida"
+msgstr "The Song of Life"
+
+#: data/lore.json lore/7/title
+msgid "El Rey Micelio"
+msgstr "The Mycelium King"
+
+#: data/lore.json lore/8/title
+msgid "La Savia que Recuerda"
+msgstr "The Sap That Remembers"
+
+#: data/lore.json lore/9/title
+msgid "La Marcha del Hambre"
+msgstr "The March of Hunger"
+
+#: data/lore.json lore/10/title
+msgid "El Coloso de Cera"
+msgstr "The Wax Colossus"
+
+#: data/lore.json lore/11/title
+msgid "La Reina Hambrienta"
+msgstr "The Hungry Queen"
+
+#: data/lore.json lore/12/title
+msgid "Zafiro, Voz del Valor"
+msgstr "Zafiro, Voice of Valor"
+
+#: data/lore.json lore/13/title
+msgid "Lia, Voz de la Astucia"
+msgstr "Lia, Voice of Cunning"
+
+#: data/lore.json lore/14/title
+msgid "Claudia, Voz de la Memoria"
+msgstr "Claudia, Voice of Memory"
+
+#: data/lore.json lore/15/title
+msgid "Aurora, Voz del Amanecer"
+msgstr "Aurora, Voice of Dawn"
+
+#: data/lore.json lore/16/title
+msgid "Irene, Voz del Engranaje"
+msgstr "Irene, Voice of the Gear"
+
+#: data/lore.json lore/17/title
+msgid "Selene, Voz de la Marea"
+msgstr "Selene, Voice of the Tide"
+
+#: data/lore.json lore/18/title
+msgid "Osty, la Mano que Recuerda"
+msgstr "Osty, the Hand That Remembers"
+
+#: data/lore.json lore/19/title
+msgid "La Cazadora y el Veneno"
+msgstr "The Huntress and the Poison"
+
+#: data/lore.json lore/20/title
+msgid "El Escudo Carmesí"
+msgstr "The Crimson Shield"
+
+#: data/lore.json lore/21/title
+msgid "Cuerda de Reloj"
+msgstr "Clockwork Spring"
+
+#: data/lore.json lore/22/title
+msgid "Ciclo de Mareas"
+msgstr "Cycle of Tides"
+
+#: data/lore.json lore/23/title
+msgid "Cien Notas"
+msgstr "A Hundred Notes"
+
+#: data/lore.json lore/24/title
+msgid "Bolsillos del Mundo"
+msgstr "The World's Pockets"
+
+#: data/lore.json lore/25/title
+msgid "Alquimia de Viaje"
+msgstr "Traveling Alchemy"
+
+#: data/lore.json lore/26/title
+msgid "El Relicario"
+msgstr "The Reliquary"
+
+#: data/lore.json lore/27/title
+msgid "Un Golpe de Leyenda"
+msgstr "A Legendary Blow"
+
+#: data/lore.json lore/28/title
+msgid "Sinfonía de Acero"
+msgstr "Symphony of Steel"
+
+#: data/lore.json lore/29/title
+msgid "Danza sin Rasguños"
+msgstr "Dance Without a Scratch"
+
+#: data/lore.json lore/30/title
+msgid "La Melodía Invertida"
+msgstr "The Inverted Melody"
+
+#: data/lore.json lore/31/title
+msgid "El Compositor Dormido"
+msgstr "The Sleeping Composer"
+
+#: data/lore.json lore/32/title
+msgid "Silencio Final"
+msgstr "Final Silence"
+
+#: data/lore.json lore/33/title
+msgid "El Fin de la Canción"
+msgstr "The End of the Song"
+
+#: data/lore.json lore/34/title
+msgid "Tres Voces"
+msgstr "Three Voices"
+
+#: data/lore.json lore/35/title
+msgid "Cuatro Voces"
+msgstr "Four Voices"
+
+#: data/lore.json lore/36/title
+msgid "Seis Voces"
+msgstr "Six Voices"
+
+#: data/lore.json lore/37/title
+msgid "Las Notas que Faltaban"
+msgstr "The Missing Notes"
+
+#: data/lore.json lore/38/title
+msgid "La Última Nota"
+msgstr "The Last Note"
+
+#: data/lore.json lore/0/ch
+msgid "Empieza tu primera partida"
+msgstr "Start your first run"
+
+#: data/lore.json lore/1/ch
+msgid "Derrota 10 enemigos"
+msgstr "Defeat 10 enemies"
+
+#: data/lore.json lore/2/ch
+msgid "Recorre 25 salas en total"
+msgstr "Explore 25 rooms in total"
+
+#: data/lore.json lore/3/ch
+msgid "Derrota al Cangrejo Rey"
+msgstr "Defeat the Crab King"
+
+#: data/lore.json lore/4/ch
+msgid "Derrota a la Capitana Ahogada"
+msgstr "Defeat the Drowned Captain"
+
+#: data/lore.json lore/5/ch
+msgid "Reúne 500 de oro en total"
+msgstr "Collect 500 gold in total"
+
+#: data/lore.json lore/6/ch
+msgid "Derrota a la Madre Raíz"
+msgstr "Defeat the Root Mother"
+
+#: data/lore.json lore/7/ch
+msgid "Derrota al Rey Micelio"
+msgstr "Defeat the Mycelium King"
+
+#: data/lore.json lore/8/ch
+msgid "Derrota a 5 élites"
+msgstr "Defeat 5 elites"
+
+#: data/lore.json lore/9/ch
+msgid "Llega a la Colmena (Acto III)"
+msgstr "Reach the Hive (Act III)"
+
+#: data/lore.json lore/10/ch
+msgid "Derrota al Coloso de Cera"
+msgstr "Defeat the Wax Colossus"
+
+#: data/lore.json lore/11/ch
+msgid "Termina el juego"
+msgstr "Finish the game"
+
+#: data/lore.json lore/12/ch
+#: data/progress.json unlocks/2/ch
+msgid "Gana una partida con Zafiro"
+msgstr "Win a run with Zafiro"
+
+#: data/lore.json lore/13/ch
+#: data/progress.json unlocks/5/ch
+msgid "Gana una partida con Lia"
+msgstr "Win a run with Lia"
+
+#: data/lore.json lore/14/ch
+#: data/progress.json unlocks/8/ch
+msgid "Gana una partida con Claudia"
+msgstr "Win a run with Claudia"
+
+#: data/lore.json lore/15/ch
+#: data/progress.json unlocks/11/ch
+msgid "Gana una partida con Aurora"
+msgstr "Win a run with Aurora"
+
+#: data/lore.json lore/16/ch
+msgid "Gana una partida con Irene"
+msgstr "Win a run with Irene"
+
+#: data/lore.json lore/17/ch
+msgid "Gana una partida con Selene"
+msgstr "Win a run with Selene"
+
+#: data/lore.json lore/18/ch
+msgid "Osty ataca 60 veces"
+msgstr "Osty attacks 60 times"
+
+#: data/lore.json lore/19/ch
+msgid "Aplica 300 de Veneno en total"
+msgstr "Apply 300 Poison in total"
+
+#: data/lore.json lore/20/ch
+msgid "Bloquea 1500 de daño en total"
+msgstr "Block 1500 damage in total"
+
+#: data/lore.json lore/21/ch
+msgid "Gasta 80 de Cuerda en total"
+msgstr "Spend 80 Wind-Up in total"
+
+#: data/lore.json lore/22/ch
+msgid "Evoca 80 orbes en total"
+msgstr "Evoke 80 orbs in total"
+
+#: data/lore.json lore/23/ch
+msgid "Juega 300 cartas en total"
+msgstr "Play 300 cards in total"
+
+#: data/lore.json lore/24/ch
+msgid "Reúne 2500 de oro en total"
+msgstr "Collect 2500 gold in total"
+
+#: data/lore.json lore/25/ch
+msgid "Usa 15 pociones"
+msgstr "Use 15 potions"
+
+#: data/lore.json lore/26/ch
+msgid "Descubre 12 reliquias distintas"
+msgstr "Discover 12 different relics"
+
+#: data/lore.json lore/27/ch
+msgid "Inflige 40 de daño con un solo golpe"
+msgstr "Deal 40 damage in a single hit"
+
+#: data/lore.json lore/28/ch
+msgid "Derrota 250 enemigos en total"
+msgstr "Defeat 250 enemies in total"
+
+#: data/lore.json lore/29/ch
+msgid "Vence a un élite sin recibir daño"
+msgstr "Beat an elite without taking damage"
+
+#: data/lore.json lore/30/ch
+msgid "Supera la Pesadilla 1"
+msgstr "Clear Nightmare 1"
+
+#: data/lore.json lore/31/ch
+msgid "Supera la Pesadilla 3"
+msgstr "Clear Nightmare 3"
+
+#: data/lore.json lore/32/ch
+msgid "Supera la Pesadilla 6"
+msgstr "Clear Nightmare 6"
+
+#: data/lore.json lore/33/ch
+msgid "Supera la Pesadilla 10"
+msgstr "Clear Nightmare 10"
+
+#: data/lore.json lore/34/ch
+msgid "Gana una partida con cada musa"
+msgstr "Win a run with every muse"
+
+#: data/lore.json lore/35/ch
+msgid "Gana una partida con cada una de las cuatro musas"
+msgstr "Win a run with each of the four muses"
+
+#: data/lore.json lore/36/ch
+msgid "Gana una partida con cada una de las seis musas"
+msgstr "Win a run with each of the six muses"
+
+#: data/lore.json lore/37/ch
+msgid "Gana una partida con Irene y con Selene"
+msgstr "Win a run with Irene and with Selene"
+
+#: data/lore.json lore/38/ch
+msgid "Desbloquea todo el resto de la Galería"
+msgstr "Unlock everything else in the Gallery"
+
+#: data/lore.json lore/0/text
+msgid "Antes de los muelles, los bosques y las colmenas, el mundo era una canción. La cantaba una diosa dormida, y cada nota se volvía una montaña, un río, un animal. Mientras la canción sonara, nada podía morir de verdad."
+msgstr "Before the docks, the forests and the hives, the world was a song. A sleeping goddess sang it, and every note became a mountain, a river, an animal. As long as the song played, nothing could truly die."
+
+#: data/lore.json lore/1/text
+msgid "Para que la canción no se apagara, un compositor sin nombre levantó una torre inmensa: la Aguja. Dentro, un carillón de mil engranajes guardaba la melodía. Subir por ella es recorrer, nota a nota, el corazón del mundo."
+msgstr "So that the song would never fade, a nameless composer raised an immense tower: the Spire. Inside, a carillon of a thousand gears kept the melody. To climb it is to travel, note by note, through the heart of the world."
+
+#: data/lore.json lore/2/text
+msgid "La melodía tenía tres movimientos: el Preludio del Agua, el Canto de la Vida y la Marcha del Hambre. Cada uno dio origen a una región, y cada región a sus criaturas. Pero un movimiento mal tocado puede volverse una amenaza."
+msgstr "The melody had three movements: the Prelude of Water, the Song of Life and the March of Hunger. Each one gave birth to a region, and each region to its creatures. But a movement played wrong can turn into a threat."
+
+#: data/lore.json lore/3/text
+msgid "Los Bajos Muelles fueron la primera estrofa: agua, sal y campanas lejanas. El Cangrejo Rey se coronó con anclas oxidadas y juró que ninguna nota subiría más allá del puerto. Hasta que alguien tuvo la osadía de cantarle de vuelta."
+msgstr "The Low Docks were the first verse: water, salt and distant bells. The Crab King crowned himself with rusty anchors and swore that no note would rise beyond the harbor. Until someone had the nerve to sing back at him."
+
+#: data/lore.json lore/4/text
+msgid "Antes del Cangrejo Rey, la Aguja tuvo una capitana. Zarpó para llevarle al Compositor la última nota y la tormenta se la devolvió tarde: con el casco abierto, la tripulación ahogada y un cañón en lugar de brazo. Todavía da órdenes a las olas, aunque las olas ya no la obedecen."
+msgstr "Before the Crab King, the Spire had a captain. She set sail to bring the Composer the last note, and the storm sent her back too late: hull split open, crew drowned and a cannon where her arm used to be. She still barks orders at the waves, though the waves no longer obey."
+
+#: data/lore.json lore/5/text
+msgid "En los muelles dicen que cada moneda guarda un eco de la canción primera. Los mercaderes fantasma las coleccionan, las pulen y las venden. Dicen que si juntas las suficientes, puedes oír una melodía completa."
+msgstr "On the docks they say every coin holds an echo of the first song. The phantom merchants collect them, polish them and sell them. They say that if you gather enough, you can hear a whole melody."
+
+#: data/lore.json lore/6/text
+msgid "En la Maleza, la segunda estrofa creció salvaje. La Madre Raíz es el corazón de un bosque que aprendió a defenderse con espinas. No es mala: solo recuerda que todo lo que ama puede ser talado."
+msgstr "In the Thicket, the second verse grew wild. The Root Mother is the heart of a forest that learned to defend itself with thorns. She isn't evil: she just remembers that everything she loves can be cut down."
+
+#: data/lore.json lore/7/text
+msgid "Bajo la Maleza hay otro bosque, más viejo y más callado: una red de hongos que se tocan unos a otros en la oscuridad. El Rey Micelio es su corona. No gobierna con espinas sino con esporas, y cada árbol que cae le cuenta un secreto que él nunca olvida."
+msgstr "Beneath the Thicket lies another forest, older and quieter: a web of fungi that touch one another in the dark. The Mycelium King is its crown. He rules not with thorns but with spores, and every tree that falls tells him a secret he never forgets."
+
+#: data/lore.json lore/8/text
+msgid "Los élites no nacieron monstruos. Cada uno fue un guardián de la canción: un estibador, un ciervo, un árbol que cantaba a los viajeros. Cuando la melodía se debilitó, su lealtad se retorció en furia."
+msgstr "The elites weren't born monsters. Each one was a guardian of the song: a dockworker, a stag, a tree that sang to travelers. When the melody weakened, their loyalty twisted into fury."
+
+#: data/lore.json lore/9/text
+msgid "El tercer movimiento debía ser una marcha triunfal. Pero alguien tocó demasiado fuerte, demasiado rápido, y de aquel ruido nació la Colmena: miel, cera y un hambre que nunca descansa."
+msgstr "The third movement was meant to be a triumphal march. But someone played too loud, too fast, and from that noise the Hive was born: honey, wax and a hunger that never rests."
+
+#: data/lore.json lore/10/text
+msgid "Cuando la Colmena cantó demasiado fuerte, la cera se derritió y volvió a endurecerse con forma de gigante. El Coloso carga una vela por cada abeja que murió en la Marcha del Hambre. Si se funde, no se apaga: ilumina."
+msgstr "When the Hive sang too loud, the wax melted and hardened again in the shape of a giant. The Colossus carries a candle for every bee that died in the March of Hunger. If it melts, it doesn't go out: it shines."
+
+#: data/lore.json lore/11/text
+msgid "La Reina fue la hija del Compositor. Cuando él se durmió, ella intentó terminar la canción y no pudo: le faltaba una nota. Esa ausencia se volvió hambre, y el hambre, corona. Nadie la odió tanto como ella misma."
+msgstr "The Queen was the Composer's daughter. When he fell asleep, she tried to finish the song and couldn't: one note was missing. That absence became hunger, and the hunger, a crown. No one hated her as much as she hated herself."
+
+#: data/lore.json lore/12/text
+msgid "Zafiro fue la última de los Acorazados, una orden de caballeros que juró proteger la melodía. Su espada no corta carne: corta silencio. Cada vez que cae, una nota grave se enciende en su pecho, y se levanta."
+msgstr "Zafiro was the last of the Ironclad, an order of knights sworn to protect the melody. Her sword doesn't cut flesh: it cuts silence. Every time she falls, a deep note kindles in her chest, and she rises."
+
+#: data/lore.json lore/13/text
+msgid "Lia creció entre los árboles y aprendió que la fuerza es solo una forma torpe de ser rápida. Se ríe de las trampas, pero conoce de memoria cada una. Su nota es aguda, un silbido que apenas se oye y lo cambia todo."
+msgstr "Lia grew up among the trees and learned that strength is just a clumsy way of being fast. She laughs at traps, but she knows every one of them by heart. Her note is high, a whistle you can barely hear that changes everything."
+
+#: data/lore.json lore/14/text
+msgid "Claudia no teme a los muertos: los escucha. En sus canciones guarda los nombres que el mundo olvidó. Cuando invoca a Osty, no llama a un esqueleto, sino a un recuerdo que se niega a desvanecerse."
+msgstr "Claudia doesn't fear the dead: she listens to them. In her songs she keeps the names the world forgot. When she summons Osty, she isn't calling a skeleton, but a memory that refuses to fade."
+
+#: data/lore.json lore/15/text
+msgid "Aurora baila en los templos del solio dorado, donde la luz es una oración. Sus abanicos de espejos no cortan: ciegan. Dicen que cada amanecer es un compás de su danza, y que su nota es cálida, larga y sin final."
+msgstr "Aurora dances in the temples of the golden throne, where light is a prayer. Her mirrored fans don't cut: they blind. They say every dawn is one bar of her dance, and that her note is warm, long and endless."
+
+#: data/lore.json lore/16/text
+msgid "Irene despertó una mañana sin recordar quién le dio cuerda. Camina con pasos exactos, habla bajo y escucha el tictac de la Aguja como quien oye su propio pulso. Nadie le ha dicho de dónde viene su nota; ella sospecha que es la más pequeña del acorde."
+msgstr "Irene woke up one morning with no memory of who had wound her. She walks with precise steps, speaks softly and listens to the Spire's ticking as if it were her own pulse. No one has told her where her note comes from; she suspects it's the smallest one in the chord."
+
+#: data/lore.json lore/17/text
+msgid "Selene dice haber nacido de la espuma y de una canción de cuna que nadie recuerda entera. Sus orbes suben y bajan como la marea: se acumulan en silencio y estallan cuando decide. Su nota es líquida, profunda y siempre regresa."
+msgstr "Selene claims she was born of sea foam and a lullaby no one remembers in full. Her orbs rise and fall like the tide: they gather in silence and burst when she decides. Her note is liquid, deep, and it always comes back."
+
+#: data/lore.json lore/18/text
+msgid "Nadie sabe de quién fue la mano de Osty. Claudia dice que de alguien que quiso tocar el piano una última vez. Por eso, cada golpe suyo suena un poco a acorde."
+msgstr "No one knows whose hand Osty once was. Claudia says it belonged to someone who wanted to play the piano one last time. That's why each of Osty's blows sounds a little like a chord."
+
+#: data/lore.json lore/19/text
+msgid "El veneno de Lia no mata rápido: espera. Es la paciencia hecha líquido, destilada de hongos que crecen donde nadie canta. Dicen que los enemigos envenenados tararean antes de caer."
+msgstr "Lia's poison doesn't kill fast: it waits. It's patience turned liquid, distilled from mushrooms that grow where no one sings. They say poisoned enemies hum a tune before they fall."
+
+#: data/lore.json lore/20/text
+msgid "Zafiro dice que defenderse no es retroceder: es elegir dónde clavar los pies. Su escudo, forjado con el hierro de un barco hundido, ha detenido más golpes de los que cualquiera podría contar."
+msgstr "Zafiro says defending isn't backing down: it's choosing where to plant your feet. Her shield, forged from the iron of a sunken ship, has stopped more blows than anyone could count."
+
+#: data/lore.json lore/21/text
+msgid "Dicen que a los relojes no se les acaba la cuerda: se les acaba la paciencia. Cada vuelta que Irene gasta es un compás prestado al futuro, y algún día habrá que devolverlo."
+msgstr "They say clocks never run out of winding: they run out of patience. Every turn of the key Irene spends is a bar borrowed from the future, and someday it will have to be paid back."
+
+#: data/lore.json lore/22/text
+msgid "El mar no destruye ni crea: devuelve. Todo orbe que Selene deja estallar vuelve a ella, tarde o temprano, convertido en otra ola. Por eso nunca deja de canalizar."
+msgstr "The sea neither destroys nor creates: it gives back. Every orb Selene lets burst returns to her sooner or later as another wave. That's why she never stops channeling."
+
+#: data/lore.json lore/23/text
+msgid "Cada carta es una nota. Un mazo es una partitura. Las musas aprendieron que no hay carta inútil, solo notas esperando su compás."
+msgstr "Every card is a note. A deck is a score. The muses learned there are no useless cards, only notes waiting for their bar."
+
+#: data/lore.json lore/24/text
+msgid "Hay tesoros bajo la Aguja que nadie reclamó: tumbas de comerciantes, cofres malditos, ofrendas a dioses olvidados. El oro no compra la canción, pero paga a quienes la guardan."
+msgstr "There are treasures beneath the Spire that no one ever claimed: merchants' tombs, cursed chests, offerings to forgotten gods. Gold can't buy the song, but it pays those who guard it."
+
+#: data/lore.json lore/25/text
+msgid "En cada sala de la Aguja hay un frasco olvidado. Algunos fueron preparados por el Compositor, otros por viajeras desesperadas. Todos saben a lo mismo: a segunda oportunidad."
+msgstr "In every room of the Spire there's a forgotten flask. Some were brewed by the Composer, others by desperate travelers. They all taste the same: like a second chance."
+
+#: data/lore.json lore/26/text
+msgid "Las reliquias son fragmentos de la canción atrapados en objetos. Una linterna que recuerda la calidez de un hogar, una piedra lisa que recuerda al río. Al reunirlas, empiezan a susurrar entre sí."
+msgstr "Relics are fragments of the song trapped inside objects. A lantern that remembers the warmth of a home, a smooth stone that remembers the river. Gather them, and they start whispering to each other."
+
+#: data/lore.json lore/27/text
+msgid "Hay golpes que se oyen en tres reinos. Los bardos los llaman fortissimo. Cuando uno se da bien, la Aguja entera vibra y los engranajes se detienen un instante a escuchar."
+msgstr "Some blows can be heard across three kingdoms. Bards call them fortissimo. When one lands just right, the whole Spire trembles and the gears stop for a moment to listen."
+
+#: data/lore.json lore/28/text
+msgid "Un campo de batalla bien librado tiene ritmo: avance, compás, silencio, avance. Las musas lo saben. Y lo lamentan, porque cada criatura derrotada fue una vez una nota de la misma canción."
+msgstr "A well-fought battlefield has rhythm: advance, beat, silence, advance. The muses know it. And they mourn it, because every creature they defeat was once a note of the same song."
+
+#: data/lore.json lore/29/text
+msgid "Hay un baile que solo se aprende al lado de la muerte: dar un paso atrás justo cuando la espada pasa. Quien lo domina no esquiva el golpe: lo hace parte de la música."
+msgstr "There's a dance you can only learn beside death: stepping back just as the sword passes. Whoever masters it doesn't dodge the blow: she makes it part of the music."
+
+#: data/lore.json lore/30/text
+msgid "Cuando cayó el último guardián de la Colmena, la torre no calló. Empezó a sonar al revés. Las notas se agrietaron, los pasillos cambiaron de lugar y los enemigos regresaron más furiosos. La Pesadilla había comenzado."
+msgstr "When the Hive's last guardian fell, the tower did not go quiet. It began to play backwards. The notes cracked, the halls moved and the enemies came back angrier. The Nightmare had begun."
+
+#: data/lore.json lore/31/text
+msgid "En la cima de la Aguja duerme el Compositor, hecho de papel de música y polvo. Sueña con su hija. Sus pesadillas son las que dan forma a la torre, y cada una es más oscura que la anterior."
+msgstr "At the top of the Spire sleeps the Composer, made of sheet music and dust. He dreams of his daughter. His nightmares are what shape the tower, and each one is darker than the last."
+
+#: data/lore.json lore/32/text
+msgid "Hay un lugar más allá del último compás: el Silencio. No es vacío, es espera. Allí el mundo contiene la respiración y decide si la canción merece seguir."
+msgstr "There is a place beyond the final bar: the Silence. It isn't emptiness; it's waiting. There, the world holds its breath and decides whether the song deserves to go on."
+
+#: data/lore.json lore/33/text
+msgid "Quien llega hasta aquí ha oído la canción de todas las formas posibles: en orden, al revés, rota y entera. Y entiende al fin que una canción no se acaba: se hereda."
+msgstr "Whoever makes it this far has heard the song every way it can be heard: in order, backwards, broken and whole. And at last she understands that a song doesn't end: it's passed down."
+
+#: data/lore.json lore/34/text
+msgid "Valor, astucia y memoria. Zafiro, Lia y Claudia nunca cantaron juntas, pero sus notas siempre armonizaron. La Aguja lo sabía: faltaba una cuarta voz para completar el acorde."
+msgstr "Valor, cunning and memory. Zafiro, Lia and Claudia never sang together, but their notes always harmonized. The Spire knew it: a fourth voice was missing to complete the chord."
+
+#: data/lore.json lore/35/text
+msgid "Aurora llegó con el amanecer. No cantó más fuerte que las otras: solo les dio la luz bajo la que por fin pudieron oírse. Desde entonces el acorde de la Aguja suena con cuatro voces, y se dice que la luz que lo acompaña nunca se apaga."
+msgstr "Aurora arrived with the dawn. She didn't sing louder than the others: she simply gave them the light under which they could finally hear each other. Ever since, the Spire's chord has rung with four voices, and they say the light that comes with it never goes out."
+
+#: data/lore.json lore/36/text
+msgid "Con Irene y Selene el acorde dejó de sonar como un recuerdo y empezó a sonar como un hogar. Seis notas distintas, seis maneras de cantar lo mismo. La Aguja, que lo escuchó todo, por primera vez guardó el compás."
+msgstr "With Irene and Selene, the chord stopped sounding like a memory and began to sound like a home. Six different notes, six ways of singing the same thing. The Spire, which had heard it all, kept time for the very first time."
+
+#: data/lore.json lore/37/text
+msgid "Irene y Selene no nacieron: las hicieron. Fueron las dos notas que la Reina no logró cantar, talladas en latón y en espuma con sus propias manos. Cuando las musas detuvieron a la Reina, ellas se detuvieron con ella; cada golpe que dieron también lo recibieron. Y aun así, siguieron caminando. Quizá eso sea estar vivas."
+msgstr "Irene and Selene weren't born: they were made. They were the two notes the Queen never managed to sing, carved from brass and from sea foam by her own hands. When the muses stopped the Queen, the two stopped along with her; every blow they struck, they also took. And even so, they kept walking. Maybe that's what being alive means."
+
+#: data/lore.json lore/38/text
+msgid "La cuarta voz era la de la Reina. No una corona, sino una canción de cuna. Al entenderlo, las musas no la mataron: la dejaron descansar. Y la diosa, por fin, sonrió en sueños."
+msgstr "The fourth voice was the Queen's. Not a crown, but a lullaby. Once they understood, the muses didn't kill her: they let her rest. And the goddess, at last, smiled in her sleep."
+
+#: data/lore.json nm/1
+msgid "Los enemigos tienen +10% de PV."
+msgstr "Enemies have +10% HP."
+
+#: data/lore.json nm/2
+msgid "Los enemigos infligen +10% de daño."
+msgstr "Enemies deal +10% damage."
+
+#: data/lore.json nm/3
+#: data/balance_w2.json nm_texts/8
+msgid "Empiezas cada partida con la maldición Duda."
+msgstr "Start every run with the Doubt curse."
+
+#: data/lore.json nm/4
+msgid "Ganas un 25% menos de oro."
+msgstr "Gain 25% less gold."
+
+#: data/lore.json nm/5
+msgid "Los élites y jefes empiezan con +2 de Fuerza."
+msgstr "Elites and bosses start with +2 Strength."
+
+#: data/lore.json nm/6
+msgid "La hoguera cura solo un 20% de tu vida."
+msgstr "Campfires heal only 20% of your health."
+
+#: data/lore.json nm/7
+msgid "Los enemigos tienen +25% de PV (en total)."
+msgstr "Enemies have +25% HP (in total)."
+
+#: data/lore.json nm/8
+#: data/balance_w2.json nm_texts/6
+msgid "Cada combate empieza con una Herida en tu mazo."
+msgstr "Every combat starts with a Wound in your deck."
+
+#: data/lore.json nm/9
+msgid "Los enemigos infligen +25% de daño (en total)."
+msgstr "Enemies deal +25% damage (in total)."
+
+#: data/lore.json nm/10
+msgid "Los enemigos normales llegan con +1 de Fuerza y los jefes con +4."
+msgstr "Normal enemies arrive with +1 Strength, and bosses with +4."
+
+#: data/balance_w2.json nm_texts/1
+msgid "Los enemigos infligen +3% de daño."
+msgstr "Enemies deal +3% damage."
+
+#: data/balance_w2.json nm_texts/2
+msgid "Ganas un 15% menos de oro."
+msgstr "Gain 15% less gold."
+
+#: data/balance_w2.json nm_texts/3
+msgid "Los enemigos tienen +3% de PV."
+msgstr "Enemies have +3% HP."
+
+#: data/balance_w2.json nm_texts/4
+msgid "La hoguera cura solo un 25% de tu vida."
+msgstr "Campfires heal only 25% of your health."
+
+#: data/balance_w2.json nm_texts/5
+msgid "Los enemigos infligen +6% de daño (en total)."
+msgstr "Enemies deal +6% damage (in total)."
+
+#: data/balance_w2.json nm_texts/7
+msgid "Los enemigos tienen +6% de PV (en total)."
+msgstr "Enemies have +6% HP (in total)."
+
+#: data/balance_w2.json nm_texts/9
+msgid "Los élites empiezan con +1 de Fuerza."
+msgstr "Elites start with +1 Strength."
+
+#: data/balance_w2.json nm_texts/10
+msgid "Los jefes empiezan con +1 de Fuerza."
+msgstr "Bosses start with +1 Strength."
+
+#: data/lore.json ending/scenes/0/text
+msgid "La Reina Hambrienta cayó, y su corona se deshizo en miles de abejas de luz. Por primera vez en siglos, la Aguja guardó silencio."
+msgstr "The Hungry Queen fell, and her crown dissolved into thousands of bees made of light. For the first time in centuries, the Spire fell silent."
+
+#: data/lore.json ending/scenes/1/text
+msgid "{N} dio un paso al frente. En la cima, una campana colgaba sin badajo. Al rozarla con los dedos, el metal cantó solo."
+msgstr "{N} stepped forward. At the summit hung a bell with no clapper. When her fingers brushed it, the metal sang on its own."
+
+#: data/lore.json ending/scenes/2/text
+msgid "Entonces vio la verdad: la Aguja no era una fortaleza, sino un carillón gigante. Y la melodía del mundo estaba incompleta."
+msgstr "Then she saw the truth: the Spire was not a fortress, but a giant carillon. And the melody of the world was incomplete."
+
+#: data/lore.json ending/scenes/3/text
+msgid "{N} cerró los ojos y oyó dos voces más. {O1} y {O2}, lejos, en otros pasillos, cantaban la misma nota. «Éramos las notas que faltaban», susurró."
+msgstr "{N} closed her eyes and heard two more voices. {O1} and {O2}, far away in other halls, were singing the same note. \"We were the missing notes,\" she whispered."
+
+#: data/lore.json ending/scenes/4/text
+msgid "Cuando las tres voces se unieron, la canción volvió a sonar. En los muelles se encendieron los faroles; el bosque rebrotó; la colmena floreció en jardines de mariposas."
+msgstr "When the three voices joined, the song rang out once more. On the docks, the lanterns lit up; the forest sprouted anew; the hive blossomed into butterfly gardens."
+
+#: data/lore.json ending/scenes/5/text
+msgid "Las musas no regresaron a casa. Se quedaron en la Aguja, convertidas en luz, cantando cada noche para que el mundo no volviera a olvidarse. {N} es ahora una estrella que se ve desde cualquier puerto."
+msgstr "The muses never went home. They stayed in the Spire, turned into light, singing every night so the world would never forget again. {N} is now a star that can be seen from any harbor."
+
+#: data/lore.json ending/scenes/1/alt/irene
+msgid "Irene subió los últimos peldaños con pasos exactos, como siempre. En la cima, una campana colgaba sin badajo. Al rozarla, oyó dentro de su pecho el mismo tictac que la campana, y por primera vez le pareció que latían juntas."
+msgstr "Irene climbed the last steps with precise strides, as always. At the summit hung a bell with no clapper. When she brushed it, she heard inside her chest the same tick-tock as the bell, and for the first time it felt like they beat together."
+
+#: data/lore.json ending/scenes/1/alt/selene
+msgid "Selene subió los últimos peldaños dejando huellas húmedas. En la cima, una campana colgaba sin badajo y, a su lado, un estanque quieto como un espejo. Al rozar el agua, el metal cantó solo, y las gotas de sus dedos cantaron con él."
+msgstr "Selene climbed the last steps, leaving wet footprints behind. At the summit hung a bell with no clapper and, beside it, a pond as still as a mirror. When she touched the water, the metal sang on its own, and the drops on her fingers sang along."
+
+#: data/lore.json ending/scenes/1/alt/aurora
+msgid "Aurora subió los últimos peldaños danzando, con los abanicos abiertos al sol. En la cima, una campana colgaba sin badajo; la luz de sus espejos la rozó y el metal cantó solo."
+msgstr "Aurora danced up the last steps, her fans spread open to the sun. At the summit hung a bell with no clapper; the light of her mirrors brushed it, and the metal sang on its own."
+
+#: data/lore.json ending/scenes/2/alt/irene
+msgid "Entonces vio la verdad: la Aguja no era una fortaleza, sino un carillón gigante. Y en la base del mecanismo, bajo el polvo, había moldes de latón con forma de mujer. Uno tenía su rostro."
+msgstr "Then she saw the truth: the Spire was not a fortress, but a giant carillon. And at the base of the mechanism, under the dust, lay brass molds shaped like women. One of them had her face."
+
+#: data/lore.json ending/scenes/2/alt/selene
+msgid "Entonces vio la verdad: la Aguja no era una fortaleza, sino un carillón gigante. Y en el fondo del estanque, bajo el agua, dormían moldes de perla con forma de mujer. Uno tenía su rostro."
+msgstr "Then she saw the truth: the Spire was not a fortress, but a giant carillon. And at the bottom of the pond, beneath the water, slept pearl molds shaped like women. One of them had her face."
+
+#: data/lore.json ending/scenes/3/alt/irene
+msgid "Irene abrió la tapa de la campana y vio dentro su propia llave, girando al compás de la Reina. Cada golpe que había dado contra ella lo había sentido, en silencio, un engranaje de su cuerpo. «Soy una de sus notas», comprendió. «Y al detenerla, me detuve a mí misma.»"
+msgstr "Irene opened the bell's lid and saw her own key inside, turning to the Queen's rhythm. Every blow she had struck against her, a gear in her own body had silently felt. \"I'm one of her notes,\" she realized. \"And in stopping her, I stopped myself.\""
+
+#: data/lore.json ending/scenes/3/alt/selene
+msgid "Selene se asomó al agua y su reflejo no la imitó: cantaba otra canción. Entonces recordó la nana que nunca oyó entera, la que la Reina empezó y no pudo terminar. «Me hizo de su canción de cuna», comprendió. «Y al detenerla, me detuve a mí misma.»"
+msgstr "Selene leaned over the water and her reflection didn't copy her: it was singing another song. Then she remembered the lullaby she had never heard in full, the one the Queen began and couldn't finish. \"She made me out of her lullaby,\" she realized. \"And in stopping her, I stopped myself.\""
+
+#: data/lore.json ending/scenes/3/alt/aurora
+msgid "Aurora cerró los ojos y oyó tres voces más. Zafiro, Lia y Claudia, lejos, en otros pasillos, cantaban una melodía a la que le faltaba una nota. «Yo traigo la luz que las despierta», susurró, y su luz completó el acorde."
+msgstr "Aurora closed her eyes and heard three more voices. Zafiro, Lia and Claudia, far away in other halls, were singing a melody that was missing one note. \"I bring the light that wakes them,\" she whispered, and her light completed the chord."
+
+#: data/lore.json ending/scenes/4/alt/irene
+msgid "Pero la canción no se detuvo. Irene tomó su propia llave, la apoyó en el carillón y le dio cuerda. Zafiro, Lia, Claudia, Aurora y Selene oyeron el tictac cambiar de compás: ya no era el de la Reina, sino el de alguien que elige seguir. En los muelles se encendieron los faroles, y el bosque y la colmena florecieron."
+msgstr "But the song didn't stop. Irene took her own key, set it in the carillon and wound it. Zafiro, Lia, Claudia, Aurora and Selene heard the ticking change its beat: it was no longer the Queen's, but that of someone who chooses to go on. On the docks, the lanterns lit up, and the forest and the hive burst into bloom."
+
+#: data/lore.json ending/scenes/4/alt/selene
+msgid "Pero la canción no se detuvo. Selene dejó caer una perla en el estanque y las ondas llegaron a cada rincón de la Aguja. Zafiro, Lia, Claudia, Aurora e Irene oyeron la marea regresar: ya no era la nana de la Reina, sino la voz de alguien que elige quedarse. En los muelles se encendieron los faroles, y el bosque y la colmena florecieron."
+msgstr "But the song didn't stop. Selene let a pearl fall into the pond, and the ripples reached every corner of the Spire. Zafiro, Lia, Claudia, Aurora and Irene heard the tide come back: it was no longer the Queen's lullaby, but the voice of someone who chooses to stay. On the docks, the lanterns lit up, and the forest and the hive burst into bloom."
+
+#: data/lore.json ending/scenes/4/alt/aurora
+msgid "Cuando las cuatro voces se unieron, la canción volvió a sonar. En los muelles se encendieron los faroles; el bosque rebrotó; la colmena floreció en jardines de mariposas; y en el desierto, el sol volvió a salir sobre los templos."
+msgstr "When the four voices joined, the song rang out once more. On the docks, the lanterns lit up; the forest sprouted anew; the hive blossomed into butterfly gardens; and in the desert, the sun rose again over the temples."
+
+#: data/lore.json ending/scenes/5/alt/irene
+msgid "Las musas no regresaron a casa. Irene se quedó en la Aguja, dándole cuerda al carillón cada noche para que el mundo no volviera a olvidarse. Hay quien jura que cuando el reloj de la torre da las doce, una muñeca sonríe en lo alto."
+msgstr "The muses never went home. Irene stayed in the Spire, winding the carillon every night so the world would never forget again. Some swear that when the tower clock strikes twelve, a doll smiles from up high."
+
+#: data/lore.json ending/scenes/5/alt/selene
+msgid "Las musas no regresaron a casa. Selene se quedó en la Aguja, guardando el estanque de la cima para que la marea no volviera a olvidarse. Hay quien jura que en las noches de luna llena, el mar entero canta una nana."
+msgstr "The muses never went home. Selene stayed in the Spire, guarding the pond at the summit so the tide would never forget again. Some swear that on full-moon nights, the whole sea sings a lullaby."
+
+#: data/lore.json ending/scenes/5/alt/aurora
+msgid "Las musas no regresaron a casa. Se quedaron en la Aguja, convertidas en luz, cantando cada noche para que el mundo no volviera a olvidarse. Aurora es ahora el primer rayo del amanecer que se ve desde cualquier puerto."
+msgstr "The muses never went home. They stayed in the Spire, turned into light, singing every night so the world would never forget again. Aurora is now the first ray of dawn that can be seen from any harbor."
+
+#: data/lore.json ending/scenes/0/altBoss/waxcolossus
+msgid "El Coloso de Cera se desplomó y su cuerpo se deshizo en un río de miel dorada. Cada vela que cargaba se apagó a la vez, y en la oscuridad una abeja de luz salió volando. Por primera vez en siglos, la Aguja guardó silencio."
+msgstr "The Wax Colossus collapsed and its body melted into a river of golden honey. Every candle it carried went out at once, and in the darkness a bee of light flew away. For the first time in centuries, the Spire fell silent."
+
+#: data/lore.json ending/nightmare/text
+msgid "Pero en lo más hondo de la torre, algo se removió. Una nota al revés, una sonrisa en la oscuridad. «Otra vez», susurró el Compositor dormido. La Pesadilla aún no ha terminado."
+msgstr "But deep in the bowels of the tower, something stirred. A note played backwards, a smile in the dark. \"Again,\" whispered the sleeping Composer. The Nightmare isn't over yet."
+
+#: data/lore.json ending/final
+msgid "FIN"
+msgstr "THE END"
+
+#: data/states.json st/strength/n
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:66
+#: scripts/ui/card_text.gd:67
+#: … (+2)
+msgid "Fuerza"
+msgstr "Strength"
+
+#: data/states.json st/dexterity/n
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:68
+msgid "Destreza"
+msgstr "Dexterity"
+
+#: data/states.json st/vulnerable/n
+#: data/states.json glos (clave)
+msgid "Vulnerable"
+msgstr "Vulnerable"
+
+#: data/states.json st/weak/n
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:165
+msgid "Débil"
+msgstr "Weak"
+
+#: data/states.json st/frail/n
+#: data/states.json glos (clave)
+msgid "Frágil"
+msgstr "Frail"
+
+#: data/states.json st/poison/n
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:136
+#: scripts/ui/card_text.gd:154
+msgid "Veneno"
+msgstr "Poison"
+
+#: data/states.json st/thorns/n
+msgid "Espinas"
+msgstr "Thorns"
+
+#: data/states.json st/tthorns/n
+msgid "Espinas (turno)"
+msgstr "Thorns (turn)"
+
+#: data/states.json st/tstr/n
+msgid "Fuerza temporal"
+msgstr "Temporary Strength"
+
+#: data/states.json st/glow/n
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:152
+msgid "Resplandor"
+msgstr "Glow"
+
+#: data/states.json st/heat/n
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:132
+#: scripts/ui/card_text.gd:134
+#: … (+3)
+msgid "Calor"
+msgstr "Heat"
+
+#: data/states.json st/mirage/n
+msgid "Espejismo"
+msgstr "Mirage"
+
+#: data/states.json st/apoth/n
+msgid "Solio Supremo"
+msgstr "Supreme Throne"
+
+#: data/states.json st/cuerda/n
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:76
+#: scripts/ui/card_text.gd:77
+#: … (+4)
+msgid "Cuerda"
+msgstr "Wind-Up"
+
+#: data/states.json st/bucle/n
+msgid "Bucle"
+msgstr "Loop"
+
+#: data/states.json st/perlera/n
+msgid "Perlera"
+msgstr "Pearl Bed"
+
+#: data/states.json st/strength/d
+msgid "Tus ataques infligen {n} de daño menos."
+msgstr "Your attacks deal {n} less damage."
+
+#: data/states.json st/dexterity/d
+msgid "Tu Bloqueo aumenta en {n}."
+msgstr "Your Block increases by {n}."
+
+#: data/states.json st/vulnerable/d
+#: data/states.json glos/Vulnerable
+msgid "Recibe un 50% más de daño de ataques."
+msgstr "Takes 50% more damage from attacks."
+
+#: data/states.json st/weak/d
+#: data/states.json glos/Débil
+msgid "Inflige un 25% menos de daño con ataques."
+msgstr "Deals 25% less damage with attacks."
+
+#: data/states.json st/frail/d
+msgid "El Bloqueo ganado de cartas se reduce un 25%."
+msgstr "Block gained from cards is reduced by 25%."
+
+#: data/states.json st/poison/d
+msgid "Al inicio de su turno pierde {n} PV y el Veneno baja 1."
+msgstr "At the start of its turn, loses {n} HP and Poison drops by 1."
+
+#: data/states.json st/thorns/d
+msgid "Quien lo ataca recibe {n} de daño."
+msgstr "Attackers take {n} damage."
+
+#: data/states.json st/tthorns/d
+msgid "Quien te ataca recibe {n} de daño. Dura hasta tu próximo turno."
+msgstr "Whoever attacks you takes {n} damage. Lasts until your next turn."
+
+#: data/states.json st/tstr/d
+msgid "Pierdes {n} de Fuerza al final del turno."
+msgstr "Lose {n} Strength at the end of the turn."
+
+#: data/states.json st/metallicize/d
+msgid "Al final de tu turno obtienes {n} de Bloqueo."
+msgstr "At the end of your turn, gain {n} Block."
+
+#: data/states.json st/demon/d
+msgid "Al inicio de tu turno ganas {n} de Fuerza."
+msgstr "At the start of your turn, gain {n} Strength."
+
+#: data/states.json st/combust/d
+msgid "Al final de tu turno pierdes 1 PV e infliges {n} a TODOS."
+msgstr "At the end of your turn, lose 1 HP and deal {n} to ALL."
+
+#: data/states.json st/noxious/d
+msgid "Al inicio de tu turno aplicas {n} de Veneno a TODOS."
+msgstr "At the start of your turn, apply {n} Poison to ALL."
+
+#: data/states.json st/accuracy/d
+msgid "Las Cuchillas infligen {n} de daño extra."
+msgstr "Shivs deal {n} extra damage."
+
+#: data/states.json st/cuts/d
+msgid "Cada carta que juegas inflige {n} a TODOS los enemigos."
+msgstr "Every card you play deals {n} to ALL enemies."
+
+#: data/states.json st/barricade/d
+msgid "Tu Bloqueo ya no se pierde al empezar tu turno."
+msgstr "Your Block is no longer lost at the start of your turn."
+
+#: data/states.json st/boneDance/d
+msgid "Al agotar una carta obtienes {n} de Bloqueo."
+msgstr "Whenever you Exhaust a card, gain {n} Block."
+
+#: data/states.json st/darkEmbrace/d
+msgid "Al agotar una carta robas {n}."
+msgstr "Whenever you Exhaust a card, draw {n}."
+
+#: data/states.json st/ostyCleave/d
+msgid "Los ataques de Osty golpean a TODOS los enemigos."
+msgstr "Osty's attacks hit ALL enemies."
+
+#: data/states.json st/glow/d
+msgid "Al atacar, recibe {n} de daño y su ataque inflige 3 menos. Baja 1 por turno."
+msgstr "When it attacks, it takes {n} damage and its attack deals 3 less. Drops by 1 each turn."
+
+#: data/states.json st/heat/d
+msgid "Tienes {n} de Calor. Las cartas de remate lo consumen para golpear más fuerte."
+msgstr "You have {n} Heat. Finisher cards consume it to hit harder."
+
+#: data/states.json st/mirage/d
+#: scripts/ui/card_text.gd:149
+msgid "El próximo ataque que recibas este turno inflige {n} de daño al atacante."
+msgstr "The next attack you receive this turn deals {n} damage to the attacker."
+
+#: data/states.json st/reflect/d
+#: scripts/ui/card_text.gd:150
+msgid "Devuelves la mitad del daño bloqueado a los atacantes este turno."
+msgstr "This turn, you return half of the blocked damage to attackers."
+
+#: data/states.json st/prism/d
+msgid "Cada vez que ganas Bloqueo de una carta, infliges {n} a un enemigo al azar."
+msgstr "Whenever you gain Block from a card, deal {n} to a random enemy."
+
+#: data/states.json st/incand/d
+msgid "Al inicio de tu turno ganas {n} de Calor y aplicas 1 de Resplandor a TODOS."
+msgstr "At the start of your turn, gain {n} Heat and apply 1 Glow to ALL."
+
+#: data/states.json st/noon/d
+msgid "Cuando un enemigo sufre daño por Resplandor, robas 1 carta."
+msgstr "Whenever an enemy takes damage from Glow, draw 1 card."
+
+#: data/states.json st/apoth/d
+msgid "Tus cartas de Danza cuestan 0 el resto del combate."
+msgstr "Your Dance cards cost 0 for the rest of combat."
+
+#: data/states.json st/corona/d
+msgid "Al final de tu turno infliges a TODOS un daño igual a tu Bloqueo restante."
+msgstr "At the end of your turn, deal damage equal to your remaining Block to ALL."
+
+#: data/states.json st/cuerda/d
+msgid "Tienes {n} de Cuerda. Cada carta de Engranaje que juegas gasta 1 para repetir su efecto."
+msgstr "You have {n} Wind-Up. Each Gear card you play spends 1 to repeat its effect."
+
+#: data/states.json st/resorte/d
+msgid "Al inicio de tu turno ganas {n} de Cuerda."
+msgstr "At the start of your turn, gain {n} Wind-Up."
+
+#: data/states.json st/tictac/d
+msgid "Cada vez que gastas Cuerda, infliges {n} de daño a un enemigo al azar."
+msgstr "Whenever you spend Wind-Up, deal {n} damage to a random enemy."
+
+#: data/states.json st/precision/d
+msgid "Tus cartas de Engranaje infligen {n} de daño extra."
+msgstr "Your Gear cards deal {n} extra damage."
+
+#: data/states.json st/perpetuum/d
+msgid "Al inicio de tu turno robas {n} carta y ganas {n} de Cuerda."
+msgstr "At the start of your turn, draw {n} card and gain {n} Wind-Up."
+
+#: data/states.json st/maestro/d
+msgid "La primera carta de Engranaje de cada turno se repite sin gastar Cuerda."
+msgstr "The first Gear card each turn repeats without spending Wind-Up."
+
+#: data/states.json st/resonancia/d
+msgid "Tus orbes de Ola, Bruma y Abismo ganan {n} de potencia."
+msgstr "Your Wave, Mist and Abyss orbs gain {n} potency."
+
+#: data/states.json st/marea_alta/d
+msgid "Al inicio de tu turno canalizas {n} Ola."
+msgstr "At the start of your turn, Channel {n} Wave."
+
+#: data/states.json st/corriente/d
+msgid "Cada vez que canalizas un orbe, ganas {n} de Bloqueo."
+msgstr "Whenever you Channel an orb, gain {n} Block."
+
+#: data/states.json st/bucle/d
+msgid "Al final de tu turno, el orbe frontal activa su pasivo {n} vez más."
+msgstr "At the end of your turn, your front orb triggers its passive {n} more time."
+
+#: data/states.json st/perlera/d
+msgid "Al inicio de tu turno canalizas {n} Perla."
+msgstr "At the start of your turn, Channel {n} Pearl."
+
+#: data/states.json st/ostyRegen/d
+msgid "Al inicio de tu turno Osty recupera {n} PV."
+msgstr "At the start of your turn, Osty heals {n} HP."
+
+#: data/states_extra.json st/regen/n
+msgid "Regeneración"
+msgstr "Regeneration"
+
+#: data/states_extra.json st/regen/d
+msgid "Al inicio de tu turno recuperas {n} PV y la Regeneración baja 1."
+msgstr "At the start of your turn, heal {n} HP and Regeneration drops by 1."
+
+#: data/states_extra.json st/rootShield/d
+msgid "Recibe la mitad de daño por golpe mientras viva al menos un Brote. Cantidad de Brotes protectores: {n}."
+msgstr "Takes half damage per hit while at least one Sprout lives. Protecting Sprouts: {n}."
+
+#: data/states_extra.json st/carapace/d
+msgid "Ningún golpe le quita más de {n} PV. Los ataques de varios golpes atraviesan mejor su defensa."
+msgstr "No single hit can take more than {n} HP from it. Multi-hit attacks get through its defense better."
+
+#: data/states.json orb/ola/n
+#: data/states.json glos (clave)
+msgid "Ola"
+msgstr "Wave"
+
+#: data/states.json orb/bruma/n
+#: data/states.json glos (clave)
+msgid "Bruma"
+msgstr "Mist"
+
+#: data/states.json orb/abismo/n
+#: data/states.json glos (clave)
+msgid "Abismo"
+msgstr "Abyss"
+
+#: data/states.json orb/perla/n
+#: data/states.json glos (clave)
+msgid "Perla"
+msgstr "Pearl"
+
+#: data/states.json orb/ola/d
+msgid "Pasivo: {p} de daño a un enemigo al azar. Evocar: {e} de daño a uno al azar."
+msgstr "Passive: {p} damage to a random enemy. Evoke: {e} damage to a random enemy."
+
+#: data/states.json orb/bruma/d
+msgid "Pasivo: {p} de Bloqueo. Evocar: {e} de Bloqueo."
+msgstr "Passive: {p} Block. Evoke: {e} Block."
+
+#: data/states.json orb/abismo/d
+msgid "Pasivo: crece {p}. Evocar: daño igual a su valor al enemigo con menos PV."
+msgstr "Passive: grows by {p}. Evoke: damage equal to its value to the enemy with the lowest HP."
+
+#: data/states.json orb/perla/d
+msgid "Pasivo: {p} de Energía al inicio de tu turno. Evocar: {e} de Energía."
+msgstr "Passive: {p} Energy at the start of your turn. Evoke: {e} Energy."
+
+#: data/states.json glos/Bloqueo
+msgid "Absorbe el daño que recibes. Se pierde al empezar tu turno."
+msgstr "Absorbs incoming damage. Lost at the start of your turn."
+
+#: data/states.json glos/Frágil
+msgid "El Bloqueo de tus cartas se reduce un 25%."
+msgstr "Block from your cards is reduced by 25%."
+
+#: data/states.json glos/Veneno
+msgid "Al inicio de su turno pierde PV igual al Veneno; luego el Veneno baja 1."
+msgstr "At the start of its turn, loses HP equal to its Poison; then Poison drops by 1."
+
+#: data/states.json glos/Agotar
+msgid "La carta se retira del combate (vuelve en el siguiente)."
+msgstr "The card is removed from combat (it returns next combat)."
+
+#: data/states.json glos/Innata
+msgid "Siempre empieza en tu mano al principio del combate."
+msgstr "Always starts in your hand at the beginning of combat."
+
+#: data/states.json glos/Etérea
+msgid "Si no la juegas este turno, se agota."
+msgstr "If you don't play it this turn, it is Exhausted."
+
+#: data/states.json glos/Resplandor
+msgid "Cuando el enemigo ataca, recibe daño igual a su Resplandor y su ataque inflige 3 menos. Baja 1 por turno."
+msgstr "When the enemy attacks, it takes damage equal to its Glow and its attack deals 3 less. Drops by 1 each turn."
+
+#: data/states.json glos/Calor
+msgid "Se acumula con las cartas de Danza. Las cartas de remate lo consumen para golpear más fuerte."
+msgstr "Builds up with Dance cards. Finisher cards consume it to hit harder."
+
+#: data/states.json glos/Cuerda
+msgid "Recurso de Irene (máx. 10). Cada carta de Engranaje que juegas gasta 1 de Cuerda para repetir su efecto."
+msgstr "Irene's resource (max 10). Each Gear card you play spends 1 Wind-Up to repeat its effect."
+
+#: data/states.json glos/Engranaje
+msgid "Tipo de carta de Irene. Si tienes Cuerda, al jugarla gasta 1 y su efecto se repite."
+msgstr "Irene's card type. If you have Wind-Up, playing it spends 1 and its effect repeats."
+
+#: data/states.json glos/Orbe
+msgid "Selene canaliza orbes en huecos (3 de base). Su pasivo actúa al final de tu turno. Si no hay hueco, se evoca el más antiguo."
+msgstr "Selene channels orbs into slots (3 to start). Their passive triggers at the end of your turn. If there's no free slot, the oldest one is Evoked."
+
+#: data/states.json glos/Canalizar
+msgid "Coloca un orbe en tu primer hueco libre. Si están llenos, se evoca el orbe frontal."
+msgstr "Places an orb in your first free slot. If they're all full, your front orb is Evoked."
+
+#: data/states.json glos/Evocar
+msgid "Activa el efecto de evocación del orbe frontal y lo retira."
+msgstr "Triggers your front orb's Evoke effect and removes it."
+
+#: data/states.json glos/Ola
+msgid "Orbe. Pasivo: 3 de daño a un enemigo al azar. Evocar: 8 de daño a uno al azar."
+msgstr "Orb. Passive: 3 damage to a random enemy. Evoke: 8 damage to a random enemy."
+
+#: data/states.json glos/Bruma
+msgid "Orbe. Pasivo: 2 de Bloqueo. Evocar: 5 de Bloqueo."
+msgstr "Orb. Passive: 2 Block. Evoke: 5 Block."
+
+#: data/states.json glos/Abismo
+msgid "Orbe. Pasivo: crece 3. Evocar: daño igual a su valor al enemigo con menos PV."
+msgstr "Orb. Passive: grows by 3. Evoke: damage equal to its value to the enemy with the lowest HP."
+
+#: data/states.json glos/Perla
+msgid "Orbe. Pasivo: +1 de Energía al inicio de tu turno. Evocar: +2 de Energía."
+msgstr "Orb. Passive: +1 Energy at the start of your turn. Evoke: +2 Energy."
+
+#: data/states.json glos/Resonancia
+msgid "Aumenta la potencia de tus orbes de Ola, Bruma y Abismo."
+msgstr "Increases the potency of your Wave, Mist and Abyss orbs."
+
+#: data/states.json glos/Retener
+msgid "Si no la juegas este turno, se queda en tu mano."
+msgstr "If you don't play it this turn, it stays in your hand."
+
+#: data/states.json glos/Danza
+msgid "Tipo de carta de Aurora. Algunos efectos las abaratan."
+msgstr "Aurora's card type. Some effects make them cheaper."
+
+#: data/states.json glos/Fuerza
+msgid "Aumenta el daño de tus ataques."
+msgstr "Increases the damage of your attacks."
+
+#: data/states.json glos/Destreza
+msgid "Aumenta el Bloqueo que ganas de tus cartas."
+msgstr "Increases the Block you gain from cards."
+
+#: data/states.json glos/Osty
+msgid "Tu fiel mano espectral. Absorbe el daño que el Bloqueo no cubre y ataca al final de tu turno con su Poder. Si cae, vuelve solo con 1 PV al inicio de tu turno y se cura 1 PV por turno; las curas normales no lo reviven."
+msgstr "Your faithful spectral hand. Absorbs the damage your Block doesn't cover and attacks at the end of your turn with its Power. If it falls, it comes back on its own with 1 HP at the start of your turn and heals 1 HP per turn; normal healing won't revive it."
+
+#: data/states.json glos/Poder
+msgid "El daño base del ataque de Osty al final de tu turno (y se suma a sus cartas)."
+msgstr "The base damage of Osty's end-of-turn attack (also added to Osty's cards)."
+
+#: data/states.json glos/Cuchilla
+msgid "Carta de coste 0 que inflige 4 de daño. Se agota."
+msgstr "A 0-cost card that deals 4 damage. Exhausts."
+
+#: data/states.json glos/TODOS
+msgid "Afecta a todos los enemigos."
+msgstr "Affects all enemies."
+
+#: data/progress.json cats/0/n
+msgid "Primeros compases"
+msgstr "Opening Bars"
+
+#: data/progress.json cats/1/n
+msgid "Las seis voces"
+msgstr "The Six Voices"
+
+#: data/progress.json cats/2/n
+msgid "Pesadilla"
+msgstr "Nightmare"
+
+#: data/progress.json cats/3/n
+msgid "Jefes y élites"
+msgstr "Bosses and Elites"
+
+#: data/progress.json cats/4/n
+msgid "Combate"
+msgstr "Fight"
+
+#: data/progress.json cats/5/n
+msgid "Hazañas de partida"
+msgstr "Run Feats"
+
+#: data/progress.json cats/6/n
+msgid "Reto diario"
+msgstr "Daily Challenge"
+
+#: data/progress.json cats/7/n
+msgid "Colección"
+msgstr "Collection"
+
+#: data/progress.json achievements/0/n
+msgid "Telón del Primer Acto"
+msgstr "First Act Curtain"
+
+#: data/progress.json achievements/1/n
+msgid "Cazadora de Élites"
+msgstr "Elite Huntress"
+
+#: data/progress.json achievements/2/n
+msgid "Más Allá del Puerto"
+msgstr "Beyond the Harbor"
+
+#: data/progress.json achievements/3/n
+msgid "La Canción Sigue"
+msgstr "The Song Goes On"
+
+#: data/progress.json achievements/4/n
+msgid "Oído Afinado"
+msgstr "Perfect Pitch"
+
+#: data/progress.json achievements/5/n
+msgid "El Acero Canta"
+msgstr "Steel Sings"
+
+#: data/progress.json achievements/6/n
+msgid "Silbido Final"
+msgstr "Final Whistle"
+
+#: data/progress.json achievements/7/n
+msgid "Nombres Recordados"
+msgstr "Names Remembered"
+
+#: data/progress.json achievements/8/n
+msgid "Amanecer Eterno"
+msgstr "Eternal Dawn"
+
+#: data/progress.json achievements/9/n
+msgid "Cuerda Infinita"
+msgstr "Endless Wind-Up"
+
+#: data/progress.json achievements/10/n
+msgid "Pleamar"
+msgstr "High Water"
+
+#: data/progress.json achievements/11/n
+msgid "Acorde Completo"
+msgstr "Full Chord"
+
+#: data/progress.json achievements/12/n
+msgid "Melodía Invertida"
+msgstr "Inverted Melody"
+
+#: data/progress.json achievements/13/n
+msgid "Medianoche"
+msgstr "Midnight"
+
+#: data/progress.json achievements/14/n
+msgid "La Canción se Hereda"
+msgstr "The Song Lives On"
+
+#: data/progress.json achievements/15/n
+msgid "Pesadilla Coral"
+msgstr "Choral Nightmare"
+
+#: data/progress.json achievements/16/n
+msgid "Intocable"
+msgstr "Untouchable"
+
+#: data/progress.json achievements/17/n
+msgid "Prestissimo"
+msgstr "Prestissimo"
+
+#: data/progress.json achievements/18/n
+msgid "Bestiario de la Aguja"
+msgstr "Bestiary of the Spire"
+
+#: data/progress.json achievements/19/n
+msgid "Guardianes Caídos"
+msgstr "Fallen Guardians"
+
+#: data/progress.json achievements/20/n
+msgid "Fortissimo"
+msgstr "Fortissimo"
+
+#: data/progress.json achievements/21/n
+msgid "Cataclismo"
+msgstr "Cataclysm"
+
+#: data/progress.json achievements/22/n
+msgid "Crescendo"
+msgstr "Crescendo"
+
+#: data/progress.json achievements/23/n
+msgid "Paciencia Letal"
+msgstr "Lethal Patience"
+
+#: data/progress.json achievements/24/n
+msgid "Muralla Carmesí"
+msgstr "Crimson Rampart"
+
+#: data/progress.json achievements/26/n
+msgid "Minimalista"
+msgstr "Minimalist"
+
+#: data/progress.json achievements/27/n
+msgid "Orquesta Completa"
+msgstr "Full Orchestra"
+
+#: data/progress.json achievements/28/n
+msgid "Desapego"
+msgstr "Detachment"
+
+#: data/progress.json achievements/29/n
+msgid "Bolsillos Llenos"
+msgstr "Deep Pockets"
+
+#: data/progress.json achievements/30/n
+msgid "Sin un Rasguño"
+msgstr "Without a Scratch"
+
+#: data/progress.json achievements/31/n
+msgid "Fiel al Día"
+msgstr "Faithful to the Day"
+
+#: data/progress.json achievements/32/n
+msgid "Constancia"
+msgstr "Perseverance"
+
+#: data/progress.json achievements/33/n
+msgid "Semana Perfecta"
+msgstr "Perfect Week"
+
+#: data/progress.json achievements/34/n
+msgid "Gabinete de Curiosidades"
+msgstr "Cabinet of Curiosities"
+
+#: data/progress.json achievements/35/n
+msgid "Archivo Completo"
+msgstr "Complete Archive"
+
+#: data/progress.json achievements/36/n
+msgid "Leyenda Viva"
+msgstr "Living Legend"
+
+#: data/progress.json achievements/0/d
+msgid "Derrota a tu primer jefe."
+msgstr "Defeat your first boss."
+
+#: data/progress.json achievements/1/d
+msgid "Derrota a un élite."
+msgstr "Defeat an elite."
+
+#: data/progress.json achievements/2/d
+msgid "Llega al Acto II."
+msgstr "Reach Act II."
+
+#: data/progress.json achievements/3/d
+msgid "Gana una partida."
+msgstr "Win a run."
+
+#: data/progress.json achievements/4/d
+msgid "Termina 5 partidas, ganes o pierdas."
+msgstr "Finish 5 runs, win or lose."
+
+#: data/progress.json achievements/5/d
+msgid "Gana una partida con Zafiro."
+msgstr "Win a run with Zafiro."
+
+#: data/progress.json achievements/6/d
+msgid "Gana una partida con Lia."
+msgstr "Win a run with Lia."
+
+#: data/progress.json achievements/7/d
+msgid "Gana una partida con Claudia."
+msgstr "Win a run with Claudia."
+
+#: data/progress.json achievements/8/d
+msgid "Gana una partida con Aurora."
+msgstr "Win a run with Aurora."
+
+#: data/progress.json achievements/9/d
+msgid "Gana una partida con Irene."
+msgstr "Win a run with Irene."
+
+#: data/progress.json achievements/10/d
+msgid "Gana una partida con Selene."
+msgstr "Win a run with Selene."
+
+#: data/progress.json achievements/11/d
+msgid "Gana una partida con cada una de las seis musas."
+msgstr "Win a run with each of the six muses."
+
+#: data/progress.json achievements/12/d
+msgid "Gana una partida en Pesadilla 1 o superior."
+msgstr "Win a run on Nightmare 1 or higher."
+
+#: data/progress.json achievements/13/d
+msgid "Gana una partida en Pesadilla 5 o superior."
+msgstr "Win a run on Nightmare 5 or higher."
+
+#: data/progress.json achievements/14/d
+msgid "Gana una partida en Pesadilla 10."
+msgstr "Win a run on Nightmare 10."
+
+#: data/progress.json achievements/15/d
+msgid "Gana en Pesadilla 1 o superior con las seis musas."
+msgstr "Win on Nightmare 1 or higher with all six muses."
+
+#: data/progress.json achievements/16/d
+msgid "Derrota a un jefe sin perder PV en ese combate."
+msgstr "Defeat a boss without losing HP in that combat."
+
+#: data/progress.json achievements/17/d
+msgid "Derrota a un jefe en 3 turnos o menos."
+msgstr "Defeat a boss in 3 turns or fewer."
+
+#: data/progress.json achievements/18/d
+msgid "Derrota a seis jefes distintos."
+msgstr "Defeat six different bosses."
+
+#: data/progress.json achievements/19/d
+msgid "Derrota a 25 élites."
+msgstr "Defeat 25 elites."
+
+#: data/progress.json achievements/20/d
+msgid "Inflige 60 de daño con un solo golpe."
+msgstr "Deal 60 damage in a single hit."
+
+#: data/progress.json achievements/21/d
+msgid "Inflige 150 de daño con un solo golpe."
+msgstr "Deal 150 damage in a single hit."
+
+#: data/progress.json achievements/22/d
+msgid "Juega 10 cartas en un solo turno."
+msgstr "Play 10 cards in a single turn."
+
+#: data/progress.json achievements/23/d
+msgid "Aplica 1000 de Veneno en total."
+msgstr "Apply 1000 Poison in total."
+
+#: data/progress.json achievements/24/d
+msgid "Bloquea 5000 de daño en total."
+msgstr "Block 5000 damage in total."
+
+#: data/progress.json achievements/25/d
+msgid "Derrota a 500 enemigos en total."
+msgstr "Defeat 500 enemies in total."
+
+#: data/progress.json achievements/26/d
+msgid "Gana con 15 cartas o menos en el mazo (sin modo fácil)."
+msgstr "Win with 15 cards or fewer in your deck (not in easy mode)."
+
+#: data/progress.json achievements/27/d
+msgid "Gana con 40 cartas o más en el mazo (sin modo fácil)."
+msgstr "Win with 40 cards or more in your deck (not in easy mode)."
+
+#: data/progress.json achievements/28/d
+msgid "Gana con 4 reliquias o menos (sin modo fácil)."
+msgstr "Win with 4 relics or fewer (not in easy mode)."
+
+#: data/progress.json achievements/29/d
+msgid "Gana con 500 de oro o más sin gastar (sin modo fácil)."
+msgstr "Win with 500 or more unspent gold (not in easy mode)."
+
+#: data/progress.json achievements/30/d
+msgid "Gana con el 90 % de tus PV o más (sin modo fácil)."
+msgstr "Win with 90% of your HP or more (not in easy mode)."
+
+#: data/progress.json achievements/31/d
+msgid "Supera un reto diario el mismo día."
+msgstr "Clear a daily challenge on the same day."
+
+#: data/progress.json achievements/32/d
+msgid "Supera el reto diario 3 días seguidos."
+msgstr "Clear the daily challenge 3 days in a row."
+
+#: data/progress.json achievements/33/d
+msgid "Supera el reto diario 7 días seguidos."
+msgstr "Clear the daily challenge 7 days in a row."
+
+#: data/progress.json achievements/34/d
+msgid "Descubre 40 reliquias distintas."
+msgstr "Discover 40 different relics."
+
+#: data/progress.json achievements/35/d
+msgid "Desbloquea todas las cartas y reliquias."
+msgstr "Unlock every card and relic."
+
+#: data/progress.json achievements/36/d
+msgid "Alcanza la Maestría «Maestra» con una musa."
+msgstr "Reach the \"Maestro\" Mastery rank with a muse."
+
+#: data/progress.json unlocks/0/ch
+msgid "Termina una partida con Zafiro"
+msgstr "Finish a run with Zafiro"
+
+#: data/progress.json unlocks/1/ch
+msgid "Derrota al jefe del Acto I con Zafiro"
+msgstr "Defeat the Act I boss with Zafiro"
+
+#: data/progress.json unlocks/3/ch
+msgid "Termina una partida con Lia"
+msgstr "Finish a run with Lia"
+
+#: data/progress.json unlocks/4/ch
+msgid "Derrota al jefe del Acto I con Lia"
+msgstr "Defeat the Act I boss with Lia"
+
+#: data/progress.json unlocks/6/ch
+msgid "Termina una partida con Claudia"
+msgstr "Finish a run with Claudia"
+
+#: data/progress.json unlocks/7/ch
+msgid "Derrota al jefe del Acto I con Claudia"
+msgstr "Defeat the Act I boss with Claudia"
+
+#: data/progress.json unlocks/9/ch
+msgid "Termina una partida con Aurora"
+msgstr "Finish a run with Aurora"
+
+#: data/progress.json unlocks/10/ch
+msgid "Derrota al jefe del Acto I con Aurora"
+msgstr "Defeat the Act I boss with Aurora"
+
+#: data/progress.json unlocks/12/ch
+msgid "Termina una partida con Irene"
+msgstr "Finish a run with Irene"
+
+#: data/progress.json unlocks/13/ch
+msgid "Derrota al jefe del Acto I con Irene"
+msgstr "Defeat the Act I boss with Irene"
+
+#: data/progress.json unlocks/14/ch
+msgid "Termina una partida con Selene"
+msgstr "Finish a run with Selene"
+
+#: data/progress.json unlocks/15/ch
+msgid "Derrota al jefe del Acto I con Selene"
+msgstr "Defeat the Act I boss with Selene"
+
+#: data/progress.json unlocks/16/ch
+msgid "Termina 3 partidas"
+msgstr "Finish 3 runs"
+
+#: data/progress.json unlocks/17/ch
+msgid "Derrota a 3 jefes"
+msgstr "Defeat 3 bosses"
+
+#: data/progress.json unlocks/18/ch
+msgid "Derrota a 3 élites"
+msgstr "Defeat 3 elites"
+
+#: data/progress.json unlocks/19/ch
+msgid "Derrota a 2 jefes"
+msgstr "Defeat 2 bosses"
+
+#: data/progress.json unlocks/20/ch
+msgid "Derrota a 3 jefes distintos"
+msgstr "Defeat 3 different bosses"
+
+#: data/progress.json mastery/ranks/0/n
+msgid "Aprendiz"
+msgstr "Apprentice"
+
+#: data/progress.json mastery/ranks/1/n
+msgid "Intérprete"
+msgstr "Performer"
+
+#: data/progress.json mastery/ranks/2/n
+msgid "Solista"
+msgstr "Soloist"
+
+#: data/progress.json mastery/ranks/3/n
+msgid "Virtuosa"
+msgstr "Virtuoso"
+
+#: data/progress.json mastery/ranks/4/n
+msgid "Maestra"
+msgstr "Maestro"
+
+#: data/progress.json mastery/ranks/5/n
+msgid "Leyenda"
+msgstr "Legend"
+
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:70
+#: scripts/ui/card_text.gd:72
+#: scripts/ui/card_text.gd:75
+#: … (+1)
+msgid "Bloqueo"
+msgstr "Block"
+
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:163
+#: scripts/ui/card_text.gd:174
+msgid "Agotar"
+msgstr "Exhaust"
+
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:169
+msgid "Innata"
+msgstr "Innate"
+
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:173
+msgid "Etérea"
+msgstr "Ethereal"
+
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:172
+msgid "Engranaje"
+msgstr "Gear"
+
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:75
+#: scripts/ui/card_text.gd:78
+#: scripts/ui/card_text.gd:90
+#: … (+5)
+msgid "Orbe"
+msgstr "Orb"
+
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:87
+msgid "Canalizar"
+msgstr "Channel"
+
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:90
+#: scripts/ui/card_text.gd:92
+#: scripts/ui/card_text.gd:93
+#: … (+1)
+msgid "Evocar"
+msgstr "Evoke"
+
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:170
+msgid "Retener"
+msgstr "Retain"
+
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:171
+msgid "Danza"
+msgstr "Dance"
+
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:98
+#: scripts/ui/card_text.gd:99
+#: scripts/ui/card_text.gd:103
+#: … (+3)
+msgid "Osty"
+msgstr "Osty"
+
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:99
+#: scripts/ui/card_text.gd:140
+#: scripts/ui/card_text.gd:9
+msgid "Poder"
+msgstr "Power"
+
+#: data/states.json glos (clave)
+#: scripts/ui/card_text.gd:58
+msgid "TODOS"
+msgstr "ALL"
+
+#: scripts/engine/daily.gd:151
+msgid "Verso de Musas · Reto diario {key}"
+msgstr "Verso de Musas · Daily Challenge {key}"
+
+#: scripts/engine/daily.gd:153
+msgid "Semilla: {seed}"
+msgstr "Seed: {seed}"
+
+#: scripts/engine/daily.gd:157
+msgid "Mi resultado: superado en {n} intento"
+msgid_plural "Mi resultado: superado en {n} intentos"
+msgstr[0] "My result: cleared in {n} attempt"
+msgstr[1] "My result: cleared in {n} attempts"
+
+#: scripts/engine/daily.gd:159
+msgid "Mi resultado: piso {f} en {n} intento"
+msgid_plural "Mi resultado: piso {f} en {n} intentos"
+msgstr[0] "My result: floor {f} in {n} attempt"
+msgstr[1] "My result: floor {f} in {n} attempts"
+
+#: scripts/engine/daily.gd:160
+msgid "¿Lo superas?"
+msgstr "Can you beat it?"
+
+#: scripts/engine/daily.gd:9
+msgid "Bolsa Llena"
+msgstr "Full Purse"
+
+#: scripts/engine/daily.gd:9
+msgid "Empiezas con 250 de oro."
+msgstr "Start with 250 gold."
+
+#: scripts/engine/daily.gd:10
+msgid "Coleccionista"
+msgstr "Collector"
+
+#: scripts/engine/daily.gd:10
+msgid "Empiezas con una reliquia aleatoria."
+msgstr "Start with a random relic."
+
+#: scripts/engine/daily.gd:11
+msgid "Alquimista"
+msgstr "Alchemist"
+
+#: scripts/engine/daily.gd:11
+msgid "Empiezas con 3 pociones aleatorias."
+msgstr "Start with 3 random potions."
+
+#: scripts/engine/daily.gd:12
+msgid "Templado"
+msgstr "Tempered"
+
+#: scripts/engine/daily.gd:12
+msgid "Tus cartas iniciales empiezan mejoradas, pero tienes 15 PV máx. menos."
+msgstr "Your starting cards begin upgraded, but you have 15 less Max HP."
+
+#: scripts/engine/daily.gd:13
+msgid "Pacto Maldito"
+msgstr "Cursed Pact"
+
+#: scripts/engine/daily.gd:13
+msgid "Empiezas con 2 Dudas en el mazo y una reliquia rara."
+msgstr "Start with 2 Doubts in your deck and a rare relic."
+
+#: scripts/engine/daily.gd:14
+msgid "Cañón de Cristal"
+msgstr "Glass Cannon"
+
+#: scripts/engine/daily.gd:14
+msgid "+2 de Fuerza en cada combate, pero tienes 25 PV máx. menos."
+msgstr "+2 Strength in every combat, but you have 25 less Max HP."
+
+#: scripts/engine/eng.gd:80
+msgid "Tus ataques infligen {n} de daño extra."
+msgstr "Your attacks deal {n} extra damage."
+
+#: scripts/engine/eng.gd:361
+msgid "Osty +{n} PV máx."
+msgstr "Osty +{n} Max HP"
+
+#: scripts/engine/eng.gd:363
+msgid "Osty +{n} de Poder"
+msgstr "Osty +{n} Power"
+
+#: scripts/engine/eng.gd:365
+msgid "+{n} de {st}"
+msgstr "+{n} {st}"
+
+#: scripts/engine/eng.gd:586
+msgid "¡Aturdido!"
+msgstr "Stunned!"
+
+#: scripts/engine/eng.gd:972
+msgid "No puedes jugar ahora."
+msgstr "You can't play right now."
+
+#: scripts/engine/eng.gd:975
+msgid "Esta carta no se puede jugar."
+msgstr "This card can't be played."
+
+#: scripts/engine/eng.gd:977
+msgid "No tienes suficiente energía."
+msgstr "Not enough energy."
+
+#: scripts/engine/events.gd:19
+#: scripts/engine/events.gd:94
+#: scripts/engine/events.gd:231
+msgid "Marcharte"
+msgstr "Leave"
+
+#: scripts/engine/events.gd:19
+msgid "Sigues tu camino."
+msgstr "You continue on your way."
+
+#: scripts/engine/events.gd:23
+msgid "Ofrecer sangre"
+msgstr "Offer blood"
+
+#: scripts/engine/events.gd:23
+msgid "Pierdes 8 PV. Obtienes una reliquia."
+msgstr "Lose 8 HP. Obtain a relic."
+
+#: scripts/engine/events.gd:28
+msgid "El altar brilla y te concede **%s**."
+msgstr "The altar glows and grants you **%s**."
+
+#: scripts/engine/events.gd:29
+msgid "El altar guarda silencio."
+msgstr "The altar stays silent."
+
+#: scripts/engine/events.gd:30
+msgid "Rezar"
+msgstr "Pray"
+
+#: scripts/engine/events.gd:30
+msgid "Recuperas 15 PV."
+msgstr "Heal 15 HP."
+
+#: scripts/engine/events.gd:32
+msgid "Una calidez suave recorre tu cuerpo."
+msgstr "A gentle warmth runs through your body."
+
+#: scripts/engine/events.gd:36
+msgid "Beber"
+msgstr "Drink"
+
+#: scripts/engine/events.gd:36
+msgid "Recuperas el 30% de tus PV máx."
+msgstr "Heal 30% of your Max HP."
+
+#: scripts/engine/events.gd:39
+msgid "Recuperas %d PV."
+msgstr "You heal %d HP."
+
+#: scripts/engine/events.gd:40
+msgid "Purificar una carta"
+msgstr "Purify a card"
+
+#: scripts/engine/events.gd:40
+msgid "Elimina una carta de tu mazo. Pierdes 5 PV."
+msgstr "Remove a card from your deck. Lose 5 HP."
+
+#: scripts/engine/events.gd:41
+#: scripts/engine/events.gd:141
+msgid "Elige una carta para eliminar"
+msgstr "Choose a card to remove"
+
+#: scripts/engine/events.gd:43
+#: scripts/engine/events.gd:53
+msgid "Cambias de idea."
+msgstr "You change your mind."
+
+#: scripts/engine/events.gd:46
+msgid "Eliminas **%s** de tu mazo."
+msgstr "You remove **%s** from your deck."
+
+#: scripts/engine/events.gd:50
+msgid "Mejorar una carta"
+msgstr "Upgrade a card"
+
+#: scripts/engine/events.gd:50
+msgid "Gratis."
+msgstr "Free."
+
+#: scripts/engine/events.gd:51
+#: scripts/engine/events.gd:148
+msgid "Elige una carta para mejorar"
+msgstr "Choose a card to upgrade"
+
+#: scripts/engine/events.gd:56
+#: scripts/engine/events.gd:372
+msgid "**%s** ha sido mejorada."
+msgstr "**%s** has been upgraded."
+
+#: scripts/engine/events.gd:57
+msgid "Regatear"
+msgstr "Haggle"
+
+#: scripts/engine/events.gd:57
+msgid "Ganas 45 de oro. Pierdes 6 PV."
+msgstr "Gain 45 gold. Lose 6 HP."
+
+#: scripts/engine/events.gd:60
+msgid "El herrero te lanza unas monedas tras un forcejeo."
+msgstr "After a scuffle, the blacksmith tosses you a few coins."
+
+#: scripts/engine/events.gd:64
+msgid "Abrirlo"
+msgstr "Open it"
+
+#: scripts/engine/events.gd:64
+msgid "Ganas 80 de oro. Añades la maldición Duda."
+msgstr "Gain 80 gold. Add the Doubt curse."
+
+#: scripts/engine/events.gd:67
+msgid "Tomas el oro... y sientes un escalofrío."
+msgstr "You take the gold... and feel a chill."
+
+#: scripts/engine/events.gd:68
+msgid "Dejarlo"
+msgstr "Leave it"
+
+#: scripts/engine/events.gd:68
+msgid "Es mejor no tentar a la suerte."
+msgstr "Better not to tempt fate."
+
+#: scripts/engine/events.gd:71
+msgid "Comerlos"
+msgstr "Eat them"
+
+#: scripts/engine/events.gd:71
+msgid "+6 PV máx. Añades una Herida."
+msgstr "+6 Max HP. Add a Wound."
+
+#: scripts/engine/events.gd:75
+msgid "Te sientes más fuerte, pero con náuseas."
+msgstr "You feel stronger, but nauseous."
+
+#: scripts/engine/events.gd:76
+msgid "Recolectarlos"
+msgstr "Gather them"
+
+#: scripts/engine/events.gd:76
+msgid "Ganas 30 de oro."
+msgstr "Gain 30 gold."
+
+#: scripts/engine/events.gd:78
+msgid "Los vendes más adelante."
+msgstr "You sell them further down the road."
+
+#: scripts/engine/events.gd:82
+msgid "Comprar reliquia (50 de oro)"
+msgstr "Buy a relic (50 gold)"
+
+#: scripts/engine/events.gd:82
+msgid "Una reliquia aleatoria."
+msgstr "A random relic."
+
+#: scripts/engine/events.gd:87
+#: scripts/engine/events.gd:93
+msgid "Obtienes **%s**."
+msgstr "You obtain **%s**."
+
+#: scripts/engine/events.gd:88
+msgid "No le quedan reliquias."
+msgstr "He has no relics left."
+
+#: scripts/engine/events.gd:89
+msgid "Comprar poción (20 de oro)"
+msgstr "Buy a potion (20 gold)"
+
+#: scripts/engine/events.gd:89
+msgid "Una poción aleatoria."
+msgstr "A random potion."
+
+#: scripts/engine/events.gd:94
+msgid "El fantasma se desvanece."
+msgstr "The ghost fades away."
+
+#: scripts/engine/events.gd:97
+msgid "Aceptar el duelo"
+msgstr "Accept the duel"
+
+#: scripts/engine/events.gd:97
+msgid "Combate contra un élite. Recompensa mejorada."
+msgstr "Fight an elite. Improved reward."
+
+#: scripts/engine/events.gd:98
+msgid "Rechazarlo"
+msgstr "Decline"
+
+#: scripts/engine/events.gd:98
+msgid "Lo rodeas con cuidado."
+msgstr "You carefully walk around him."
+
+#: scripts/engine/events.gd:167
+#: scripts/core/progress.gd:227
+msgid "{a} y {b}"
+msgstr "{a} and {b}"
+
+#: scripts/engine/events.gd:177
+msgid "Estudiar un tomo"
+msgstr "Study a tome"
+
+#: scripts/engine/events.gd:177
+msgid "Elige 1 de 3 cartas poco comunes o raras de tu musa."
+msgstr "Choose 1 of 3 uncommon or rare cards of your muse."
+
+#: scripts/engine/events.gd:178
+msgid "Elige una carta del tomo"
+msgstr "Choose a card from the tome"
+
+#: scripts/engine/events.gd:180
+msgid "Cierras el libro sin terminar de leerlo."
+msgstr "You close the book without finishing it."
+
+#: scripts/engine/events.gd:182
+msgid "Memorizas cada palabra: aprendes **%s**."
+msgstr "You memorize every word: you learn **%s**."
+
+#: scripts/engine/events.gd:183
+msgid "Arrancar páginas doradas"
+msgstr "Tear out golden pages"
+
+#: scripts/engine/events.gd:183
+msgid "Ganas 60 de oro. Añades la maldición Duda."
+msgstr "Gain 60 gold. Add the Doubt curse."
+
+#: scripts/engine/events.gd:186
+msgid "Las páginas valen su peso en oro... pero las palabras arrancadas te persiguen."
+msgstr "The pages are worth their weight in gold... but the torn-out words haunt you."
+
+#: scripts/engine/events.gd:190
+msgid "Apostar 40 de oro"
+msgstr "Bet 40 gold"
+
+#: scripts/engine/events.gd:190
+msgid "50%: ganas 100 de oro."
+msgstr "50%: win 100 gold."
+
+#: scripts/engine/events.gd:194
+msgid "¡Los dados te sonríen! Ganas **100 de oro**."
+msgstr "The dice smile on you! You win **100 gold**."
+
+#: scripts/engine/events.gd:195
+msgid "Los dados ruedan... y pierdes. El hombrecillo guarda tus monedas con una reverencia."
+msgstr "The dice roll... and you lose. The little man pockets your coins with a bow."
+
+#: scripts/engine/events.gd:196
+msgid "Apostar tu sangre"
+msgstr "Bet your blood"
+
+#: scripts/engine/events.gd:196
+msgid "Pierdes 8 PV. 50%: obtienes una reliquia."
+msgstr "Lose 8 HP. 50%: obtain a relic."
+
+#: scripts/engine/events.gd:199
+msgid "Doble seis. Pagas con sangre y obtienes **{r}**."
+msgstr "Double six. You pay in blood and obtain **{r}**."
+
+#: scripts/engine/events.gd:199
+msgid "Doble seis. Pagas con sangre y pero no queda ninguna reliquia que encontrar."
+msgstr "Double six. You pay in blood... but there are no relics left to find."
+
+#: scripts/engine/events.gd:200
+msgid "Un uno y un dos. La sangre cae en el polvo y el hombrecillo sonríe."
+msgstr "A one and a two. Your blood drips into the dust and the little man grins."
+
+#: scripts/engine/events.gd:204
+msgid "Reflejar una carta"
+msgstr "Reflect a card"
+
+#: scripts/engine/events.gd:204
+msgid "Duplica una carta de tu mazo."
+msgstr "Duplicate a card in your deck."
+
+#: scripts/engine/events.gd:205
+msgid "Elige una carta para duplicar"
+msgstr "Choose a card to duplicate"
+
+#: scripts/engine/events.gd:207
+#: scripts/engine/events.gd:213
+msgid "Apartas la mirada."
+msgstr "You look away."
+
+#: scripts/engine/events.gd:209
+msgid "Del espejo sale una copia exacta de **%s**."
+msgstr "An exact copy of **%s** steps out of the mirror."
+
+#: scripts/engine/events.gd:210
+msgid "Atravesar el espejo"
+msgstr "Step through the mirror"
+
+#: scripts/engine/events.gd:210
+msgid "Transforma una carta de tu mazo en otra aleatoria de tu musa."
+msgstr "Transform a card in your deck into a random card of your muse."
+
+#: scripts/engine/events.gd:211
+#: scripts/engine/events.gd:354
+msgid "Elige una carta para transformar"
+msgstr "Choose a card to transform"
+
+#: scripts/engine/events.gd:215
+msgid "Al otro lado, **%s** se ha convertido en **%s**."
+msgstr "On the other side, **%s** has become **%s**."
+
+#: scripts/engine/events.gd:219
+msgid "Darle una poción"
+msgstr "Give her a potion"
+
+#: scripts/engine/events.gd:219
+msgid "Pierdes una poción al azar. Obtienes una reliquia."
+msgstr "Lose a random potion. Obtain a relic."
+
+#: scripts/engine/events.gd:225
+msgid "La peregrina bebe y recupera el color. Agradecida, te da un objeto y obtienes **{r}**."
+msgstr "The pilgrim drinks and the color returns to her cheeks. Grateful, she hands you a keepsake: you obtain **{r}**."
+
+#: scripts/engine/events.gd:225
+msgid "La peregrina bebe y recupera el color. Agradecida, te da un objeto y pero no queda ninguna reliquia que encontrar."
+msgstr "The pilgrim drinks and the color returns to her cheeks. Grateful, she tries to give you a keepsake... but there are no relics left to find."
+
+#: scripts/engine/events.gd:226
+msgid "Darle 35 de oro"
+msgstr "Give her 35 gold"
+
+#: scripts/engine/events.gd:226
+msgid "Recuperas 12 PV y mejoras una carta al azar."
+msgstr "Heal 12 HP and upgrade a random card."
+
+#: scripts/engine/events.gd:230
+msgid "La peregrina te bendice. Recuperas 12 PV y **{c}** mejora."
+msgstr "The pilgrim blesses you. You heal 12 HP and **{c}** is upgraded."
+
+#: scripts/engine/events.gd:230
+msgid "La peregrina te bendice. Recuperas 12 PV."
+msgstr "The pilgrim blesses you. You heal 12 HP."
+
+#: scripts/engine/events.gd:231
+msgid "Le deseas suerte y sigues tu camino."
+msgstr "You wish her luck and continue on your way."
+
+#: scripts/engine/events.gd:234
+msgid "Abrazar el recuerdo"
+msgstr "Embrace the memory"
+
+#: scripts/engine/events.gd:234
+msgid "Pierdes 5 PV. Elige 1 de 2 cartas raras de tu musa."
+msgstr "Lose 5 HP. Choose 1 of 2 rare cards of your muse."
+
+#: scripts/engine/events.gd:236
+msgid "El recuerdo toma forma"
+msgstr "The memory takes shape"
+
+#: scripts/engine/events.gd:238
+msgid "El recuerdo se desvanece antes de que puedas alcanzarlo."
+msgstr "The memory fades before you can reach it."
+
+#: scripts/engine/events.gd:240
+msgid "Duele, pero ahora lo recuerdas: obtienes **%s**."
+msgstr "It hurts, but now you remember: you obtain **%s**."
+
+#: scripts/engine/events.gd:241
+msgid "Dejarlo ir"
+msgstr "Let it go"
+
+#: scripts/engine/events.gd:241
+msgid "Elimina una carta de tu mazo."
+msgstr "Remove a card from your deck."
+
+#: scripts/engine/events.gd:243
+msgid "Sueltas el pasado y, con él, **%s**."
+msgstr "You let go of the past, and **%s** along with it."
+
+#: scripts/engine/events.gd:243
+msgid "Te quedas un rato en silencio."
+msgstr "You linger a while in silence."
+
+#: scripts/engine/events.gd:247
+msgid "Saquear la bodega"
+msgstr "Loot the hold"
+
+#: scripts/engine/events.gd:247
+msgid "Ganas 55 de oro. 30%: una rata te muerde y pierdes 6 PV."
+msgstr "Gain 55 gold. 30%: a rat bites you and you lose 6 HP."
+
+#: scripts/engine/events.gd:251
+msgid "Llenas los bolsillos de monedas... y una rata enorme te muerde la mano."
+msgstr "You fill your pockets with coins... and a huge rat bites your hand."
+
+#: scripts/engine/events.gd:252
+msgid "Llenas los bolsillos de monedas mohosas."
+msgstr "You fill your pockets with moldy coins."
+
+#: scripts/engine/events.gd:253
+msgid "Bucear hasta el camarote"
+msgstr "Dive to the cabin"
+
+#: scripts/engine/events.gd:253
+msgid "Pierdes 9 PV. Obtienes una reliquia."
+msgstr "Lose 9 HP. Obtain a relic."
+
+#: scripts/engine/events.gd:255
+msgid "El agua helada te corta la respiración, pero en el cofre del capitán obtienes **{r}**."
+msgstr "The icy water takes your breath away, but in the captain's chest you obtain **{r}**."
+
+#: scripts/engine/events.gd:255
+msgid "El agua helada te corta la respiración, pero en el cofre del capitán pero no queda ninguna reliquia que encontrar."
+msgstr "The icy water takes your breath away, but the captain's chest holds no relics left to find."
+
+#: scripts/engine/events.gd:259
+msgid "Desafiar a la criatura"
+msgstr "Challenge the creature"
+
+#: scripts/engine/events.gd:259
+msgid "Combate contra el Tentáculo Abisal (élite). Recompensa de élite."
+msgstr "Fight the Abyssal Tentacle (elite). Elite reward."
+
+#: scripts/engine/events.gd:260
+msgid "Arrojar 30 de oro al agua"
+msgstr "Toss 30 gold into the water"
+
+#: scripts/engine/events.gd:260
+msgid "Recuperas el 25% de tus PV máx. y eliminas una maldición si tienes."
+msgstr "Heal 25% of your Max HP and remove a curse if you have one."
+
+#: scripts/engine/events.gd:268
+msgid "El ojo se cierra, satisfecho. Recuperas %d PV y la maldición **%s** se disuelve en la marea."
+msgstr "The eye closes, satisfied. You heal %d HP and the **%s** curse dissolves into the tide."
+
+#: scripts/engine/events.gd:269
+msgid "El ojo se cierra, satisfecho. Recuperas %d PV."
+msgstr "The eye closes, satisfied. You heal %d HP."
+
+#: scripts/engine/events.gd:273
+msgid "Escuchar sus secretos"
+msgstr "Listen to its secrets"
+
+#: scripts/engine/events.gd:273
+msgid "Mejoras 2 cartas al azar. Añades la maldición Duda."
+msgstr "Upgrade 2 random cards. Add the Doubt curse."
+
+#: scripts/engine/events.gd:276
+msgid "Los secretos te enseñan a mejorar **%s**, pero dejan una duda en tu corazón."
+msgstr "The secrets teach you to improve **%s**, but leave a doubt in your heart."
+
+#: scripts/engine/events.gd:277
+msgid "Tomar un fruto"
+msgstr "Take a fruit"
+
+#: scripts/engine/events.gd:277
+msgid "Obtienes una poción aleatoria y recuperas 10 PV."
+msgstr "Obtain a random potion and heal 10 HP."
+
+#: scripts/engine/events.gd:280
+msgid "El fruto sabe a miel y a tierra. Recuperas 10 PV y guardas **%s**."
+msgstr "The fruit tastes of honey and earth. You heal 10 HP and keep **%s**."
+
+#: scripts/engine/events.gd:284
+msgid "Bailar con ellas"
+msgstr "Dance with them"
+
+#: scripts/engine/events.gd:284
+msgid "Transforma 2 cartas al azar de tu mazo."
+msgstr "Transform 2 random cards in your deck."
+
+#: scripts/engine/events.gd:288
+msgid "Bailas hasta el amanecer. Al despertar, tu mazo ha cambiado: **%s**."
+msgstr "You dance until dawn. When you wake, your deck has changed: **%s**."
+
+#: scripts/engine/events.gd:289
+msgid "Atrapar una"
+msgstr "Catch one"
+
+#: scripts/engine/events.gd:289
+msgid "50%: obtienes una reliquia. Si no, pierdes 10 PV y añades Duda."
+msgstr "50%: obtain a relic. Otherwise, lose 10 HP and add Doubt."
+
+#: scripts/engine/events.gd:291
+msgid "¡La atrapas! A cambio de su libertad obtienes **{r}**."
+msgstr "You catch one! In exchange for its freedom, you obtain **{r}**."
+
+#: scripts/engine/events.gd:291
+msgid "¡La atrapas! A cambio de su libertad pero no queda ninguna reliquia que encontrar."
+msgstr "You catch one! It offers a treasure for its freedom... but there are no relics left to find."
+
+#: scripts/engine/events.gd:294
+msgid "Se escapa entre risas y te deja un hechizo de mala suerte."
+msgstr "It slips away giggling and leaves you with a bad-luck hex."
+
+#: scripts/engine/events.gd:298
+msgid "Probar la miel real"
+msgstr "Taste the royal honey"
+
+#: scripts/engine/events.gd:298
+msgid "Recuperas el 40% de tus PV máx. Añades 2 Babas a tu mazo."
+msgstr "Heal 40% of your Max HP. Add 2 Slimes to your deck."
+
+#: scripts/engine/events.gd:303
+msgid "Recuperas %d PV. La miel es deliciosa... y muy, muy pegajosa."
+msgstr "You heal %d HP. The honey is delicious... and very, very sticky."
+
+#: scripts/engine/events.gd:304
+msgid "Llevarte la cera"
+msgstr "Take the wax"
+
+#: scripts/engine/events.gd:304
+msgid "Ganas 70 de oro. Pierdes 9 PV."
+msgstr "Gain 70 gold. Lose 9 HP."
+
+#: scripts/engine/events.gd:307
+msgid "Arrancas un buen trozo de cera dorada mientras el enjambre te pica sin piedad."
+msgstr "You rip off a hefty chunk of golden wax while the swarm stings you mercilessly."
+
+#: scripts/engine/events.gd:311
+msgid "Sentarte en el trono"
+msgstr "Sit on the throne"
+
+#: scripts/engine/events.gd:311
+msgid "Obtienes una reliquia de jefe. Añades 2 maldiciones Duda."
+msgstr "Obtain a boss relic. Add 2 Doubt curses."
+
+#: scripts/engine/events.gd:316
+msgid "La corona pesa demasiado y no te concede nada... salvo dudas."
+msgstr "The crown is too heavy and grants you nothing... except doubts."
+
+#: scripts/engine/events.gd:317
+msgid "La corona se ajusta a tu cabeza: obtienes **{r}**."
+msgstr "The crown fits your head perfectly: you obtain **{r}**."
+
+#: scripts/engine/events.gd:317
+msgid "La corona se ajusta a tu cabeza: pero no queda ninguna reliquia que encontrar."
+msgstr "The crown fits your head perfectly... but there are no relics left to find."
+
+#: scripts/engine/events.gd:318
+msgid "Arrodillarte"
+msgstr "Kneel"
+
+#: scripts/engine/events.gd:318
+msgid "Elimina una carta de tu mazo. Recuperas 15 PV."
+msgstr "Remove a card from your deck. Heal 15 HP."
+
+#: scripts/engine/events.gd:321
+msgid "Rindes homenaje y dejas atrás **%s**. Recuperas 15 PV."
+msgstr "You pay homage and leave **%s** behind. You heal 15 HP."
+
+#: scripts/engine/events.gd:321
+msgid "Rindes homenaje en silencio. Recuperas 15 PV."
+msgstr "You pay homage in silence. You heal 15 HP."
+
+#: scripts/engine/events.gd:326
+msgid "Tocar la campana"
+msgstr "Ring the bell"
+
+#: scripts/engine/events.gd:326
+msgid "Pierdes 7 PV. Obtienes una reliquia."
+msgstr "Lose 7 HP. Obtain a relic."
+
+#: scripts/engine/events.gd:328
+msgid "La nota atraviesa la niebla. Entre los ecos obtienes **{r}**."
+msgstr "The note pierces the fog. Among the echoes, you obtain **{r}**."
+
+#: scripts/engine/events.gd:328
+msgid "La nota atraviesa la niebla. Entre los ecos pero no queda ninguna reliquia que encontrar."
+msgstr "The note pierces the fog. Among the echoes... there are no relics left to find."
+
+#: scripts/engine/events.gd:329
+msgid "Arrancar el badajo"
+msgstr "Rip out the clapper"
+
+#: scripts/engine/events.gd:329
+msgid "Ganas 90 de oro. Añades la maldición Duda."
+msgstr "Gain 90 gold. Add the Doubt curse."
+
+#: scripts/engine/events.gd:332
+msgid "La campana queda muda. El badajo se convierte en monedas, pero su última nota se queda contigo."
+msgstr "The bell falls mute. The clapper turns into coins, but its last note stays with you."
+
+#: scripts/engine/events.gd:336
+msgid "Abrazar el corazón"
+msgstr "Embrace the heart"
+
+#: scripts/engine/events.gd:336
+msgid "+8 PV máx. Añades 2 Heridas."
+msgstr "+8 Max HP. Add 2 Wounds."
+
+#: scripts/engine/events.gd:341
+msgid "La savia fortalece tu pecho. Dos espinas se desprenden y se enredan en tu mazo."
+msgstr "The sap strengthens your chest. Two thorns break loose and tangle themselves into your deck."
+
+#: scripts/engine/events.gd:342
+msgid "Cortar el corazón"
+msgstr "Cut out the heart"
+
+#: scripts/engine/events.gd:342
+msgid "Ganas 110 de oro. Pierdes 10 PV."
+msgstr "Gain 110 gold. Lose 10 HP."
+
+#: scripts/engine/events.gd:345
+msgid "La madera se abre como un cofre. Recoges sus monedas semilla; el roble exhala un largo suspiro."
+msgstr "The wood opens like a chest. You gather its seed coins; the oak lets out a long sigh."
+
+#: scripts/engine/events.gd:349
+msgid "Esculpir tus recuerdos"
+msgstr "Sculpt your memories"
+
+#: scripts/engine/events.gd:349
+msgid "Pierdes 12 PV. Mejora hasta 2 cartas al azar."
+msgstr "Lose 12 HP. Upgrade up to 2 random cards."
+
+#: scripts/engine/events.gd:352
+msgid "La cera se enfría con una forma más nítida: **%s** mejora."
+msgstr "The wax cools into a sharper shape: **%s** is upgraded."
+
+#: scripts/engine/events.gd:353
+msgid "Trocar una forma"
+msgstr "Trade a shape"
+
+#: scripts/engine/events.gd:353
+msgid "Transforma una carta en otra aleatoria de tu musa. Ganas 75 de oro."
+msgstr "Transform a card into a random card of your muse. Gain 75 gold."
+
+#: scripts/engine/events.gd:356
+msgid "La cera recupera su forma. Decides no cambiar la tuya."
+msgstr "The wax returns to its shape. You decide not to change yours."
+
+#: scripts/engine/events.gd:360
+msgid "**%s** se funde y reaparece como **%s**. El molde sobrante se convierte en 75 de oro."
+msgstr "**%s** melts and reappears as **%s**. The leftover mold turns into 75 gold."
+
+#: scripts/engine/events.gd:365
+msgid "Entrenar hasta el amanecer"
+msgstr "Train until dawn"
+
+#: scripts/engine/events.gd:365
+msgid "Pierdes 8 PV máx. +1 de Fuerza permanente en cada combate."
+msgstr "Lose 8 Max HP. Permanent +1 Strength in every combat."
+
+#: scripts/engine/events.gd:369
+msgid "Golpeas los muñecos hasta que tus brazos arden. **+1 de Fuerza** en cada combate."
+msgstr "You pound the dummies until your arms burn. **+1 Strength** in every combat."
+
+#: scripts/engine/events.gd:370
+msgid "Afilar la espada"
+msgstr "Sharpen your sword"
+
+#: scripts/engine/events.gd:370
+msgid "Mejora una carta de tu mazo."
+msgstr "Upgrade a card in your deck."
+
+#: scripts/engine/events.gd:372
+msgid "Guardas la piedra de afilar."
+msgstr "You pocket the whetstone."
+
+#: scripts/engine/events.gd:376
+msgid "Afilar tus cuchillas"
+msgstr "Sharpen your blades"
+
+#: scripts/engine/events.gd:376
+msgid "+2 de Precisión permanente: tus Cuchillas infligen 2 de daño más."
+msgstr "Permanent +2 Accuracy: your Shivs deal 2 more damage."
+
+#: scripts/engine/events.gd:378
+msgid "La piedra del zorro deja tus cuchillas con un filo perfecto. **+2 de Precisión** en cada combate."
+msgstr "The fox's whetstone leaves your blades with a perfect edge. **+2 Accuracy** in every combat."
+
+#: scripts/engine/events.gd:379
+msgid "Tomar su alijo"
+msgstr "Take its stash"
+
+#: scripts/engine/events.gd:379
+msgid "Obtienes un Frasco de Veneno y 40 de oro."
+msgstr "Obtain a Poison Flask and 40 gold."
+
+#: scripts/engine/events.gd:382
+msgid "Te llevas 40 monedas y un **{p}**. El zorro no parece molesto."
+msgstr "You take 40 coins and a **{p}**. The fox doesn't seem to mind."
+
+#: scripts/engine/events.gd:382
+msgid "Te llevas 40 monedas. El zorro no parece molesto."
+msgstr "You take 40 coins. The fox doesn't seem to mind."
+
+#: scripts/engine/events.gd:386
+msgid "Despertar a los huesos"
+msgstr "Wake the bones"
+
+#: scripts/engine/events.gd:386
+msgid "Pierdes 6 PV. Osty gana +5 PV máx. y +1 de Poder permanentes."
+msgstr "Lose 6 HP. Osty permanently gains +5 Max HP and +1 Power."
+
+#: scripts/engine/events.gd:390
+msgid "Los huesos se unen a Osty, que crece y se fortalece. **Osty +5 PV máx. y +1 de Poder** en cada combate."
+msgstr "The bones join Osty, who grows bigger and stronger. **Osty +5 Max HP and +1 Power** in every combat."
+
+#: scripts/engine/events.gd:391
+msgid "Saquear las tumbas"
+msgstr "Loot the tombs"
+
+#: scripts/engine/events.gd:391
+msgid "Ganas 50 de oro. Añades una Herida."
+msgstr "Gain 50 gold. Add a Wound."
+
+#: scripts/engine/events.gd:394
+msgid "Las monedas de los muertos tintinean en tu bolsa. Algo te ha arañado al salir."
+msgstr "The coins of the dead jingle in your purse. Something scratched you on the way out."
+
+#: scripts/engine/events.gd:398
+msgid "Danzar ante la llama"
+msgstr "Dance before the flame"
+
+#: scripts/engine/events.gd:398
+msgid "Pierdes 8 PV. +1 de Destreza permanente."
+msgstr "Lose 8 HP. Permanent +1 Dexterity."
+
+#: scripts/engine/events.gd:401
+msgid "Danzas hasta que la llama se inclina ante ti. **+1 de Destreza** en cada combate."
+msgstr "You dance until the flame bows before you. **+1 Dexterity** in every combat."
+
+#: scripts/engine/events.gd:402
+msgid "Recoger las ofrendas"
+msgstr "Collect the offerings"
+
+#: scripts/engine/events.gd:402
+msgid "Ganas 50 de oro. Recuperas 10 PV."
+msgstr "Gain 50 gold. Heal 10 HP."
+
+#: scripts/engine/events.gd:405
+msgid "Las ofrendas del solio son tuyas por derecho. Recuperas 10 PV."
+msgstr "The throne's offerings are yours by right. You heal 10 HP."
+
+#: scripts/engine/events.gd:409
+msgid "Ajustar tus engranajes"
+msgstr "Tune your gears"
+
+#: scripts/engine/events.gd:409
+msgid "+2 de Precisión de Relojero permanente: tus Engranajes infligen 2 de daño más."
+msgstr "Permanent +2 Watchmaker's Precision: your Gears deal 2 more damage."
+
+#: scripts/engine/events.gd:411
+msgid "Cada engranaje encaja con un clic perfecto. **+2 de Precisión de Relojero** en cada combate."
+msgstr "Every gear clicks perfectly into place. **+2 Watchmaker's Precision** in every combat."
+
+#: scripts/engine/events.gd:412
+msgid "Cambiar tu muelle"
+msgstr "Replace your mainspring"
+
+#: scripts/engine/events.gd:412
+msgid "+10 PV máx. Pierdes 50 de oro (o todo el que tengas)."
+msgstr "+10 Max HP. Lose 50 gold (or all you have)."
+
+#: scripts/engine/events.gd:416
+msgid "Un muelle nuevo, firme y brillante. Te sientes más resistente."
+msgstr "A new mainspring, firm and shiny. You feel sturdier."
+
+#: scripts/engine/events.gd:420
+msgid "Cantar a la luna"
+msgstr "Sing to the moon"
+
+#: scripts/engine/events.gd:420
+msgid "Pierdes 6 PV máx. +1 de Resonancia permanente."
+msgstr "Lose 6 Max HP. Permanent +1 Resonance."
+
+#: scripts/engine/events.gd:424
+msgid "La poza responde a tu canción. **+1 de Resonancia** en cada combate."
+msgstr "The pool answers your song. **+1 Resonance** in every combat."
+
+#: scripts/engine/events.gd:425
+msgid "Bañarte en la poza"
+msgstr "Bathe in the pool"
+
+#: scripts/engine/events.gd:425
+msgid "Recuperas todos tus PV."
+msgstr "Heal all your HP."
+
+#: scripts/engine/events.gd:427
+msgid "El agua lunar cierra todas tus heridas."
+msgstr "The moonlit water closes all your wounds."
+
+#: scripts/engine/favors.gd:8
+msgid "Furia de Calíope"
+msgstr "Calliope's Fury"
+
+#: scripts/engine/favors.gd:8
+msgid "Este acto: empiezas cada combate con +1 de Fuerza."
+msgstr "This act: start each combat with +1 Strength."
+
+#: scripts/engine/favors.gd:9
+msgid "Égida de Clío"
+msgstr "Clio's Aegis"
+
+#: scripts/engine/favors.gd:9
+msgid "Este acto: empiezas cada combate con 8 de Bloqueo."
+msgstr "This act: start each combat with 8 Block."
+
+#: scripts/engine/favors.gd:10
+msgid "Inspiración de Erato"
+msgstr "Erato's Inspiration"
+
+#: scripts/engine/favors.gd:10
+msgid "Este acto: robas 2 cartas más en el primer turno de cada combate."
+msgstr "This act: draw 2 more cards on the first turn of each combat."
+
+#: scripts/engine/favors.gd:11
+msgid "Coro de Melpómene"
+msgstr "Melpomene's Chorus"
+
+#: scripts/engine/favors.gd:11
+msgid "Este acto: empiezas cada combate con 3 de Espinas."
+msgstr "This act: start each combat with 3 Thorns."
+
+#: scripts/engine/favors.gd:12
+msgid "Danza de Terpsícore"
+msgstr "Terpsichore's Dance"
+
+#: scripts/engine/favors.gd:12
+msgid "Este acto: empiezas cada combate con +1 de Destreza."
+msgstr "This act: start each combat with +1 Dexterity."
+
+#: scripts/engine/favors.gd:13
+msgid "Marea Vital"
+msgstr "Vital Tide"
+
+#: scripts/engine/favors.gd:13
+msgid "Este acto: al ganar un combate recuperas 5 PV."
+msgstr "This act: heal 5 HP whenever you win a combat."
+
+#: scripts/engine/favors.gd:14
+msgid "Mal de Ojo"
+msgstr "Evil Eye"
+
+#: scripts/engine/favors.gd:14
+msgid "Este acto: los enemigos empiezan el combate con 1 de Vulnerable."
+msgstr "This act: enemies start combat with 1 Vulnerable."
+
+#: scripts/engine/favors.gd:15
+msgid "Botín Dorado"
+msgstr "Golden Loot"
+
+#: scripts/engine/favors.gd:15
+msgid "Este acto: ganas un 50% más de oro en los combates."
+msgstr "This act: gain 50% more gold from combat."
+
+#: scripts/engine/favors.gd:16
+msgid "Furia Encadenada"
+msgstr "Chained Fury"
+
+#: scripts/engine/favors.gd:16
+msgid "Este acto: empiezas cada combate con +2 de Fuerza y 1 de Débil."
+msgstr "This act: start each combat with +2 Strength and 1 Weak."
+
+#: scripts/engine/favors.gd:17
+msgid "Oro a cambio de sangre"
+msgstr "Gold for Blood"
+
+#: scripts/engine/favors.gd:17
+msgid "Ganas 120 de oro. Pierdes 12 PV."
+msgstr "Gain 120 gold. Lose 12 HP."
+
+#: scripts/engine/favors.gd:18
+msgid "Reliquia a cambio de Duda"
+msgstr "Relic for Doubt"
+
+#: scripts/engine/favors.gd:18
+msgid "Obtienes una reliquia aleatoria. Añades la maldición Duda a tu mazo."
+msgstr "Obtain a random relic. Add the Doubt curse to your deck."
+
+#: scripts/engine/favors.gd:19
+msgid "Vigor a cambio de oro"
+msgstr "Vigor for Gold"
+
+#: scripts/engine/favors.gd:19
+msgid "Ganas 12 PV máx. Pierdes 60 de oro (o todo el que tengas)."
+msgstr "Gain 12 Max HP. Lose 60 gold (or all you have)."
+
+#: scripts/engine/favors.gd:20
+msgid "Temple a cambio de sangre"
+msgstr "Temper for Blood"
+
+#: scripts/engine/favors.gd:20
+msgid "Mejoras 2 cartas al azar de tu mazo. Pierdes 8 PV."
+msgstr "Upgrade 2 random cards in your deck. Lose 8 HP."
+
+#: scripts/engine/favors.gd:21
+msgid "Regalo de la Musa"
+msgstr "The Muse's Gift"
+
+#: scripts/engine/favors.gd:21
+msgid "Añades a tu mazo una carta mejorada elegida al azar de tu musa."
+msgstr "Add a random upgraded card of your muse to your deck."
+
+#: scripts/engine/favors.gd:22
+msgid "Bálsamo Verde"
+msgstr "Green Balm"
+
+#: scripts/engine/favors.gd:22
+msgid "Recuperas el 40% de tus PV máx. Solo se ofrece si te faltan PV."
+msgstr "Heal 40% of your Max HP. Only offered if you're missing HP."
+
+#: scripts/engine/favors.gd:23
+msgid "Alquimia Ofrecida"
+msgstr "Offered Alchemy"
+
+#: scripts/engine/favors.gd:23
+msgid "Recibes hasta 2 pociones aleatorias."
+msgstr "Receive up to 2 random potions."
+
+#: scripts/core/progress.gd:211
+msgid "{n} cartas {rar} neutrales"
+msgid_plural "{n} cartas {rar} neutrales"
+msgstr[0] "{n} {rar} neutral card"
+msgstr[1] "{n} {rar} neutral cards"
+
+#: scripts/core/progress.gd:213
+msgid "{n} cartas {rar} de {muse}"
+msgid_plural "{n} cartas {rar} de {muse}"
+msgstr[0] "{n} {rar} {muse} card"
+msgstr[1] "{n} {rar} {muse} cards"
+
+#: scripts/core/progress.gd:218
+msgid "la reliquia {list}"
+msgid_plural "las reliquias {list}"
+msgstr[0] "the relic {list}"
+msgstr[1] "the relics {list}"
+
+#: scripts/core/progress.gd:263
+msgid "Sin rango"
+msgstr "Unranked"
+
+#: scripts/core/progress.gd:277
+msgid "Pesadilla {n}"
+msgstr "Nightmare {n}"
+
+#: scripts/core/progress.gd:279
+msgid "modo fácil"
+msgstr "easy mode"
+
+#: scripts/core/progress.gd:280
+msgid "Verso de Musas · Victoria con {muse}"
+msgstr "Verso de Musas · Victory with {muse}"
+
+#: scripts/core/progress.gd:280
+msgid "Verso de Musas · Derrota con {muse}"
+msgstr "Verso de Musas · Defeat with {muse}"
+
+#: scripts/core/progress.gd:288
+msgid "la Reina"
+msgstr "the Queen"
+
+#: scripts/core/progress.gd:289
+msgid "Coronada en la cima ante {boss} (piso {f})"
+msgstr "Crowned at the summit against {boss} (floor {f})"
+
+#: scripts/core/progress.gd:291
+msgid "Rendida en {act} (piso {f})"
+msgstr "Surrendered in {act} (floor {f})"
+
+#: scripts/core/progress.gd:295
+msgid "Cayó en {act} ante {by} (piso {f})"
+msgstr "Fell in {act} to {by} (floor {f})"
+
+#: scripts/core/progress.gd:297
+msgid "Cayó en {act} (piso {f})"
+msgstr "Fell in {act} (floor {f})"
+
+#: scripts/core/progress.gd:301
+msgid "{n} combates"
+msgid_plural "{n} combates"
+msgstr[0] "{n} fight"
+msgstr[1] "{n} fights"
+
+#: scripts/core/progress.gd:302
+msgid "{n} enemigos"
+msgid_plural "{n} enemigos"
+msgstr[0] "{n} enemy"
+msgstr[1] "{n} enemies"
+
+#: scripts/core/progress.gd:303
+msgid "{n} turnos"
+msgid_plural "{n} turnos"
+msgstr[0] "{n} turn"
+msgstr[1] "{n} turns"
+
+#: scripts/core/progress.gd:304
+msgid "mazo de {n} cartas"
+msgid_plural "mazo de {n} cartas"
+msgstr[0] "{n}-card deck"
+msgstr[1] "{n}-card deck"
+
+#: scripts/core/progress.gd:305
+msgid "{n} reliquias"
+msgid_plural "{n} reliquias"
+msgstr[0] "{n} relic"
+msgstr[1] "{n} relics"
+
+#: scripts/core/progress.gd:308
+msgid "Reto diario {key} ({mod})"
+msgstr "Daily Challenge {key} ({mod})"
+
+#: scripts/core/progress.gd:309
+msgid "Semilla: {seed} — ¿la superas?"
+msgstr "Seed: {seed} — can you beat it?"
+
+#: scripts/core/progress.gd:204
+msgid "comunes"
+msgstr "common"
+
+#: scripts/core/progress.gd:204
+msgid "poco comunes"
+msgstr "uncommon"
+
+#: scripts/core/progress.gd:204
+msgid "raras"
+msgstr "rare"
+
+#: scripts/ui/card_text.gd:64
+msgid "Pierdes {n} PV."
+msgstr "Lose {n} HP."
+
+#: scripts/ui/card_text.gd:65
+msgid "Obtén {e}."
+msgstr "Gain {e}."
+
+#: scripts/ui/card_text.gd:66
+msgid "Obtén {n} de {kw} hasta el fin del turno."
+msgstr "Gain {n} {kw} until end of turn."
+
+#: scripts/ui/card_text.gd:67
+#: scripts/ui/card_text.gd:68
+#: scripts/ui/card_text.gd:72
+#: scripts/ui/card_text.gd:76
+#: … (+2)
+msgid "Obtén {n} de {kw}."
+msgstr "Gain {n} {kw}."
+
+#: scripts/ui/card_text.gd:69
+#: scripts/ui/card_text.gd:70
+#: scripts/ui/card_text.gd:77
+#: scripts/ui/card_text.gd:148
+msgid "Duplica tu {kw}."
+msgstr "Double your {kw}."
+
+#: scripts/ui/card_text.gd:75
+msgid "Obtén {n} de {kw} por cada {orb}{extra}."
+msgstr "Gain {n} {kw} for each {orb}{extra}."
+
+#: scripts/ui/card_text.gd:78
+msgid "+{n} huecos de {kw}."
+msgid_plural "+{n} huecos de {kw}."
+msgstr[0] "+{n} {kw} slot."
+msgstr[1] "+{n} {kw} slots."
+
+#: scripts/ui/card_text.gd:87
+msgid "{kw} {list}."
+msgstr "{kw} {list}."
+
+#: scripts/ui/card_text.gd:90
+msgid "{ev} tu {orb} frontal {n} veces."
+msgstr "{ev} your front {orb} {n} times."
+
+#: scripts/ui/card_text.gd:92
+msgid "{ev} tu {orb} frontal."
+msgstr "{ev} your front {orb}."
+
+#: scripts/ui/card_text.gd:93
+msgid "{ev} tu {orb} frontal X veces."
+msgstr "{ev} your front {orb} X times."
+
+#: scripts/ui/card_text.gd:94
+msgid "{ev} todos tus {orbs}."
+msgstr "{ev} all your {orbs}."
+
+#: scripts/ui/card_text.gd:94
+msgid "orbes"
+msgstr "orbs"
+
+#: scripts/ui/card_text.gd:98
+msgid "{osty} gana +{n} PV máx. y los recupera."
+msgstr "{osty} gains +{n} Max HP and heals that much."
+
+#: scripts/ui/card_text.gd:99
+msgid "{osty} gana +{n} de {kw}."
+msgstr "{osty} gains +{n} {kw}."
+
+#: scripts/ui/card_text.gd:103
+msgid "{osty} revive y se cura por completo."
+msgstr "{osty} revives and fully heals."
+
+#: scripts/ui/card_text.gd:105
+msgid "{osty} se cura por completo."
+msgstr "{osty} fully heals."
+
+#: scripts/ui/card_text.gd:107
+msgid "{osty} recupera {n} PV."
+msgstr "{osty} heals {n} HP."
+
+#: scripts/ui/card_text.gd:112
+msgid "daño igual a tu {kw}{extra}"
+msgstr "damage equal to your {kw}{extra}"
+
+#: scripts/ui/card_text.gd:116
+msgid "{n} de daño por cada {kw}{extra}"
+msgstr "{n} damage for each {kw}{extra}"
+
+#: scripts/ui/card_text.gd:118
+msgid "{n} de daño"
+msgstr "{n} damage"
+
+#: scripts/ui/card_text.gd:121
+msgid "Inflige {v} a {all} los enemigos X veces."
+msgstr "Deal {v} to {all} enemies X times."
+
+#: scripts/ui/card_text.gd:121
+msgid "Inflige {v} X veces."
+msgstr "Deal {v} X times."
+
+#: scripts/ui/card_text.gd:123
+msgid "Inflige {v} a {all} los enemigos {h} veces."
+msgstr "Deal {v} to {all} enemies {h} times."
+
+#: scripts/ui/card_text.gd:123
+msgid "Inflige {v} {h} veces."
+msgstr "Deal {v} {h} times."
+
+#: scripts/ui/card_text.gd:125
+msgid "Inflige {v} a {all} los enemigos."
+msgstr "Deal {v} to {all} enemies."
+
+#: scripts/ui/card_text.gd:125
+msgid "Inflige {v}."
+msgstr "Deal {v}."
+
+#: scripts/ui/card_text.gd:126
+msgid "La {kw} se aplica ×{n}."
+msgstr "{kw} applies ×{n}."
+
+#: scripts/ui/card_text.gd:127
+msgid "Pierdes tu Bloqueo."
+msgstr "Lose your Block."
+
+#: scripts/ui/card_text.gd:128
+#: scripts/ui/card_text.gd:129
+msgid "+{n} por cada {kw}."
+msgstr "+{n} for each {kw}."
+
+#: scripts/ui/card_text.gd:130
+msgid "Consume toda tu {kw}: +{n} de daño por carga."
+msgstr "Consume all your {kw}: +{n} damage per charge."
+
+#: scripts/ui/card_text.gd:131
+msgid "Consume toda tu {kw}."
+msgstr "Consume all your {kw}."
+
+#: scripts/ui/card_text.gd:132
+msgid "Consume todo el {kw}: +{n} de daño por carga."
+msgstr "Consume all {kw}: +{n} damage per charge."
+
+#: scripts/ui/card_text.gd:134
+msgid "Consume todo el {kw}: +{p}% de daño."
+msgstr "Consume all {kw}: +{p}% damage."
+
+#: scripts/ui/card_text.gd:135
+msgid "Te curas por el daño no bloqueado."
+msgstr "Heal for the unblocked damage."
+
+#: scripts/ui/card_text.gd:136
+msgid "Si tiene {kw}, el daño se duplica."
+msgstr "If it has {kw}, damage is doubled."
+
+#: scripts/ui/card_text.gd:137
+msgid "Si mata, +{n} PV máx."
+msgstr "If this kills, +{n} Max HP."
+
+#: scripts/ui/card_text.gd:143
+msgid "{osty} ataca a {all} los enemigos: {dmg}."
+msgstr "{osty} attacks {all} enemies: {dmg}."
+
+#: scripts/ui/card_text.gd:143
+msgid "{osty} ataca: {dmg}."
+msgstr "{osty} attacks: {dmg}."
+
+#: scripts/ui/card_text.gd:146
+msgid "Aplica {n} {kw} a {all} los enemigos."
+msgstr "Apply {n} {kw} to {all} enemies."
+
+#: scripts/ui/card_text.gd:146
+msgid "Aplica {n} {kw}."
+msgstr "Apply {n} {kw}."
+
+#: scripts/ui/card_text.gd:151
+msgid "Si jugaste un ataque antes, obtén {e}."
+msgstr "If you played an attack earlier, gain {e}."
+
+#: scripts/ui/card_text.gd:152
+msgid "Si el enemigo tiene {kw}, obtén {e}."
+msgstr "If the enemy has {kw}, gain {e}."
+
+#: scripts/ui/card_text.gd:153
+msgid "Si tienes {kw}, roba {n} carta."
+msgid_plural "Si tienes {kw}, roba {n} cartas."
+msgstr[0] "If you have {kw}, draw {n} card."
+msgstr[1] "If you have {kw}, draw {n} cards."
+
+#: scripts/ui/card_text.gd:154
+msgid "Duplica el {kw} de un enemigo."
+msgstr "Double an enemy's {kw}."
+
+#: scripts/ui/card_text.gd:154
+msgid "Triplica el {kw} de un enemigo."
+msgstr "Triple an enemy's {kw}."
+
+#: scripts/ui/card_text.gd:155
+msgid "Te curas {n} PV."
+msgstr "Heal {n} HP."
+
+#: scripts/ui/card_text.gd:156
+msgid "Roba {n} carta."
+msgid_plural "Roba {n} cartas."
+msgstr[0] "Draw {n} card."
+msgstr[1] "Draw {n} cards."
+
+#: scripts/ui/card_text.gd:159
+msgid "Cuchillas"
+msgstr "Shivs"
+
+#: scripts/ui/card_text.gd:160
+msgid "Añade {n} {what} a tu mano."
+msgstr "Add {n} {what} to your hand."
+
+#: scripts/ui/card_text.gd:160
+msgid "Añade {n} {what} a tu mazo."
+msgstr "Add {n} {what} to your draw pile."
+
+#: scripts/ui/card_text.gd:160
+msgid "Añade {n} {what} a tu descarte."
+msgstr "Add {n} {what} to your discard pile."
+
+#: scripts/ui/card_text.gd:161
+msgid "Descarta tu mano. Añade 1 {kw} por carta descartada."
+msgstr "Discard your hand. Add 1 {kw} for each card discarded."
+
+#: scripts/ui/card_text.gd:162
+msgid "Descarta {n} carta."
+msgid_plural "Descarta {n} cartas."
+msgstr[0] "Discard {n} card."
+msgstr[1] "Discard {n} cards."
+
+#: scripts/ui/card_text.gd:163
+msgid "{kw} {n} carta de tu mano."
+msgid_plural "{kw} {n} carta de tu mano."
+msgstr[0] "{kw} {n} card from your hand."
+msgstr[1] "{kw} {n} cards from your hand."
+
+#: scripts/ui/card_text.gd:164
+msgid "Si está en tu mano al final del turno, pierdes {n} PV."
+msgstr "If this is in your hand at the end of your turn, lose {n} HP."
+
+#: scripts/ui/card_text.gd:165
+msgid "Si está en tu mano al final del turno, quedas {kw}."
+msgstr "If this is in your hand at the end of your turn, become {kw}."
+
+#: scripts/ui/card_text.gd:167
+msgid "Injugable."
+msgstr "Unplayable."
+
+#: scripts/ui/card_text.gd:9
+msgid "Ataque"
+msgstr "Attack"
+
+#: scripts/ui/card_text.gd:9
+msgid "Habilidad"
+msgstr "Skill"
+
+#: scripts/ui/card_text.gd:9
+msgid "Estado"
+msgstr "Status"

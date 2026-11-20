@@ -14,8 +14,15 @@ static func defs() -> Dictionary:
 	if _defs.is_empty():
 		DB.load_all()
 		_defs = DB._read("progress")
+		DB.loc_register("progress", _defs, DB.LOC_FIELDS_PROGRESS)   # nombres/textos traducidos en su sitio
 		_build_groups()
 	return _defs
+
+
+## Tras cambiar de idioma (DB.relocalize): los grupos son copias de «unlocks», se rehacen con los textos nuevos.
+static func relocalize() -> void:
+	if not _defs.is_empty():
+		_build_groups()
 
 
 static func achievements() -> Array:
@@ -194,18 +201,30 @@ static func is_locked(data: Dictionary, id: String) -> bool:
 static func group_text(g: Dictionary) -> String:
 	var parts := []
 	if not g.cards.is_empty():
-		var rar_n := {"common": "comunes", "uncommon": "poco comunes", "rare": "raras"}
-		var rr := []
+		var rar_n := {"common": "comunes", "uncommon": "poco comunes", "rare": "raras"}   # loc-strings
+		var rr := ""
 		for r in g.rar:
-			rr.append(rar_n.get(r, r))
-		var who: String = "neutrales" if g.pool == "neutral" else "de " + DB.characters[g.pool].name
-		parts.append("%d cartas %s %s" % [g.cards.size(), " y ".join(rr), who])
+			var w := DB.tl(rar_n.get(r, r))
+			rr = w if rr == "" else _and(rr, w)
+		var n: int = g.cards.size()
+		if g.pool == "neutral":
+			parts.append(DB.tln("{n} cartas {rar} neutrales", "{n} cartas {rar} neutrales", n).format({"n": n, "rar": rr}))
+		else:
+			parts.append(DB.tln("{n} cartas {rar} de {muse}", "{n} cartas {rar} de {muse}", n).format({"n": n, "rar": rr, "muse": DB.characters[g.pool].name}))
 	var names := []
 	for id in g.relics:
 		names.append(DB.relics[id].n)
 	if not names.is_empty():
-		parts.append(("la reliquia " if names.size() == 1 else "las reliquias ") + ", ".join(names))
-	return " y ".join(parts)
+		parts.append(DB.tln("la reliquia {list}", "las reliquias {list}", names.size()).format({"list": ", ".join(names)}))
+	var out := ""
+	for p in parts:
+		out = p if out == "" else _and(out, p)
+	return out
+
+
+## «A y B» en el idioma activo.
+static func _and(a: String, b: String) -> String:
+	return DB.tl("{a} y {b}").format({"a": a, "b": b})
 
 
 ## Icono que representa un grupo: [tipo, id] para Icons, o ["muse", id].
@@ -241,7 +260,7 @@ static func mastery_rank(data: Dictionary, c: String) -> int:
 
 
 static func rank_name(i: int) -> String:
-	return ranks()[i].n if i >= 0 and i < ranks().size() else "Sin rango"
+	return ranks()[i].n if i >= 0 and i < ranks().size() else DB.tl("Sin rango")
 
 
 static func rank_color(i: int) -> Color:
@@ -255,25 +274,37 @@ static func share_text(G, won: bool) -> String:
 	var nm := int(G.get("nm", 0))
 	var tags := []
 	if nm > 0:
-		tags.append("Pesadilla %d" % nm)
+		tags.append(DB.tl("Pesadilla {n}").format({"n": nm}))
 	if G.get("easy", false):
-		tags.append("modo fácil")
-	var head := "Verso de Musas · %s con %s%s" % ["Victoria" if won else "Derrota", name, (" · " + ", ".join(tags)) if not tags.is_empty() else ""]
+		tags.append(DB.tl("modo fácil"))
+	var head := DB.tl("Verso de Musas · Victoria con {muse}" if won else "Verso de Musas · Derrota con {muse}").format({"muse": name})
+	if not tags.is_empty():
+		head += " · " + ", ".join(tags)
 	var act := clampi(int(G.get("act", 1)), 1, 3)
 	var line2: String
+	var fl := int(G.floor)
 	if won:
 		var bid := RunGen.boss_id(G)
-		line2 = "Coronada en la cima ante %s (piso %d)" % [DB.enemies[bid].name if DB.enemies.has(bid) else "la Reina", int(G.floor)]
+		var boss: String = DB.enemies[bid].name if DB.enemies.has(bid) else DB.tl("la Reina")
+		line2 = DB.tl("Coronada en la cima ante {boss} (piso {f})").format({"boss": boss, "f": fl})
 	elif G.get("surrender", false):
-		line2 = "Rendida en %s (piso %d)" % [DB.acts[act - 1].name, int(G.floor)]
+		line2 = DB.tl("Rendida en {act} (piso {f})").format({"act": DB.acts[act - 1].name, "f": fl})
 	else:
 		var by := str(G.get("deathBy", ""))
-		line2 = "Cayó en %s%s (piso %d)" % [DB.acts[act - 1].name, (" ante " + by) if by != "" else "", int(G.floor)]
+		if by != "":
+			line2 = DB.tl("Cayó en {act} ante {by} (piso {f})").format({"act": DB.acts[act - 1].name, "by": by, "f": fl})
+		else:
+			line2 = DB.tl("Cayó en {act} (piso {f})").format({"act": DB.acts[act - 1].name, "f": fl})
 	var st: Dictionary = G.get("stats", {})
-	var line3 := "%d combates · %d enemigos · %d turnos · mazo de %d cartas · %d reliquias" % [
-		int(st.get("fights", 0)), int(st.get("kills", 0)), int(st.get("turns", 0)), G.deck.size(), G.relics.size()]
+	var nums := [int(st.get("fights", 0)), int(st.get("kills", 0)), int(st.get("turns", 0)), G.deck.size(), G.relics.size()]
+	var line3 := " · ".join([
+		DB.tln("{n} combates", "{n} combates", nums[0]).format({"n": nums[0]}),
+		DB.tln("{n} enemigos", "{n} enemigos", nums[1]).format({"n": nums[1]}),
+		DB.tln("{n} turnos", "{n} turnos", nums[2]).format({"n": nums[2]}),
+		DB.tln("mazo de {n} cartas", "mazo de {n} cartas", nums[3]).format({"n": nums[3]}),
+		DB.tln("{n} reliquias", "{n} reliquias", nums[4]).format({"n": nums[4]})])
 	var lines := [head, line2, line3]
 	if str(G.get("daily", "")) != "":
-		lines.append("Reto diario %s (%s)" % [G.daily, Daily.mod_name(str(G.get("dailyMod", "")))])
-	lines.append("Semilla: %d — ¿la superas?" % int(G.seed))
+		lines.append(DB.tl("Reto diario {key} ({mod})").format({"key": G.daily, "mod": Daily.mod_name(str(G.get("dailyMod", "")))}))
+	lines.append(DB.tl("Semilla: {seed} — ¿la superas?").format({"seed": int(G.seed)}))
 	return "\n".join(lines)

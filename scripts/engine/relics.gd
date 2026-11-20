@@ -30,7 +30,7 @@ static func run(id: String, hook: String, ctx, a = null) -> void:
 				ctx.maxHp += 7
 				ctx.hp += 7
 			elif id == "pozo":
-				ctx.maxHp += 25
+				ctx.maxHp += int(DB.relics.pozo.get("hp", 25))   # balance_w2 lo baja a 18 (el texto ya lo decía)
 				ctx.hp = ctx.maxHp
 			elif id == "medallon":
 				ctx.potions.append(null)

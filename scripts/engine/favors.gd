@@ -3,7 +3,8 @@ extends RefCounted
 ## Favor de las Musas: bendición elegida al empezar cada acto (1 de 3 opciones aleatorias).
 ## Los bufos duran el acto; los pactos y regalos se aplican al momento. G.favor = {id, act} guarda el bufo activo.
 
-const DEFS := {
+## static var (no const): DB lo traduce en su sitio (name/desc) al cargar y al cambiar de idioma.
+static var DEFS := {
 	"fuerza": {"kind": "buff", "name": "Furia de Calíope", "desc": "Este acto: empiezas cada combate con +1 de Fuerza."},
 	"egida": {"kind": "buff", "name": "Égida de Clío", "desc": "Este acto: empiezas cada combate con 8 de Bloqueo."},
 	"inspiracion": {"kind": "buff", "name": "Inspiración de Erato", "desc": "Este acto: robas 2 cartas más en el primer turno de cada combate."},

@@ -76,8 +76,8 @@ static func st_icon(k: String) -> String:
 
 static func st_desc(k: String, n: int) -> String:
 	var t: String = DB.st[k].d
-	if k == "strength":
-		t = t.replace("menos", "extra" if n > 0 else "menos")
+	if k == "strength" and n > 0:
+		t = DB.tl("Tus ataques infligen {n} de daño extra.")   # el dato dice «menos» (Fuerza negativa)
 	return t.replace("{n}", str(n))
 
 static func st_neg(k: String, n: int) -> bool:
@@ -106,6 +106,10 @@ static func add_status(C, c, k: String, n: int) -> void:
 static func make_card(G, id: String, up: bool = false) -> Dictionary:
 	G.uid += 1
 	return {"uid": G.uid, "id": id, "up": up}
+
+## Las definiciones en caché llevan el nombre ya traducido: DB.relocalize() las vacía al cambiar de idioma.
+static func clear_def_cache() -> void:
+	_def_cache.clear()
 
 static func card_def(inst: Dictionary) -> Dictionary:
 	var key: String = inst.id + ("+" if inst.up else "")
@@ -354,11 +358,11 @@ static func perm_text(G) -> String:
 	var parts := []
 	for k in perm.keys():
 		if k == "ostyMax":
-			parts.append("Osty +%d PV máx." % perm[k])
+			parts.append(DB.tl("Osty +{n} PV máx.").format({"n": perm[k]}))
 		elif k == "ostyPow":
-			parts.append("Osty +%d de Poder" % perm[k])
+			parts.append(DB.tl("Osty +{n} de Poder").format({"n": perm[k]}))
 		elif DB.st.has(k):
-			parts.append("+%d de %s" % [perm[k], st_name(k)])
+			parts.append(DB.tl("+{n} de {st}").format({"n": perm[k], "st": st_name(k)}))
 	return ", ".join(parts)
 
 static func add_perm(G, k: String, n: int) -> void:
@@ -579,7 +583,7 @@ static func _brk_check(C, e) -> void:
 	if e.intent == null or int(e.intent.get("brk", 0)) <= 0:
 		return
 	if int(e.get("brkDamage", 0)) >= int(e.intent.brk):
-		e.intent = {"name": "¡Aturdido!", "stun": true}
+		e.intent = {"name": DB.tl("¡Aturdido!"), "stun": true}
 
 ## Fase 4 · Jefes con fases (solo DB.extra; los datos viven en balance_w2.json → «phase2»).
 ## Devuelve true solo en el instante en que el jefe pasa a la fase 2.
@@ -965,12 +969,12 @@ static func card_cost(C, inst: Dictionary):
 
 static func can_play(C, inst: Dictionary) -> Dictionary:
 	if C.over != "" or C.phase != "player" or C.prompt != null:
-		return {"ok": false, "why": "No puedes jugar ahora."}
+		return {"ok": false, "why": DB.tl("No puedes jugar ahora.")}
 	var d := card_def(inst)
 	if d.flags.get("unplayable", false) or (not is_x(d.cost) and d.cost == -1):
-		return {"ok": false, "why": "Esta carta no se puede jugar."}
+		return {"ok": false, "why": DB.tl("Esta carta no se puede jugar.")}
 	if not is_x(d.cost) and eff_cost(C, d) > C.energy:
-		return {"ok": false, "why": "No tienes suficiente energía."}
+		return {"ok": false, "why": DB.tl("No tienes suficiente energía.")}
 	return {"ok": true}
 
 static func play_card(C, uid: int, target = null) -> bool:

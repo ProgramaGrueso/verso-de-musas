@@ -19,6 +19,8 @@ var _fade_tw: Tween
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	if DB.loaded:
+		DB.relocalize()   # Meta (autoload anterior) ya cargó DB y fijó el idioma antes de que este nodo existiera
 	for i in POOL_SIZE:
 		var p := AudioStreamPlayer.new()
 		add_child(p)
@@ -273,3 +275,10 @@ func restart_music() -> void:
 	_cur_name = ""
 	if _last_req.size() == 3:
 		music(_last_req[0], _last_req[1], _last_req[2])
+
+
+## Localización: al cambiar el idioma (TranslationServer.set_locale) Godot avisa a todos los nodos; este autoload
+## aprovecha para retraducir el contenido de DB en su sitio (nombres de cartas, reliquias…). Es idempotente.
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and DB.loaded:
+		DB.relocalize()

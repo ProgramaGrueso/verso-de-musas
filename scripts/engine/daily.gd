@@ -28,11 +28,11 @@ static func info(key: String) -> Dictionary:
 
 
 static func mod_name(mod: String) -> String:
-	return MODS[mod].name if MODS.has(mod) else ""
+	return DB.tl(MODS[mod].name) if MODS.has(mod) else ""
 
 
 static func mod_desc(mod: String) -> String:
-	return MODS[mod].desc if MODS.has(mod) else ""
+	return DB.tl(MODS[mod].desc) if MODS.has(mod) else ""
 
 
 ## Crea la partida del reto (con su mapa del acto I).
@@ -148,10 +148,14 @@ static func shift_month(v: Vector2i, n: int) -> Vector2i:
 ## Texto para compartir un reto: cualquiera puede jugar el mismo día desde el calendario.
 static func share_text(key: String, res: Dictionary = {}) -> String:
 	var inf := info(key)
-	var t := "Verso de Musas · Reto diario %s\n%s · %s (%s)\nSemilla: %d" % [key, DB.characters[inf.char].name, mod_name(inf.mod), mod_desc(inf.mod), inf.seed]
+	var lines := [DB.tl("Verso de Musas · Reto diario {key}").format({"key": key}),
+		"%s · %s (%s)" % [DB.characters[inf.char].name, mod_name(inf.mod), mod_desc(inf.mod)],
+		DB.tl("Semilla: {seed}").format({"seed": inf.seed})]
 	if not res.is_empty():
+		var tries := int(res.get("tries", 1))
 		if res.get("win", false):
-			t += "\nMi resultado: superado en %d intento%s" % [int(res.get("tries", 1)), "" if int(res.get("tries", 1)) == 1 else "s"]
+			lines.append(DB.tln("Mi resultado: superado en {n} intento", "Mi resultado: superado en {n} intentos", tries).format({"n": tries}))
 		elif int(res.get("floor", 0)) > 0:
-			t += "\nMi resultado: piso %d en %d intento%s" % [int(res.floor), int(res.get("tries", 1)), "" if int(res.get("tries", 1)) == 1 else "s"]
-	return t + "\n¿Lo superas?"
+			lines.append(DB.tln("Mi resultado: piso {f} en {n} intento", "Mi resultado: piso {f} en {n} intentos", tries).format({"f": int(res.floor), "n": tries}))
+	lines.append(DB.tl("¿Lo superas?"))
+	return "\n".join(lines)
