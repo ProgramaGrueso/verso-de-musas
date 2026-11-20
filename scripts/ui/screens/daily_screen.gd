@@ -271,6 +271,15 @@ func _render_side() -> void:
 		Main.I.toast("Reto copiado: compártelo y comparad resultados"))
 	UIK.tip(cp, "Copia el día, la musa, el modificador, la semilla y tu resultado.")
 	row.add_child(cp)
+	# con el texto al 130 % «Revancha de este día» + «Copiar reto» pasan de los 506 px de la columna y la ensanchan
+	# fuera de la tarjeta: ambos botones bajan de fuente a la par hasta caber (no se apilan: no hay alto de sobra)
+	var fs := UIK.ts(20)
+	while fs > 14 and UIK.button_width(play, fs) + UIK.button_width(cp, fs) + 10.0 > v.size.x:
+		fs -= 1
+	if fs != UIK.ts(20):
+		for b in [play, cp]:
+			b.add_theme_font_size_override("font_size", fs)
+			b.set_meta("fit_base", fs)
 	if sel != today:
 		var note := UIK.label("Los días pasados cuentan en el calendario, no en la racha ni en los logros.", 13, UIK.DIM)
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

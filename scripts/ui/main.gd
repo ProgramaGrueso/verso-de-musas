@@ -27,8 +27,8 @@ const KEYS_RESERVED := [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_TAB, KEY_ENTE
 	KEY_ESCAPE, KEY_F1, KEY_F11, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9,
 	KEY_SHIFT, KEY_CTRL, KEY_ALT, KEY_META, KEY_CAPSLOCK, KEY_NUMLOCK, KEY_BACKSPACE, KEY_UNKNOWN]
 ## Tope del tamaño del texto al construir ciertas pantallas: el HUD del combate es de geometría fija (insignias de
-## pila, enemigos, orbes) y los eventos a 130 % no caben en su columna (event_layout_test pasa a 115 %).
-const SCREEN_MAX_TEXT_SCALE := {"combat": 1.0, "event": 1.15}
+## pila, enemigos, orbes). Los eventos ya no tienen tope: su columna se ensancha con la escala (EventScreen).
+const SCREEN_MAX_TEXT_SCALE := {"combat": 1.0}
 var _key_tr := {}   # tecla pulsada -> tecla por defecto que se inyecta (0 = se traga)
 
 var screen_host: Control

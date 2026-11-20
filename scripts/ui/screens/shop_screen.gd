@@ -120,6 +120,7 @@ func _render() -> void:
 	leave.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	leave.pressed.connect(func(): Nav.node_done(false))
 	_root.add_child(leave)
+	_fit_root(t, leave)
 	# Al terminar, el foco vuelve al primer artículo en venta (o a «Salir de la tienda»): tras vender algo
 	# el artículo que tenía el foco se reconstruye, y el diálogo cerrado lo deja sin foco. Se pide con
 	# `_grab_next`, que espera al final del fotograma (cuando el Overlay ya devolvió el foco) y comprueba
@@ -127,6 +128,44 @@ func _render() -> void:
 	var first := _first_focus()
 	if first != null:
 		_grab_next(first)
+
+
+## Con el texto grande (115-130 %) la columna no cabe en los 720 px y «Salir de la tienda» quedaba por debajo
+## del borde. Se mide ya maquetada y, mientras sobre, cede por orden: aire entre bloques, el tamaño «big» del
+## botón de salir y el título (decorativo). El rótulo nunca pisa los iconos de reliquias de la barra superior.
+const ROOT_BOTTOM := 712.0
+
+func _fit_root(title: Label, leave: Button) -> void:
+	UIK.fit_title(title, 860.0, 22)
+	for step in 3:
+		await get_tree().process_frame
+		if not is_instance_valid(title) or not is_instance_valid(leave) or leave.is_queued_for_deletion():
+			return
+		var need := _root.get_combined_minimum_size().y
+		var over := _root.position.y + need - ROOT_BOTTOM
+		if over <= 0.0:
+			return
+		match step:
+			0:
+				_root.add_theme_constant_override("separation", 4)
+			1:
+				var fs := UIK.ts(24)
+				leave.set_meta("fit_base", fs)
+				leave.add_theme_font_size_override("font_size", fs)
+				for st in ["normal", "hover", "pressed", "disabled", "focus"]:
+					var sb := leave.get_theme_stylebox(st) as StyleBoxFlat
+					if sb != null:
+						sb.content_margin_top = 10
+						sb.content_margin_bottom = 10
+						sb.content_margin_left = 28
+						sb.content_margin_right = 28
+				leave.update_minimum_size()
+			2:
+				var f := title.get_theme_font("font")
+				var fs2 := int(title.get_theme_font_size("font_size"))
+				while fs2 > 22 and f.get_height(int(title.get_theme_font_size("font_size"))) - f.get_height(fs2) < over:
+					fs2 -= 1
+				title.add_theme_font_size_override("font_size", fs2)
 
 
 ## Tras comprar/vender: la tienda se reconstruye (los botones viejos se liberan) y el foco vuelve

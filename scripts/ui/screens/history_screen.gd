@@ -19,12 +19,15 @@ func _ready() -> void:
 	add_child(head)
 	var hv := VBoxContainer.new()
 	hv.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hv.add_child(UIK.label("Historial", 34, UIK.GOLD, "title"))
+	var title := UIK.label("Historial", 34, UIK.GOLD, "title")
+	hv.add_child(title)
 	var s: Dictionary = Meta.data.s
 	var wins: int = s.get("wins", 0)
 	var runs: int = s.get("runs", 0)
-	hv.add_child(UIK.label("%d partidas empezadas · %d victorias · %d derrotas · %d enemigos derrotados" % [runs, wins, s.get("deaths", 0), s.get("kills", 0)], 17, UIK.DIM))
+	var sub := UIK.label("%d partidas empezadas · %d victorias · %d derrotas · %d enemigos derrotados" % [runs, wins, s.get("deaths", 0), s.get("kills", 0)], 17, UIK.DIM)
+	hv.add_child(sub)
 	head.add_child(hv)
+	fit_head(title, sub, HEAD_MAX_H)
 	_back = UIK.button("← Volver", "small")
 	_back.pressed.connect(func(): Nav.title())
 	head.add_child(_back)
@@ -70,6 +73,24 @@ func _ready() -> void:
 
 func on_escape() -> void:
 	Nav.title()
+
+
+## Alto de la cabecera (y=20): las columnas empiezan en y=100, así que título + subtítulo caben en 76 px.
+const HEAD_MAX_H := 76.0
+
+## Cabecera de título decorativo + subtítulo: con el texto al 115-130 % el subtítulo bajaba hasta pisar la
+## primera sección. Cede el título (decorativo), como `Medal.chrome`; el subtítulo conserva su tamaño.
+## También la usa la Galería, que tiene la misma cabecera.
+static func fit_head(title: Label, sub: Label, max_h: float) -> void:
+	var tf := title.get_theme_font("font")
+	var sf := sub.get_theme_font("font")
+	var sub_h := sf.get_height(int(sub.get_theme_font_size("font_size")))
+	var fs := int(title.get_theme_font_size("font_size"))
+	var gap := 4.0   # separación por defecto del VBox de la cabecera
+	while fs > 20 and tf.get_height(fs) + gap + sub_h > max_h:
+		fs -= 1
+	if fs != int(title.get_theme_font_size("font_size")):
+		title.add_theme_font_size_override("font_size", fs)
 
 
 func _section(t: String) -> Label:

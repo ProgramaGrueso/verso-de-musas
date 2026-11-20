@@ -29,6 +29,7 @@ var _type_band: Panel
 var _type_lbl: Label
 var _txt: RichTextLabel
 var _txt_box: VBoxContainer
+var _box_h := 0.0         # alto de la caja del cuerpo: el VBox crece con el texto, así que se mide contra éste
 var _frame: Panel
 var _kws: Array = []
 var _dim: ColorRect
@@ -127,11 +128,14 @@ func _build() -> void:
 	shade.size = Vector2(w, art_h)
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	clip.add_child(shade)
-	# caja de texto (empieza donde acaba la banda de tipo, así el texto nunca se cuela debajo de ella)
+	# caja de texto (empieza donde acaba la banda de tipo, así el texto nunca se cuela debajo de ella).
+	# La banda va a caballo del borde inferior del arte: antes quedaba una franja vacía de `title_h` entre el
+	# arte y la banda, y el cuerpo solo tenía ~32 px (2 líneas y media) en las cartas de 148 px: se cortaba.
 	var title_h := 36 * s
-	var band_h := maxf(17 * s, UIK.font("bold").get_height(int(11 * s)) + 2.0)
-	var band_top := art_h + title_h - 4 * s
-	var box_top := band_top + band_h - 2 * s
+	var type_fs := maxi(9, int(10 * s))   # la carta es un gráfico de tamaño fijo: su texto no sigue UIK.text_scale
+	var band_h := maxf(17 * s, UIK.font("bold").get_height(maxi(type_fs, int(11 * s))) + 2.0)
+	var band_top := art_h - band_h / 2.0
+	var box_top := band_top + band_h
 	var tbg := TextureRect.new()
 	tbg.texture = _grad([[0.0, Color("#2a2238")], [1.0, Color("#1b1526")]])
 	tbg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -143,8 +147,10 @@ func _build() -> void:
 	_txt_box = VBoxContainer.new()
 	_txt_box.alignment = BoxContainer.ALIGNMENT_CENTER
 	_txt_box.position = Vector2(7 * s, box_top + 3 * s)
-	_txt_box.size = Vector2(w - 14 * s, h - box_top - 6 * (s + 1.0) - (18 * s if h - box_top > 26 * s else 0.0))
+	_box_h = h - box_top - 6 * (s + 1.0) - (18 * s if h - box_top > 26 * s else 0.0)
+	_txt_box.size = Vector2(w - 14 * s, _box_h)
 	_txt_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_txt_box.minimum_size_changed.connect(_shrink_box)
 	clip.add_child(_txt_box)
 	_txt = UIK.rich("", maxi(11, int(13 * s)), Color("#f1ecff"))
 	_txt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -157,7 +163,8 @@ func _build() -> void:
 	_type_band.size = Vector2(w, band_h)
 	_type_band.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	clip.add_child(_type_band)
-	_type_lbl = UIK.label("", maxi(9, int(10 * s)), Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_CENTER)
+	_type_lbl = UIK.label("", type_fs, Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_CENTER)
+	_type_lbl.add_theme_font_size_override("font_size", type_fs)
 	_type_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_type_lbl.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)   # la banda manda: nunca se sale de ella
 	_type_band.add_child(_type_lbl)
@@ -176,6 +183,7 @@ func _build() -> void:
 	_cost_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_cost_bg)
 	_cost = UIK.label("", int(22 * s), Color.WHITE, "title", HORIZONTAL_ALIGNMENT_CENTER)
+	_cost.add_theme_font_size_override("font_size", int(22 * s))   # sin escala de texto: el círculo es fijo
 	_cost.size = _cost_bg.size
 	_cost.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	UIK.outlined(_cost, int(5 * s))
@@ -387,7 +395,9 @@ func _fit_text() -> void:
 	while is_instance_valid(_txt):
 		var _pt := UIK.prof_t()
 		_fit_again = false
-		var avail := _txt_box.size.y
+		# contra el alto de diseño, no contra `_txt_box.size.y`: el VBox ya creció con el texto a tamaño base
+		# y medir contra él daba siempre «cabe» (el cuerpo se quedaba grande y se salía de la carta)
+		var avail := _box_h
 		var lo := _fit_lo()
 		var hi := maxi(lo, int(13 * s))
 		var ck := _fit_key(_txt.text)
@@ -442,15 +452,27 @@ func _fit_lo() -> int:
 
 ## Clave del ajuste del cuerpo: el resultado depende solo del texto y de la caja (las fuentes son fijas).
 func _fit_key(body: String) -> String:
-	return "%s|%.1f|%.1f|%d|%d" % [body, _txt.size.x, _txt_box.size.y, _fit_lo(), maxi(_fit_lo(), int(13 * s))]
+	return "%s|%.1f|%.1f|%d|%d" % [body, _txt.size.x, _box_h, _fit_lo(), maxi(_fit_lo(), int(13 * s))]
 
 
 ## Tamaño del cuerpo (solo si cambia: cada override nuevo vuelve a maquetar el RichTextLabel).
 func _set_body_fs(fs: int) -> void:
+	var changed := false
 	if not _txt.has_theme_font_size_override("normal_font_size") or _txt.get_theme_font_size("normal_font_size") != fs:
 		_txt.add_theme_font_size_override("normal_font_size", fs)
+		changed = true
 	if not _txt.has_theme_font_size_override("bold_font_size") or _txt.get_theme_font_size("bold_font_size") != fs:
 		_txt.add_theme_font_size_override("bold_font_size", fs)
+		changed = true
+	if changed:
+		_shrink_box()
+
+
+## El VBox del cuerpo crece solo cuando el texto pide más alto, pero nunca vuelve a encoger: tras bajar la
+## fuente vuelve a su alto de diseño (si el texto aún pide más, Godot lo deja en su mínimo) y recentra el cuerpo.
+func _shrink_box() -> void:
+	if _box_h > 0.0 and _txt_box.size.y > _box_h + 0.5:
+		_txt_box.size = Vector2(_txt_box.size.x, _box_h)
 
 
 func set_state(p_playable: bool, p_afford: bool) -> void:

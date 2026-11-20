@@ -99,6 +99,33 @@ func _ready() -> void:
 	row2.add_child(lg)
 	a.grab_focus.call_deferred()
 	UIK.fade_in(self, 0.5)
+	_fit_col(col, title)
+
+
+## La columna va centrada: si con el texto grande (resumen largo + logros) pasa del alto de la pantalla, se sale
+## por arriba y por abajo. Cede primero el aire entre bloques y luego el titular decorativo, nunca los botones.
+func _fit_col(col: VBoxContainer, title: Label) -> void:
+	const MAX_H := 704.0
+	for step in 3:
+		await get_tree().process_frame
+		if not is_instance_valid(col):
+			return
+		var over := col.get_combined_minimum_size().y - MAX_H
+		if over <= 0.5:
+			return
+		var sep := col.get_theme_constant("separation")
+		var n := col.get_child_count() - 1
+		if sep > 8 and n > 0:
+			var nsep := maxi(8, sep - int(ceilf(over / n)))
+			over -= (sep - nsep) * n
+			col.add_theme_constant_override("separation", nsep)
+		if over > 0.5:
+			var f := title.get_theme_font("font")
+			var fs := title.get_theme_font_size("font_size")
+			var h0 := f.get_height(fs)
+			while fs > 40 and h0 - f.get_height(fs) < over:
+				fs -= 2
+			title.add_theme_font_size_override("font_size", fs)
 
 
 ## Logros y contenido conseguidos en esta partida (Meta los apunta en G.ach / G.unl) y Maestría al ganar.

@@ -23,6 +23,7 @@ var _hold := 0.0
 var _title: Label
 var _auto_btn: Button
 var _cur_tw: Tween
+var _ctrl: HBoxContainer
 
 
 func _ready() -> void:
@@ -68,12 +69,21 @@ func _ready() -> void:
 	_title.size = Vector2(1280, 140)
 	UIK.outlined(_title, 12)
 	add_child(_title)
+	# fila de controles pegada a la esquina inferior derecha: crece hacia arriba y a la izquierda con el
+	# tamaño del texto (antes empezaba en y=668 con 44 px y los botones, de 58-68 px, se salían por abajo)
 	var ctrl := HBoxContainer.new()
-	ctrl.position = Vector2(700, 668)
-	ctrl.size = Vector2(560, 44)
+	ctrl.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	ctrl.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	ctrl.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	ctrl.offset_left = -580
+	ctrl.offset_right = -20
+	ctrl.offset_top = -52
+	ctrl.offset_bottom = -8
 	ctrl.alignment = BoxContainer.ALIGNMENT_END
 	ctrl.add_theme_constant_override("separation", 10)
 	add_child(ctrl)
+	_ctrl = ctrl
+	ctrl.resized.connect(_place_text)
 	var skip := UIK.button("Saltar", "small")
 	skip.pressed.connect(_finish)
 	_auto_btn = UIK.button("Automático: sí", "small")
@@ -84,6 +94,21 @@ func _ready() -> void:
 	ctrl.add_child(_auto_btn)
 	ctrl.add_child(nxt)
 	_show_scene(0)
+	_place_text()
+
+
+## El texto de la escena termina justo encima de la fila de controles (que crece con el tamaño del texto);
+## si una frase no cabe en sus 120 px, la fuente encoge (UIK.fit_label) en vez de meterse bajo los botones.
+func _place_text() -> void:
+	if _ctrl == null or _text == null:
+		return
+	var bottom := _ctrl.position.y - 6.0
+	var top := minf(540.0, bottom - 120.0)
+	var r := Rect2(140, top, 1000, bottom - top)
+	if Rect2(_text.position, _text.size) != r:
+		_text.position = r.position
+		_text.size = r.size
+	UIK.fit_label(_text)
 
 
 func _mk_img() -> TextureRect:
@@ -166,6 +191,7 @@ func _show_scene(i: int) -> void:
 	_stage.move_child(back, _stage.get_child_count() - 1)
 	_front = 1 - _front
 	_text.text = sc.text
+	UIK.fit_label(_text)
 	_text.visible_characters = 0
 	_typed = 0.0
 	_typing = true

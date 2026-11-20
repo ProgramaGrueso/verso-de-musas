@@ -140,6 +140,9 @@ func _ready() -> void:
 	gh.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	gh.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(gh)
+	# con el texto grande los botones crecen y «▼» bajaba hasta la ayuda: ésta empieza bajo su alto real
+	gh.position.y = maxf(410.0, nav.position.y + nav.get_combined_minimum_size().y + 6.0)
+	gh.size = Vector2(gh.size.x, maxf(60.0, gh.get_combined_minimum_size().y))
 	var leg := VBoxContainer.new()
 	leg.position = Vector2(14, 520)
 	for k in NODE_NAME.keys():

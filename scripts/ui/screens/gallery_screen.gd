@@ -21,9 +21,12 @@ func _ready() -> void:
 	add_child(head)
 	var hv := VBoxContainer.new()
 	hv.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hv.add_child(UIK.label("Galería de la Aguja", 34, UIK.GOLD, "title"))
-	hv.add_child(UIK.label("La historia del mundo se revela con tus hazañas · %d/%d desbloqueadas" % [un, DB.lore.size()], 17, UIK.DIM))
+	var title := UIK.label("Galería de la Aguja", 34, UIK.GOLD, "title")
+	hv.add_child(title)
+	var sub := UIK.label("La historia del mundo se revela con tus hazañas · %d/%d desbloqueadas" % [un, DB.lore.size()], 17, UIK.DIM)
+	hv.add_child(sub)
 	head.add_child(hv)
+	HistoryScreen.fit_head(title, sub, HistoryScreen.HEAD_MAX_H)
 	if Meta.data.get("seenEnding", false):
 		var r := UIK.button("Ver el final", "small")
 		r.pressed.connect(func():
@@ -92,7 +95,7 @@ func _tile(i: int) -> Control:
 		art.texture = UIK.grad_tex([[0.0, Color("#2a1d4a")], [1.0, Color("#0b0814")]])
 		art.stretch_mode = TextureRect.STRETCH_SCALE
 		var ic := UIK.label(l.ico, 54, Color(1, 1, 1, 0.25), "sans", HORIZONTAL_ALIGNMENT_CENTER)
-		ic.size = Vector2(290, 150)
+		ic.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)   # sigue al arte si éste cede alto
 		ic.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		art.add_child(ic)
 		var lk := Icons.rect("ui", "lock", 30)
@@ -107,7 +110,9 @@ func _tile(i: int) -> Control:
 	m.add_child(info)
 	m.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	v.add_child(m)
-	info.add_child(UIK.label(l.title if ok else "???", 19, Color.WHITE, "bold"))
+	var tl := UIK.label(l.title if ok else "???", 19, Color.WHITE, "bold")
+	UIK.fit_title(tl, 266.0, 13)   # títulos largos («La Capitana de la Marea Baja») no se salen del marco
+	info.add_child(tl)
 	if ok:
 		info.add_child(UIK.label("Capítulo %d" % (i + 1), 15, UIK.DIM))
 	else:
@@ -123,6 +128,12 @@ func _tile(i: int) -> Control:
 		info.add_child(pb)
 		info.add_child(UIK.label("%d / %d" % [mini(pr, l.t), l.t], 13, UIK.DIM))
 	b.add_child(v)
+	# con el texto al 130 % el bloque de una casilla bloqueada (pista partida en líneas, barra y cuenta) no cabe
+	# bajo los 150 px del arte: cede el arte (hasta 96 px), no el texto
+	v.minimum_size_changed.connect(func():
+		var over := v.get_combined_minimum_size().y - b.custom_minimum_size.y
+		if over > 0.5 and art.custom_minimum_size.y > 96.0:
+			art.custom_minimum_size.y = maxf(96.0, art.custom_minimum_size.y - ceilf(over)))
 	if ok:
 		b.pressed.connect(func(): _view(i))
 	else:

@@ -185,8 +185,8 @@ static func _row(sep: int = 14) -> HBoxContainer:
 	return r
 
 
-static func _card_grid(cards: Array, C, w: float, on_press: Callable = Callable(), max_h: float = 500.0) -> Control:
-	var cols := maxi(1, int(1160.0 / (w + 14.0)))
+static func _card_grid(cards: Array, C, w: float, on_press: Callable = Callable(), max_h: float = 500.0, max_w: float = 1160.0) -> Control:
+	var cols := maxi(1, int(max_w / (w + 14.0)))
 	var rows := ceili(float(cards.size()) / cols)
 	var cw := w
 	var ch := w * 1.42
@@ -205,7 +205,7 @@ static func _card_grid(cards: Array, C, w: float, on_press: Callable = Callable(
 		cc.add_child(grid)
 		return cc
 	var sc := ScrollContainer.new()
-	sc.custom_minimum_size = Vector2(1200, max_h)
+	sc.custom_minimum_size = Vector2(max_w + 40.0, max_h)
 	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	var m := MarginContainer.new()
 	m.add_theme_constant_override("margin_left", 20)
@@ -564,12 +564,22 @@ static func pick_cards(opts: Dictionary) -> Array:
 			sel.append(uid)
 			cv.set_selected(true)
 		upd.call()
-	var grid := _card_grid(opts.cards, opts.get("C", null), w, on_press)
+	var preview: bool = opts.get("upgradePreview", false)
+	# con vista previa la rejilla deja a su derecha un hueco fijo para la carta mejorada: flotando encima
+	# tapaba el nombre y el texto de las cartas vecinas (y la ayuda de arriba)
+	var grid := _card_grid(opts.cards, opts.get("C", null), w, on_press, 500.0, PEEK_GRID_W if preview else 1160.0)
 	for cv in _find_cards(grid):
 		views[cv.inst.uid] = cv
-	v.add_child(grid)
 	var all_cards := _find_cards(grid)
-	if opts.get("upgradePreview", false):
+	if preview:
+		var gh := _row(14)
+		gh.alignment = BoxContainer.ALIGNMENT_CENTER
+		gh.add_child(grid)
+		var slot := Control.new()
+		slot.custom_minimum_size = PEEK_SLOT
+		slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		gh.add_child(slot)
+		v.add_child(gh)
 		# hoguera: al pasar el ratón (o el foco) por una carta se ve al lado cómo queda mejorada
 		var peek := {"n": null}
 		for cv in all_cards:
@@ -578,7 +588,9 @@ static func pick_cards(opts: Dictionary) -> Array:
 					peek.n.queue_free()
 				peek.n = null
 				if on and view.is_inside_tree():
-					peek.n = _upgrade_peek(o, view, opts.get("C", null)))
+					peek.n = _upgrade_peek(slot, view, opts.get("C", null)))
+	else:
+		v.add_child(grid)
 	if not all_cards.is_empty():
 		all_cards[0].grab_focus.call_deferred()
 	var row := _row(16)
@@ -634,8 +646,14 @@ static func upgrade_note(inst: Dictionary, C = null) -> String:
 	return " · ".join(parts) if not parts.is_empty() else "Mejora los valores de la carta."
 
 
-## Vista previa flotante de la carta mejorada junto a la carta señalada (no roba el ratón).
-static func _upgrade_peek(o: Control, view: CardView, C) -> Control:
+## Rejilla más estrecha cuando hay vista previa de mejora, y el hueco donde se pinta (cabe la carta de 200 px,
+## su rótulo y la nota de lo que cambia).
+const PEEK_GRID_W := 916.0
+const PEEK_SLOT := Vector2(230, 420)
+
+## Vista previa de la carta mejorada en su hueco junto a la rejilla, a la altura de la carta señalada
+## (dentro del hueco) y sin robar el ratón.
+static func _upgrade_peek(slot: Control, view: CardView, C) -> Control:
 	var up_inst: Dictionary = view.inst.duplicate()
 	up_inst.up = true
 	var box := PanelContainer.new()
@@ -656,13 +674,16 @@ static func _upgrade_peek(o: Control, view: CardView, C) -> Control:
 	col.add_child(nl)
 	box.add_child(col)
 	Juice.mouse_ignore_all(box)
-	o.add_child(box)
+	slot.add_child(box)
 	box.reset_size()
-	var r := view.get_global_rect()
+	var sr := slot.get_global_rect()
 	var bw := box.size.x
-	var x := r.end.x + 14.0 if r.end.x + 14.0 + bw <= 1274.0 else r.position.x - 14.0 - bw
-	var y := clampf(r.get_center().y - box.size.y / 2.0, 6.0, 714.0 - box.size.y)
-	box.global_position = Vector2(clampf(x, 6.0, 1274.0 - bw), y)
+	var bh := box.size.y
+	var top := sr.position.y
+	var bottom := maxf(sr.end.y, top + bh)
+	var lo := maxf(6.0, top)
+	var y := clampf(view.get_global_rect().get_center().y - bh / 2.0, lo, maxf(lo, minf(714.0, bottom) - bh))
+	box.global_position = Vector2(sr.position.x + (sr.size.x - bw) / 2.0, y)
 	box.modulate.a = 0.0
 	box.create_tween().tween_property(box, "modulate:a", 1.0, 0.12)
 	return box

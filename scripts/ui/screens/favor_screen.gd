@@ -74,6 +74,13 @@ func _ready() -> void:
 	line.size = Vector2(1000, 44)   # dos líneas: las frases largas se parten, no se salen
 	line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(line)
+	# con el texto grande el nombre del ente pasa de sus 34 px: la frase empieza bajo su alto real y, si no le
+	# caben sus líneas antes de las cartas (y=368), encoge
+	var who_h := maxf(34.0, who.get_combined_minimum_size().y)
+	who.size = Vector2(who.size.x, who_h)
+	line.position.y = who.position.y + who_h + 2.0
+	line.size = Vector2(line.size.x, maxf(44.0, 362.0 - line.position.y))
+	UIK.fit_label(line)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 20)
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -140,6 +147,9 @@ func _emblem(col: Color) -> Control:
 
 
 const CARD := Vector2(372, 280)
+const TXT_TOP := 142.0
+const TXT_H := 118.0
+const TXT_MIN_TOP := 96.0   # por encima taparía la cinta de tipo y el centro del arte
 
 
 ## Carta de favor: ilustración a todo el fondo, cinta de tipo, marco dorado y elevación al señalarla.
@@ -190,8 +200,8 @@ func _card(id: String) -> Button:
 	b.add_child(rib)
 	# texto
 	var v := VBoxContainer.new()
-	v.position = Vector2(20, 142)
-	v.size = Vector2(CARD.x - 40, 118)
+	v.position = Vector2(20, TXT_TOP)
+	v.size = Vector2(CARD.x - 40, TXT_H)
 	v.add_theme_constant_override("separation", 4)
 	v.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	b.add_child(v)
@@ -209,6 +219,27 @@ func _card(id: String) -> Button:
 	tx.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tx.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	v.add_child(tx)
+	# el bloque de texto tiene 118 px bajo el arte; con el texto grande la descripción (y el nombre en dos líneas)
+	# no cabe y el VBox crecía por debajo del marco. Primero baja un poco la fuente de la descripción, luego el
+	# bloque sube sobre el arte (que ahí ya va sombreado) y, solo si tampoco basta, la fuente sigue bajando.
+	# El VBox vuelve a su alto: nunca encoge solo.
+	var soft := maxi(15, UIK.ts(15))
+	var lo := maxi(13, UIK.ts(13))
+	var fit_txt := func():
+		var mh := v.get_combined_minimum_size().y
+		if mh <= TXT_H + 0.5:
+			if v.size.y > TXT_H + 0.5 and v.position.y == TXT_TOP:
+				v.size = Vector2(v.size.x, TXT_H)
+			return
+		var fs := tx.get_theme_font_size("normal_font_size")
+		var top := TXT_TOP + TXT_H - mh
+		if fs > soft or (fs > lo and top < TXT_MIN_TOP):
+			tx.add_theme_font_size_override("normal_font_size", fs - 1)
+			tx.add_theme_font_size_override("bold_font_size", fs - 1)
+		else:
+			v.position.y = maxf(TXT_MIN_TOP, top)
+			v.size = Vector2(v.size.x, mh)
+	v.minimum_size_changed.connect(fit_txt)
 	# marco dorado (encima de todo)
 	var frame := Panel.new()
 	frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

@@ -3,8 +3,11 @@ extends Control
 ## Eventos aleatorios del camino: arte a la izquierda, texto y opciones a la derecha.
 
 ## Marca de la columna de contenido (la usan las herramientas de captura y el test de regresión).
-const COL_POS := Vector2(700, 96)
-const COL_SIZE := Vector2(530, 560)
+## Al 100 % es 700,96 · 530×560. Con el texto más grande (Opciones ▸ Tamaño del texto) la columna gana ancho
+## (el arte cede a la izquierda) y alto (hasta SAFE_BOTTOM): `_layout_for_scale()` las fija al construir.
+static var COL_POS := Vector2(700, 96)
+static var COL_SIZE := Vector2(530, 560)
+static var ART_RECT := Rect2(50, 86, 610, 580)
 ## Relleno interno de los carteles de opción (izq./der.) y arriba/abajo.
 const BANNER_PAD_X := 22.0
 const BANNER_PAD_Y := 10.0
@@ -27,6 +30,7 @@ func _ready() -> void:
 	dark.color = Color(0.03, 0.04, 0.06, 0.86)
 	UIK.full_rect(dark)
 	add_child(dark)
+	_layout_for_scale()
 	_build_art(ev)
 	_col = VBoxContainer.new()
 	_col.position = COL_POS
@@ -85,6 +89,15 @@ func _ready() -> void:
 	await get_tree().process_frame
 	fit_layout()
 	UIK.fade_in(self, 0.3)
+
+
+## Geometría según la escala de texto con la que se construye la pantalla: 0 al 100 %, 1 al 130 %.
+## Al 130 % la columna pasa a 620,96 · 620×594 (pie en SAFE_BOTTOM) y el arte a 50..580; al 100 % nada cambia.
+static func _layout_for_scale() -> void:
+	var k := clampf((UIK.text_scale - 1.0) / 0.3, 0.0, 1.0)
+	COL_POS = Vector2(roundf(700.0 - 80.0 * k), 96.0)
+	COL_SIZE = Vector2(roundf(530.0 + 90.0 * k), roundf(560.0 + (SAFE_BOTTOM - 96.0 - 560.0) * k))
+	ART_RECT = Rect2(50, 86, roundf(610.0 - 80.0 * k), 580)
 
 
 ## Deja la pantalla consistente: cada cartel con la altura exacta de su texto y la columna
@@ -177,7 +190,7 @@ static func _banner_text(b: Button) -> RichTextLabel:
 
 
 func _build_art(ev: Dictionary) -> void:
-	var rect := Rect2(50, 86, 610, 580)
+	var rect := ART_RECT
 	var tex := UIK.tex("res://assets/bg/ev_%s.webp" % ev.id)
 	var holder := Control.new()
 	holder.position = rect.position
