@@ -312,11 +312,21 @@ func _apply_frame(focused: bool = false) -> void:
 	_frame.add_theme_stylebox_override("panel", fs)
 
 
+var _focus_tw: Tween
+
+
+## Mata el tween de foco anterior: recorrer la mano rápido dejaba varios tweens peleando por `scale`.
+func _new_focus_tw() -> Tween:
+	if _focus_tw != null and _focus_tw.is_valid():
+		_focus_tw.kill()
+	return create_tween()
+
+
 func _on_focus_entered() -> void:
 	hovered.emit(self, true)
 	_apply_frame(true)
-	var tw := create_tween()
-	tw.tween_property(self, "scale", Vector2(1.08, 1.08), 0.1).set_trans(Tween.TRANS_SINE)
+	_focus_tw = _new_focus_tw()
+	_focus_tw.tween_property(self, "scale", Vector2(1.08, 1.08), 0.1).set_trans(Tween.TRANS_SINE)
 	z_index = 50
 	_is_sfx("select_soft", 0.4)
 
@@ -331,8 +341,8 @@ func _is_sfx(name: String, v: float) -> void:
 func _on_focus_exited() -> void:
 	hovered.emit(self, false)
 	_apply_frame(false)
-	var tw := create_tween()
-	tw.tween_property(self, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_SINE)
+	_focus_tw = _new_focus_tw()
+	_focus_tw.tween_property(self, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_SINE)
 	z_index = 0
 
 

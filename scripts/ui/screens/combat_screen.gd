@@ -1483,8 +1483,16 @@ func _layout_hand(animate: bool) -> void:
 		var target := Vector4(t.pos.x, t.pos.y, t.rot, t.scale)
 		var spawned: bool = v.modulate.a < 1.0
 		var fresh: bool = v.get_meta("lay_to", Vector4.INF) != target
-		if not animate and not fresh and not spawned:
-			continue   # ya está en su sitio (reposicionar sin animar no mueve nada)
+		if not fresh and not spawned:
+			if not animate:
+				continue   # ya está en su sitio (reposicionar sin animar no mueve nada)
+			# animando: si mismo destino y su tween sigue en marcha (o ya llegó), no se recrea ni se reinicia
+			# (cada hover/foco re-animaba la mano entera: 4 tweens por carta y por cambio, sin ver nada nuevo)
+			var run = v.get_meta("lay_tw") if v.has_meta("lay_tw") else null
+			if run is Tween and run.is_valid() and run.is_running():
+				continue
+			if v.position.is_equal_approx(t.pos) and is_equal_approx(v.rotation, t.rot) and v.scale.is_equal_approx(Vector2(t.scale, t.scale)):
+				continue
 		v.set_meta("lay_to", target)
 		if v.has_meta("lay_tw"):
 			var old = v.get_meta("lay_tw")
