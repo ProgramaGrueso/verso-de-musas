@@ -152,7 +152,10 @@ BALANCE = {
         "treant": {"hp": [125, 129], "moves": {"slam": {"dmg": 23}, "splinter": {"dmg": 9}}},
         "stag": {"hp": [123, 127], "moves": {"gore": {"dmg": 22}, "gallop": {"dmg": 13}}},
         "royalguard": {"hp": [153, 158], "moves": {"guard": {"block": 24}, "thrust": {"dmg": 25}, "sweep": {"dmg": 11}, "charge": {"dmg": 35}}},
-        "hivemind": {"hp": [142, 147], "moves": {"strike": {"dmg": 33}, "mind": {"dmg": 10}, "wave": {"dmg": 5}}},
+        # Ronda 7: seguía en ~2 % de derrotas. Nuevo ritmo (solo DB.extra): el Pulso Mental (Vulnerable) abre y el Golpe
+        # cae justo después, con el Vulnerable aún activo; antes el Golpe llegaba tras Convocar/Ola y no castigaba.
+        "hivemind": {"hp": [142, 147], "moves": {"strike": {"dmg": 28}, "mind": {"dmg": 10}, "wave": {"dmg": 5}},
+                     "ai": {"t": "cyc", "seq": ["mind", "strike", "swarm", "strike", "wave", "strike"]}},
         # Normales del Acto III: los «fáciles» cuestan 2,1 PV (objetivo 3-5).
         "crab": {"hp": [36, 40], "moves": {"crush": {"dmg": 13}}},
         "jelly": {"hp": [26, 30]},

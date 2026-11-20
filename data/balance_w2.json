@@ -178,7 +178,7 @@
    ],
    "moves": {
     "strike": {
-     "dmg": 33
+     "dmg": 28
     },
     "mind": {
      "dmg": 10
@@ -186,6 +186,17 @@
     "wave": {
      "dmg": 5
     }
+   },
+   "ai": {
+    "t": "cyc",
+    "seq": [
+     "mind",
+     "strike",
+     "swarm",
+     "strike",
+     "wave",
+     "strike"
+    ]
    }
   },
   "crab": {
