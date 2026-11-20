@@ -2,8 +2,20 @@ class_name EventScreen
 extends Control
 ## Eventos aleatorios del camino: arte a la izquierda, texto y opciones a la derecha.
 
+## Marca de la columna de contenido (la usan las herramientas de captura y el test de regresión).
+const COL_POS := Vector2(700, 96)
+const COL_SIZE := Vector2(530, 560)
+## Relleno interno de los carteles de opción (izq./der.) y arriba/abajo.
+const BANNER_PAD_X := 22.0
+const BANNER_PAD_Y := 10.0
+## Si un cartel mide más que esto (texto desmedido), su texto pasa a desplazarse en vez de desbordar.
+const MAX_BANNER_H := 260.0
+## Margen inferior del viewport que nunca debe ocupar contenido.
+const SAFE_BOTTOM := 690.0
+
 var _text: RichTextLabel
 var _opts: VBoxContainer
+var _col: VBoxContainer
 
 
 func _ready() -> void:
@@ -16,25 +28,25 @@ func _ready() -> void:
 	UIK.full_rect(dark)
 	add_child(dark)
 	_build_art(ev)
-	var col := VBoxContainer.new()
-	col.position = Vector2(700, 96)
-	col.size = Vector2(530, 560)
-	col.add_theme_constant_override("separation", 14)
-	add_child(col)
+	_col = VBoxContainer.new()
+	_col.position = COL_POS
+	_col.size = COL_SIZE
+	_col.add_theme_constant_override("separation", 14)
+	add_child(_col)
 	var t := UIK.label(ev.title, 36, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(t, 6)
 	# un título largo no debe ensanchar la columna: se parte en varias líneas
 	t.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	col.add_child(t)
+	_col.add_child(t)
 	_text = UIK.rich("[center]%s[/center]" % EventsLogic.text_for(G, ev), 20, Color("#e8e4f4"))
 	_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	col.add_child(_text)
+	_col.add_child(_text)
 	var sp := Control.new()
 	sp.custom_minimum_size = Vector2(0, 8)
-	col.add_child(sp)
+	_col.add_child(sp)
 	_opts = VBoxContainer.new()
 	_opts.add_theme_constant_override("separation", 12)
-	col.add_child(_opts)
+	_col.add_child(_opts)
 	var ctx := EvCtx.new()
 	var first_opt: Button = null
 	for o in EventsLogic.options(G, ev.id):
@@ -60,14 +72,108 @@ func _ready() -> void:
 			var cb := _banner("Continuar ➜", "")
 			cb.pressed.connect(func(): Nav.node_done(false))
 			_opts.add_child(cb)
+			# el resultado suele ser corto: las opciones nuevas caben sin más ajustes
+			await get_tree().process_frame
+			await get_tree().process_frame
+			fit_layout()
 			cb.grab_focus.call_deferred())
 		_opts.add_child(b)
 	if first_opt != null:
 		first_opt.grab_focus.call_deferred()
-	UIK.fade_in(self, 0.3)
-	# con el ancho ya resuelto, cada cartel crece si su texto ocupa más de una línea
+	# con el ancho ya resuelto (y la fuente cargada), cada cartel toma la altura justa de su texto
 	await get_tree().process_frame
+	await get_tree().process_frame
+	fit_layout()
+	UIK.fade_in(self, 0.3)
+
+
+## Deja la pantalla consistente: cada cartel con la altura exacta de su texto y la columna
+## completa dentro del viewport. Idempotente; la llaman _ready y el test de regresión.
+func fit_layout() -> void:
 	_fit_banners()
+	_fit_column()
+
+
+## Alto real del texto de un cartel, partido en líneas al ancho que va a tener.
+## Se fija el ancho antes de leer get_content_height() porque puede calcularse antes de que el
+## nodo tenga su rect: con ancho 1 px el texto se parte en decenas de líneas y el cartel crecería
+## al máximo sin motivo (el «desborda con pocas líneas» del informe).
+static func content_height(b: Button) -> float:
+	var r := _banner_text(b)
+	if r == null:
+		return 0.0
+	var w := text_width(b)
+	if b.size.y <= 1.0 or absf(r.size.x - w) > 0.5:
+		# aún sin rect: se le da el ancho final y se recalcula el mínimo (el contenedor lo
+		# recolocará igual en cuanto pueda; así la medida es la definitiva)
+		r.size = Vector2(w, maxf(r.size.y, 1.0))
+		b.update_minimum_size()
+	return r.get_content_height()
+
+
+## Ancho útil del texto dentro de un cartel (descontado el relleno de su estilo).
+static func text_width(b: Button) -> float:
+	var sb := b.get_theme_stylebox("normal")
+	var pad := (sb.content_margin_left + sb.content_margin_right) if sb != null else 2.0 * BANNER_PAD_X
+	return maxf(b.size.x - pad, 1.0)
+
+
+## Altura que necesita un cartel: texto partido + relleno vertical.
+## Es el ÚNICO número que fija su altura (mínimo del contenedor y size): ni huecos ni recortes.
+static func banner_need(b: Button) -> float:
+	return ceilf(content_height(b) + 2.0 * BANNER_PAD_Y)
+
+
+## Ajusta la altura de cada cartel al texto ya partido en líneas por el ancho de la columna.
+func _fit_banners() -> void:
+	for c in _opts.get_children():
+		if not (c is Button):
+			continue
+		var b := c as Button
+		var r := _banner_text(b)
+		if r == null:
+			continue
+		var h := banner_need(b)
+		var clamps := h > MAX_BANNER_H   # texto desmedido: se desplaza en vez de desbordar el viewport
+		r.fit_content = not clamps
+		r.scroll_active = clamps
+		r.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		if clamps:
+			h = MAX_BANNER_H
+		# el mismo número alimenta el mínimo del contenedor y la altura real: sin huecos ni recortes
+		b.custom_minimum_size.y = h
+		b.size.y = h
+		r.position = Vector2(BANNER_PAD_X, BANNER_PAD_Y)
+		r.size = Vector2(maxf(b.size.x - 2.0 * BANNER_PAD_X, 1.0), maxf(b.size.y - 2.0 * BANNER_PAD_Y, 1.0))
+
+
+## Si título + texto + opciones no caben en la columna, se reparte el sobrante quitando antes
+## los espacios decorativos y, si hiciera falta, escalando el bloque para que nunca se salga.
+func _fit_column() -> void:
+	if _col == null:
+		return
+	_col.scale = Vector2.ONE
+	var need := _col.get_combined_minimum_size().y
+	var avail := COL_SIZE.y
+	if need > avail and need > 0.0:
+		# 0.96 de margen: el alto real de un RichTextLabel puede quedar unas décimas por encima del
+		# mínimo declarado y, una vez escalado, ese redondeo no debe volver a recortarlo.
+		var k := clampf(avail * 0.96 / need, 0.55, 1.0)
+		_col.scale = Vector2(k, k)
+	# nada puede quedar empujado fuera del viewport: con el bloque escalado, su centro
+	# se recoloca para que el pie quede dentro de SAFE_BOTTOM.
+	var end_y := COL_POS.y + need * _col.scale.y
+	if end_y > SAFE_BOTTOM:
+		_col.position = Vector2(COL_POS.x, SAFE_BOTTOM - need * _col.scale.y)
+	else:
+		_col.position = COL_POS
+
+
+static func _banner_text(b: Button) -> RichTextLabel:
+	for c in b.get_children():
+		if c is RichTextLabel:
+			return c
+	return null
 
 
 func _build_art(ev: Dictionary) -> void:
@@ -104,16 +210,18 @@ func _build_art(ev: Dictionary) -> void:
 
 
 ## Opción en forma de cartel verde azulado con título dorado y descripción.
+## No fija altura: _fit_banners() la calcula a partir del texto una vez partido en líneas.
 static func _banner(title: String, hint: String) -> Button:
 	var b := Button.new()
 	b.focus_mode = Control.FOCUS_ALL
-	b.custom_minimum_size = Vector2(0, 78 if hint != "" else 54)
 	var n := UIK.stylebox(Color("#1c3a44"), Color("#52858c"), 2, 16, 6)
 	var h := UIK.stylebox(Color("#27505c"), Color("#9fd6dc"), 2, 16, 10)
 	var d := UIK.stylebox(Color("#14222a"), Color("#2c444a"), 2, 16, 0)
-	for st in [n, h, d]:
-		st.content_margin_left = 22
-		st.content_margin_right = 22
+	for st: StyleBoxFlat in [n, h, d]:
+		st.content_margin_left = BANNER_PAD_X
+		st.content_margin_right = BANNER_PAD_X
+		st.content_margin_top = BANNER_PAD_Y
+		st.content_margin_bottom = BANNER_PAD_Y
 	b.add_theme_stylebox_override("normal", n)
 	b.add_theme_stylebox_override("hover", h)
 	b.add_theme_stylebox_override("focus", h)
@@ -121,31 +229,16 @@ static func _banner(title: String, hint: String) -> Button:
 	b.add_theme_stylebox_override("disabled", d)
 	b.mouse_entered.connect(func(): if not b.disabled: Sfx.play("select_soft", 0.4))
 	b.pressed.connect(func(): Sfx.play("click"))
-	b.set_meta("base_h", 78.0 if hint != "" else 54.0)
 	var r := UIK.rich("[b][color=#f0cf7a]%s[/color][/b]%s" % [title, ("\n" + _tint(hint)) if hint != "" else ""], 19, Color("#e8f2f2"))
 	r.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	r.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	r.offset_left = 22
-	r.offset_right = -22
-	r.offset_top = 8
+	# el texto no se pega a bordes ni flota lejos de ellos: solo se centra verticalmente si
+	# cabe con holgura (el desplazamiento lo fija _fit_banners en coordenadas del panel)
 	r.fit_content = false
+	r.scroll_active = false
+	r.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	b.add_child(r)
 	return b
-
-
-## Ajusta la altura de cada cartel al texto ya partido en líneas por el ancho de la columna.
-func _fit_banners() -> void:
-	for c in _opts.get_children():
-		if not (c is Button):
-			continue
-		var b := c as Button
-		var r := b.get_child(0) as RichTextLabel
-		if r == null:
-			continue
-		var need := r.get_content_height() + 16.0
-		var base: float = b.get_meta("base_h", 54.0)
-		b.custom_minimum_size.y = maxf(base, ceilf(need))
 
 
 ## Colorea cifras de oro (dorado) y de PV (rojo si se pierden, verde si se ganan).
@@ -165,9 +258,14 @@ static func _tint(h: String) -> String:
 
 
 class EvCtx extends RefCounted:
+	## Test headless: sin diálogos que esperen a un humano; elige la primera carta válida.
+	static var auto: bool = false
+
 	func pick_card(title: String, filter: Callable, n: int, upgrade_preview: bool = false) -> Array:
 		var G = Meta.run
 		var cards: Array = G.deck.filter(filter)
+		if auto:
+			return cards.slice(0, n)
 		return await Dlg.pick_cards({"title": title, "upgradePreview": upgrade_preview, "cards": cards, "n": n, "cancel": "Cancelar"})
 
 	## Elegir 1 carta nueva entre `ids` (no están en el mazo). Devuelve [] si se salta.
@@ -175,6 +273,8 @@ class EvCtx extends RefCounted:
 		var G = Meta.run
 		if ids.is_empty():
 			return []
+		if auto:
+			return [Eng.make_card(G, ids[0])]
 		var cards := []
 		for id in ids:
 			var c := Eng.make_card(G, id)

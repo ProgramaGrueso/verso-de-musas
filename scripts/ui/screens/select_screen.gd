@@ -82,7 +82,7 @@ func _ready() -> void:
 		_avatars[m.id] = b
 	var bot := HBoxContainer.new()
 	bot.position = Vector2(40, 650)
-	bot.size = Vector2(1200, 60)
+	bot.size = Vector2(1200, 62)
 	bot.add_theme_constant_override("separation", 20)
 	add_child(bot)
 	var back := UIK.button("← Volver")
@@ -91,10 +91,13 @@ func _ready() -> void:
 	_mid = HBoxContainer.new()
 	_mid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_mid.alignment = BoxContainer.ALIGNMENT_CENTER
+	_mid.add_theme_constant_override("separation", 14)
 	bot.add_child(_mid)
+	_fit_bottom.call_deferred()
 	_go = UIK.button("Comenzar", "big green")
 	_go.pressed.connect(_start)
 	bot.add_child(_go)
+	# la fila de abajo nunca se sale de la pantalla: lo que no cabe se parte o se encoge
 	_render(false)
 	Sfx.music("menu", 1, TitleScreen.last_char if TitleScreen.last_char != "" else "zafiro")
 	var order := []
@@ -108,6 +111,18 @@ func _ready() -> void:
 	_back = back
 	_wire_bottom()
 	_avatars[pick].grab_focus.call_deferred()
+
+
+## La fila inferior (Volver · ajustes · Comenzar) tiene que caber en 1200 px: si el texto de la semilla es largo,
+## esos botones bajan la fuente en vez de salirse o pisar «Comenzar».
+func _fit_bottom() -> void:
+	var bot: HBoxContainer = _back.get_parent()
+	if bot == null:
+		return
+	for c in bot.get_children():
+		if c is Button:
+			UIK.fit_button(c)
+	bot.update_minimum_size()
 
 
 func on_escape() -> void:
@@ -144,6 +159,8 @@ func _render(animate: bool) -> void:
 		var r: Dictionary = DB.relics[m.startRelic]
 		_panel.add_child(UIK.label(m.role, 20, UIK.GOLD))
 		var nm_l := UIK.label(m.name, 92, Color.WHITE, "title")
+		nm_l.custom_minimum_size = Vector2(520, 0)
+		nm_l.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		nm_l.add_theme_color_override("font_shadow_color", Color(glow, 0.6))
 		nm_l.add_theme_constant_override("shadow_offset_y", 0)
 		UIK.outlined(nm_l, 10, Color(0, 0, 0, 0.7))
@@ -168,7 +185,9 @@ func _render(animate: bool) -> void:
 		_panel.add_child(rr)
 	else:
 		_panel.add_child(UIK.label("Próximamente", 20, UIK.GOLD))
-		_panel.add_child(UIK.label(m.name, 92, Color.WHITE, "title"))
+		var nm2 := UIK.label(m.name, 92, Color.WHITE, "title")
+		nm2.custom_minimum_size = Vector2(520, 0)
+		_panel.add_child(nm2)
 		_panel.add_child(UIK.label("Esta musa aún no está disponible.", 18, Color("#ece6ff")))
 	_go.disabled = not m.implemented
 	for id in _avatars.keys():
@@ -212,7 +231,10 @@ func _render_nm() -> void:
 		r.custom_minimum_size = Vector2(640, 0)
 		_nm_box.add_child(r)
 	else:
-		_nm_box.add_child(UIK.label("Termina el juego con %s para desbloquear su Pesadilla" % m.name, 16, UIK.DIM))
+		var no_nm := UIK.label("Termina el juego con %s para desbloquear su Pesadilla" % m.name, 16, UIK.DIM)
+		no_nm.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		no_nm.custom_minimum_size = Vector2(640, 0)
+		_nm_box.add_child(no_nm)
 
 
 func _render_toggle() -> void:
@@ -227,7 +249,8 @@ func _render_toggle() -> void:
 	cb.toggled.connect(func(p): easy = p; Meta.settings.easy = p; Meta.save_settings(); Sfx.play("select"))
 	UIK.tip(cb, "[b][color=#f0cf7a]Modo fácil[/color][/b]\nMás vida, enemigos más débiles y puedes deshacer la última carta jugada. No se combina con la Pesadilla.")
 	_mid.add_child(cb)
-	var sd := UIK.button("Semilla: " + (seed_txt if seed_txt != "" else "aleatoria"), "small")
+	var sd := UIK.button(_seed_label(), "small")
+	sd.set_meta("fit_base", 16)
 	sd.pressed.connect(func():
 		var t = await Dlg.text_input("Semilla", "Escribe un número o una palabra para repetir los mismos mapas (por ejemplo, la semilla de una partida de un amigo). Déjalo vacío para una partida aleatoria.", seed_txt, "aleatoria")
 		if t != null:
@@ -238,6 +261,15 @@ func _render_toggle() -> void:
 	_bottom_first = cb
 	_bottom_last = sd
 	_wire_bottom()
+
+
+## Texto del botón de semilla: una semilla escrita a mano puede ser larga; se recorta para que el botón siga
+## siendo «small» y quepa junto a «Modo fácil» y «Comenzar».
+func _seed_label() -> String:
+	var s := seed_txt if seed_txt != "" else "aleatoria"
+	if s.length() > 14:
+		s = s.left(12) + "…"
+	return "Semilla: " + s
 
 
 ## Fila inferior para el mando: avatares ↓ ajustes ↔ Volver … Comenzar.

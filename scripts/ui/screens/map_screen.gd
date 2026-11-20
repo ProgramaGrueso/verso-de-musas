@@ -110,26 +110,33 @@ func _ready() -> void:
 	head.size = Vector2(1280, 60)
 	head.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var t1 := UIK.label("%s: %s%s" % [act.sub, act.name, (" · Pesadilla %d" % G.nm) if G.get("nm", 0) else ""], 32, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
+	t1.custom_minimum_size = Vector2(1240, 0)
+	t1.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	UIK.outlined(t1, 8)
 	head.add_child(t1)
 	var t2 := UIK.label("Arrastra o usa la rueda / stick derecho / flechas para ver el camino", 15, Color("#d9d2ee"), "sans", HORIZONTAL_ALIGNMENT_CENTER)
+	t2.custom_minimum_size = Vector2(1240, 0)
 	UIK.outlined(t2, 5)
 	head.add_child(t2)
 	add_child(head)
 	# navegación y leyenda
 	var nav := VBoxContainer.new()
-	nav.position = Vector2(1210, 280)
+	nav.position = Vector2(1206, 280)
+	nav.size = Vector2(64, 0)
+	nav.mouse_filter = Control.MOUSE_FILTER_PASS
 	nav.add_theme_constant_override("separation", 8)
 	for spec in [["▲", -380], ["Aquí", 0], ["▼", 380]]:
-		var b := UIK.button(spec[0], "small", 22)
+		var b := UIK.button(spec[0], "small", 18)
+		b.custom_minimum_size = Vector2(64, 0)
+		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		var d: int = spec[1]
 		b.focus_mode = Control.FOCUS_NONE   # con mando: stick derecho desplaza, X centra
 		b.pressed.connect(func(): _scroll_by(d) if d != 0 else _focus(true))
 		nav.add_child(b)
 	add_child(nav)
 	var gh := UIK.label("Mando · X: centrar\nStick der.: desplazar\nR3: inspeccionar", 13, UIK.DIM)
-	gh.position = Vector2(1086, 410)
-	gh.size = Vector2(190, 60)
+	gh.position = Vector2(940, 410)
+	gh.size = Vector2(336, 60)   # ancho para la línea más larga: no se sale ni se recorta
 	gh.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	gh.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(gh)

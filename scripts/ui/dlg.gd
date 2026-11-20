@@ -19,8 +19,10 @@ class Overlay extends Control:
 			_lock_behind(Main.I)
 
 	## Modal para el mando: lo de detrás no puede recibir foco (si no, el D-Pad se cuela bajo el diálogo).
+	## No se baja dentro de otro Overlay: un diálogo exterior no apaga los focos del interior (cada uno
+	## restaura solo lo suyo, así un modal anidado no se pisa ni se queda con todo sin foco).
 	func _lock_behind(n: Node) -> void:
-		if n == self:
+		if n == self or n is Overlay:
 			return
 		if n is Control and (n as Control).focus_mode != Control.FOCUS_NONE:
 			_locked.append([n, (n as Control).focus_mode])
@@ -43,16 +45,50 @@ class Overlay extends Control:
 			return
 		_closed = true
 		Tip.hide_all()
+		# de dónde recuperar el foco al descartar: se mira antes de avisar, porque quien espera el diálogo
+		# suele reconstruir o cambiar de pantalla en ese mismo momento
+		var fallback := _focusable_below(self) if result == null else null
 		done.emit(result)
 		for pair in _locked:
-			if is_instance_valid(pair[0]):
-				(pair[0] as Control).focus_mode = pair[1]
+			var c: Control = pair[0]
+			# solo se toca lo que este diálogo apagó (y sigue apagado: si otro modal u otro código ya lo
+			# reactivó —la pantalla que se reconstruyó mientras estaba abierto— se respeta su valor nuevo)
+			if is_instance_valid(c) and not c.is_queued_for_deletion() and c.focus_mode == Control.FOCUS_NONE:
+				c.focus_mode = pair[1]
 		_locked.clear()
 		# devuelve el foco a lo que lo tenía antes (si no, el mando se queda sin foco al cerrar un diálogo)
 		var pf := _prev_focus
-		if pf != null and is_instance_valid(pf) and not pf.is_queued_for_deletion():
+		if pf != null and is_instance_valid(pf) and not pf.is_queued_for_deletion() and pf.focus_mode != Control.FOCUS_NONE:
 			pf.grab_focus.call_deferred()
+		elif result == null and fallback != null:
+			# descartado sin resultado (ESC/B, o un diálogo que solo informa): el mando se queda en el botón
+			# del modal. Se pide al final del fotograma, y solo si ese botón sigue vivo y visible.
+			_reclaim_focus(fallback)
 		queue_free()
+
+	## De forma diferida, y comprobando antes: nunca se pide el foco a un control liberado o en cola de borrado.
+	func _reclaim_focus(c: Control) -> void:
+		_await_focus(c)
+
+
+	func _await_focus(c: Control) -> void:
+		await get_tree().process_frame
+		if c != null and is_instance_valid(c) and not c.is_queued_for_deletion() and c.is_inside_tree() and c.is_visible_in_tree() and c.focus_mode != Control.FOCUS_NONE:
+			c.grab_focus()
+
+	## Primer control que puede recibir foco dentro de `n`, sin bajar a diálogos anidados.
+	func _focusable_below(n: Node) -> Control:
+		if n != self and n is Overlay:
+			return null
+		if n is Control:
+			var c := n as Control
+			if c.focus_mode != Control.FOCUS_NONE and not c.is_queued_for_deletion() and c.is_visible_in_tree():
+				return c
+		for ch in n.get_children():
+			var f := _focusable_below(ch)
+			if f != null:
+				return f
+		return null
 
 	func _unhandled_input(ev: InputEvent) -> void:
 		if not allow_esc:
@@ -83,9 +119,16 @@ static func _center_col(o: Overlay, sep: int = 14) -> VBoxContainer:
 	return v
 
 
+const TITLE_MAX_W := 1180.0   # ningún título se lee más ancho que el contenido del juego
+const TITLE_MIN_W := 400.0    # caja mínima del título: más estrecho, se parte en líneas
+
 static func _title(text: String, size: int = 38) -> Label:
 	var l := UIK.label(text, size, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(l, 6)
+	# un título largo encoge la fuente y, si aún no cabe, se parte en líneas dentro del diálogo: nunca se sale
+	l.custom_minimum_size = Vector2(TITLE_MIN_W, 0)
+	UIK.fit_title.call_deferred(l, TITLE_MAX_W, 20)
+	UIK.wrap(l, TITLE_MIN_W, 16)
 	return l
 
 
@@ -138,14 +181,11 @@ static func confirm(text: String, yes: String = "Sí", no: String = "No") -> boo
 	r.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	r.custom_minimum_size = Vector2(560, 0)
 	col.add_child(r)
-	var row := _row(16)
 	var y := UIK.button(yes, "green")
 	var n := UIK.button(no, "red")
 	y.pressed.connect(func(): o.close(true))
 	n.pressed.connect(func(): o.close(false))
-	row.add_child(y)
-	row.add_child(n)
-	col.add_child(row)
+	col.add_child(UIK.button_row([y, n], 16))
 	p.add_child(col)
 	v.add_child(p)
 	n.grab_focus.call_deferred()
@@ -168,6 +208,7 @@ static func message(title: String, bbcode: String, btn: String = "Entendido", wi
 	sc.add_child(r)
 	sc.custom_minimum_size.y = 430
 	col.add_child(sc)
+	col.custom_minimum_size.x = minf(col.custom_minimum_size.x, TITLE_MAX_W)   # un texto largo no ensancha el panel
 	var b := UIK.button(btn)
 	b.pressed.connect(func(): o.close(null))
 	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -201,15 +242,13 @@ static func text_input(title: String, sub: String = "", initial: String = "", pl
 	le.add_theme_font_override("font", UIK.font("bold"))
 	le.add_theme_font_size_override("font_size", 24)
 	col.add_child(le)
-	var row := _row(16)
 	var y := UIK.button("Aceptar", "green")
 	var n := UIK.button("Cancelar", "red")
 	y.pressed.connect(func(): o.close(le.text))
 	n.pressed.connect(func(): o.close(null))
 	le.text_submitted.connect(func(t: String): o.close(t))
-	row.add_child(y)
-	row.add_child(n)
-	col.add_child(row)
+	col.add_child(UIK.button_row([y, n], 16))
+	col.custom_minimum_size.x = minf(col.custom_minimum_size.x, TITLE_MAX_W)
 	p.add_child(col)
 	v.add_child(p)
 	le.grab_focus.call_deferred()
@@ -397,14 +436,11 @@ static func upgrade_compare(inst: Dictionary, C = null) -> bool:
 		if pair[0] == "Ahora":
 			row.add_child(UIK.label("➜", 72, UIK.GOLD, "bold"))
 	v.add_child(row)
-	var btns := _row(16)
 	var yes := UIK.button("Mejorar", "green")
 	var no := UIK.button("Cancelar", "red")
 	yes.pressed.connect(func(): o.close(true))
 	no.pressed.connect(func(): o.close(false))
-	btns.add_child(yes)
-	btns.add_child(no)
-	v.add_child(btns)
+	v.add_child(UIK.button_row([yes, no], 16))
 	yes.grab_focus.call_deferred()
 	return await o.done
 
@@ -462,17 +498,13 @@ static func options() -> void:
 	var calm_row := _toggle_row("Reducir movimiento", Meta.settings.get("calm", false), "Sí (sin sacudidas ni partículas)", "No", func(x): Meta.settings.calm = x; Meta.save_settings(), "moon")
 	UIK.tip(calm_row.get_child(2), "[b][color=#f0cf7a]Reducir movimiento[/color][/b]\nApaga las sacudidas de pantalla, el hitstop de los golpes, los anillos y las partículas. Los colores y los sonidos se mantienen.")
 	col.add_child(calm_row)
-	var row := _row(14)
 	var mr := UIK.button("Reiniciar música")
 	mr.pressed.connect(func(): Sfx.restart_music())
 	var fs := UIK.button("Pantalla completa")
 	fs.pressed.connect(func(): Main.I._toggle_fullscreen())
 	var cl := UIK.button("Cerrar")
 	cl.pressed.connect(func(): o.close(null))
-	row.add_child(mr)
-	row.add_child(fs)
-	row.add_child(cl)
-	col.add_child(row)
+	col.add_child(UIK.button_row([mr, fs, cl], 14))
 	p.add_child(col)
 	v.add_child(p)
 	cl.grab_focus.call_deferred()

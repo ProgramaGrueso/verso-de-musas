@@ -2,6 +2,8 @@ class_name TitleScreen
 extends Control
 ## Menú principal.
 
+const COL_W := 500.0   # ancho de la columna del menú (logo, subtítulo y botones comparten eje)
+
 static var last_char := ""
 
 
@@ -37,25 +39,29 @@ func _ready() -> void:
 	add_child(UIK.embers(glow))
 	var save := Meta.has_save()
 	var compact := true   # con Reto diario e Historial el menú siempre va compacto para caber en 720 px
+	# columna del menú: ancho fijo y alto = pantalla; si el contenido no cabe, la fuente del logo se encoge
 	var col := VBoxContainer.new()
+	col.name = "Menu"
 	col.position = Vector2(70, 0)
-	col.size = Vector2(460, 720)
+	col.size = Vector2(COL_W, 720)
 	col.alignment = BoxContainer.ALIGNMENT_CENTER
 	col.add_theme_constant_override("separation", 8 if compact else 16)
 	add_child(col)
-	var logo := UIK.label("VERSO\nDE MUSAS", (68 if save else 74) if compact else 86, UIK.GOLD, "title")
+	var logo_fs := (68 if save else 74) if compact else 86
+	var logo := UIK.label("VERSO\nDE MUSAS", logo_fs, UIK.GOLD, "title")
 	logo.add_theme_constant_override("line_spacing", -14)
 	logo.add_theme_color_override("font_shadow_color", Color(glow, 0.8))
 	logo.add_theme_constant_override("shadow_offset_x", 0)
 	logo.add_theme_constant_override("shadow_offset_y", 5)
 	UIK.outlined(logo, 8, Color(0.1, 0.05, 0.0))
+	logo.set_meta("logo", true)
 	col.add_child(logo)
 	var sub := UIK.label("MUSAS MÁGICAS DEL VERSO", 19, Color.WHITE, "bold")
 	UIK.outlined(sub, 5)
 	col.add_child(sub)
 	var menu := VBoxContainer.new()
 	menu.add_theme_constant_override("separation", (4 if save else 6) if compact else 10)
-	menu.custom_minimum_size = Vector2(380, 0)
+	menu.custom_minimum_size = Vector2(COL_W, 0)
 	col.add_child(menu)
 	var add := func(t: String, kind: String, fn: Callable) -> Button:
 		var b := UIK.button(t, kind, 19 if compact else 22)
@@ -95,11 +101,11 @@ func _ready() -> void:
 	add.call("Salir", "", func(): get_tree().quit())
 	if Meta.nm_unlocked(ch) > 0:
 		var nml := UIK.label("Modo Pesadilla disponible (hasta nivel %d con %s)" % [Meta.nm_unlocked(ch), m.name], 16, Color("#caa5ff"), "bold")
-		nml.position = Vector2(70, 664)
+		nml.position = Vector2(COL_W + 86, 666)   # a la derecha del menú: deja libre la fila de abajo
 		add_child(nml)
 	var cred := VBoxContainer.new()
-	cred.position = Vector2(780, 610)
-	cred.size = Vector2(470, 80)
+	cred.position = Vector2(770, 600)
+	cred.size = Vector2(480, 84)
 	var nm := UIK.label(m.name, 34, Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_RIGHT)
 	UIK.outlined(nm, 6)
 	var rl := UIK.label(m.role, 18, UIK.GOLD, "sans", HORIZONTAL_ALIGNMENT_RIGHT)
@@ -111,11 +117,34 @@ func _ready() -> void:
 	for c in chars:
 		names.append(DB.characters[c].name)
 	var foot := UIK.label(" · ".join(names), 14, UIK.DIM)
-	foot.position = Vector2(70, 692)
+	foot.position = Vector2(COL_W + 86, 694)
+	foot.size = Vector2(540, 22)
+	foot.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	add_child(foot)
+	_fit_column.call_deferred()
 	Sfx.music("menu", 1, ch)
 	first.grab_focus.call_deferred()
 	UIK.fade_in(self, 0.4)
+
+
+## Con muchas opciones (partida guardada, pesadilla, racha…) el menú puede pasar de 720 px: el logo es el que
+## cede, para que nunca se salga ni empuje los botones fuera de la pantalla.
+func _fit_column() -> void:
+	var col: VBoxContainer = get_node_or_null("Menu") as VBoxContainer
+	if col == null:
+		return
+	var logo: Label = null
+	for c in col.get_children():
+		if c is Label and c.has_meta("logo"):
+			logo = c
+	var over := col.size.y - col.get_combined_minimum_size().y
+	if over >= 0.0 or logo == null:
+		return
+	var fs := int(logo.get_theme_font_size("font_size"))
+	while fs > 40 and col.get_combined_minimum_size().y > col.size.y:
+		fs -= 2
+		logo.add_theme_font_size_override("font_size", fs)
+		col.update_minimum_size()
 
 
 ## Reto diario: confirma y arranca el de ese día (el calendario está en DailyScreen).

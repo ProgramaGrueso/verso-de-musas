@@ -104,9 +104,21 @@ func _ready() -> void:
 	UIK.fade_in(self, 0.3)
 
 
+static func _fit_item(b: Button) -> void:
+	if b == null or not is_instance_valid(b) or not b.is_inside_tree():
+		return
+	var r := b.get_meta("r") as RichTextLabel
+	if r == null:
+		return
+	var base: float = b.get_meta("base_h", 76.0)
+	var need := ceilf(r.get_content_height() + 24.0)   # 12 px arriba y abajo (el estilo del botón no tiene relleno propio)
+	b.custom_minimum_size.y = maxf(base, need)
+
+
 func _item(icon: String, bb: String, fn: Callable) -> void:
 	var b := Button.new()
-	b.custom_minimum_size = Vector2(520, 76)
+	b.custom_minimum_size = Vector2(520, 76)   # mínimo: _fit_item() lo crece si el texto ocupa más líneas
+	b.set_meta("base_h", 76.0)
 	b.focus_mode = Control.FOCUS_ALL
 	var sb := UIK.stylebox(Color("#2a2140"), Color("#4a3f6b"), 2, 14, 6)
 	var sbh := UIK.stylebox(Color("#3a2e5c"), UIK.GOLD, 2, 14, 10)
@@ -132,6 +144,10 @@ func _item(icon: String, bb: String, fn: Callable) -> void:
 	r.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(r)
 	b.add_child(row)
+	b.set_meta("r", r)
+	# el alto se ajusta al texto ya partido por el ancho real (2 líneas: 81 px; 3: ~107), nunca se recorta
+	b.resized.connect(func(): _fit_item.call_deferred(b))
+	_fit_item.call_deferred(b)
 	b.pressed.connect(func():
 		Sfx.play("click")
 		var res = await fn.call()

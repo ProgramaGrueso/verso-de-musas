@@ -24,8 +24,15 @@ static func _mx(k: String, n: int) -> void:
 	if meta_max.is_valid():
 		meta_max.call(k, n)
 
+## Avisos de la interfaz que NO cambian nada de lo que se ve en los textos de la mano (avisan, pero no tocan
+## estados, energía ni vida). Todo lo demás sube la época de repintado de las cartas (ver CardView).
+const FX_SIN_TEXTO := ["select", "draw", "addCards", "reshuffle", "turnStart", "enemySpawn", "enemyAct",
+	"exhaust", "discard", "orbTick", "ostyPow", "play", "handFull", "ostyDown"]
+
 static func _fx(C, type: String, d: Dictionary = {}) -> void:
 	if C.fx.is_valid():
+		if not type in FX_SIN_TEXTO:
+			CardView.card_refresh_epoch += 1
 		C.fx.call(type, d)
 
 

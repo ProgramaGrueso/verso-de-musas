@@ -11,6 +11,7 @@ const RED := Color("#ff6b75")
 const GREEN := Color("#8bf0a4")
 
 static var _fonts := {}
+static var _watch := {}   # id -> [texto, tamaño]: último estado visto por el vigilante de los botones
 
 
 static func font(kind: String = "sans") -> Font:
@@ -83,6 +84,8 @@ static func rich(bbcode: String, size: int = 18, color: Color = TEXT, kind: Stri
 ## Botón con el estilo del juego. kind: "", "green", "red", "small", "big"
 static func button(text: String, kind: String = "", size: int = 24) -> Button:
 	var b := Button.new()
+	b.set_meta("uik", {"kind": kind})
+	b.set_meta("fit_min0", b.custom_minimum_size.y)
 	b.text = text
 	b.focus_mode = Control.FOCUS_ALL
 	b.add_theme_font_override("font", font("bold"))
@@ -118,9 +121,20 @@ static func button(text: String, kind: String = "", size: int = 24) -> Button:
 	b.add_theme_stylebox_override("pressed", p)
 	b.add_theme_stylebox_override("disabled", d)
 	b.add_theme_stylebox_override("focus", h)
-	b.mouse_entered.connect(func(): if not b.disabled: Sfx.play("select_soft", 0.4))
-	b.pressed.connect(func(): Sfx.play("click"))
+	b.mouse_entered.connect(func(): if not b.disabled: _sfx(b, "select_soft", 0.4))
+	b.pressed.connect(func(): _sfx(b, "click"))
+	_auto_fit(b)
 	return b
+
+
+## Sonido de interfaz. Se busca el autoload desde el nodo (y no por el identificador `Sfx`) porque al cargar
+## esta clase —la primera pantalla se construye durante el arranque— los autoloads aún no están registrados.
+static func _sfx(from: Node, name: String, vol: float = 1.0) -> void:
+	if from == null or not from.is_inside_tree():
+		return
+	var s := from.get_node_or_null("/root/Sfx")
+	if s != null:
+		s.play(name, vol)
 
 
 static func panel(inner_margin: int = 24, radius: int = 16) -> PanelContainer:
@@ -130,6 +144,316 @@ static func panel(inner_margin: int = 24, radius: int = 16) -> PanelContainer:
 	s.content_margin_top = inner_margin * 0.8; s.content_margin_bottom = inner_margin * 0.8
 	p.add_theme_stylebox_override("panel", s)
 	return p
+
+
+# ---------- Caja de texto de los botones ----------
+## Regla: ningún botón debe tener texto (o icono + texto) más grande que su caja. `fit_button` mide el texto con la
+## fuente real y, si no cabe en el rect que le deja el layout (contenedores incluidos), baja la fuente paso a paso
+## hasta `FIT_MIN`; si ni así entra, lo parte en líneas y, en último caso, lo recorta con «…».
+## Los botones de `UIK.button` se reajustan solos: al entrar en el árbol, al cambiar de tamaño y cuando cambia su texto.
+const FIT_MIN := 12        # por debajo de esto el texto deja de leerse
+
+static func _auto_fit(b: Button) -> void:
+	if b.has_meta("fit_auto"):
+		return
+	b.set_meta("fit_auto", true)
+	b.set_meta("fit_base", int(b.get_theme_font_size("font_size")))
+	# El botón no tiene _process propio (el script es de UIK) y NO se le puede poner otro script (Godot lo rechaza
+	# y rompería su clase), así que se registra en un vigilante único (WeakRef: no retiene botones muertos).
+	_watched.append(weakref(b))
+	b.resized.connect(func(): fit_button.call_deferred(b))
+	b.tree_entered.connect(func():
+		b.set_meta("fit_init", true)
+		fit_button.call_deferred(b))
+
+
+static var _watched: Array = []   # WeakRef a cada botón de UIK.button (el vigilante único los recorre)
+static var _watch_tick := 0
+const WATCH_EVERY := 3            # se vigila cada 3 fotogramas (~20 veces por segundo a 60 fps)
+
+
+## Vigilante único: lo llama `_process` de Main cada fotograma; cada WATCH_EVERY fotogramas mira solo los botones
+## cuyo texto o tamaño ha cambiado (una comparación de dos valores por botón: barato incluso con cientos).
+static func watch_tick() -> void:
+	_watch_tick += 1
+	if _watch_tick % WATCH_EVERY != 0:
+		return
+	var keep := []
+	for w in _watched:
+		var b = w.get_ref()
+		if b == null or not is_instance_valid(b):
+			continue
+		keep.append(w)
+		# mirar el texto de un botón que aún no se ha dibujado hace que Godot rasterice su fuente ahí mismo
+		# (tirón + RAM en cada cambio de pantalla): solo se vigila lo que está en pantalla de verdad
+		if b.is_inside_tree() and b.is_visible_in_tree():
+			_watch_fit(b)
+	_watched = keep
+
+
+
+## Vigilante: solo reajusta si el texto o el tamaño cambiaron respecto al fotograma anterior.
+static func _watch_fit(b: Button) -> void:
+	if b == null or not is_instance_valid(b):
+		return
+	var id := b.get_instance_id()
+	var key := [b.text, b.size]
+	if _watch.get(id, null) == key:
+		return
+	_watch[id] = key
+	if b.get_meta("fit_init", false):
+		fit_button(b)
+
+
+## Reajusta `b` para que su texto quepa en su caja.
+static func fit_button(b: Button, preserve_style: bool = false) -> void:
+	if b == null or not is_instance_valid(b) or not b.is_inside_tree():
+		return
+	var base: int = b.get_meta("fit_base", int(b.get_theme_font_size("font_size")))
+	var orig_wrap := b.autowrap_mode
+	if b.text != "" and _btn_fits(b, int(b.get_theme_font_size("font_size")), orig_wrap) and b.get_theme_font_size("font_size") >= mini(base, FIT_MIN):
+		pass   # ya cabe: no hay nada que reajustar (ni que pedir un relayout)
+	elif b.text != "":
+		var lo: int = base if preserve_style else mini(base, FIT_MIN)
+		var fs := int(b.get_theme_font_size("font_size"))
+		if fs > base or fs < lo:
+			fs = base
+		while fs > lo and not _btn_fits(b, fs, orig_wrap):
+			fs -= 1
+		if not _btn_fits(b, fs, orig_wrap):
+			# partir en líneas: por palabras y, si no, letra a letra (solo si el alto lo permite)
+			var wrap := orig_wrap
+			for mode in [TextServer.AUTOWRAP_WORD_SMART, TextServer.AUTOWRAP_ARBITRARY]:
+				if _btn_fits(b, fs, mode):
+					wrap = mode
+					break
+			b.autowrap_mode = wrap
+			if wrap == orig_wrap and not _btn_fits(b, fs, orig_wrap) and b.text_overrun_behavior == TextServer.OVERRUN_NO_TRIMMING:
+				b.clip_text = true
+				b.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		else:
+			b.autowrap_mode = orig_wrap
+		if b.get_theme_font_size("font_size") != fs:
+			b.add_theme_font_size_override("font_size", fs)
+			b.update_minimum_size()
+	# subir el alto mínimo cambia el layout (y eso puede reemitir `resized`): como mucho una vez por fotograma,
+	# si no el mensaje de «tamaño mínimo cambiado» puede realimentarse y desbordar la cola de mensajes de Godot
+	if _btn_fit_min(b) and b.get_parent() is Container and _once_this_frame(b):
+		(b.get_parent() as Container).update_minimum_size()
+
+
+## ¿El texto de `b` cabe en su caja con la fuente `fs`?
+static func _btn_fits(b: Button, fs: int, wrap: int = -1) -> bool:
+	var pad := b.get_theme_stylebox("normal").get_minimum_size()
+	var w := b.size.x - pad.x - _icon_w(b)
+	var h := b.size.y - pad.y
+	if w <= 0.0 or h <= 0.0:
+		return true   # aún sin layout: se reajusta cuando llegue el tamaño
+	var f := b.get_theme_font("font")
+	var mode := b.autowrap_mode if wrap < 0 else wrap
+	if mode != TextServer.AUTOWRAP_OFF:
+		if mode == TextServer.AUTOWRAP_WORD_SMART or mode == TextServer.AUTOWRAP_WORD:
+			for word in b.text.split(" "):
+				if f.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x > w:
+					return false   # palara que no entra en una línea: AUTOWRAP_WORD no la parte
+		return _wrap_lines(f, fs, b.text, w, mode) * f.get_height(fs) <= h
+	var tw := f.get_string_size(b.text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
+	return tw <= w and b.text.split("\n").size() * f.get_height(fs) <= h
+
+
+## Ancho que ocupa el icono del botón (incluida la separación con el texto).
+static func _icon_w(b: Button) -> float:
+	if b.icon == null:
+		return 0.0
+	var iwc: int = b.get_theme_constant("icon_max_width")
+	return float(iwc if iwc > 0 else b.icon.get_width()) + b.get_theme_constant("h_separation")
+
+
+## Ajusta la altura mínima del botón a las líneas que necesita su texto con el ancho disponible.
+static func _btn_fit_min(b: Button) -> bool:
+	var fs := b.get_theme_font_size("font_size")
+	var f := b.get_theme_font("font")
+	var pad := b.get_theme_stylebox("normal").get_minimum_size()
+	var w := b.size.x - pad.x - _icon_w(b)
+	var lines: float = b.text.split("\n").size()
+	if b.autowrap_mode != TextServer.AUTOWRAP_OFF and w > 0.0:
+		lines = maxf(lines, _wrap_lines(f, fs, b.text, w, b.autowrap_mode))
+	var need := ceilf(lines * f.get_height(fs) + pad.y)
+	var cur := b.custom_minimum_size.y
+	if need > cur:
+		b.custom_minimum_size.y = need
+		return true
+	elif b.has_meta("fit_min0") and need < cur:
+		b.custom_minimum_size.y = maxf(b.get_meta("fit_min0"), need)
+		return true
+	return false
+
+
+## Líneas que ocupa `text` con el autoajuste `mode` en un ancho `w`.
+static func _wrap_lines(f: Font, fs: int, text: String, w: float, mode: int) -> int:
+	var lines := 0
+	var space := f.get_string_size(" ", HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
+	for para in text.split("\n"):
+		var n := 1
+		var left := w
+		for word in para.split(" "):
+			var ww := f.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
+			if mode == TextServer.AUTOWRAP_ARBITRARY and ww > w:
+				n += int(ceil(ww / w)) - 1
+				left = w - fposmod(ww, w)
+			elif ww > left:
+				n += 1
+				left = w - ww
+			else:
+				left -= ww + space
+		lines += n
+	return lines
+
+
+## Ancho mínimo real que necesita un botón (texto con la fuente actual + márgenes del estilo + icono).
+static func button_width(b: Button, fs: int = 0) -> float:
+	var f := b.get_theme_font("font")
+	var s := fs if fs > 0 else int(b.get_theme_font_size("font_size"))
+	var w := f.get_string_size(b.text, HORIZONTAL_ALIGNMENT_LEFT, -1, s).x + b.get_theme_stylebox("normal").get_minimum_size().x
+	return maxf(w + _icon_w(b), b.custom_minimum_size.x)
+
+
+# ---------- Etiquetas y títulos ----------
+## Etiqueta que se parte en líneas dentro de una columna estrecha (`min_px`) y, si aun así no cabe en su alto,
+## encoge hasta `min_size`. Su ancho mínimo es `min_px`: nunca ensancha a su contenedor ni invade al de al lado.
+static func wrap(label: Label, min_px: float = 0.0, min_size: int = 13) -> Label:
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	if min_px > 0.0:
+		label.custom_minimum_size = Vector2(min_px, label.custom_minimum_size.y)
+	label.set_meta("wrap_min_size", min_size)
+	label.resized.connect(func(): fit_label.call_deferred(label))
+	fit_label.call_deferred(label)
+	return label
+
+
+static var _frame_once := {}   # id -> nº de fotograma del último ajuste (evita bucles de relayout)
+
+static func _once_this_frame(c: Control) -> bool:
+	var id := c.get_instance_id()
+	var f := Engine.get_process_frames()
+	if _frame_once.get(id, -1) == f:
+		return false
+	_frame_once[id] = f
+	return true
+
+
+## Si el texto de una Label con ancho fijo no cabe (ni partido en líneas), baja la fuente hasta `min_size`.
+## Como mucho se reajusta una vez por fotograma: cambiar la fuente cambia el mínimo y eso vuelve a emitir
+## `resized`, así que sin este freno el layout podía entrar en bucle.
+static func fit_label(l: Label, min_size: int = 0) -> void:
+	if l == null or not is_instance_valid(l) or l.autowrap_mode == TextServer.AUTOWRAP_OFF:
+		return
+	if not _once_this_frame(l):
+		return
+	var base: int = l.get_meta("fit_size", 0)
+	if base == 0:
+		base = int(l.get_theme_font_size("font_size"))
+		l.set_meta("fit_size", base)
+	var lo: int = min_size if min_size > 0 else int(l.get_meta("wrap_min_size", mini(base, FIT_MIN)))
+	var fs := base
+	var f := l.get_theme_font("font")
+	var w := l.size.x
+	if w <= 0.0:
+		return
+	while fs > lo and l.size.y > 0.0 and _wrap_lines(f, fs, l.text, w, TextServer.AUTOWRAP_WORD_SMART) * f.get_height(fs) > l.size.y:
+		fs -= 1
+	if l.get_theme_font_size("font_size") != fs:
+		l.add_theme_font_size_override("font_size", fs)
+		l.update_minimum_size()
+		if l.get_parent() is Container:
+			(l.get_parent() as Container).update_minimum_size()
+
+
+## Título de pantalla: encoge si el texto es más ancho que `max_w` (no se sale ni se lee a medias).
+static func fit_title(l: Label, max_w: float, min_size: int = 20) -> void:
+	var f := l.get_theme_font("font")
+	var fs := int(l.get_theme_font_size("font_size"))
+	while fs > min_size and f.get_string_size(l.text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x > max_w:
+		fs -= 1
+	if fs != int(l.get_theme_font_size("font_size")):
+		l.add_theme_font_size_override("font_size", fs)
+
+
+# ---------- Filas de botones ----------
+## Fila (o filas) centradas de botones que nunca es más ancha que `max_w`: los que no caben pasan a otra línea,
+## como en el móvil. Devuelve el VBox; se reordena sola cada vez que cambia su ancho.
+static func button_row(buttons: Array, sep: int = 14, max_w: float = 1180.0) -> VBoxContainer:
+	var v := VBoxContainer.new()
+	v.add_theme_constant_override("separation", sep)
+	v.alignment = BoxContainer.ALIGNMENT_CENTER
+	v.mouse_filter = Control.MOUSE_FILTER_PASS
+	var row := _flow_row(sep)
+	v.add_child(row)
+	for b in buttons:
+		row.add_child(b)
+	v.set_meta("rows", [row])
+	v.set_meta("max_w", max_w)
+	v.set_meta("sep", sep)
+	v.resized.connect(func(): _reflow_buttons.call_deferred(v))
+	_reflow_buttons.call_deferred(v)
+	return v
+
+
+static func _flow_row(sep: int) -> HBoxContainer:
+	var r := HBoxContainer.new()
+	r.alignment = BoxContainer.ALIGNMENT_CENTER
+	r.add_theme_constant_override("separation", sep)
+	return r
+
+
+## Reparte los botones en filas de como mucho `max_w` px, conservando el orden (y el foco de cada botón).
+static func _reflow_buttons(v: VBoxContainer) -> void:
+	if not is_instance_valid(v) or not v.is_inside_tree():
+		return
+	var max_w: float = v.get_meta("max_w", 1180.0)
+	var sep: int = v.get_meta("sep", 14)
+	var btns := []
+	for r in v.get_children():
+		for b in r.get_children():
+			btns.append(b)
+	if btns.is_empty():
+		return
+	for b in btns:
+		fit_button(b)
+	var lines := []
+	var cur := []
+	var w := 0.0
+	for b in btns:
+		var bw := button_width(b)
+		if not cur.is_empty() and w + sep + bw > max_w:
+			lines.append(cur)
+			cur = []
+			w = 0.0
+		w += bw + (sep if not cur.is_empty() else 0.0)
+		cur.append(b)
+	if not cur.is_empty():
+		lines.append(cur)
+	var old: Array = v.get_meta("rows", [])
+	if old.size() != lines.size():
+		for r in old:
+			(r as Node).queue_free()
+		var rows := []
+		for i in lines.size():
+			var r := _flow_row(sep)
+			v.add_child(r)
+			rows.append(r)
+		v.set_meta("rows", rows)
+	var rows2: Array = v.get_meta("rows")
+	for i in lines.size():
+		var target: HBoxContainer = rows2[i]
+		var got := target.get_children()
+		for j in lines[i].size():
+			var b = lines[i][j]
+			if j >= got.size() or got[j] != b:
+				if b.get_parent() != null:
+					b.get_parent().remove_child(b)
+				target.add_child(b)
+				target.move_child(b, mini(j, target.get_child_count() - 1))
 
 
 static func tex(path: String) -> Texture2D:
@@ -152,7 +476,9 @@ static func full_rect(c: Control) -> void:
 
 
 static func sleep(node: Node, secs: float) -> void:
-	var f: float = 0.45 if Meta.settings.fast else 1.0
+	var m := node.get_node_or_null("/root/Meta")   # igual que _sfx: el autoload puede no existir aún
+	var fast: bool = bool(m.settings.get("fast", false)) if m != null else false
+	var f: float = 0.45 if fast else 1.0
 	await node.get_tree().create_timer(secs * f).timeout
 
 

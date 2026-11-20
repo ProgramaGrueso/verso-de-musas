@@ -40,6 +40,8 @@ var _x_tw: Tween
 var _y_tw: Tween
 var _intent_txt := ""   ## resumen de la intención (para el tooltip del cuerpo)
 var _phase2 := false    ## retrato de fase 2 ya aplicado (Fase 4)
+var _intent_row: HBoxContainer   ## fila de la intención, creada una vez y rehacida solo si cambia su contenido
+var _intent_sig := ""
 
 
 func setup(p_e: Dictionary, k: float) -> void:
@@ -238,11 +240,21 @@ static func status_chip(k: String, v: int) -> Control:
 
 
 func _rebuild_intent(C) -> void:
-	for c in intent_box.get_children():
-		c.queue_free()
 	var it = e.intent
 	if it == null:
+		_clear_intent()
 		return
+	# firma barata de lo que se pinta: si no cambió, no se reconstruye nada. Mientras la fase del jugador
+	# lo golpea, el motor refresca la intención en cada golpe (p. ej. al romper el Cañonazo la deja
+	# «¡Aturdido!» con el mismo contenido): antes cada uno de esos refrescos fabricaba un HBox y decenas de
+	# nodos nuevos con su tooltip, y eso se veía como un tirón en cuanto hay golpes encadenados.
+	var dmg := Eng.intent_damage(C, e) if it.get("dmg", 0) > 0 else 0
+	var sig := "%s|%d|%s|%s|%s|%s|%s|%s|%s" % [it.name, dmg, it.get("hits", 1), it.get("block", 0), it.get("selfStr", 0),
+		it.get("thorns", 0), str(it.get("apply", "")), str(it.get("add", "")), it.get("heal", 0) + it.get("healAll", 0) + (1 if it.has("summon") else 0)]
+	if _intent_row != null and is_instance_valid(_intent_row) and _intent_row.get_parent() == intent_box and sig == _intent_sig:
+		return
+	_intent_sig = sig
+	_clear_intent()
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_theme_constant_override("separation", 6)
@@ -251,7 +263,7 @@ func _rebuild_intent(C) -> void:
 	var parts := 0
 	var atk: bool = it.get("dmg", 0) > 0
 	if atk:
-		var d := Eng.intent_damage(C, e)
+		var d := dmg
 		var hits: int = it.get("hits", 1)
 		row.add_child(_intent_icon("attack"))
 		var n := UIK.label(str(d), 30, Color("#ffb0b6"), "bold")
@@ -293,6 +305,7 @@ func _rebuild_intent(C) -> void:
 	if parts == 0:
 		row.add_child(_intent_icon("unknown"))
 	intent_box.add_child(row)
+	_intent_row = row
 	row.mouse_filter = Control.MOUSE_FILTER_PASS
 	UIK.tip(row, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [it.name, " ".join(tips)])
 	_intent_txt = "[b]%s[/b]: %s" % [it.name, " ".join(tips)]
@@ -301,6 +314,14 @@ func _rebuild_intent(C) -> void:
 	var tw := row.create_tween().set_loops()
 	tw.tween_property(row, "position:y", -7.0, 0.9).set_trans(Tween.TRANS_SINE)
 	tw.tween_property(row, "position:y", 0.0, 0.9).set_trans(Tween.TRANS_SINE)
+
+
+## Quita la fila de la intención (mata también su tween de flotación al liberarla).
+func _clear_intent() -> void:
+	_intent_row = null
+	_intent_sig = ""
+	for c in intent_box.get_children():
+		c.queue_free()
 
 
 ## Tooltip del cuerpo: PV, Bloqueo, intención y cada mejora/penalización con su explicación.
@@ -396,8 +417,7 @@ func die() -> void:
 	dying = true
 	if _idle_tw and _idle_tw.is_valid():
 		_idle_tw.kill()
-	for c in intent_box.get_children():
-		c.queue_free()
+	_clear_intent()
 	body.modulate = Color(3.0, 3.0, 3.0)
 	var tw := create_tween().set_parallel(true)
 	tw.tween_property(body, "modulate", Color(0.2, 0.2, 0.2, 0.0), 0.8).set_delay(0.06)

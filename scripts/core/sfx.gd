@@ -3,10 +3,12 @@ extends Node
 
 const RATE := 22050
 const ZONE := ["underdocks", "overgrowth", "hive"]
+const POOL_SIZE := 16   # voces simultáneas (antes 10: una ráfaga de Irene las agotaba en medio segundo)
 
 var _sounds := {}
 var _pool: Array[AudioStreamPlayer] = []
 var _pool_i := 0
+var _stop_until := 0    # ms hasta los que se descartan los efectos de la pantalla que se acaba de dejar
 var _mus: Array[AudioStreamPlayer] = []
 var _mus_cur := -1
 var _cur_name := ""
@@ -17,7 +19,7 @@ var _fade_tw: Tween
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	for i in 10:
+	for i in POOL_SIZE:
 		var p := AudioStreamPlayer.new()
 		add_child(p)
 		_pool.append(p)
@@ -151,11 +153,43 @@ func _build_sounds() -> void:
 func play(name: String, vol_scale: float = 1.0) -> void:
 	if not _sounds.has(name) or Meta.settings.sfx <= 0.0:
 		return
-	var p := _pool[_pool_i]
-	_pool_i = (_pool_i + 1) % _pool.size()
+	if Time.get_ticks_msec() < _stop_until:
+		return
+	var p := _take_player()
 	p.stream = _sounds[name]
 	p.volume_db = linear_to_db(clampf(Meta.settings.sfx * vol_scale * 0.9, 0.001, 2.0))
 	p.play()
+
+
+## Reproductor libre del fondo común. En ráfaga (Irene repitiendo Engranaje encadena ~20 efectos en medio
+## segundo) se toma el que lleva más tiempo sonando en vez del turno fijo a ciegas: aun así se corta el más
+## viejo, pero nunca un golpe recién empezado por uno que también lo está.
+func _take_player() -> AudioStreamPlayer:
+	var n := _pool.size()
+	for i in n:
+		var k := (_pool_i + i) % n
+		if not _pool[k].playing:
+			_pool_i = (k + 1) % n
+			return _pool[k]
+	var best := _pool[_pool_i]
+	var best_i := _pool_i
+	for i in n:
+		var q := _pool[i]
+		if q.get_playback_position() > best.get_playback_position() + 0.005:
+			best = q
+			best_i = i
+	_pool_i = (best_i + 1) % n
+	return best
+
+
+## Se cambia de pantalla: corta los efectos en vuelo (los golpes de un combate ya terminado no deben seguir
+## sonando en la pantalla de recompensas ni en el mapa) y deja de aceptar los del combate que se va.
+func stop_fx() -> void:
+	# 320 ms: lo que tardan en morir los golpes de la pantalla que se deja (antes eran 800 ms y cada
+	# cambio de pantalla silenciaba el «clic» de los botones durante casi un segundo)
+	_stop_until = int(Time.get_ticks_msec()) + 320
+	for p in _pool:
+		p.stop()
 
 
 # ---------- Música ----------

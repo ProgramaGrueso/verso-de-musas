@@ -3,7 +3,8 @@ extends Control
 ## Tienda del Mercader.
 
 var _shop: Dictionary
-var _root: VBoxContainer
+var _root: VBoxContainer          # contenido que se reconstruye en cada compra
+var _deferred_grab: Control       # control que se queda con el foco en el siguiente proceso (o null)
 
 
 func _ready() -> void:
@@ -28,6 +29,60 @@ func _price_tag(price: int, gold: int) -> Control:
 	p.add_child(l)
 	p.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	return p
+
+
+## Doble cambio diferido (fin de proceso): así el foco aterriza DESPUÉS de quien lo pida más tarde
+## ese mismo proceso (el Overlay al cerrarse devuelve el foco a «lo de detrás») y sobre un control ya
+## asentado en el árbol. En un `call_deferred` que se ejecuta antes del cierre del diálogo, el grab
+## quedaría en un nodo que aún está bloqueado por el modal (FOCUS_NONE) y el mando se quedaría sin foco.
+func _grab_next(c: Control) -> void:
+	if c == null or not is_instance_valid(c) or c.is_queued_for_deletion():
+		return
+	if _deferred_grab != c:
+		_deferred_grab = c
+		_grab_deferred()
+
+
+func _grab_deferred() -> void:
+	await get_tree().process_frame
+	if not is_inside_tree():
+		return
+	await get_tree().process_frame
+	var c := _deferred_grab
+	_deferred_grab = null
+	# nunca se pide el foco a algo liberado o en cola de borrado (por ejemplo, la carta vendida)
+	if c == null or not is_instance_valid(c) or c.is_queued_for_deletion() or not c.is_visible_in_tree():
+		c = _first_focus()
+	if c != null:
+		c.grab_focus()
+
+
+## Primer control que puede recibir foco: las cartas en venta y, si no queda ninguna, «Salir de la tienda».
+func _first_focus() -> Control:
+	for c in _focusables():
+		if _is_card(c) and not c.is_queued_for_deletion() and c.focus_mode != Control.FOCUS_NONE:
+			return c
+	for c in _focusables():
+		if c is Button and not (c as Button).disabled and not c.is_queued_for_deletion() and c.focus_mode != Control.FOCUS_NONE:
+			if not _is_card(c):
+				return c
+	return null
+
+
+func _is_card(c: Control) -> bool:
+	return c is CardView
+
+
+func _focusables() -> Array:
+	var out := []
+	var stack := [_root]
+	while not stack.is_empty():
+		var n: Node = stack.pop_back()
+		for ch in n.get_children():
+			if ch is Control and (ch as Control).focus_mode != Control.FOCUS_NONE:
+				out.append(ch)
+			stack.push_back(ch)
+	return out
 
 
 func _render() -> void:
@@ -65,15 +120,19 @@ func _render() -> void:
 	leave.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	leave.pressed.connect(func(): Nav.node_done(false))
 	_root.add_child(leave)
-	var first_focus: Control = null
-	for col in cards.get_children():
-		var cv = col.get_child(0)
-		if cv is CardView and cv.focus_mode != Control.FOCUS_NONE:
-			first_focus = cv
-			break
-	if first_focus == null:
-		first_focus = leave
-	first_focus.grab_focus.call_deferred()
+	# Al terminar, el foco vuelve al primer artículo en venta (o a «Salir de la tienda»): tras vender algo
+	# el artículo que tenía el foco se reconstruye, y el diálogo cerrado lo deja sin foco. Se pide con
+	# `_grab_next`, que espera al final del fotograma (cuando el Overlay ya devolvió el foco) y comprueba
+	# que el control sigue siendo válido antes de pedirlo, así nunca se pide el foco a un nodo liberado.
+	var first := _first_focus()
+	if first != null:
+		_grab_next(first)
+
+
+## Tras comprar/vender: la tienda se reconstruye (los botones viejos se liberan) y el foco vuelve
+## al primer artículo en venta, no a un nodo en cola de borrado.
+func _after_purchase() -> void:
+	_render()
 
 
 func _card_item(it: Dictionary, w: float) -> Control:
@@ -84,23 +143,22 @@ func _card_item(it: Dictionary, w: float) -> Control:
 	if Eng.has_relic(G, "huevo") and Eng.can_upgrade(shown):
 		shown.up = true   # el Huevo de Grifo: se ve como llegará al mazo
 	var cv := CardView.create(shown, null, w)
-	if true:
-		if it.sold:
-			cv.modulate = Color(1, 1, 1, 0.25)
-			cv.focus_mode = Control.FOCUS_NONE
-		else:
-			var item: Dictionary = it
-			cv.pressed.connect(func(_v):
-				if G.gold < item.price:
-					Sfx.play("error")
-					Main.I.toast("No tienes suficiente oro.")
-					return
-				if await Dlg.confirm("¿Comprar [b][color=#f0cf7a]%s[/color][/b] por %d de oro?" % [DB.cards[item.id].name, item.price]):
-					G.gold -= item.price
-					item.sold = true
-					Eng.gain_card(G, item.id)
-					Sfx.play("coin")
-					_render())
+	if it.sold:
+		cv.modulate = Color(1, 1, 1, 0.25)
+		cv.focus_mode = Control.FOCUS_NONE
+	else:
+		var item: Dictionary = it
+		cv.pressed.connect(func(_v):
+			if G.gold < item.price:
+				Sfx.play("error")
+				Main.I.toast("No tienes suficiente oro.")
+				return
+			if await Dlg.confirm("¿Comprar [b][color=#f0cf7a]%s[/color][/b] por %d de oro?" % [DB.cards[item.id].name, item.price]):
+				G.gold -= item.price
+				item.sold = true
+				Eng.gain_card(G, item.id)
+				Sfx.play("coin")
+				_after_purchase())
 	col.add_child(cv)
 	col.add_child(_price_tag(it.price, G.gold))
 	return col
@@ -125,7 +183,7 @@ func _render_service(mid: Control) -> void:
 		rm.used = true
 		G.removed = G.get("removed", 0) + 1
 		Sfx.play("coin")
-		_render())
+		_after_purchase())
 	var sv := VBoxContainer.new()
 	sv.add_theme_constant_override("separation", 6)
 	sv.add_child(UIK.label("Servicio", 18, UIK.GOLD, "bold", HORIZONTAL_ALIGNMENT_CENTER))
@@ -215,7 +273,7 @@ func _items(list: Array, kind: String) -> Array:
 				else:
 					G.potions[G.potions.find(null)] = item.id
 				Sfx.play("coin")
-				_render())
+				_after_purchase())
 		col.add_child(b)
 		col.add_child(_price_tag(it.price, G.gold))
 		out.append(col)

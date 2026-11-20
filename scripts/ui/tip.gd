@@ -78,6 +78,9 @@ func _set_text(t: String) -> void:
 	var w := 0.0
 	for line in plain.split("\n"):
 		w = maxf(w, f.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, 15).x)
+	# una línea que no cabe se parte letra a letra: el tooltip nunca se sale de la pantalla
+	var wide := w + 6.0 > 330.0
+	_rt.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY if wide else TextServer.AUTOWRAP_WORD_SMART
 	_rt.custom_minimum_size = Vector2(clampf(w + 6.0, 120.0, 330.0), 0)
 	size = Vector2.ZERO
 

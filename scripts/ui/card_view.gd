@@ -33,6 +33,12 @@ var _frame: Panel
 var _kws: Array = []
 var _dim: ColorRect
 var _num: Label
+var _text_sig := ""   # firma de lo que hay pintado en el texto/coste (para no repintar en vano)
+var _fit_busy := false   # ajuste de texto en vuelo (se coalescen los repintados que caen en ese fotograma)
+var _fit_again := false
+## Época de repintado: el tablero de combate la sube cuando avanzan los efectos de las cartas (un estado, daño,
+## energía); las cartas que no se vuelven a subir (ni el hover cambia) solo repintan entonces, no en cada mano.
+static var card_refresh_epoch := 0
 
 
 static func create(p_inst: Dictionary, p_C = null, p_w: float = BASE_W, tip: bool = true) -> CardView:
@@ -111,8 +117,11 @@ func _build() -> void:
 	shade.size = Vector2(w, art_h)
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	clip.add_child(shade)
-	# caja de texto
-	var box_top := art_h + 9 * s
+	# caja de texto (empieza donde acaba la banda de tipo, así el texto nunca se cuela debajo de ella)
+	var title_h := 36 * s
+	var band_h := maxf(17 * s, UIK.font("bold").get_height(int(11 * s)) + 2.0)
+	var band_top := art_h + title_h - 4 * s
+	var box_top := band_top + band_h - 2 * s
 	var tbg := TextureRect.new()
 	tbg.texture = _grad([[0.0, Color("#2a2238")], [1.0, Color("#1b1526")]])
 	tbg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -123,28 +132,29 @@ func _build() -> void:
 	clip.add_child(tbg)
 	_txt_box = VBoxContainer.new()
 	_txt_box.alignment = BoxContainer.ALIGNMENT_CENTER
-	_txt_box.position = Vector2(7 * s, box_top + 4 * s)
-	_txt_box.size = Vector2(w - 14 * s, h - box_top - 8 * s)
+	_txt_box.position = Vector2(7 * s, box_top + 3 * s)
+	_txt_box.size = Vector2(w - 14 * s, h - box_top - 6 * (s + 1.0) - (18 * s if h - box_top > 26 * s else 0.0))
 	_txt_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	clip.add_child(_txt_box)
-	_txt = UIK.rich("", int(13 * s), Color("#f1ecff"))
+	_txt = UIK.rich("", maxi(11, int(13 * s)), Color("#f1ecff"))
 	_txt.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_txt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_txt.clip_contents = true   # el texto de la carta nunca asoma fuera de su caja
 	_txt_box.add_child(_txt)
 	# banda de tipo
 	_type_band = Panel.new()
-	_type_band.position = Vector2(0, art_h - 9 * s)
-	_type_band.size = Vector2(w, 18 * s)
+	_type_band.position = Vector2(0, band_top)
+	_type_band.size = Vector2(w, band_h)
 	_type_band.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	clip.add_child(_type_band)
-	_type_lbl = UIK.label("", int(11 * s), Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_CENTER)
-	_type_lbl.size = Vector2(w, 18 * s)
+	_type_lbl = UIK.label("", maxi(9, int(10 * s)), Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_CENTER)
 	_type_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_type_lbl.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)   # la banda manda: nunca se sale de ella
 	_type_band.add_child(_type_lbl)
 	# nombre
-	_name = UIK.label("", int(15 * s), Color("#f1ecff"), "title", HORIZONTAL_ALIGNMENT_CENTER)
-	_name.position = Vector2(36 * s, 5 * s)
-	_name.size = Vector2(w - 72 * s, 34 * s)
+	_name = UIK.label("", maxi(11, int(15 * s)), Color("#f1ecff"), "title", HORIZONTAL_ALIGNMENT_CENTER)
+	_name.position = Vector2(30 * s, 5 * s)
+	_name.size = Vector2(w - 58 * s, title_h)
 	_name.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_name.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	UIK.outlined(_name, int(4 * s))
@@ -173,8 +183,9 @@ func _build() -> void:
 	_dim.visible = false
 	add_child(_dim)
 	_num = UIK.label("", int(14 * s), Color(1, 1, 1, 0.8), "bold", HORIZONTAL_ALIGNMENT_CENTER)
-	_num.position = Vector2(0, h - 22 * s)
-	_num.size = Vector2(w, 20 * s)
+	var num_h := maxf(20 * s, UIK.font("bold").get_height(int(14 * s)) + 2.0)
+	_num.position = Vector2(0, h - num_h - 1)
+	_num.size = Vector2(w, num_h)
 	add_child(_num)
 	mouse_entered.connect(func(): hovered.emit(self, true))
 	mouse_exited.connect(func(): hovered.emit(self, false))
@@ -187,14 +198,44 @@ func _build() -> void:
 
 func refresh(p_C = null) -> void:
 	C = p_C
-	var d := Eng.card_def(inst)
+	_text_sig = ""   # repintado forzado (alta de la carta, hover, cambio de número…)
+	set_text_once(p_C)
+
+
+## Refresca texto y coste SOLO si cambió algo de lo que se ve: el nombre/los números calculados con los
+## estados y, sobre todo, la energía (la carta enseña si puedes pagarla). Antes cada repintado de la mano
+## (dos por jugada) reconstruía el RichTextLabel y los estilos de las 5-10 cartas: con los golpes encadenados
+## de Irene eran decenas de re-rasterizaciones de texto por turno y el fotograma de ~10-20 ms al llenar la mano.
+func set_text_once(p_C = null) -> void:
+	if p_C != null:
+		C = p_C
+	var d: Dictionary = Eng.card_def(inst)
+	var cost := 0
+	var energy := -1
+	if C != null:
+		cost = C.energy if Eng.is_x(d.cost) else int(Eng.eff_cost(C, d))
+		energy = int(C.energy)
+	else:
+		cost = int(d.cost)
+	var sig := "%s|%d|%d|%d" % [d.name, cost, energy, card_refresh_epoch]
+	if sig == _text_sig:
+		return
+	_text_sig = sig
+	_refresh_text(d, cost)
+
+
+## Pinta texto, nombre, tipo y coste con un coste ya calculado.
+func _refresh_text(d: Dictionary, cost: int) -> void:
 	var res := CardText.lines(d, C)
 	_kws = res.kws
 	_txt.text = "[center]" + "\n".join(res.lines) + "[/center]"
-	_txt.add_theme_font_size_override("normal_font_size", int(13 * s))
-	_txt.add_theme_font_size_override("bold_font_size", int(13 * s))
-	_name.text = d.name
-	_fit_name()
+	# en cartas estrechas (tienda: 142 y 112 px) el texto baja hasta 9 px sin salirse de la caja de texto
+	var tfs := maxi((8 if w < 130.0 else 9), int(13 * s))   # en cartas de 112 px, 8 px de cuerpo
+	_txt.add_theme_font_size_override("normal_font_size", tfs)
+	_txt.add_theme_font_size_override("bold_font_size", tfs)
+	if _name.text != d.name:
+		_name.text = d.name
+		_fit_name()
 	_name.add_theme_color_override("font_color", Color("#8dff9d") if inst.up else Color("#f1ecff"))
 	_type_lbl.text = CardText.TYPE_ES[d.type].to_upper()
 	_type_band.add_theme_stylebox_override("panel", UIK.stylebox(Color(TYPE_COL[d.type]), Color(0, 0, 0, 0), 0, 0, 0))
@@ -204,8 +245,9 @@ func refresh(p_C = null) -> void:
 	elif d.cost == -1:
 		cost_txt = "–"
 	else:
-		cost_txt = str(Eng.eff_cost(C, d) if C != null else d.cost)
-	_cost.text = cost_txt
+		cost_txt = str(cost)
+	if _cost.text != cost_txt:
+		_cost.text = cost_txt
 	_set_cost_style(false)
 	_apply_frame()
 	_num.text = str(num_key) if num_key > 0 else ""
@@ -229,7 +271,14 @@ func _on_focus_entered() -> void:
 	var tw := create_tween()
 	tw.tween_property(self, "scale", Vector2(1.08, 1.08), 0.1).set_trans(Tween.TRANS_SINE)
 	z_index = 50
-	Sfx.play("select_soft", 0.4)
+	_is_sfx("select_soft", 0.4)
+
+
+## Sonido opcional: al cargar la clase (antes de que arranquen los autoloads) `Sfx` aún no existe.
+func _is_sfx(name: String, v: float) -> void:
+	var s = get_node_or_null("/root/Sfx")
+	if s != null:
+		s.play(name, v)
 
 
 func _on_focus_exited() -> void:
@@ -246,19 +295,32 @@ func set_selected(on: bool) -> void:
 
 
 func _fit_name() -> void:
-	# reduce la fuente hasta que la palabra más larga quepa sin partirse
+	# reduce la fuente hasta que el nombre quepa en las dos líneas de la cabecera (sin partirse por letras)
 	var avail := _name.size.x
 	var f := _name.get_theme_font("font")
-	var fs := int(15 * s)
-	var longest := 0.0
-	for w in _name.text.split(" "):
-		longest = maxf(longest, f.get_string_size(w, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x)
-	while longest > avail and fs > int(9 * s):
+	var base := maxi(9, int(15 * s))
+	var lo := 9
+	var fs := base
+	while fs > lo and not _name_fits(f, fs, avail):
 		fs -= 1
-		longest = 0.0
-		for w in _name.text.split(" "):
-			longest = maxf(longest, f.get_string_size(w, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x)
-	_name.add_theme_font_size_override("font_size", fs)
+	if fs != int(_name.get_theme_font_size("font_size")):
+		_name.add_theme_font_size_override("font_size", fs)
+
+
+func _name_fits(f: Font, fs: int, avail: float) -> bool:
+	var lines := 1
+	var left := avail
+	var space := f.get_string_size(" ", HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
+	for word in _name.text.split(" "):
+		var ww := f.get_string_size(word, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
+		if ww > avail:
+			return false   # una sola palabra más ancha que la columna
+		if ww > left:
+			lines += 1
+			left = avail - ww
+		else:
+			left -= ww + space
+	return lines * f.get_height(fs) <= _name.size.y and lines <= 2
 
 
 func _set_cost_style(unaffordable: bool) -> void:
@@ -266,23 +328,60 @@ func _set_cost_style(unaffordable: bool) -> void:
 	_cost_bg.add_theme_stylebox_override("panel", UIK.stylebox(col, Color("#fff3c4"), int(3 * s), int(19 * s), 0))
 
 
+## Ajusta el cuerpo del texto a la caja. Mide con la curva completa de una vez (antes bajaba de píxel en
+## píxel esperando un fotograma por paso: al llenarse la mano eso caía en cascada sobre el mismo fotograma y
+## con las cifras encadenadas de Irene era el pico de ~10-20 ms). La medición usa una copia fuera de pantalla
+## (Rect (0,0,0,0)) para no recolocar el texto de verdad.
 func _fit_text() -> void:
 	if not is_inside_tree():
 		return
-	await get_tree().process_frame
-	if not is_instance_valid(_txt):
+	if _fit_busy:
+		_fit_again = true   # quedó un ajuste en vuelo: al terminar, repite con el texto nuevo
 		return
-	var avail := _txt_box.size.y
-	var fs := int(13 * s)
-	var guard := 0
-	while _txt.get_content_height() > avail and fs > int(8 * s) and guard < 6:
-		fs -= 1
-		guard += 1
+	_fit_busy = true
+	await get_tree().process_frame
+	while is_instance_valid(_txt):
+		_fit_again = false
+		var avail := _txt_box.size.y
+		var lo := 8 if w < 130.0 else 9
+		var hi := maxi(lo, int(13 * s))
+		var probe := RichTextLabel.new()
+		probe.bbcode_enabled = true
+		probe.fit_content = true
+		probe.scroll_active = false
+		probe.autowrap_mode = _txt.autowrap_mode
+		probe.clip_contents = true
+		probe.size = Vector2(_txt.size.x, 0.0)
+		probe.add_theme_font_override("normal_font", _txt.get_theme_font("normal_font"))
+		probe.add_theme_font_override("bold_font", _txt.get_theme_font("bold_font"))
+		probe.add_theme_font_size_override("normal_font_size", hi)
+		probe.add_theme_font_size_override("bold_font_size", hi)
+		probe.text = _txt.text
+		add_child(probe)
+		var fits := func(fs: int) -> bool:
+			probe.add_theme_font_size_override("normal_font_size", fs)
+			probe.add_theme_font_size_override("bold_font_size", fs)
+			return probe.get_content_height() <= avail
+		var fs := lo
+		if fits.call(hi):
+			fs = hi
+		else:
+			var a := lo
+			var b := hi
+			while b - a > 1:   # bisección: ~4 medidas en vez de hasta 6 fotogramas
+				var m := (a + b) / 2
+				if fits.call(m):
+					a = m
+				else:
+					b = m
+			fs = a
+		probe.queue_free()
 		_txt.add_theme_font_size_override("normal_font_size", fs)
 		_txt.add_theme_font_size_override("bold_font_size", fs)
+		if not _fit_again:
+			break
 		await get_tree().process_frame
-		if not is_instance_valid(_txt):
-			return
+	_fit_busy = false
 
 
 func set_state(p_playable: bool, p_afford: bool) -> void:

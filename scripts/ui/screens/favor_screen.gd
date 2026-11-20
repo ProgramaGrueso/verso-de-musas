@@ -66,11 +66,13 @@ func _ready() -> void:
 	UIK.outlined(who, 6)
 	who.position = Vector2(0, 280)
 	who.size = Vector2(1280, 34)
+	who.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	add_child(who)
 	var line := UIK.label(ent.line, 20, Color("#e8e4f4"), "sans", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(line, 5)
-	line.position = Vector2(140, 322)
-	line.size = Vector2(1000, 32)
+	line.position = Vector2(140, 318)
+	line.size = Vector2(1000, 44)   # dos líneas: las frases largas se parten, no se salen
+	line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(line)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 20)
@@ -92,9 +94,10 @@ func _ready() -> void:
 			Nav.map(true))
 		btns.append(b)
 		row.add_child(b)
-	var skip := UIK.button("Rechazar los favores", "", 15)
-	skip.position = Vector2(500, 682)
-	skip.size = Vector2(280, 32)
+	var skip := UIK.button("Rechazar los favores", "", 18)
+	skip.position = Vector2(640 - 150, 680)   # centrado y con su alto natural (texto + márgenes)
+	skip.custom_minimum_size = Vector2(300, 0)
+	skip.size = skip.get_combined_minimum_size()
 	skip.pressed.connect(func(): Nav.map(true))
 	add_child(skip)
 	if not btns.is_empty():

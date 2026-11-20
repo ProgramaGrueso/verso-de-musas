@@ -4,6 +4,8 @@ extends Control
 
 static var I: Main
 
+const TOP_H := 128.0   # alto de la barra superior (retrato, vida, oro, pociones y reliquias)
+
 var screen_host: Control
 var overlay_host: Control
 var top: Control
@@ -46,8 +48,8 @@ func _ready() -> void:
 	overlay_host.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(overlay_host)
 	toast_lbl = UIK.label("", 22, Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_CENTER)
-	toast_lbl.position = Vector2(340, 640)
-	toast_lbl.size = Vector2(600, 40)
+	toast_lbl.position = Vector2(40, 646)   # ancho completo: los avisos largos no se salen de la pantalla
+	toast_lbl.size = Vector2(1200, 34)
 	toast_lbl.modulate.a = 0.0
 	toast_lbl.z_index = 3000
 	UIK.outlined(toast_lbl, 6)
@@ -219,6 +221,7 @@ func _find_scrolls(n: Node, out: Array) -> void:
 
 
 func _process(dt: float) -> void:
+	UIK.watch_tick()   # reajusta los botones cuyo texto cambió en caliente (precios, turnos, contadores)
 	if _insp_on:
 		if overlay_host.get_child_count() != _insp_ov or current != _insp_scr:
 			_insp_end()
@@ -383,7 +386,10 @@ func _toggle_fullscreen() -> void:
 # ---------- Pantallas ----------
 func set_screen(node: Control, name: String) -> void:
 	Tip.hide_all()
+	Sfx.stop_fx()   # los golpes de la pantalla que se va no siguen sonando sobre la siguiente
 	if screen != null and is_instance_valid(screen):
+		# se retira del árbol al instante: si no, su _process sigue un fotograma leyendo el estado ya reemplazado
+		screen_host.remove_child(screen)
 		screen.queue_free()
 	screen = node
 	current = name
@@ -437,7 +443,11 @@ func update_top() -> void:
 			c.queue_free()
 		for id in G.relics:
 			var r: Dictionary = DB.relics[id]
-			var l: Control = Icons.frame("relic", id, 48, Color("#c9a24a"), true) if Icons.has("relic", id) else UIK.label(r.i, 28)
+			var l: Control = Icons.frame("relic", id, 44, Color("#c9a24a"), true) if Icons.has("relic", id) else UIK.label(r.i, 26, Color.WHITE, "sans", HORIZONTAL_ALIGNMENT_CENTER)
+			l.custom_minimum_size = Vector2(44, 44)   # tamaño fijo: la columna de reliquias no mete empujones
+			if l is Label:
+				(l as Label).size = Vector2(44, 44)
+				(l as Label).vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 			UIK.tip(l, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [r.n, r.d])
 			l.set_meta("relic_id", id)
 			_tb_relics.add_child(l)
@@ -642,14 +652,18 @@ func pulse_relic(id: String) -> void:
 	var lb := UIK.rich("[b][color=#f0cf7a]%s[/color][/b] [color=#bfb6d6]¡se activa![/color]" % r.n, 14)
 	lb.autowrap_mode = TextServer.AUTOWRAP_OFF
 	lb.fit_content = true
-	lb.custom_minimum_size = Vector2(200, 0)
+	lb.custom_minimum_size = Vector2(0, 0)   # el chip mide su texto (crece hasta 420 px) en vez de cortar el nombre
 	lb.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hb.add_child(lb)
 	p.add_child(hb)
 	add_child(p)
+	p.reset_size()
+	if p.size.x > 420.0:
+		p.size.x = 420.0
 	var slot := _relic_tags
 	_relic_tags += 1
-	p.position = Vector2(10, 128 + slot * 34)
+	# columna bajo la barra superior, a la derecha de la vida (antes caía encima de «94/94»)
+	p.position = Vector2(200, TOP_H + float(slot) * (p.size.y + 6.0))
 	p.modulate.a = 0.0
 	var pt := p.create_tween()
 	pt.tween_interval(slot * 0.12)
@@ -663,6 +677,12 @@ func pulse_relic(id: String) -> void:
 
 func toast(msg: String) -> void:
 	toast_lbl.text = msg
+	# el aviso va en una línea: se baja la fuente (22 → 14) para que quepa entero antes que recortarlo
+	var f := UIK.font("bold")
+	var fs := 22
+	while fs > 14 and f.get_string_size(msg, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x > toast_lbl.size.x - 8.0:
+		fs -= 1
+	toast_lbl.add_theme_font_size_override("font_size", fs)
 	if _toast_tw and _toast_tw.is_valid():
 		_toast_tw.kill()
 	toast_lbl.modulate.a = 1.0
