@@ -94,6 +94,49 @@
    "ap": "a terrifying abyssal siren, a pale drowned woman-like sea creature with a long eel tail, webbed claws, black hollow eyes, seaweed hair, glowing teal runes on her skin, her chest and torso fully covered by dense wet seaweed, kelp and fish scales, modest, no nudity, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
    "id": "sirena"
   },
+  "spectralbosun": {
+   "name": "Contramaestre Espectral",
+   "act": 1,
+   "tier": "elite",
+   "hp": [
+    96,
+    100
+   ],
+   "h": 300,
+   "moves": {
+    "apuntar": {
+     "name": "Apuntar el Cañón",
+     "block": 8,
+     "selfStr": 1
+    },
+    "canon": {
+     "name": "Cañonazo Rompible (16)",
+     "dmg": 30,
+     "brk": 16
+    },
+    "andanada": {
+     "name": "Andanada Fantasma",
+     "dmg": 5,
+     "hits": 3
+    },
+    "sable": {
+     "name": "Sablazo Espectral",
+     "dmg": 13
+    }
+   },
+   "ai": {
+    "t": "cyc",
+    "seq": [
+     "apuntar",
+     "canon",
+     "andanada",
+     "sable",
+     "canon"
+    ]
+   },
+   "ap": "a ghostly spectral pirate boatswain beside a huge translucent cannon, tattered naval coat, glowing green eyes, barnacles and fog, imposing elite monster, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
+   "id": "spectralbosun"
+  },
   "drowncaptain": {
    "name": "Capitana Ahogada",
    "act": 1,
@@ -218,6 +261,52 @@
    },
    "ap": "a giant praying mantis monster covered in thorns and bark-like armor, huge scythe forelimbs, mossy green and dark red colors, menacing hunter pose, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
    "id": "mantis"
+  },
+  "rootwarden": {
+   "name": "Guardiana de Raíces",
+   "act": 2,
+   "tier": "elite",
+   "hp": [
+    116,
+    120
+   ],
+   "h": 310,
+   "rootShield": true,
+   "moves": {
+    "raices": {
+     "name": "Escudo de Raíces",
+     "block": 15,
+     "selfStr": 2
+    },
+    "golpe": {
+     "name": "Golpe de Corteza",
+     "dmg": 24
+    },
+    "astillas": {
+     "name": "Astillas",
+     "dmg": 8,
+     "hits": 3
+    },
+    "lianas": {
+     "name": "Lianas",
+     "dmg": 9,
+     "apply": {
+      "weak": 1,
+      "vulnerable": 1
+     }
+    }
+   },
+   "ai": {
+    "t": "cyc",
+    "seq": [
+     "raices",
+     "golpe",
+     "astillas",
+     "lianas"
+    ]
+   },
+   "ap": "an ancient regal dryad guardian with bark armor and long roots connecting her to two small saplings, glowing amber heart, mossy crown, protective pose, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
+   "id": "rootwarden"
   },
   "mycelking": {
    "name": "Rey Micelio",
@@ -353,6 +442,53 @@
    "ap": "a giant executioner hornet with a black and crimson carapace, a hooded executioner mask-like head, a huge barbed stinger like a blade, translucent wings, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
    "id": "hornet"
   },
+  "royalbeetle": {
+   "name": "Escarabajo Real",
+   "act": 3,
+   "tier": "elite",
+   "hp": [
+    136,
+    142
+   ],
+   "h": 310,
+   "shellCap": 10,
+   "startBlock": 8,
+   "moves": {
+    "placa": {
+     "name": "Placas Reales",
+     "block": 20,
+     "selfStr": 2
+    },
+    "embestida": {
+     "name": "Embestida Real",
+     "dmg": 30
+    },
+    "esquirlas": {
+     "name": "Esquirlas de Quitina",
+     "dmg": 8,
+     "hits": 3
+    },
+    "cornada": {
+     "name": "Cornada",
+     "dmg": 14,
+     "apply": {
+      "vulnerable": 1
+     }
+    }
+   },
+   "ai": {
+    "t": "cyc",
+    "seq": [
+     "placa",
+     "embestida",
+     "esquirlas",
+     "cornada",
+     "embestida"
+    ]
+   },
+   "ap": "a majestic giant royal rhinoceros beetle with overlapping golden chitin armor plates, emerald iridescent shell, crown shaped horn, elite hive guardian, dark fantasy creature concept art, seen in three-quarter view facing left, full body entirely inside the frame with wide empty margins, single monster centered, painterly digital illustration, plain flat dark neutral background",
+   "id": "royalbeetle"
+  },
   "waxcolossus": {
    "name": "Coloso de Cera",
    "act": 3,
@@ -461,6 +597,9 @@
    "elite": [
     [
      "sirena"
+    ],
+    [
+     "spectralbosun"
     ]
    ],
    "boss": [
@@ -516,6 +655,11 @@
    "elite": [
     [
      "mantis"
+    ],
+    [
+     "rootwarden",
+     "sprout",
+     "sprout"
     ]
    ],
    "boss": [
@@ -574,6 +718,9 @@
    "elite": [
     [
      "hornet"
+    ],
+    [
+     "royalbeetle"
     ]
    ],
    "boss": [

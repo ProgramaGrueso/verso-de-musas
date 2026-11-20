@@ -341,6 +341,8 @@ static func gen_shop(G) -> Dictionary:
 
 ## ¿Puede salir este evento ahora? (los eventos ampliados pueden ser de un acto o de una musa concretos)
 static func event_ok(G, e: Dictionary) -> bool:
+	if DB.extra and e.get("once", false) and e.id in G.get("onceEvents", []):
+		return false
 	if e.has("act") and int(e.act) != int(G.act):
 		return false
 	if e.has("char") and e.char != G.char:
@@ -360,6 +362,7 @@ static func pick_event(G) -> Dictionary:
 
 
 ## Sorteo con eventos de acto y de musa: los exclusivos de la musa pesan el doble para que se vean a menudo.
+## «weight» permite eventos raros; «once» usa una lista propia que no se vacía al reiniciar seenEvents.
 static func _pick_event_extra(G) -> Dictionary:
 	var elig := DB.events.filter(func(e): return event_ok(G, e))
 	var pool := elig.filter(func(e): return not (e.id in G.seenEvents))
@@ -367,11 +370,20 @@ static func _pick_event_extra(G) -> Dictionary:
 		for e in elig:
 			G.seenEvents.erase(e.id)
 		pool = elig
-	var weighted := []
+	var total := 0.0
 	for e in pool:
-		weighted.append(e)
-		if e.has("char"):
-			weighted.append(e)
-	var ev: Dictionary = Eng.pick(G, weighted)
+		total += float(e.get("weight", 1.0)) * (2.0 if e.has("char") else 1.0)
+	var roll := Eng.rnd(G) * total
+	var ev: Dictionary = pool[0]
+	for e in pool:
+		roll -= float(e.get("weight", 1.0)) * (2.0 if e.has("char") else 1.0)
+		if roll < 0:
+			ev = e
+			break
 	G.seenEvents.append(ev.id)
+	if ev.get("once", false):
+		if not G.has("onceEvents"):
+			G["onceEvents"] = []
+		if not (ev.id in G.onceEvents):
+			G.onceEvents.append(ev.id)
 	return ev

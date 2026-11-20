@@ -35,6 +35,13 @@ ENEMIES = {
                          "lamento": {"name": "Lamento", "dmg": 5, "add": {"id": "doubt", "n": 1, "to": "discard"}}},
                "ai": {"t": "cyc", "seq": ["canto", "garra", "marea", "lamento", "garra"]},
                "ap": "a terrifying abyssal siren, a pale drowned woman-like sea creature with a long eel tail, webbed claws, black hollow eyes, seaweed hair, glowing teal runes on her skin, her chest and torso fully covered by dense wet seaweed, kelp and fish scales, modest, no nudity"},
+    "spectralbosun": {"name": "Contramaestre Espectral", "act": 1, "tier": "elite", "hp": [90, 94], "h": 300,
+                      "moves": {"apuntar": {"name": "Apuntar el Cañón", "block": 8, "selfStr": 1},
+                                "canon": {"name": "Cañonazo Rompible (15)", "dmg": 29, "brk": 15},
+                                "andanada": {"name": "Andanada Fantasma", "dmg": 5, "hits": 3},
+                                "sable": {"name": "Sablazo Espectral", "dmg": 13}},
+                      "ai": {"t": "cyc", "seq": ["apuntar", "canon", "andanada", "sable", "canon"]},
+                      "ap": "a ghostly spectral pirate boatswain beside a huge translucent cannon, tattered naval coat, glowing green eyes, barnacles and fog, imposing elite monster"},
     "drowncaptain": {"name": "Capitana Ahogada", "act": 1, "tier": "boss", "hp": [94, 98], "h": 350,
                      "moves": {"abordaje": {"name": "¡Al abordaje!", "summon": {"id": "ghostpirate", "n": 1}, "block": 6},
                                "canon": {"name": "Cañonazo", "dmg": 10},
@@ -57,6 +64,14 @@ ENEMIES = {
                          "molt": {"name": "Muda", "selfStr": 2}},
                "ai": {"t": "cyc", "seq": ["camo", "scythe", "ambush", "molt", "scythe"]},
                "ap": "a giant praying mantis monster covered in thorns and bark-like armor, huge scythe forelimbs, mossy green and dark red colors, menacing hunter pose"},
+    "rootwarden": {"name": "Guardiana de Raíces", "act": 2, "tier": "elite", "hp": [116, 120], "h": 310,
+                   "rootShield": True,
+                   "moves": {"raices": {"name": "Escudo de Raíces", "block": 15, "selfStr": 2},
+                             "golpe": {"name": "Golpe de Corteza", "dmg": 24},
+                             "astillas": {"name": "Astillas", "dmg": 8, "hits": 3},
+                             "lianas": {"name": "Lianas", "dmg": 9, "apply": {"weak": 1, "vulnerable": 1}}},
+                   "ai": {"t": "cyc", "seq": ["raices", "golpe", "astillas", "lianas"]},
+                   "ap": "an ancient regal dryad guardian with bark armor and long roots connecting her to two small saplings, glowing amber heart, mossy crown, protective pose"},
     "mycelking": {"name": "Rey Micelio", "act": 2, "tier": "boss", "hp": [172, 176], "h": 360,
                   "moves": {"colonia": {"name": "Colonia", "summon": {"id": "sporecap", "n": 1}, "block": 12},
                             "aplastar": {"name": "Aplastar", "dmg": 24},
@@ -79,6 +94,14 @@ ENEMIES = {
                          "frenzy": {"name": "Frenesí", "dmg": 4, "hits": 4}},
                "ai": {"t": "cyc", "seq": ["buzz", "sting", "execute", "frenzy"]},
                "ap": "a giant executioner hornet with a black and crimson carapace, a hooded executioner mask-like head, a huge barbed stinger like a blade, translucent wings"},
+    "royalbeetle": {"name": "Escarabajo Real", "act": 3, "tier": "elite", "hp": [136, 142], "h": 310,
+                    "shellCap": 10, "startBlock": 8,
+                    "moves": {"placa": {"name": "Placas Reales", "block": 20, "selfStr": 2},
+                              "embestida": {"name": "Embestida Real", "dmg": 30},
+                              "esquirlas": {"name": "Esquirlas de Quitina", "dmg": 8, "hits": 3},
+                              "cornada": {"name": "Cornada", "dmg": 14, "apply": {"vulnerable": 1}}},
+                    "ai": {"t": "cyc", "seq": ["placa", "embestida", "esquirlas", "cornada", "embestida"]},
+                    "ap": "a majestic giant royal rhinoceros beetle with overlapping golden chitin armor plates, emerald iridescent shell, crown shaped horn, elite hive guardian"},
     "waxcolossus": {"name": "Coloso de Cera", "act": 3, "tier": "boss", "hp": [226, 232], "h": 390,
                     "moves": {"sello": {"name": "Sello de Cera", "block": 28},
                               "aplastar": {"name": "Puño de Panal", "dmg": 32},
@@ -94,14 +117,17 @@ ENEMIES = {
 ENCOUNTERS = {
     "1": {"easy": [["jelly", "dockrat"], ["slime"], ["crab"], ["eel"], ["dockrat", "dockrat"]],
           "hard": [["dockrat", "dockrat", "dockrat"], ["ghostpirate"], ["slime", "jelly"], ["eel", "dockrat"], ["crab", "dockrat"], ["ghostpirate", "dockrat"], ["eel", "eel"], ["ghostpirate", "jelly"]],
-          "elite": [["sirena"]], "boss": [["drowncaptain"]]},
+          "elite": [["sirena"], ["spectralbosun"]], "boss": [["drowncaptain"]]},
     "2": {"easy": [["sporecap"], ["vinelasher"], ["brambwolf"], ["dryad"], ["thornbeast"]],
           "hard": [["sporecap", "vinelasher"], ["mossgolem"], ["dryad", "sporecap"], ["dryad", "brambwolf"], ["brambwolf", "sporecap"], ["thornbeast", "sprout", "sprout"]],
-          "elite": [["mantis"]], "boss": [["mycelking"]]},
+          "elite": [["mantis"], ["rootwarden", "sprout", "sprout"]], "boss": [["mycelking"]]},
     "3": {"easy": [["drone", "drone"], ["wasp"], ["honeyslime"], ["workerbee"], ["beetle"]],
           "hard": [["drone", "drone", "drone"], ["wasp", "drone"], ["nurse", "wasp"], ["wasp", "wasp"], ["workerbee", "drone", "drone"], ["beetle", "drone"]],
-          "elite": [["hornet"]], "boss": [["waxcolossus"]]},
+          "elite": [["hornet"], ["royalbeetle"]], "boss": [["waxcolossus"]]},
 }
+
+# Fase 4B: reutilizan arte terminado; no crean trabajos de generación ni cambian las semillas anteriores.
+ART_COPIES = {"spectralbosun": "ghostpirate", "rootwarden": "dryad", "royalbeetle": "beetle"}
 
 # ------------------------------------------------------------------ equilibrio
 # Ajustes que solo se aplican con DB.extra = true (el juego con la Oleada 2). Las trazas de paridad
@@ -267,6 +293,8 @@ POTIONS = {
 
 STATES = {
     "regen": {"n": "Regeneración", "i": "🌿", "d": "Al inicio de tu turno recuperas {n} PV y la Regeneración baja 1.", "negp": False, "negn": False},
+    "rootShield": {"n": "Escudo de Raíces", "i": "🌳", "d": "Recibe la mitad de daño por golpe mientras viva al menos un Brote. Cantidad de Brotes protectores: {n}.", "negp": False, "negn": False},
+    "carapace": {"n": "Coraza", "i": "🪲", "d": "Ningún golpe le quita más de {n} PV. Los ataques de varios golpes atraviesan mejor su defensa.", "negp": False, "negn": False},
 }
 
 # ------------------------------------------------------------------ eventos
@@ -334,6 +362,16 @@ EVENTS = [
     {"id": "poza_lunar", "title": "Poza Lunar", "img": "🌙", "char": "selene",
      "text": "Una poza de agua inmóvil refleja una luna que no está en el cielo. Al acercarte, el agua empieza a cantar.",
      "ap": "a still moonlit pool in a dark grotto reflecting a full moon that is not in the sky, glowing pearls at the bottom, silver mist"},
+    # --- Fase 4B: hallazgos raros, una sola vez por partida (usan el fondo general como fallback)
+    {"id": "campana_bruma", "title": "Campana de la Bruma", "img": "🔔", "act": 1, "once": True, "weight": 0.22,
+     "text": "Una campana verde oscilante cuelga de un mástil sin barco. No la mueve el viento. Dentro del bronce, una luz parpadea al ritmo de tus pasos.",
+     "ap": "an ancient verdigris ship bell hanging from a single mast surrounded by spectral fog, mysterious soft light inside the bell, abandoned docks"},
+    {"id": "corazon_hueco", "title": "El Corazón Hueco", "img": "💚", "act": 2, "once": True, "weight": 0.22,
+     "text": "En el tronco de un roble abierto late un corazón de madera. Sus raíces se apartan con suavidad; saben que has venido a elegir qué llevarte.",
+     "ap": "a hollow ancient oak with a glowing wooden heart inside, gentle roots opening like hands, emerald sap and drifting leaves"},
+    {"id": "cera_memoria", "title": "La Cera Recuerda", "img": "🕯️", "act": 3, "once": True, "weight": 0.22,
+     "text": "Un banco de cera tibia conserva la forma de las cartas que tocas. Las figuras cambian bajo tus dedos como si el panal recordara otra versión de tu viaje.",
+     "ap": "a warm beeswax worktable holding luminous card shaped impressions, gentle golden steam, amber workshop inside a giant hive"},
 ]
 
 # Descripciones para los iconos (se copian a tools/gen_icons.py).
@@ -391,6 +429,8 @@ def main():
         d["id"] = eid
         d["ap"] = f"{e['ap']}, {ENEMY_STYLE}"
         enemies_extra["enemies"][eid] = d
+        if eid in ART_COPIES:
+            continue
         seed += 7
         big = e["tier"] == "boss"
         jobs.append({"kind": "image", "name": f"enemy_{eid}", "lora": "karen_krea2.safetensors", "w": 640 if big else 512, "h": 640 if big else 512,
@@ -399,6 +439,8 @@ def main():
     for ev in EVENTS:
         d = {k: v for k, v in ev.items() if k != "ap"}
         events.append(d)
+        if ev.get("once"):
+            continue
         seed += 7
         jobs.append({"kind": "image", "name": f"ev_{ev['id']}", "lora": "karen_krea2.safetensors", "w": 1280, "h": 720,
                      "seed": seed, "strength": 0, "prompt": f"{ev['ap']}, {EVENT_STYLE}", "out": f"assets/bg/ev_{ev['id']}.webp"})

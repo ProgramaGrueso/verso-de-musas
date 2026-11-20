@@ -6,6 +6,20 @@
    "d": "Al inicio de tu turno recuperas {n} PV y la Regeneración baja 1.",
    "negp": false,
    "negn": false
+  },
+  "rootShield": {
+   "n": "Escudo de Raíces",
+   "i": "🌳",
+   "d": "Recibe la mitad de daño por golpe mientras viva al menos un Brote. Cantidad de Brotes protectores: {n}.",
+   "negp": false,
+   "negn": false
+  },
+  "carapace": {
+   "n": "Coraza",
+   "i": "🪲",
+   "d": "Ningún golpe le quita más de {n} PV. Los ataques de varios golpes atraviesan mejor su defensa.",
+   "negp": false,
+   "negn": false
   }
  }
 }

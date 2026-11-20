@@ -249,7 +249,7 @@ static func new_run(char: String, opts: Dictionary = {}) -> Dictionary:
 	var G := {
 		"char": char, "seed": seed_v, "rs": 0, "uid": 0, "easy": opts.get("easy", false), "hp": 0, "maxHp": 0, "gold": 99,
 		"deck": [], "relics": [DB.characters[char].startRelic], "potions": [null, null, null], "act": 1, "floor": 0, "map": null, "pos": null,
-		"stats": {"kills": 0, "turns": 0, "fights": 0}, "seenEvents": [], "nm": opts.get("nm", 0), "removed": 0,
+		"stats": {"kills": 0, "turns": 0, "fights": 0}, "seenEvents": [], "onceEvents": [], "nm": opts.get("nm", 0), "removed": 0,
 	}
 	G.rs = seed_v
 	G.easy = G.easy and G.nm == 0
@@ -275,8 +275,11 @@ static func spawn_enemy(C, id: String) -> Dictionary:
 	var G = C.G
 	var hp: int = floori(rint(G, def.hp[0], def.hp[1]) * nmods(G).hp + 0.5)
 	G.uid += 1
-	return {"uid": G.uid, "id": id, "def": def, "name": def.name, "hp": hp, "maxHp": hp, "block": def.get("startBlock", 0),
+	var e := {"uid": G.uid, "id": id, "def": def, "name": def.name, "hp": hp, "maxHp": hp, "block": def.get("startBlock", 0),
 		"status": {}, "turn": 0, "hist": [], "intent": null, "moveKey": null}
+	if DB.extra and def.get("shellCap", 0):
+		e.status["carapace"] = int(def.shellCap)
+	return e
 
 static func start_combat(G, ids: Array, opts: Dictionary = {}) -> Dictionary:
 	var C := {
@@ -287,6 +290,7 @@ static func start_combat(G, ids: Array, opts: Dictionary = {}) -> Dictionary:
 	}
 	for id in ids:
 		C.enemies.append(spawn_enemy(C, id))
+	_sync_root_shields(C)
 	if G.nm:
 		var m := nmods(G)
 		for e in C.enemies:
@@ -361,6 +365,20 @@ static func living(C) -> Array:
 		if e.hp > 0:
 			out.append(e)
 	return out
+
+## Fase 4B · el estado muestra cuántos Brotes mantienen activo cada Escudo de Raíces.
+static func _sync_root_shields(C) -> void:
+	if not DB.extra:
+		return
+	var sprouts := 0
+	for e in C.enemies:
+		if e.hp > 0 and e.id == "sprout":
+			sprouts += 1
+	for e in C.enemies:
+		if e.hp > 0 and e.def.get("rootShield", false):
+			var delta: int = sprouts - get_s(e, "rootShield")
+			if delta != 0:
+				add_status(C, e, "rootShield", delta)
 
 static func draw_cards(C, n: int) -> int:
 	var drawn := 0
@@ -519,11 +537,17 @@ static func deal_to_player(C, amt: int, src, no_thorns: bool = false) -> int:
 static func deal_to_enemy(C, e, amt: int, o: Dictionary = {}) -> int:
 	if e.hp <= 0:
 		return 0
+	# Fase 4B · Escudo de Raíces: se aplica al golpe antes de que lo absorba el Bloqueo.
+	if DB.extra and e.def.get("rootShield", false) and get_s(e, "rootShield") > 0:
+		amt = floori(amt / 2.0)
 	var blocked: int = mini(e.block, amt)
 	if not o.get("thorns", false) and not o.get("poison", false) and not o.get("osty", false) and not o.get("noReflect", false):
 		_mx("maxHit", amt)
 	e.block -= blocked
 	amt -= blocked
+	# Coraza limita los PV perdidos por cada golpe, no el daño absorbido por el Bloqueo.
+	if DB.extra and e.def.get("shellCap", 0):
+		amt = mini(amt, int(e.def.shellCap))
 	e.hp -= amt
 	_fx(C, "enemyHit", {"e": e, "amt": amt, "blocked": blocked, "osty": o.get("osty", false), "thorns": o.get("thorns", false)})
 	if not o.get("thorns", false) and not o.get("osty", false) and amt + blocked > 0 and get_s(e, "thorns") and not o.get("noReflect", false):
@@ -534,9 +558,21 @@ static func deal_to_enemy(C, e, amt: int, o: Dictionary = {}) -> int:
 			_player_down(C)
 	if e.hp <= 0:
 		kill_enemy(C, e, o)
-	elif _boss_phase(C, e) and C.phase == "player":
-		choose_intent(C, e)   # el golpe nuevo de la fase 2 se telegrafía al instante
+	else:
+		# Cañonazo rompible: cuenta el daño infligido por el jugador durante este turno.
+		if DB.extra and C.phase == "player" and e.intent != null and amt + blocked > 0:
+			e["brkDamage"] = int(e.get("brkDamage", 0)) + amt + blocked   # cuenta el golpe entero: Bloqueo incluido
+			_brk_check(C, e)
+		if _boss_phase(C, e) and C.phase == "player":
+			choose_intent(C, e)   # el golpe nuevo de la fase 2 se telegrafía al instante
 	return amt
+
+## Fase 4B · ruptura del cañonazo: si el golpe anunciado acumula daño >= brk este turno, queda aturdido.
+static func _brk_check(C, e) -> void:
+	if e.intent == null or int(e.intent.get("brk", 0)) <= 0:
+		return
+	if int(e.get("brkDamage", 0)) >= int(e.intent.brk):
+		e.intent = {"name": "¡Aturdido!", "stun": true}
 
 ## Fase 4 · Jefes con fases (solo DB.extra; los datos viven en balance_w2.json → «phase2»).
 ## Devuelve true solo en el instante en que el jefe pasa a la fase 2.
@@ -568,6 +604,7 @@ static func _phase_key(C, e) -> String:
 
 static func kill_enemy(C, e, o) -> void:
 	e.hp = 0
+	_sync_root_shields(C)
 	C.G.stats.kills += 1
 	_mt("kills")
 	if e.def.tier == "elite":
@@ -678,6 +715,8 @@ static func _ai_custom(C, e) -> String:
 
 static func choose_intent(C, e) -> void:
 	var key := _ai_key(C, e)
+	if DB.extra:
+		e["brkDamage"] = 0
 	e.moveKey = key
 	e.hist.append(key)
 	e.intent = e.def.moves[key].duplicate()
@@ -714,6 +753,8 @@ static func run_enemy_turn(C, e) -> void:
 		if e.hp <= 0:
 			return
 	_fx(C, "enemyAct", {"e": e, "it": it})
+	if it.get("stun", false):   # Cañonazo rompible (Fase 4B): el turno aturdido se pierde entero
+		return
 	if it.get("block", 0):
 		e.block += it.block
 		_fx(C, "enemyBlock", {"e": e, "n": it.block})

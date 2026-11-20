@@ -93,6 +93,8 @@ func _init() -> void:
 						ok(res is String and res != "", "%s: sin texto de resultado (%s)" % [label, str(res)])
 						state_ok(G2, label)
 	_exclusives()
+	_once_events()
+	_elite_mechanics()
 	print("\nRESULTADO: %d eventos x musas x modos, %d comprobaciones, %d fallan" % [runs, checks, fails])
 	quit(1 if fails else 0)
 
@@ -105,3 +107,77 @@ func _exclusives() -> void:
 		var C := Eng.start_combat(G, ["dockrat"])
 		ok(C.over == "", "%s: el combate con G.perm falla" % ch)
 		ok(C.pl.status.get("strength", 0) >= 1, "%s: G.perm no aplica Fuerza" % ch)
+
+
+## Los eventos raros no vuelven a entrar en el pool ni cuando seenEvents se reinicia.
+func _once_events() -> void:
+	var rare: Array = DB.events.filter(func(e): return e.get("once", false))
+	ok(rare.size() >= 3, "Fase 4B: faltan eventos raros")
+	for act in [1, 2, 3]:
+		ok(rare.any(func(e): return int(e.get("act", 0)) == act), "Fase 4B: no hay evento raro en el acto %d" % act)
+	for ev in rare:
+		var id: String = ev.id
+		ok(float(ev.get("weight", 1.0)) < 1.0, "%s: el evento raro no tiene peso bajo" % id)
+		var G := Eng.new_run("zafiro", {"seed": 4040})
+		G.act = int(ev.act)
+		ok(G.onceEvents.is_empty(), "%s: onceEvents no empieza vacío" % id)
+		ok(RunGen.event_ok(G, ev), "%s: el evento raro no es elegible en su acto" % id)
+		var elig: Array = DB.events.filter(func(e): return RunGen.event_ok(G, e))
+		G.seenEvents = elig.filter(func(e): return e.id != id).map(func(e): return e.id)
+		var picked := RunGen.pick_event(G)
+		ok(picked.id == id, "%s: no se pudo forzar el sorteo del evento raro" % id)
+		ok(id in G.onceEvents, "%s: el sorteo no registra el evento como usado" % id)
+		ok(not RunGen.event_ok(G, ev), "%s: event_ok admite repetir un evento único" % id)
+		G.seenEvents = []
+		for i in 40:
+			ok(RunGen.pick_event(G).id != id, "%s: reaparece al reiniciar seenEvents (%d)" % [id, i])
+
+
+## Mecánicas de los tres élites nuevas: ruptura, reducción por Brotes y límite por golpe.
+func _elite_mechanics() -> void:
+	for spec in [[1, "spectralbosun"], [2, "rootwarden"], [3, "royalbeetle"]]:
+		var act: int = spec[0]
+		var id: String = spec[1]
+		ok(DB.encounters[act].elite.any(func(ids): return id in ids), "%s: falta en el pool de élites" % id)
+	# Contramaestre: dos golpes acumulan el umbral y anulan el cañonazo ya anunciado.
+	var G1 := Eng.new_run("zafiro", {"seed": 51})
+	var C1 := Eng.start_combat(G1, ["spectralbosun"], {"tier": "elite"})
+	var bosun: Dictionary = C1.enemies[0]
+	bosun.block = 0
+	bosun.intent = bosun.def.moves.canon.duplicate()
+	bosun["brkDamage"] = 0
+	var brk: int = int(bosun.intent.get("brk", 0))
+	ok(brk > 1, "Contramaestre: el cañonazo no lleva umbral de ruptura")
+	Eng.deal_to_enemy(C1, bosun, brk - 2)
+	ok(bosun.intent.get("name", "") != "¡Aturdido!", "Contramaestre: se rompe antes del umbral")
+	Eng.deal_to_enemy(C1, bosun, 1)
+	ok(bosun.intent.get("name", "") != "¡Aturdido!", "Contramaestre: se rompe con un golpe de menos")
+	Eng.deal_to_enemy(C1, bosun, 1)
+	ok(bosun.intent.get("name", "") == "¡Aturdido!", "Contramaestre: el umbral no aturde")
+	var hp1: int = G1.hp
+	Eng.run_enemy_turn(C1, bosun)
+	ok(G1.hp == hp1, "Contramaestre: el turno aturdido sigue atacando")
+	# Guardiana: el estado sigue a los Brotes vivos y la reducción desaparece con ellos.
+	var G2 := Eng.new_run("zafiro", {"seed": 52})
+	var C2 := Eng.start_combat(G2, ["rootwarden", "sprout", "sprout"], {"tier": "elite"})
+	var root: Dictionary = C2.enemies[0]
+	root.block = 0
+	ok(Eng.get_s(root, "rootShield") == 2, "Guardiana: el estado no cuenta los dos Brotes")
+	var hp2: int = root.hp
+	ok(Eng.deal_to_enemy(C2, root, 20) == 10 and root.hp == hp2 - 10, "Guardiana: no reduce el golpe a la mitad")
+	Eng.deal_to_enemy(C2, C2.enemies[1], 999)
+	ok(Eng.get_s(root, "rootShield") == 1, "Guardiana: el estado no baja al perder un Brote")
+	Eng.deal_to_enemy(C2, C2.enemies[2], 999)
+	ok(Eng.get_s(root, "rootShield") == 0, "Guardiana: el escudo persiste sin Brotes")
+	root.block = 0
+	hp2 = root.hp
+	ok(Eng.deal_to_enemy(C2, root, 20) == 20 and root.hp == hp2 - 20, "Guardiana: sin Brotes no recibe daño completo")
+	# Escarabajo: cada golpe pierde como máximo 10 PV; los golpes pequeños no se reducen.
+	var G3 := Eng.new_run("zafiro", {"seed": 53})
+	var C3 := Eng.start_combat(G3, ["royalbeetle"], {"tier": "elite"})
+	var beetle: Dictionary = C3.enemies[0]
+	beetle.block = 0
+	ok(Eng.get_s(beetle, "carapace") == 10, "Escarabajo: Coraza no está visible")
+	ok(Eng.deal_to_enemy(C3, beetle, 25) == 10, "Escarabajo: un golpe grande supera el límite")
+	beetle.block = 0
+	ok(Eng.deal_to_enemy(C3, beetle, 6) == 6, "Escarabajo: Coraza altera los golpes pequeños")

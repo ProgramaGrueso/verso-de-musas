@@ -311,6 +311,45 @@ static func _options_w2(G, id: String, leave: Dictionary) -> Array:
 					G.hp = mini(G.maxHp, G.hp + 15)
 					return ("Rindes homenaje y dejas atrás **%s**. Recuperas 15 PV." % n) if n != "" else "Rindes homenaje en silencio. Recuperas 15 PV."},
 				leave]
+		# --- Fase 4B: encuentros raros, una vez por partida
+		"campana_bruma":
+			return [
+				{"t": "Tocar la campana", "hint": "Pierdes 7 PV. Obtienes una reliquia.", "ok": G.hp > 7, "run": func(_ctx):
+					G.hp -= 7
+					return "La nota atraviesa la niebla. Entre los ecos " + _relic_text(G, Eng.random_relic_tiered(G, 0.15))},
+				{"t": "Arrancar el badajo", "hint": "Ganas 90 de oro. Añades la maldición Duda.", "ok": true, "run": func(_ctx):
+					Eng.gain_gold(G, 90)
+					G.deck.append(Eng.make_card(G, "doubt"))
+					return "La campana queda muda. El badajo se convierte en monedas, pero su última nota se queda contigo."},
+				leave]
+		"corazon_hueco":
+			return [
+				{"t": "Abrazar el corazón", "hint": "+8 PV máx. Añades 2 Heridas.", "ok": true, "run": func(_ctx):
+					G.maxHp += 8
+					G.hp += 8
+					for i in 2:
+						G.deck.append(Eng.make_card(G, "wound"))
+					return "La savia fortalece tu pecho. Dos espinas se desprenden y se enredan en tu mazo."},
+				{"t": "Cortar el corazón", "hint": "Ganas 110 de oro. Pierdes 10 PV.", "ok": G.hp > 10, "run": func(_ctx):
+					G.hp -= 10
+					Eng.gain_gold(G, 110)
+					return "La madera se abre como un cofre. Recoges sus monedas semilla; el roble exhala un largo suspiro."},
+				leave]
+		"cera_memoria":
+			return [
+				{"t": "Esculpir tus recuerdos", "hint": "Pierdes 12 PV. Mejora hasta 2 cartas al azar.", "ok": G.hp > 12 and can_up, "run": func(_ctx):
+					G.hp -= 12
+					var ups := _rand_upgrade(G, 2)
+					return "La cera se enfría con una forma más nítida: **%s** mejora." % " y ".join(ups)},
+				{"t": "Trocar una forma", "hint": "Transforma una carta en otra aleatoria de tu musa. Ganas 75 de oro.", "ok": not G.deck.is_empty(), "run": func(ctx):
+					var c: Array = await ctx.pick_card("Elige una carta para transformar", func(_x): return true, 1)
+					if c.is_empty():
+						return "La cera recupera su forma. Decides no cambiar la tuya."
+					var old_name: String = DB.cards[c[0].id].name
+					var new_name: String = _transform(G, c[0])
+					Eng.gain_gold(G, 75)
+					return "**%s** se funde y reaparece como **%s**. El molde sobrante se convierte en 75 de oro." % [old_name, new_name]},
+				leave]
 		# --- exclusivos de cada musa
 		"coliseo":
 			return [

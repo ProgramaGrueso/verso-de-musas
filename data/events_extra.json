@@ -121,6 +121,33 @@
    "img": "🌙",
    "char": "selene",
    "text": "Una poza de agua inmóvil refleja una luna que no está en el cielo. Al acercarte, el agua empieza a cantar."
+  },
+  {
+   "id": "campana_bruma",
+   "title": "Campana de la Bruma",
+   "img": "🔔",
+   "act": 1,
+   "once": true,
+   "weight": 0.22,
+   "text": "Una campana verde oscilante cuelga de un mástil sin barco. No la mueve el viento. Dentro del bronce, una luz parpadea al ritmo de tus pasos."
+  },
+  {
+   "id": "corazon_hueco",
+   "title": "El Corazón Hueco",
+   "img": "💚",
+   "act": 2,
+   "once": true,
+   "weight": 0.22,
+   "text": "En el tronco de un roble abierto late un corazón de madera. Sus raíces se apartan con suavidad; saben que has venido a elegir qué llevarte."
+  },
+  {
+   "id": "cera_memoria",
+   "title": "La Cera Recuerda",
+   "img": "🕯️",
+   "act": 3,
+   "once": true,
+   "weight": 0.22,
+   "text": "Un banco de cera tibia conserva la forma de las cartas que tocas. Las figuras cambian bajo tus dedos como si el panal recordara otra versión de tu viaje."
   }
  ]
 }
