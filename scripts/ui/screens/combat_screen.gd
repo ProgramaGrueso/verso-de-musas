@@ -190,7 +190,7 @@ func _ready() -> void:
 	Main.I.on_potion = _on_potion
 	_render_all(true)
 	var boss: Dictionary = C.enemies[0]
-	_banner(boss.name if tier == "boss" else ("¡Élite!" if tier == "elite" else "Tu turno"), tier != "normal")
+	_banner(boss.name if tier == "boss" else (tr("¡Élite!") if tier == "elite" else tr("Tu turno")), tier != "normal")
 	busy = false
 	_update_hud()
 	_update_tip()
@@ -340,7 +340,7 @@ func _build_player() -> void:
 	lsb.shadow_color = Color("#ff2a3a", 0.55)
 	lsb.content_margin_left = 10; lsb.content_margin_right = 12; lsb.content_margin_top = 2; lsb.content_margin_bottom = 2
 	lethal_box.add_theme_stylebox_override("panel", lsb)
-	var lrow := Icons.with_text("ui", "heart_broken", "MUERTE SEGURA", 24, 17, Color.WHITE)
+	var lrow := Icons.with_text("ui", "heart_broken", tr("MUERTE SEGURA"), 24, 17, Color.WHITE)
 	lrow.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	lethal_box.add_child(lrow)
 	lethal_box.set_meta("lbl", lrow)
@@ -391,7 +391,7 @@ func _build_player() -> void:
 	osty_pow.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	UIK.outlined(osty_pow, 4)
 	osty_box.add_child(osty_pow)
-	UIK.tip(osty_img, func(): return "[b][color=#f0cf7a]Osty[/color][/b]\n%s\nPV %d/%d · Poder %d" % [DB.glos["Osty"], C.osty.hp, C.osty.max, C.osty.pow] if C.has("osty") and C.osty != null else "")
+	UIK.tip(osty_img, func(): return tr("[b][color=#f0cf7a]Osty[/color][/b]\n%s\nPV %d/%d · Poder %d") % [DB.glos["Osty"], C.osty.hp, C.osty.max, C.osty.pow] if C.has("osty") and C.osty != null else "")
 	# orbes (Selene)
 	orb_bar = HBoxContainer.new()
 	orb_bar.position = Vector2(70, 46)
@@ -416,24 +416,24 @@ func _build_hud() -> void:
 	energy_panel.pivot_offset = Vector2(48, 48)
 	ui_layer.add_child(energy_panel)
 	# mazo de robo: esquina inferior izquierda
-	draw_btn = _pile_btn("deck", 88, "[b][color=#f0cf7a]Mazo de robo[/color][/b]\nClic para verlo (en orden aleatorio).")
+	draw_btn = _pile_btn("deck", 88, tr("[b][color=#f0cf7a]Mazo de robo[/color][/b]\nClic para verlo (en orden aleatorio)."))
 	draw_btn.position = Vector2(14, 618)
 	draw_btn.pressed.connect(func():
 		var arr: Array = C.draw.duplicate()
 		arr.sort_custom(func(a, b): return a.id < b.id)
-		Dlg.view_cards("Mazo de robo (en orden aleatorio)", arr, C))
+		Dlg.view_cards(tr("Mazo de robo (en orden aleatorio)"), arr, C))
 	ui_layer.add_child(draw_btn)
 	# descarte: esquina inferior derecha (aquí vuelan las cartas jugadas)
-	discard_btn = _pile_btn("discard", 88, "[b][color=#f0cf7a]Descarte[/color][/b]\nLas cartas que juegas vuelan aquí. Clic para verlas.")
+	discard_btn = _pile_btn("discard", 88, tr("[b][color=#f0cf7a]Descarte[/color][/b]\nLas cartas que juegas vuelan aquí. Clic para verlas."))
 	discard_btn.position = Vector2(1178, 618)
-	discard_btn.pressed.connect(func(): Dlg.view_cards("Pila de descarte", C.discard, C))
+	discard_btn.pressed.connect(func(): Dlg.view_cards(tr("Pila de descarte"), C.discard, C))
 	ui_layer.add_child(discard_btn)
-	exhaust_btn = _pile_btn("exhaust", 60, "[b][color=#f0cf7a]Agotadas[/color][/b]\nSalen del combate. Clic para verlas.")
+	exhaust_btn = _pile_btn("exhaust", 60, tr("[b][color=#f0cf7a]Agotadas[/color][/b]\nSalen del combate. Clic para verlas."))
 	exhaust_btn.position = Vector2(1206, 548)
-	exhaust_btn.pressed.connect(func(): Dlg.view_cards("Cartas agotadas", C.exhaust, C))
+	exhaust_btn.pressed.connect(func(): Dlg.view_cards(tr("Cartas agotadas"), C.exhaust, C))
 	ui_layer.add_child(exhaust_btn)
 	end_btn = Button.new()
-	end_btn.text = "Terminar turno (Y)"
+	end_btn.text = tr("Terminar turno (Y)")
 	end_btn.position = Vector2(1050, 480)
 	end_btn.custom_minimum_size = Vector2(220, 54)
 	end_btn.size = Vector2(220, 54)
@@ -455,12 +455,12 @@ func _build_hud() -> void:
 		_play_sfx("click")
 		_end_turn())
 	ui_layer.add_child(end_btn)
-	undo_btn = UIK.button("↶ Deshacer (Z)", "small")
+	undo_btn = UIK.button(tr("↶ Deshacer (Z)"), "small")
 	undo_btn.position = Vector2(1090, 441)
 	undo_btn.focus_mode = Control.FOCUS_NONE
 	undo_btn.visible = false
 	undo_btn.pressed.connect(undo)
-	UIK.tip(undo_btn, "[b][color=#f0cf7a]Deshacer[/color][/b]\nModo fácil: devuelve la última carta jugada a tu mano, como si no la hubieras jugado.\nNo se puede si murió algún enemigo.")
+	UIK.tip(undo_btn, tr("[b][color=#f0cf7a]Deshacer[/color][/b]\nModo fácil: devuelve la última carta jugada a tu mano, como si no la hubieras jugado.\nNo se puede si murió algún enemigo."))
 	ui_layer.add_child(undo_btn)
 	tipbar = UIK.label("", 18, Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_CENTER)
 	tipbar.position = Vector2(240, 62)
@@ -816,11 +816,11 @@ func _fx(type: String, d: Dictionary) -> void:
 	match type:
 		"bossPhase":   # el jefe entra en fase 2: banda grande + sacudida corta (sin ella en «reducir movimiento»)
 			var bv := _enemy_view(d.e)
-			var nm: String = str(d.e.get("name", "El jefe"))
+			var nm: String = str(d.e.get("name", tr("El jefe")))
 			var msg: String = str(d.get("msg", ""))
 			_play_sfx("danger")
 			_play_sfx("bigHit", 0.6)
-			_banner("%s · ¡Fase 2!" % nm, true, msg, 1.2)
+			_banner(tr("%s · ¡Fase 2!") % nm, true, msg, 1.2)
 			_screen_shake(12.0, 0.3)
 			if bv != null:
 				bv.flash_hit(0.0, Color(2.4, 0.9, 0.9))
@@ -848,7 +848,7 @@ func _fx(type: String, d: Dictionary) -> void:
 					_screen_shake(6.0 + minf(d.amt, 40) * 0.15, 0.3)
 					_hit_stop(0.07)
 			elif d.blocked:
-				_popup(ev.body_center(), "Bloqueado", "blk")
+				_popup(ev.body_center(), tr("Bloqueado"), "blk")
 				_ring(ev.body_center(), Color("#8ccbff"), 24.0, 96.0, 0.32, 5.0)
 				_play_sfx("blocked")
 		"playerHit":
@@ -869,7 +869,7 @@ func _fx(type: String, d: Dictionary) -> void:
 				if big:
 					_hit_stop(0.065)
 			elif d.blocked:
-				_popup(_player_center(), "Bloqueado", "blk")
+				_popup(_player_center(), tr("Bloqueado"), "blk")
 				_ring(_player_center(), Color("#8ccbff"), 30.0, 120.0, 0.34, 6.0)
 				_play_sfx("blocked")
 			if d.get("ostyAbs", 0):
@@ -895,7 +895,7 @@ func _fx(type: String, d: Dictionary) -> void:
 		"ostyHeal":
 			_popup(osty_box.global_position + Vector2(45, 40), "+%d" % d.n, "heal")
 		"maxhp":
-			_popup(_player_center(), "+%d PV máx." % d.n, "heal")
+			_popup(_player_center(), tr("+%d PV máx.") % d.n, "heal")
 		"status":
 			if not DB.st.has(d.k):
 				UIK.prof_add("CS._fx", _pt)
@@ -921,7 +921,7 @@ func _fx(type: String, d: Dictionary) -> void:
 		"enemySpawn":
 			_play_sfx("buff")
 		"reshuffle":
-			Main.I.toast("Se baraja tu descarte…")
+			Main.I.toast(tr("Se baraja tu descarte…"))
 		"ostyAttack":
 			_play_sfx("hit")
 		"orbChannel":
@@ -939,16 +939,16 @@ func _fx(type: String, d: Dictionary) -> void:
 		"orbTick":
 			_update_orbs()
 		"replay":
-			_popup(_player_center() + Vector2(0, -50), "REPETIR ×2", "txt")
+			_popup(_player_center() + Vector2(0, -50), tr("REPETIR ×2"), "txt")
 			_play_sfx("buff")
 		"ostyDown":
-			Main.I.toast("Osty está caído: volverá solo al inicio de tu próximo turno.")
+			Main.I.toast(tr("Osty está caído: volverá solo al inicio de tu próximo turno."))
 			_play_sfx("error")
 		"ostyRevive":
-			_popup(osty_box.global_position + Vector2(45, 40), "Osty regresa", "heal")
+			_popup(osty_box.global_position + Vector2(45, 40), tr("Osty regresa"), "heal")
 			_play_sfx("heal")
 		"handFull":
-			Main.I.toast("Tu mano está llena.")
+			Main.I.toast(tr("Tu mano está llena."))
 	# las cartas (los números escritos en su texto) se repintan solo cuando algo cambia lo que muestran
 	CardView.card_refresh_epoch += 1
 	UIK.prof_add("CS._fx", _pt)
@@ -1114,7 +1114,7 @@ func _update_incoming() -> void:
 		incoming_lbl.text = ""
 		_set_lethal(false)
 		return
-	var res: String = "[color=#8bf0a4]todo bloqueado[/color]" if inc.hp <= 0 else "[color=#ff7b85]−%d PV[/color]" % inc.hp
+	var res: String = tr("[color=#8bf0a4]todo bloqueado[/color]") if inc.hp <= 0 else tr("[color=#ff7b85]−%d PV[/color]") % inc.hp
 	incoming_lbl.text = "[center]%s %d  ➜  %s[/center]" % [Icons.bb("intent", "attack", 22), inc.total, res]
 	_set_lethal(inc.hp >= G.hp and G.hp > 0)
 
@@ -1130,7 +1130,7 @@ func _set_lethal(on: bool) -> void:
 	if on:
 		var row: Control = lethal_box.get_meta("lbl")
 		var pluma: bool = Eng.has_relic(G, "pluma") and not G.get("plumaUsed", false)
-		(row.get_child(1) as Label).text = "GOLPE MORTAL · Pluma" if pluma else "MUERTE SEGURA"
+		(row.get_child(1) as Label).text = tr("GOLPE MORTAL · Pluma") if pluma else tr("MUERTE SEGURA")
 		lethal_box.reset_size()
 		lethal_box.position = Vector2((340.0 - lethal_box.size.x) / 2.0, 292)
 	vignette.visible = on or (float(G.hp) / G.maxHp <= 0.3 and G.hp > 0)
@@ -1140,11 +1140,14 @@ func _lethal_tip() -> String:
 	if C.is_empty():
 		return ""
 	var inc := Eng.incoming(C)
-	var osty := (" y Osty (%d)" % inc.osty) if inc.osty > 0 else ""   # antes: el % podía comerse el ternario
-	var t := "[b][color=#ff8a94]Muerte segura[/color][/b]\nLos enemigos atacarán por [b]%d[/b]; tu Bloqueo (%d)%s no basta y perderías [b]%d PV[/b] de los [b]%d[/b] que te quedan." % [inc.total, C.pl.block, osty, inc.hp, G.hp]
+	var t: String
+	if inc.osty > 0:   # frase entera en cada caso (traducción): con o sin Osty absorbiendo
+		t = tr("[b][color=#ff8a94]Muerte segura[/color][/b]\nLos enemigos atacarán por [b]%d[/b]; tu Bloqueo (%d) y Osty (%d) no bastan y perderías [b]%d PV[/b] de los [b]%d[/b] que te quedan.") % [inc.total, C.pl.block, inc.osty, inc.hp, G.hp]
+	else:
+		t = tr("[b][color=#ff8a94]Muerte segura[/color][/b]\nLos enemigos atacarán por [b]%d[/b]; tu Bloqueo (%d) no basta y perderías [b]%d PV[/b] de los [b]%d[/b] que te quedan.") % [inc.total, C.pl.block, inc.hp, G.hp]
 	if Eng.has_relic(G, "pluma") and not G.get("plumaUsed", false):
-		t += "\n[color=#f0cf7a]La Pluma de Fénix te levantaría una vez con el 30 % de tus PV.[/color]"
-	t += "\nBloquea, cúrate, debilita o remata al atacante antes de terminar el turno."
+		t += "\n" + tr("[color=#f0cf7a]Tu %s te levantaría una vez con el 30 %% de tus PV.[/color]") % str(DB.relics.get("pluma", {}).get("n", ""))
+	t += "\n" + tr("Bloquea, cúrate, debilita o remata al atacante antes de terminar el turno.")
 	return t
 
 
@@ -1152,12 +1155,12 @@ func _incoming_tip() -> String:
 	if C.is_empty():
 		return ""
 	var inc := Eng.incoming(C)
-	var t: String = "[b][color=#f0cf7a]Daño entrante[/color][/b]\nSi terminas el turno ahora, los enemigos atacarán por [b]%d[/b] en total." % inc.total
+	var t: String = tr("[b][color=#f0cf7a]Daño entrante[/color][/b]\nSi terminas el turno ahora, los enemigos atacarán por [b]%d[/b] en total.") % inc.total
 	if C.pl.block > 0:
-		t += "\nTu Bloqueo absorbe hasta [b]%d[/b]." % C.pl.block
+		t += "\n" + tr("Tu Bloqueo absorbe hasta [b]%d[/b].") % C.pl.block
 	if inc.osty > 0:
-		t += "\nOsty absorbe [b]%d[/b]." % inc.osty
-	t += "\nPerderías [b]%d PV[/b]." % inc.hp
+		t += "\n" + tr("Osty absorbe [b]%d[/b].") % inc.osty
+	t += "\n" + tr("Perderías [b]%d PV[/b].") % inc.hp
 	return t
 
 
@@ -1166,7 +1169,7 @@ func _update_osty() -> void:
 		return
 	var o: Dictionary = C.osty
 	osty_hp.set_values(o.hp, o.max)
-	var pow_txt: String = ("Poder %d" % o.pow) if o.hp > 0 else "Caído · vuelve en tu turno"
+	var pow_txt: String = (tr("Poder %d") % o.pow) if o.hp > 0 else tr("Caído · vuelve en tu turno")
 	if osty_pow.text != pow_txt:
 		osty_pow.text = pow_txt
 		UIK.fit_label(osty_pow, 11)
@@ -1317,7 +1320,7 @@ func _update_hud() -> void:
 	_set_count(discard_btn, C.discard.size())
 	_set_count(exhaust_btn, C.exhaust.size())
 	exhaust_btn.visible = C.exhaust.size() > 0
-	end_btn.text = ("Turno enemigo…" if C.phase == "enemy" and C.over == "" else "Terminar turno  %d" % C.turn)
+	end_btn.text = (tr("Turno enemigo…") if C.phase == "enemy" and C.over == "" else tr("Terminar turno  %d") % C.turn)
 	var any_playable := false
 	for c in C.hand:
 		if Eng.can_play(C, c).ok:
@@ -1346,11 +1349,11 @@ func _update_tip() -> void:
 	if C.is_empty() or C.over != "" or busy:
 		t = ""
 	elif pending != null:
-		t = "Elige enemigo: Stick / D-Pad y A / Enter (B / Esc cancela)" if pending.kind != "potion" else "Elige enemigo para la poción (B / Esc cancela)"
+		t = tr("Elige enemigo: Stick / D-Pad y A / Enter (B / Esc cancela)") if pending.kind != "potion" else tr("Elige enemigo para la poción (B / Esc cancela)")
 	elif sel_uid >= 0:
-		t = "Pulsa A (o Enter) para jugar · Y: Terminar turno · LB/RB: Cartas" if Meta.settings.confirm else "Y: Terminar turno · LB/RB: Cartas"
+		t = tr("Pulsa A (o Enter) para jugar · Y: Terminar turno · LB/RB: Cartas") if Meta.settings.confirm else tr("Y: Terminar turno · LB/RB: Cartas")
 	else:
-		t = "Elige carta con Stick / D-Pad / LB / RB · A: Seleccionar · Y: Terminar turno · R3: Inspeccionar"
+		t = tr("Elige carta con Stick / D-Pad / LB / RB · A: Seleccionar · Y: Terminar turno · R3: Inspeccionar")
 	tipbar.text = t
 	tipbar.visible = t != ""
 
@@ -1755,7 +1758,7 @@ func _on_enemy_click(v: EnemyView) -> void:
 
 func _on_potion(slot: int) -> void:
 	if Main.I.current != "combat" or C.is_empty() or busy or C.over != "":
-		Main.I.toast("Solo puedes usar pociones en combate.")
+		Main.I.toast(tr("Solo puedes usar pociones en combate."))
 		return
 	var id = G.potions[slot]
 	if id == null:
@@ -1814,7 +1817,7 @@ func cycle_target(dir: int) -> void:
 	t_idx = (t_idx + dir + lv.size() * 4) % lv.size()
 	_hi_target()
 	_play_sfx("select")
-	Main.I.toast("Objetivo: " + lv[t_idx].name)
+	Main.I.toast(tr("Objetivo: %s") % lv[t_idx].name)
 
 
 func confirm_action() -> void:
@@ -1855,7 +1858,7 @@ func use_potion_shortcut() -> void:
 		if G.potions[i] != null:
 			_on_potion(i)
 			return
-	Main.I.toast("No tienes pociones disponibles.")
+	Main.I.toast(tr("No tienes pociones disponibles."))
 
 
 func handle_gamepad_button(btn: int) -> bool:
@@ -1904,7 +1907,7 @@ func undo() -> void:
 		return
 	if not Eng.can_restore(C, _undo):
 		_undo = {}
-		Main.I.toast("Ya no se puede deshacer esa jugada.")
+		Main.I.toast(tr("Ya no se puede deshacer esa jugada."))
 		_update_hud()
 		return
 	_cancel_sel()
@@ -1918,7 +1921,7 @@ func undo() -> void:
 	card_views.clear()
 	_play_sfx("select")
 	_render_all()
-	Main.I.toast("Jugada deshecha.")
+	Main.I.toast(tr("Jugada deshecha."))
 
 
 func _potion_key(slot: int) -> void:
@@ -2083,8 +2086,8 @@ func _play_now(inst: Dictionary, target) -> void:
 
 func _handle_prompt() -> void:
 	var p: Dictionary = C.prompt
-	var title := ("Descarta %d carta%s" if p.kind == "discard" else "Agota %d carta%s") % [p.n, "s" if p.n > 1 else ""]
-	var sel: Array = await Dlg.pick_cards({"title": title, "sub": "Las cartas agotadas salen del combate." if p.kind == "exhaust" else "Elige de tu mano.", "cards": C.hand.duplicate(), "n": p.n, "C": C})
+	var title := (tr_n("Descarta %d carta", "Descarta %d cartas", p.n) if p.kind == "discard" else tr_n("Agota %d carta", "Agota %d cartas", p.n)) % p.n
+	var sel: Array = await Dlg.pick_cards({"title": title, "sub": tr("Las cartas agotadas salen del combate.") if p.kind == "exhaust" else tr("Elige de tu mano."), "cards": C.hand.duplicate(), "n": p.n, "C": C})
 	var uids := []
 	for c in sel:
 		uids.append(c.uid)
@@ -2105,7 +2108,7 @@ func _end_turn() -> void:
 	if await _check_end():
 		return
 	_enemy_phase_look(true)
-	_banner("Turno enemigo", true, "", 0.35)
+	_banner(tr("Turno enemigo"), true, "", 0.35)
 	_play_sfx("enemyTurn")
 	await _sleep(0.8)
 	for e in C.enemies.duplicate():
@@ -2139,7 +2142,7 @@ func _end_turn() -> void:
 		return
 	busy = false
 	_render_all()
-	_banner("Tu turno", false, "Turno %d" % C.turn)
+	_banner(tr("Tu turno"), false, tr("Turno %d") % C.turn)
 	_play_sfx("turn")
 
 
@@ -2151,7 +2154,7 @@ func _check_end() -> bool:
 	_render_all()
 	if C.over == "win":
 		_play_sfx("win")
-		_banner("¡Victoria!")
+		_banner(tr("¡Victoria!"))
 		await _sleep(1.1)
 		_finish_win()
 	else:

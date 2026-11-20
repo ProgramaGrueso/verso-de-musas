@@ -41,6 +41,10 @@ ui_cancel={
 ]
 }
 
+[internationalization]
+
+locale/fallback="es"
+
 [rendering]
 
 renderer/rendering_method="mobile"

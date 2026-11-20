@@ -76,7 +76,7 @@ func _ready() -> void:
 		var skip: Button = null
 		var cards: Array = []
 		for b in fs.find_children("*", "Button", true, false):
-			if (b as Button).text.begins_with("Rechazar"):
+			if (b as Button).text == tr("Rechazar los favores"):
 				skip = b
 			elif (b as Button).text == "" and b.get_parent() is HBoxContainer:
 				cards.append(b)

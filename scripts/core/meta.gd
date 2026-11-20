@@ -12,7 +12,7 @@ const SAVE_PATH := "user://save.json"
 const SAVE_EPOCH := "godot1"
 
 var data := {"s": {}, "relics": [], "gal": [], "nmBy": {}, "seenEnding": false, "lastWinner": ""}
-var settings := {"music": 0.5, "sfx": 0.7, "confirm": true, "fast": false, "easy": false, "calm": false}
+var settings := {"music": 0.5, "sfx": 0.7, "confirm": true, "fast": false, "easy": false, "calm": false, "language": ""}
 var run = null   # partida en curso (G) o null
 var _queue: Array = []
 var _save_timer := 0.0
@@ -125,6 +125,7 @@ func _load_settings() -> void:
 	if d is Dictionary:
 		for k in d.keys():
 			settings[k] = d[k]
+	Loc.setup(settings, d is Dictionary)   # traducciones (res://translations/*.po) e idioma: settings.language, «es» o el del sistema
 
 
 func save_settings() -> void:

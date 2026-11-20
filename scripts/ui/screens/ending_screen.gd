@@ -84,11 +84,11 @@ func _ready() -> void:
 	add_child(ctrl)
 	_ctrl = ctrl
 	ctrl.resized.connect(_place_text)
-	var skip := UIK.button("Saltar", "small")
+	var skip := UIK.button(tr("Saltar"), "small")
 	skip.pressed.connect(_finish)
-	_auto_btn = UIK.button("Automático: sí", "small")
-	_auto_btn.pressed.connect(func(): _auto = not _auto; _auto_btn.text = "Automático: " + ("sí" if _auto else "no"))
-	var nxt := UIK.button("Siguiente ▶")
+	_auto_btn = UIK.button(tr("Automático: sí"), "small")
+	_auto_btn.pressed.connect(func(): _auto = not _auto; _auto_btn.text = tr("Automático: sí") if _auto else tr("Automático: no"))
+	var nxt := UIK.button(tr("Siguiente ▶"))
 	nxt.pressed.connect(_next)
 	ctrl.add_child(skip)
 	ctrl.add_child(_auto_btn)
@@ -151,7 +151,7 @@ func _show_scene(i: int) -> void:
 	_idx = i
 	_hold = 0.0
 	if i >= _scenes.size():
-		_title.text = "FIN"
+		_title.text = tr("FIN")
 		_text.text = ""
 		_typing = false
 		get_tree().create_timer(3.5).timeout.connect(_finish)

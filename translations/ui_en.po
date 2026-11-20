@@ -1,0 +1,1759 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Verso de Musas (interfaz)\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+#: scripts/ui/dlg.gd:221
+msgid "Sí"
+msgstr "Yes"
+
+#: scripts/ui/dlg.gd:223
+#: scripts/ui/dlg.gd:803
+msgid "No"
+msgstr "No"
+
+#: scripts/ui/dlg.gd:247
+msgid "Entendido"
+msgstr "Got it"
+
+#: scripts/ui/dlg.gd:297
+msgid "Aceptar"
+msgstr "OK"
+
+#: scripts/ui/dlg.gd:298
+#: scripts/ui/dlg.gd:727
+#: scripts/ui/dlg.gd:1043
+#: scripts/ui/screens/event_screen.gd:283
+msgid "Cancelar"
+msgstr "Cancel"
+
+#: scripts/ui/dlg.gd:324
+msgid "Reliquia inicial de %s"
+msgstr "%s's starting relic"
+
+#: scripts/ui/dlg.gd:324
+msgid "Reliquia inicial"
+msgstr "Starting relic"
+
+#: scripts/ui/dlg.gd:326
+msgid "De jefe · se elige al vencer a un jefe"
+msgstr "Boss · chosen after defeating a boss"
+
+#: scripts/ui/dlg.gd:328
+msgid "%s · élites, eventos y tiendas"
+msgstr "%s · elites, events and shops"
+
+#: scripts/ui/dlg.gd:330
+msgid "Exclusiva de %s"
+msgstr "Exclusive to %s"
+
+#: scripts/ui/dlg.gd:367
+#: scripts/ui/dlg.gd:388
+#: scripts/ui/dlg.gd:853
+#: scripts/ui/dlg.gd:958
+msgid "Cerrar"
+msgstr "Close"
+
+#: scripts/ui/dlg.gd:390
+msgid "No hay cartas aquí."
+msgstr "No cards here."
+
+#: scripts/ui/dlg.gd:455
+msgid "Ninguna carta con este filtro."
+msgstr "No cards match this filter."
+
+#: scripts/ui/dlg.gd:501
+msgid "Todas %d"
+msgstr "All %d"
+
+#: scripts/ui/dlg.gd:518
+msgid "Coste"
+msgstr "Cost"
+
+#: scripts/ui/dlg.gd:527
+msgid "Mejoradas %d"
+msgstr "Upgraded %d"
+
+#: scripts/ui/dlg.gd:550
+msgid "Confirmar"
+msgstr "Confirm"
+
+#: scripts/ui/dlg.gd:644
+msgid "Coste %s ➜ %s"
+msgstr "Cost %s ➜ %s"
+
+#: scripts/ui/dlg.gd:651
+msgid "Agotar"
+msgstr "Exhaust"
+
+#: scripts/ui/dlg.gd:651
+msgid "Retener"
+msgstr "Retain"
+
+#: scripts/ui/dlg.gd:651
+msgid "Innata"
+msgstr "Innate"
+
+#: scripts/ui/dlg.gd:654
+msgid "Pierde: %s"
+msgstr "Loses: %s"
+
+#: scripts/ui/dlg.gd:655
+msgid "Mejora los valores de la carta."
+msgstr "Improves the card's numbers."
+
+#: scripts/ui/dlg.gd:676
+msgid "Mejorada ➜"
+msgstr "Upgraded ➜"
+
+#: scripts/ui/dlg.gd:705
+msgid "¿Mejorar esta carta?"
+msgstr "Upgrade this card?"
+
+#: scripts/ui/dlg.gd:710
+msgid "Ahora"
+msgstr "Now"
+
+#: scripts/ui/dlg.gd:710
+msgid "Mejorada"
+msgstr "Upgraded"
+
+#: scripts/ui/dlg.gd:726
+#: scripts/ui/screens/rest_screen.gd:47
+#: scripts/ui/screens/rest_screen.gd:53
+msgid "Mejorar"
+msgstr "Upgrade"
+
+#: scripts/ui/dlg.gd:796
+#: scripts/ui/dlg.gd:1039
+#: scripts/ui/main.gd:807
+#: scripts/ui/screens/title_screen.gd:101
+msgid "Opciones"
+msgstr "Options"
+
+#: scripts/ui/dlg.gd:797
+msgid "Música"
+msgstr "Music"
+
+#: scripts/ui/dlg.gd:798
+msgid "Sonidos"
+msgstr "Sound effects"
+
+#: scripts/ui/dlg.gd:801
+msgid "Jugar carta"
+msgstr "Play cards"
+
+#: scripts/ui/dlg.gd:801
+msgid "Elegir y confirmar (más seguro)"
+msgstr "Select, then confirm (safer)"
+
+#: scripts/ui/dlg.gd:801
+msgid "Un solo clic"
+msgstr "Single click"
+
+#: scripts/ui/dlg.gd:802
+msgid "Animaciones"
+msgstr "Animations"
+
+#: scripts/ui/dlg.gd:802
+msgid "Rápidas"
+msgstr "Fast"
+
+#: scripts/ui/dlg.gd:802
+msgid "Normales"
+msgstr "Normal"
+
+#: scripts/ui/dlg.gd:803
+#: scripts/ui/dlg.gd:804
+msgid "Reducir movimiento"
+msgstr "Reduce motion"
+
+#: scripts/ui/dlg.gd:803
+msgid "Sí (sin sacudidas ni partículas)"
+msgstr "On (no shake or particles)"
+
+#: scripts/ui/dlg.gd:804
+msgid "Apaga las sacudidas de pantalla, el hitstop de los golpes, los anillos y las partículas. Los colores y los sonidos se mantienen."
+msgstr "Turns off screen shake, hit-stop on impacts, rings and particles. Colors and sounds stay the same."
+
+#: scripts/ui/dlg.gd:808
+msgid "Idioma"
+msgstr "Language"
+
+#: scripts/ui/dlg.gd:824
+#: scripts/ui/dlg.gd:838
+msgid "Tamaño del texto"
+msgstr "Text size"
+
+#: scripts/ui/dlg.gd:838
+msgid "Agranda las letras de menús, diálogos, cartas y ayudas. Se aplica a cada pantalla al abrirla."
+msgstr "Enlarges the text in menus, dialogs, cards and tooltips. Applies to each screen when it opens."
+
+#: scripts/ui/dlg.gd:840
+msgid "Controles"
+msgstr "Controls"
+
+#: scripts/ui/dlg.gd:841
+msgid "Teclado…"
+msgstr "Keyboard…"
+
+#: scripts/ui/dlg.gd:845
+msgid "Cambia las teclas de las acciones"
+msgstr "Rebind the keys for each action"
+
+#: scripts/ui/dlg.gd:849
+msgid "Reiniciar música"
+msgstr "Restart music"
+
+#: scripts/ui/dlg.gd:851
+msgid "Pantalla completa"
+msgstr "Fullscreen"
+
+#: scripts/ui/dlg.gd:908
+msgid "Controles · teclado"
+msgstr "Controls · keyboard"
+
+#: scripts/ui/dlg.gd:909
+msgid "Pulsa una acción y después la tecla nueva (Esc cancela). Si esa tecla ya era de otra acción, se intercambian. Las flechas, Enter, Espacio, Esc, 1–9, F1 y F11 son fijas; el mando no cambia."
+msgstr "Click an action, then press the new key (Esc cancels). If that key already belonged to another action, the two swap. Arrows, Enter, Space, Esc, 1–9, F1 and F11 are fixed; the gamepad doesn't change."
+
+#: scripts/ui/dlg.gd:934
+msgid "Pulsa…"
+msgstr "Press…"
+
+#: scripts/ui/dlg.gd:935
+msgid "Pulsa la tecla nueva para «%s» (Esc cancela)."
+msgstr "Press the new key for “%s” (Esc cancels)."
+
+#: scripts/ui/dlg.gd:952
+msgid "Restablecer"
+msgstr "Reset"
+
+#: scripts/ui/dlg.gd:957
+msgid "Teclas por defecto."
+msgstr "Default keys restored."
+
+#: scripts/ui/dlg.gd:1015
+#: scripts/ui/dlg.gd:1040
+#: scripts/ui/main.gd:792
+#: scripts/ui/screens/title_screen.gd:100
+msgid "Cómo jugar"
+msgstr "How to play"
+
+#: scripts/ui/dlg.gd:1015
+msgid "¡A jugar!"
+msgstr "Let's play!"
+
+#: scripts/ui/dlg.gd:1029
+#: scripts/ui/main.gd:793
+msgid "Pausa"
+msgstr "Pause"
+
+#: scripts/ui/dlg.gd:1038
+msgid "Seguir jugando"
+msgstr "Keep playing"
+
+#: scripts/ui/dlg.gd:1041
+#: scripts/ui/dlg.gd:1043
+msgid "Guardar y salir"
+msgstr "Save and quit"
+
+#: scripts/ui/dlg.gd:1042
+msgid "Tu partida está guardada en este punto del mapa."
+msgstr "Your run is saved at this point on the map."
+
+#: scripts/ui/dlg.gd:1042
+msgid "Tu partida se guarda al inicio de esta sala, y la sala se repetirá al continuar."
+msgstr "Your run is saved at the start of this room, and the room will replay when you continue."
+
+#: scripts/ui/dlg.gd:1043
+msgid "¿Guardar y salir al menú?"
+msgstr "Save and return to the menu?"
+
+#: scripts/ui/dlg.gd:1049
+msgid "Partida guardada. Puedes continuar desde el menú."
+msgstr "Run saved. You can continue from the menu."
+
+#: scripts/ui/dlg.gd:1050
+msgid "Rendirse"
+msgstr "Give up"
+
+#: scripts/ui/dlg.gd:1051
+msgid "¿Seguro que quieres rendirte?"
+msgstr "Are you sure you want to give up?"
+
+#: scripts/ui/dlg.gd:1051
+msgid "La partida terminará como una derrota."
+msgstr "The run will end as a defeat."
+
+#: scripts/ui/dlg.gd:1051
+msgid "Rendirme"
+msgstr "Give up"
+
+#: scripts/ui/dlg.gd:1051
+msgid "Seguir luchando"
+msgstr "Keep fighting"
+
+#: scripts/ui/dlg.gd:1058
+#: scripts/ui/screens/end_screen.gd:64
+msgid "Semilla: %d"
+msgstr "Seed: %d"
+
+#: scripts/ui/dlg.gd:1061
+msgid "Copiar"
+msgstr "Copy"
+
+#: scripts/ui/dlg.gd:1064
+msgid "Semilla copiada: %d"
+msgstr "Seed copied: %d"
+
+#: scripts/ui/dlg.gd:311
+msgid "Inicial"
+msgstr "Starter"
+
+#: scripts/ui/dlg.gd:311
+msgid "Común"
+msgstr "Common"
+
+#: scripts/ui/dlg.gd:311
+msgid "Poco común"
+msgstr "Uncommon"
+
+#: scripts/ui/dlg.gd:311
+msgid "Rara"
+msgstr "Rare"
+
+#: scripts/ui/dlg.gd:311
+#: scripts/ui/screens/compendium_screen.gd:9
+msgid "De jefe"
+msgstr "Boss"
+
+#: scripts/ui/dlg.gd:414
+msgid "Ataque"
+msgstr "Attack"
+
+#: scripts/ui/dlg.gd:414
+msgid "Habilidad"
+msgstr "Skill"
+
+#: scripts/ui/dlg.gd:414
+msgid "Poder"
+msgstr "Power"
+
+#: scripts/ui/dlg.gd:414
+msgid "Otras"
+msgstr "Other"
+
+#: scripts/ui/dlg.gd:968
+msgid "[b][color=#f0cf7a]Objetivo[/color][/b]\nSube la torre superando 3 zonas. Elige tu camino en el mapa, derrota enemigos y jefes, y mejora tu mazo de cartas.\n\n[b][color=#f0cf7a]Tu turno[/color][/b]\n• Tienes ⚡ energía (3 por turno). Cada carta tiene un coste en la esquina.\n• Haz clic en una carta para elegirla y otra vez para jugarla (o arrástrala hacia arriba). Si la carta ataca a un enemigo concreto, haz clic en el enemigo.\n• Encima de cada enemigo ves su intención: ⚔️ ataque (con el daño), 🛡️ defensa, ⬇️ te debilita, ⬆️ se fortalece.\n• Sobre tu barra de vida verás el daño total que llega este turno y cuántos PV perderías con tu Bloqueo actual.\n• Pulsa Terminar turno cuando acabes. El Bloqueo 🛡️ te protege del daño solo durante un turno.\n\n[b][color=#f0cf7a]Teclado[/color][/b]\n← → eligen carta · ↑ ↓ cambian de enemigo · Enter o Espacio juegan · {terminar_turno} termina el turno · Esc cancela. También 1–9 para elegir una carta.\n{pocion_1} / {pocion_2} / {pocion_3} / {pocion_4}: usar la poción del hueco 1 / 2 / 3 / 4 · {robo}: mazo de robo · {descarte}: descarte · {agotadas}: agotadas · {deshacer}: deshacer la última carta (modo fácil).\n{ver_mazo}: ver tu mazo · {ayuda} o F1: esta ayuda · F11: pantalla completa. Las teclas se cambian en Opciones ▸ Controles.\n\n[b][color=#f0cf7a]Mando (Xbox / Gamepad)[/color][/b]\nStick izquierdo / D-Pad: navegar cartas y menús · LB / RB: pasar cartas · A: jugar / confirmar · B: cancelar / volver · Y: terminar turno · X: mazo de robo · LT: poción · RT: descarte · Back / View: ver mazo · Start: menú de pausa.\nR3 (clic del stick derecho): inspeccionar estados, intenciones, reliquias y pociones (D-Pad mueve · A abre la ficha de una reliquia · B sale) · Stick derecho: desplazar listas largas.\n\n[b][color=#f0cf7a]Tus personajes[/color][/b]\n• [color=#ff8a93]Zafiro[/color]: Fuerza, Bloqueo y fuego. Sacrifica vida para golpear más fuerte.\n• [color=#8bf0a4]Lia[/color]: Veneno, Cuchillas y robar cartas. Rápida y letal.\n• [color=#caa5ff]Claudia[/color]: invoca a Osty, su mano espectral, que absorbe daño y ataca cada turno.\n• [color=#ffc46b]Aurora[/color]: Resplandor y Calor. Ciega a los enemigos y remata con cartas de Danza.\n• [color=#ffa6dc]Irene[/color]: acumula Cuerda; con ella, las cartas de Engranaje se repiten.\n• [color=#9cc9ff]Selene[/color]: canaliza orbes de agua (Ola, Bruma, Abismo, Perla) que actúan cada turno y se evocan.\n\n[b][color=#f0cf7a]Consejos[/color][/b]\n• Pasa el ratón sobre cualquier estado, reliquia o carta para ver qué hace. Haz clic en una reliquia para ver su ficha.\n• Descansa 🔥 cuando tu vida esté baja. Las tiendas 💰 permiten eliminar cartas malas.\n• Si pierdes, ¡vuelve a intentarlo! Cada partida es distinta. El modo fácil da más vida, enemigos más débiles y permite deshacer la última carta.\n• Cada partida tiene una semilla: escríbela al elegir musa para repetir los mismos mapas, o juega el Reto diario, igual para todo el mundo."
+msgstr "[b][color=#f0cf7a]Goal[/color][/b]\nClimb the tower through 3 zones. Choose your path on the map, defeat enemies and bosses, and improve your deck.\n\n[b][color=#f0cf7a]Your turn[/color][/b]\n• You have ⚡ energy (3 per turn). Each card shows its cost in the corner.\n• Click a card to select it and click again to play it (or drag it upward). If the card targets a specific enemy, click that enemy.\n• Above each enemy you see its intent: ⚔️ attack (with damage), 🛡️ defend, ⬇️ weakens you, ⬆️ powers up.\n• Above your health bar you'll see the total damage coming this turn and how much HP you'd lose with your current Block.\n• Press End turn when you're done. Block 🛡️ only protects you from damage for one turn.\n\n[b][color=#f0cf7a]Keyboard[/color][/b]\n← → pick a card · ↑ ↓ switch enemy · Enter or Space plays · {terminar_turno} ends the turn · Esc cancels. You can also use 1–9 to pick a card.\n{pocion_1} / {pocion_2} / {pocion_3} / {pocion_4}: use the potion in slot 1 / 2 / 3 / 4 · {robo}: draw pile · {descarte}: discard pile · {agotadas}: exhausted · {deshacer}: undo the last card (easy mode).\n{ver_mazo}: view your deck · {ayuda} or F1: this help · F11: fullscreen. Keys can be changed in Options ▸ Controls.\n\n[b][color=#f0cf7a]Gamepad (Xbox / controller)[/color][/b]\nLeft stick / D-Pad: browse cards and menus · LB / RB: cycle cards · A: play / confirm · B: cancel / back · Y: end turn · X: draw pile · LT: potion · RT: discard pile · Back / View: view deck · Start: pause menu.\nR3 (click the right stick): inspect statuses, intents, relics and potions (D-Pad moves · A opens a relic's details · B exits) · Right stick: scroll long lists.\n\n[b][color=#f0cf7a]Your characters[/color][/b]\n• [color=#ff8a93]Zafiro[/color]: Strength, Block and fire. Sacrifices health to hit harder.\n• [color=#8bf0a4]Lia[/color]: Poison, Blades and card draw. Fast and deadly.\n• [color=#caa5ff]Claudia[/color]: summons Osty, her spectral hand, which absorbs damage and attacks every turn.\n• [color=#ffc46b]Aurora[/color]: Radiance and Heat. Blinds enemies and finishes them with Dance cards.\n• [color=#ffa6dc]Irene[/color]: builds up Spring; with it, her Gear cards repeat.\n• [color=#9cc9ff]Selene[/color]: channels water orbs (Wave, Mist, Abyss, Pearl) that act every turn and can be evoked.\n\n[b][color=#f0cf7a]Tips[/color][/b]\n• Hover over any status, relic or card to see what it does. Click a relic to see its details.\n• Rest 🔥 when your health is low. Shops 💰 let you remove bad cards.\n• If you lose, try again! Every run is different. Easy mode gives you more health, weaker enemies and lets you undo the last card.\n• Every run has a seed: type it in when choosing a muse to replay the same maps, or play the Daily Challenge, the same for everyone."
+
+#: scripts/ui/enemy_view.gd:333
+msgid "Atacará por %d (%d veces)."
+msgstr "Will attack for %d (%d times)."
+
+#: scripts/ui/enemy_view.gd:333
+msgid "Atacará por %d."
+msgstr "Will attack for %d."
+
+#: scripts/ui/enemy_view.gd:337
+msgid "Ganará %d de Bloqueo."
+msgstr "Will gain %d Block."
+
+#: scripts/ui/enemy_view.gd:341
+msgid "Ganará %d de Fuerza."
+msgstr "Will gain %d Strength."
+
+#: scripts/ui/enemy_view.gd:341
+msgid "Ganará %d de Espinas."
+msgstr "Will gain %d Thorns."
+
+#: scripts/ui/enemy_view.gd:348
+msgid "Te aplicará: %s."
+msgstr "Will inflict: %s."
+
+#: scripts/ui/enemy_view.gd:352
+msgid "Añadirá %d %s a tu mazo."
+msgstr "Will add %d %s to your deck."
+
+#: scripts/ui/enemy_view.gd:356
+msgid "Curará."
+msgstr "Will heal."
+
+#: scripts/ui/enemy_view.gd:360
+msgid "Invocará aliados."
+msgstr "Will summon allies."
+
+#: scripts/ui/enemy_view.gd:390
+msgid "PV %d/%d"
+msgstr "HP %d/%d"
+
+#: scripts/ui/enemy_view.gd:390
+msgid "Bloqueo %d"
+msgstr "Block %d"
+
+#: scripts/ui/enemy_view.gd:392
+msgid "Intención"
+msgstr "Intent"
+
+#: scripts/ui/enemy_view.gd:403
+msgid "Mejoras"
+msgstr "Buffs"
+
+#: scripts/ui/enemy_view.gd:405
+msgid "Penalizaciones"
+msgstr "Debuffs"
+
+#: scripts/ui/enemy_view.gd:407
+msgid "Sin mejoras ni penalizaciones."
+msgstr "No buffs or debuffs."
+
+#: scripts/ui/main.gd:140
+msgid "No hay nada que inspeccionar aquí."
+msgstr "There's nothing to inspect here."
+
+#: scripts/ui/main.gd:157
+msgid "Inspeccionar: D-Pad / Stick mover · B o R3 salir"
+msgstr "Inspect: D-Pad / Stick to move · B or R3 to exit"
+
+#: scripts/ui/main.gd:427
+#: scripts/ui/main.gd:794
+msgid "Tu mazo"
+msgstr "Your deck"
+
+#: scripts/ui/main.gd:498
+msgid "La tecla %s está reservada."
+msgstr "The %s key is reserved."
+
+#: scripts/ui/main.gd:599
+msgid "El idioma se aplicará del todo desde la siguiente sala."
+msgstr "The new language will fully apply from the next room."
+
+#: scripts/ui/main.gd:648
+msgid "Bendiciones permanentes: %s."
+msgstr "Permanent blessings: %s."
+
+#: scripts/ui/main.gd:650
+msgid "Reto diario %s: %s"
+msgstr "Daily Challenge %s: %s"
+
+#: scripts/ui/main.gd:674
+msgid "Clic o A (con R3): ficha y origen."
+msgstr "Click or A (with R3): details and source."
+
+#: scripts/ui/main.gd:706
+msgid "Haz clic para usarla en combate."
+msgstr "Click to use it in combat."
+
+#: scripts/ui/main.gd:707
+#: scripts/ui/screens/combat_screen.gd:1761
+msgid "Solo puedes usar pociones en combate."
+msgstr "You can only use potions in combat."
+
+#: scripts/ui/main.gd:710
+msgid "Hueco de poción"
+msgstr "Potion slot"
+
+#: scripts/ui/main.gd:710
+msgid "Aquí se guardan las pociones."
+msgstr "Your potions are kept here."
+
+#: scripts/ui/main.gd:793
+msgid "Guardar y salir, rendirse (Esc)"
+msgstr "Save and quit, give up (Esc)"
+
+#: scripts/ui/main.gd:794
+msgid "Mira todas tus cartas."
+msgstr "See all your cards."
+
+#: scripts/ui/main.gd:807
+msgid "Volumen, idioma y controles."
+msgstr "Volume, language and controls."
+
+#: scripts/ui/main.gd:881
+msgid "¡se activa!"
+msgstr "triggers!"
+
+#: scripts/ui/main.gd:13
+msgid "Ver tu mazo"
+msgstr "View your deck"
+
+#: scripts/ui/main.gd:14
+msgid "Ayuda"
+msgstr "Help"
+
+#: scripts/ui/main.gd:15
+msgid "Terminar turno"
+msgstr "End turn"
+
+#: scripts/ui/main.gd:16
+msgid "Poción del hueco 1"
+msgstr "Potion in slot 1"
+
+#: scripts/ui/main.gd:17
+msgid "Poción del hueco 2"
+msgstr "Potion in slot 2"
+
+#: scripts/ui/main.gd:18
+msgid "Poción del hueco 3"
+msgstr "Potion in slot 3"
+
+#: scripts/ui/main.gd:19
+msgid "Poción del hueco 4"
+msgstr "Potion in slot 4"
+
+#: scripts/ui/main.gd:20
+msgid "Mazo de robo"
+msgstr "Draw pile"
+
+#: scripts/ui/main.gd:21
+msgid "Descarte"
+msgstr "Discard pile"
+
+#: scripts/ui/main.gd:22
+msgid "Agotadas"
+msgstr "Exhausted"
+
+#: scripts/ui/main.gd:23
+msgid "Deshacer la última carta"
+msgstr "Undo the last card"
+
+#: scripts/ui/unlock_banner.gd:21
+msgid "Nueva imagen en la Galería"
+msgstr "New image in the Gallery"
+
+#: scripts/ui/unlock_banner.gd:25
+msgid "Logro desbloqueado"
+msgstr "Achievement unlocked"
+
+#: scripts/ui/unlock_banner.gd:35
+msgid "Nuevo contenido · desde la próxima partida"
+msgstr "New content · from your next run"
+
+#: scripts/ui/screens/achievements_screen.gd:12
+msgid "Logros y Maestría"
+msgstr "Achievements and Mastery"
+
+#: scripts/ui/screens/achievements_screen.gd:13
+msgid "%d de %d logros · %d de %d desbloqueos de contenido"
+msgstr "%d of %d achievements · %d of %d content unlocks"
+
+#: scripts/ui/screens/achievements_screen.gd:15
+#: scripts/ui/screens/gallery_screen.gd:42
+msgid "Logros"
+msgstr "Achievements"
+
+#: scripts/ui/screens/achievements_screen.gd:15
+msgid "Maestría"
+msgstr "Mastery"
+
+#: scripts/ui/screens/achievements_screen.gd:15
+msgid "Desbloqueos"
+msgstr "Unlocks"
+
+#: scripts/ui/screens/achievements_screen.gd:22
+#: scripts/ui/screens/compendium_screen.gd:22
+#: scripts/ui/screens/daily_screen.gd:66
+#: scripts/ui/screens/gallery_screen.gd:46
+msgid "← Volver"
+msgstr "← Back"
+
+#: scripts/ui/screens/achievements_screen.gd:102
+msgid "Conseguido el {d}/{m}/{y}"
+msgstr "Earned on {m}/{d}/{y}"
+
+#: scripts/ui/screens/achievements_screen.gd:102
+msgid "Conseguido"
+msgstr "Earned"
+
+#: scripts/ui/screens/achievements_screen.gd:127
+msgid "Cada victoria suma puntos de Maestría a su musa: 1 por ganar, +1 en Pesadilla 4 o más y +1 en Pesadilla 8 o más (el modo fácil no suma).\nRangos: %s"
+msgstr "Every victory adds Mastery points to that muse: 1 for winning, +1 on Nightmare 4 or higher and +1 on Nightmare 8 or higher (easy mode doesn't count).\nRanks: %s"
+
+#: scripts/ui/screens/achievements_screen.gd:184
+msgid "Sin rango todavía"
+msgstr "No rank yet"
+
+#: scripts/ui/screens/achievements_screen.gd:194
+#: scripts/ui/screens/achievements_screen.gd:199
+msgid "%d punto"
+msgid_plural "%d puntos"
+msgstr[0] "%d point"
+msgstr[1] "%d points"
+
+#: scripts/ui/screens/achievements_screen.gd:199
+msgid "%d victoria"
+msgid_plural "%d victorias"
+msgstr[0] "%d victory"
+msgstr[1] "%d victories"
+
+#: scripts/ui/screens/achievements_screen.gd:201
+msgid "faltan %d para %s"
+msgstr "%d more for %s"
+
+#: scripts/ui/screens/achievements_screen.gd:203
+msgid "rango máximo"
+msgstr "top rank"
+
+#: scripts/ui/screens/achievements_screen.gd:217
+msgid "Las cartas y reliquias nuevas entran en el botín, las tiendas y los eventos al alcanzar cada hito (desde la partida siguiente). El reto diario siempre usa todo el contenido."
+msgstr "New cards and relics join the loot, shops and events as you reach each milestone (from your next run). The Daily Challenge always uses all content."
+
+#: scripts/ui/screens/achievements_screen.gd:219
+msgid "Contenido ampliado desactivado: no hay nada bloqueado."
+msgstr "Extended content is off: nothing is locked."
+
+#: scripts/ui/screens/achievements_screen.gd:263
+msgid "Disponible"
+msgstr "Available"
+
+#: scripts/ui/screens/combat_screen.gd:193
+msgid "¡Élite!"
+msgstr "Elite!"
+
+#: scripts/ui/screens/combat_screen.gd:193
+#: scripts/ui/screens/combat_screen.gd:2145
+msgid "Tu turno"
+msgstr "Your turn"
+
+#: scripts/ui/screens/combat_screen.gd:343
+#: scripts/ui/screens/combat_screen.gd:1133
+msgid "MUERTE SEGURA"
+msgstr "CERTAIN DEATH"
+
+#: scripts/ui/screens/combat_screen.gd:394
+msgid "[b][color=#f0cf7a]Osty[/color][/b]\n%s\nPV %d/%d · Poder %d"
+msgstr "[b][color=#f0cf7a]Osty[/color][/b]\n%s\nHP %d/%d · Power %d"
+
+#: scripts/ui/screens/combat_screen.gd:419
+msgid "[b][color=#f0cf7a]Mazo de robo[/color][/b]\nClic para verlo (en orden aleatorio)."
+msgstr "[b][color=#f0cf7a]Draw pile[/color][/b]\nClick to view it (in random order)."
+
+#: scripts/ui/screens/combat_screen.gd:424
+msgid "Mazo de robo (en orden aleatorio)"
+msgstr "Draw pile (in random order)"
+
+#: scripts/ui/screens/combat_screen.gd:427
+msgid "[b][color=#f0cf7a]Descarte[/color][/b]\nLas cartas que juegas vuelan aquí. Clic para verlas."
+msgstr "[b][color=#f0cf7a]Discard pile[/color][/b]\nThe cards you play fly here. Click to view them."
+
+#: scripts/ui/screens/combat_screen.gd:429
+msgid "Pila de descarte"
+msgstr "Discard pile"
+
+#: scripts/ui/screens/combat_screen.gd:431
+msgid "[b][color=#f0cf7a]Agotadas[/color][/b]\nSalen del combate. Clic para verlas."
+msgstr "[b][color=#f0cf7a]Exhausted[/color][/b]\nRemoved for the rest of combat. Click to view them."
+
+#: scripts/ui/screens/combat_screen.gd:433
+msgid "Cartas agotadas"
+msgstr "Exhausted cards"
+
+#: scripts/ui/screens/combat_screen.gd:436
+msgid "Terminar turno (Y)"
+msgstr "End turn (Y)"
+
+#: scripts/ui/screens/combat_screen.gd:458
+msgid "↶ Deshacer (Z)"
+msgstr "↶ Undo (Z)"
+
+#: scripts/ui/screens/combat_screen.gd:463
+msgid "[b][color=#f0cf7a]Deshacer[/color][/b]\nModo fácil: devuelve la última carta jugada a tu mano, como si no la hubieras jugado.\nNo se puede si murió algún enemigo."
+msgstr "[b][color=#f0cf7a]Undo[/color][/b]\nEasy mode: returns the last card you played to your hand, as if you'd never played it.\nNot possible if an enemy died."
+
+#: scripts/ui/screens/combat_screen.gd:819
+msgid "El jefe"
+msgstr "The boss"
+
+#: scripts/ui/screens/combat_screen.gd:823
+msgid "%s · ¡Fase 2!"
+msgstr "%s · Phase 2!"
+
+#: scripts/ui/screens/combat_screen.gd:851
+#: scripts/ui/screens/combat_screen.gd:872
+msgid "Bloqueado"
+msgstr "Blocked"
+
+#: scripts/ui/screens/combat_screen.gd:898
+msgid "+%d PV máx."
+msgstr "+%d Max HP"
+
+#: scripts/ui/screens/combat_screen.gd:924
+msgid "Se baraja tu descarte…"
+msgstr "Shuffling your discard pile…"
+
+#: scripts/ui/screens/combat_screen.gd:942
+msgid "REPETIR ×2"
+msgstr "REPEAT ×2"
+
+#: scripts/ui/screens/combat_screen.gd:945
+msgid "Osty está caído: volverá solo al inicio de tu próximo turno."
+msgstr "Osty is down: it will come back on its own at the start of your next turn."
+
+#: scripts/ui/screens/combat_screen.gd:948
+msgid "Osty regresa"
+msgstr "Osty returns"
+
+#: scripts/ui/screens/combat_screen.gd:951
+msgid "Tu mano está llena."
+msgstr "Your hand is full."
+
+#: scripts/ui/screens/combat_screen.gd:1117
+msgid "[color=#8bf0a4]todo bloqueado[/color]"
+msgstr "[color=#8bf0a4]all blocked[/color]"
+
+#: scripts/ui/screens/combat_screen.gd:1117
+msgid "[color=#ff7b85]−%d PV[/color]"
+msgstr "[color=#ff7b85]−%d HP[/color]"
+
+#: scripts/ui/screens/combat_screen.gd:1133
+msgid "GOLPE MORTAL · Pluma"
+msgstr "LETHAL HIT · Feather"
+
+#: scripts/ui/screens/combat_screen.gd:1145
+msgid "[b][color=#ff8a94]Muerte segura[/color][/b]\nLos enemigos atacarán por [b]%d[/b]; tu Bloqueo (%d) y Osty (%d) no bastan y perderías [b]%d PV[/b] de los [b]%d[/b] que te quedan."
+msgstr "[b][color=#ff8a94]Certain death[/color][/b]\nEnemies will attack for [b]%d[/b]; your Block (%d) and Osty (%d) aren't enough and you'd lose [b]%d HP[/b] of the [b]%d[/b] you have left."
+
+#: scripts/ui/screens/combat_screen.gd:1147
+msgid "[b][color=#ff8a94]Muerte segura[/color][/b]\nLos enemigos atacarán por [b]%d[/b]; tu Bloqueo (%d) no basta y perderías [b]%d PV[/b] de los [b]%d[/b] que te quedan."
+msgstr "[b][color=#ff8a94]Certain death[/color][/b]\nEnemies will attack for [b]%d[/b]; your Block (%d) isn't enough and you'd lose [b]%d HP[/b] of the [b]%d[/b] you have left."
+
+#: scripts/ui/screens/combat_screen.gd:1149
+msgid "[color=#f0cf7a]Tu %s te levantaría una vez con el 30 %% de tus PV.[/color]"
+msgstr "[color=#f0cf7a]Your %s would revive you once with 30%% of your HP.[/color]"
+
+#: scripts/ui/screens/combat_screen.gd:1150
+msgid "Bloquea, cúrate, debilita o remata al atacante antes de terminar el turno."
+msgstr "Block, heal, weaken or finish off the attacker before ending your turn."
+
+#: scripts/ui/screens/combat_screen.gd:1158
+msgid "[b][color=#f0cf7a]Daño entrante[/color][/b]\nSi terminas el turno ahora, los enemigos atacarán por [b]%d[/b] en total."
+msgstr "[b][color=#f0cf7a]Incoming damage[/color][/b]\nIf you end your turn now, enemies will attack for [b]%d[/b] in total."
+
+#: scripts/ui/screens/combat_screen.gd:1160
+msgid "Tu Bloqueo absorbe hasta [b]%d[/b]."
+msgstr "Your Block absorbs up to [b]%d[/b]."
+
+#: scripts/ui/screens/combat_screen.gd:1162
+msgid "Osty absorbe [b]%d[/b]."
+msgstr "Osty absorbs [b]%d[/b]."
+
+#: scripts/ui/screens/combat_screen.gd:1163
+msgid "Perderías [b]%d PV[/b]."
+msgstr "You'd lose [b]%d HP[/b]."
+
+#: scripts/ui/screens/combat_screen.gd:1172
+msgid "Poder %d"
+msgstr "Power %d"
+
+#: scripts/ui/screens/combat_screen.gd:1172
+msgid "Caído · vuelve en tu turno"
+msgstr "Down · returns on your turn"
+
+#: scripts/ui/screens/combat_screen.gd:1323
+msgid "Turno enemigo…"
+msgstr "Enemy turn…"
+
+#: scripts/ui/screens/combat_screen.gd:1323
+msgid "Terminar turno  %d"
+msgstr "End turn  %d"
+
+#: scripts/ui/screens/combat_screen.gd:1352
+msgid "Elige enemigo: Stick / D-Pad y A / Enter (B / Esc cancela)"
+msgstr "Choose an enemy: Stick / D-Pad and A / Enter (B / Esc cancels)"
+
+#: scripts/ui/screens/combat_screen.gd:1352
+msgid "Elige enemigo para la poción (B / Esc cancela)"
+msgstr "Choose an enemy for the potion (B / Esc cancels)"
+
+#: scripts/ui/screens/combat_screen.gd:1354
+msgid "Pulsa A (o Enter) para jugar · Y: Terminar turno · LB/RB: Cartas"
+msgstr "Press A (or Enter) to play · Y: End turn · LB/RB: Cards"
+
+#: scripts/ui/screens/combat_screen.gd:1354
+msgid "Y: Terminar turno · LB/RB: Cartas"
+msgstr "Y: End turn · LB/RB: Cards"
+
+#: scripts/ui/screens/combat_screen.gd:1356
+msgid "Elige carta con Stick / D-Pad / LB / RB · A: Seleccionar · Y: Terminar turno · R3: Inspeccionar"
+msgstr "Pick a card with Stick / D-Pad / LB / RB · A: Select · Y: End turn · R3: Inspect"
+
+#: scripts/ui/screens/combat_screen.gd:1820
+msgid "Objetivo: %s"
+msgstr "Target: %s"
+
+#: scripts/ui/screens/combat_screen.gd:1861
+msgid "No tienes pociones disponibles."
+msgstr "You have no potions available."
+
+#: scripts/ui/screens/combat_screen.gd:1910
+msgid "Ya no se puede deshacer esa jugada."
+msgstr "That play can no longer be undone."
+
+#: scripts/ui/screens/combat_screen.gd:1924
+msgid "Jugada deshecha."
+msgstr "Play undone."
+
+#: scripts/ui/screens/combat_screen.gd:2089
+msgid "Descarta %d carta"
+msgid_plural "Descarta %d cartas"
+msgstr[0] "Discard %d card"
+msgstr[1] "Discard %d cards"
+
+#: scripts/ui/screens/combat_screen.gd:2089
+msgid "Agota %d carta"
+msgid_plural "Agota %d cartas"
+msgstr[0] "Exhaust %d card"
+msgstr[1] "Exhaust %d cards"
+
+#: scripts/ui/screens/combat_screen.gd:2090
+msgid "Las cartas agotadas salen del combate."
+msgstr "Exhausted cards are removed for the rest of combat."
+
+#: scripts/ui/screens/combat_screen.gd:2090
+msgid "Elige de tu mano."
+msgstr "Choose from your hand."
+
+#: scripts/ui/screens/combat_screen.gd:2111
+msgid "Turno enemigo"
+msgstr "Enemy turn"
+
+#: scripts/ui/screens/combat_screen.gd:2145
+msgid "Turno %d"
+msgstr "Turn %d"
+
+#: scripts/ui/screens/combat_screen.gd:2157
+#: scripts/ui/screens/reward_screen.gd:21
+msgid "¡Victoria!"
+msgstr "Victory!"
+
+#: scripts/ui/screens/compendium_screen.gd:20
+#: scripts/ui/screens/gallery_screen.gd:39
+msgid "Compendio"
+msgstr "Compendium"
+
+#: scripts/ui/screens/compendium_screen.gd:21
+msgid "Cartas y reliquias del Verso · %d bloqueadas por descubrir"
+msgstr "Cards and relics of the Verse · %d locked, still to discover"
+
+#: scripts/ui/screens/compendium_screen.gd:21
+msgid "Cartas y reliquias del Verso · todo desbloqueado"
+msgstr "Cards and relics of the Verse · everything unlocked"
+
+#: scripts/ui/screens/compendium_screen.gd:35
+msgid "Neutrales"
+msgstr "Neutral"
+
+#: scripts/ui/screens/compendium_screen.gd:35
+#: scripts/ui/screens/shop_screen.gd:116
+msgid "Reliquias"
+msgstr "Relics"
+
+#: scripts/ui/screens/compendium_screen.gd:95
+msgid "[b]Bloqueada[/b]\n%s\n[color=#a79fc0]Progreso: %d / %d[/color]"
+msgstr "[b]Locked[/b]\n%s\n[color=#a79fc0]Progress: %d / %d[/color]"
+
+#: scripts/ui/screens/compendium_screen.gd:152
+msgid "Bloqueada · %s"
+msgstr "Locked · %s"
+
+#: scripts/ui/screens/compendium_screen.gd:9
+msgid "Iniciales"
+msgstr "Starter"
+
+#: scripts/ui/screens/compendium_screen.gd:9
+msgid "Comunes"
+msgstr "Common"
+
+#: scripts/ui/screens/compendium_screen.gd:9
+msgid "Poco comunes"
+msgstr "Uncommon"
+
+#: scripts/ui/screens/compendium_screen.gd:9
+msgid "Raras"
+msgstr "Rare"
+
+#: scripts/ui/screens/daily_screen.gd:23
+msgid "[b][color=#f0cf7a]Reto del %s[/color][/b]\n\nMusa: [b]%s[/b], %s\nModificador: [b][color=#caa5ff]%s[/color][/b] — %s\n[font_size=18]Mismos mapas y la misma semilla para todo el mundo. Sin Pesadilla ni modo fácil.[/font_size]"
+msgstr "[b][color=#f0cf7a]Challenge for %s[/color][/b]\n\nMuse: [b]%s[/b], %s\nModifier: [b][color=#caa5ff]%s[/color][/b] — %s\n[font_size=18]Same maps and the same seed for everyone. No Nightmare or easy mode.[/font_size]"
+
+#: scripts/ui/screens/daily_screen.gd:26
+msgid "[font_size=18][color=#8bf0a4]Día pasado: cuenta en tu calendario, pero no en la racha ni en los logros.[/color][/font_size]"
+msgstr "[font_size=18][color=#8bf0a4]Past day: it counts on your calendar, but not for your streak or achievements.[/color][/font_size]"
+
+#: scripts/ui/screens/daily_screen.gd:28
+msgid "[font_size=18]Intentos: %d · %s[/font_size]"
+msgstr "[font_size=18]Attempts: %d · %s[/font_size]"
+
+#: scripts/ui/screens/daily_screen.gd:28
+msgid "¡ya lo has superado!"
+msgstr "already beaten!"
+
+#: scripts/ui/screens/daily_screen.gd:28
+msgid "mejor piso %d"
+msgstr "best floor %d"
+
+#: scripts/ui/screens/daily_screen.gd:30
+msgid "[font_size=18][color=#ff7b85]Se perderá la partida guardada.[/color][/font_size]"
+msgstr "[font_size=18][color=#ff7b85]Your saved run will be lost.[/color][/font_size]"
+
+#: scripts/ui/screens/daily_screen.gd:31
+msgid "Empezar"
+msgstr "Start"
+
+#: scripts/ui/screens/daily_screen.gd:31
+msgid "Ahora no"
+msgstr "Not now"
+
+#: scripts/ui/screens/daily_screen.gd:46
+msgid "{d} de {m} de {y}"
+msgstr "{M} {d}, {y}"
+
+#: scripts/ui/screens/daily_screen.gd:62
+#: scripts/ui/screens/history_screen.gd:48
+#: scripts/ui/screens/title_screen.gd:96
+msgid "Reto diario"
+msgstr "Daily Challenge"
+
+#: scripts/ui/screens/daily_screen.gd:63
+msgid "La misma musa, semilla y modificador para todo el mundo cada día · %d reto superado"
+msgid_plural "La misma musa, semilla y modificador para todo el mundo cada día · %d retos superados"
+msgstr[0] "The same muse, seed and modifier for everyone, every day · %d challenge beaten"
+msgstr[1] "The same muse, seed and modifier for everyone, every day · %d challenges beaten"
+
+#: scripts/ui/screens/daily_screen.gd:103
+msgid "Racha: %d día"
+msgid_plural "Racha: %d días"
+msgstr[0] "Streak: %d day"
+msgstr[1] "Streak: %d days"
+
+#: scripts/ui/screens/daily_screen.gd:104
+msgid "Mejor: %d"
+msgstr "Best: %d"
+
+#: scripts/ui/screens/daily_screen.gd:106
+msgid "Días seguidos superando el reto [b]el mismo día[/b]. Las revanchas de días pasados no cuentan."
+msgstr "Consecutive days beating the challenge [b]on the day itself[/b]. Rematches of past days don't count."
+
+#: scripts/ui/screens/daily_screen.gd:147
+msgid "L M X J V S D"
+msgstr "M T W T F S S"
+
+#: scripts/ui/screens/daily_screen.gd:165
+msgid "Superado"
+msgstr "Beaten"
+
+#: scripts/ui/screens/daily_screen.gd:165
+msgid "Superado otro día"
+msgstr "Beaten later"
+
+#: scripts/ui/screens/daily_screen.gd:165
+msgid "Intentado"
+msgstr "Attempted"
+
+#: scripts/ui/screens/daily_screen.gd:204
+msgid "HOY"
+msgstr "TODAY"
+
+#: scripts/ui/screens/daily_screen.gd:237
+msgid "Hoy · %s"
+msgstr "Today · %s"
+
+#: scripts/ui/screens/daily_screen.gd:255
+msgid "[color=#f0cf7a]Superado[/color] en %d intento"
+msgid_plural "[color=#f0cf7a]Superado[/color] en %d intentos"
+msgstr[0] "[color=#f0cf7a]Beaten[/color] in %d attempt"
+msgstr[1] "[color=#f0cf7a]Beaten[/color] in %d attempts"
+
+#: scripts/ui/screens/daily_screen.gd:256
+msgid "[color=#8bf0a4]Superado fuera de plazo[/color] · %d intento"
+msgid_plural "[color=#8bf0a4]Superado fuera de plazo[/color] · %d intentos"
+msgstr[0] "[color=#8bf0a4]Beaten after the day[/color] · %d attempt"
+msgstr[1] "[color=#8bf0a4]Beaten after the day[/color] · %d attempts"
+
+#: scripts/ui/screens/daily_screen.gd:257
+msgid "[color=#ff7b85]Sin superar[/color] · mejor piso %d en %d intento"
+msgid_plural "[color=#ff7b85]Sin superar[/color] · mejor piso %d en %d intentos"
+msgstr[0] "[color=#ff7b85]Not beaten[/color] · best floor %d in %d attempt"
+msgstr[1] "[color=#ff7b85]Not beaten[/color] · best floor %d in %d attempts"
+
+#: scripts/ui/screens/daily_screen.gd:258
+msgid "[color=#a79fc0]Aún no lo has intentado[/color]"
+msgstr "[color=#a79fc0]Not attempted yet[/color]"
+
+#: scripts/ui/screens/daily_screen.gd:260
+msgid "Semilla %d"
+msgstr "Seed %d"
+
+#: scripts/ui/screens/daily_screen.gd:267
+msgid "Jugar el reto de hoy"
+msgstr "Play today's challenge"
+
+#: scripts/ui/screens/daily_screen.gd:267
+msgid "Revancha de este día"
+msgstr "Rematch this day"
+
+#: scripts/ui/screens/daily_screen.gd:267
+msgid "Jugar este día"
+msgstr "Play this day"
+
+#: scripts/ui/screens/daily_screen.gd:271
+msgid "Copiar reto"
+msgstr "Copy challenge"
+
+#: scripts/ui/screens/daily_screen.gd:274
+msgid "Reto copiado: compártelo y comparad resultados"
+msgstr "Challenge copied: share it and compare results"
+
+#: scripts/ui/screens/daily_screen.gd:275
+msgid "Copia el día, la musa, el modificador, la semilla y tu resultado."
+msgstr "Copies the day, the muse, the modifier, the seed and your result."
+
+#: scripts/ui/screens/daily_screen.gd:287
+msgid "Los días pasados cuentan en el calendario, no en la racha ni en los logros."
+msgstr "Past days count on the calendar, but not for your streak or achievements."
+
+#: scripts/ui/screens/daily_screen.gd:6
+msgid "Enero"
+msgstr "January"
+
+#: scripts/ui/screens/daily_screen.gd:6
+msgid "Febrero"
+msgstr "February"
+
+#: scripts/ui/screens/daily_screen.gd:6
+msgid "Marzo"
+msgstr "March"
+
+#: scripts/ui/screens/daily_screen.gd:6
+msgid "Abril"
+msgstr "April"
+
+#: scripts/ui/screens/daily_screen.gd:6
+msgid "Mayo"
+msgstr "May"
+
+#: scripts/ui/screens/daily_screen.gd:6
+msgid "Junio"
+msgstr "June"
+
+#: scripts/ui/screens/daily_screen.gd:6
+msgid "Julio"
+msgstr "July"
+
+#: scripts/ui/screens/daily_screen.gd:6
+msgid "Agosto"
+msgstr "August"
+
+#: scripts/ui/screens/daily_screen.gd:6
+msgid "Septiembre"
+msgstr "September"
+
+#: scripts/ui/screens/daily_screen.gd:6
+msgid "Octubre"
+msgstr "October"
+
+#: scripts/ui/screens/daily_screen.gd:6
+msgid "Noviembre"
+msgstr "November"
+
+#: scripts/ui/screens/daily_screen.gd:6
+msgid "Diciembre"
+msgstr "December"
+
+#: scripts/ui/screens/end_screen.gd:38
+msgid "¡VICTORIA!"
+msgstr "VICTORY!"
+
+#: scripts/ui/screens/end_screen.gd:42
+msgid "¡Has superado la Pesadilla 10! Nada más puede detenerte."
+msgstr "You've conquered Nightmare 10! Nothing can stop you now."
+
+#: scripts/ui/screens/end_screen.gd:42
+msgid "[b][color=#caa5ff]Pesadilla %d desbloqueada[/color][/b]: enemigos más duros te esperan."
+msgstr "[b][color=#caa5ff]Nightmare %d unlocked[/color][/b]: tougher enemies await you."
+
+#: scripts/ui/screens/end_screen.gd:43
+msgid "%s ha conquistado la torre y derrotado a %s."
+msgstr "%s has conquered the tower and defeated %s."
+
+#: scripts/ui/screens/end_screen.gd:44
+#: scripts/ui/screens/end_screen.gd:63
+msgid "Combates ganados: %d · Enemigos derrotados: %d · Turnos: %d"
+msgstr "Fights won: %d · Enemies defeated: %d · Turns: %d"
+
+#: scripts/ui/screens/end_screen.gd:45
+msgid "Reliquias: %s · Cartas en el mazo: %d"
+msgstr "Relics: %s · Cards in deck: %d"
+
+#: scripts/ui/screens/end_screen.gd:47
+msgid "[i](Modo fácil)[/i]"
+msgstr "[i](Easy mode)[/i]"
+
+#: scripts/ui/screens/end_screen.gd:49
+#: scripts/ui/screens/history_screen.gd:226
+#: scripts/ui/screens/map_screen.gd:112
+#: scripts/ui/screens/select_screen.gd:289
+msgid "Pesadilla %d"
+msgstr "Nightmare %d"
+
+#: scripts/ui/screens/end_screen.gd:55
+msgid "Derrota"
+msgstr "Defeat"
+
+#: scripts/ui/screens/end_screen.gd:60
+msgid "%s cayó en %s ante %s (piso %d)."
+msgstr "%s fell in %s to %s (floor %d)."
+
+#: scripts/ui/screens/end_screen.gd:62
+msgid "%s cayó en %s (piso %d)."
+msgstr "%s fell in %s (floor %d)."
+
+#: scripts/ui/screens/end_screen.gd:66
+msgid "Reto diario %s (%s)"
+msgstr "Daily Challenge %s (%s)"
+
+#: scripts/ui/screens/end_screen.gd:82
+msgid "Jugar de nuevo"
+msgstr "Play again"
+
+#: scripts/ui/screens/end_screen.gd:82
+msgid "Intentarlo de nuevo"
+msgstr "Try again"
+
+#: scripts/ui/screens/end_screen.gd:86
+msgid "Galería"
+msgstr "Gallery"
+
+#: scripts/ui/screens/end_screen.gd:89
+#: scripts/ui/screens/history_screen.gd:22
+#: scripts/ui/screens/title_screen.gd:98
+msgid "Historial"
+msgstr "History"
+
+#: scripts/ui/screens/end_screen.gd:92
+msgid "Menú principal"
+msgstr "Main menu"
+
+#: scripts/ui/screens/end_screen.gd:100
+msgid "Revancha"
+msgstr "Rematch"
+
+#: scripts/ui/screens/end_screen.gd:101
+msgid "Repite la partida con la misma musa, semilla y Pesadilla (el reto diario repite su día)."
+msgstr "Replay the run with the same muse, seed and Nightmare (a Daily Challenge replays its day)."
+
+#: scripts/ui/screens/end_screen.gd:104
+msgid "Copiar resumen"
+msgstr "Copy summary"
+
+#: scripts/ui/screens/end_screen.gd:105
+msgid "Copia la musa, la semilla y el resultado para compartirlos."
+msgstr "Copies the muse, the seed and the result so you can share them."
+
+#: scripts/ui/screens/end_screen.gd:108
+msgid "Resumen copiado: ¡reta a alguien con tu semilla!"
+msgstr "Summary copied: challenge someone with your seed!"
+
+#: scripts/ui/screens/end_screen.gd:110
+#: scripts/ui/screens/title_screen.gd:97
+msgid "Logros  %d/%d"
+msgstr "Achievements  %d/%d"
+
+#: scripts/ui/screens/end_screen.gd:151
+msgid "Maestría de %s: [b][color=%s]%s[/color][/b] (%d puntos, +%d)"
+msgstr "%s's Mastery: [b][color=%s]%s[/color][/b] (%d points, +%d)"
+
+#: scripts/ui/screens/end_screen.gd:176
+msgid "[b][color=#8bf0a4]Nuevo contenido[/color][/b]\n%s"
+msgstr "[b][color=#8bf0a4]New content[/color][/b]\n%s"
+
+#: scripts/ui/screens/end_screen.gd:181
+msgid "%d logro nuevo"
+msgid_plural "%d logros nuevos"
+msgstr[0] "%d new achievement"
+msgstr[1] "%d new achievements"
+
+#: scripts/ui/screens/end_screen.gd:183
+msgid "%d desbloqueo de contenido"
+msgid_plural "%d desbloqueos de contenido"
+msgstr[0] "%d content unlock"
+msgstr[1] "%d content unlocks"
+
+#: scripts/ui/screens/end_screen.gd:184
+msgid "%s y %s"
+msgstr "%s and %s"
+
+#: scripts/ui/screens/end_screen.gd:185
+msgid "[color=#f0cf7a]%s[/color] en esta partida"
+msgstr "[color=#f0cf7a]%s[/color] this run"
+
+#: scripts/ui/screens/end_screen.gd:196
+msgid "la Reina de la Colmena"
+msgstr "the Hive Queen"
+
+#: scripts/ui/screens/ending_screen.gd:87
+#: scripts/ui/screens/event_screen.gd:298
+#: scripts/ui/screens/reward_screen.gd:84
+msgid "Saltar"
+msgstr "Skip"
+
+#: scripts/ui/screens/ending_screen.gd:89
+#: scripts/ui/screens/ending_screen.gd:90
+msgid "Automático: sí"
+msgstr "Auto: on"
+
+#: scripts/ui/screens/ending_screen.gd:90
+msgid "Automático: no"
+msgstr "Auto: off"
+
+#: scripts/ui/screens/ending_screen.gd:91
+#: scripts/ui/screens/gallery_screen.gd:184
+msgid "Siguiente ▶"
+msgstr "Next ▶"
+
+#: scripts/ui/screens/ending_screen.gd:154
+msgid "FIN"
+msgstr "THE END"
+
+#: scripts/ui/screens/event_screen.gd:76
+#: scripts/ui/screens/reward_screen.gd:90
+msgid "Continuar ➜"
+msgstr "Continue ➜"
+
+#: scripts/ui/screens/event_screen.gd:298
+#: scripts/ui/screens/reward_screen.gd:84
+msgid "Se añadirá a tu mazo."
+msgstr "It will be added to your deck."
+
+#: scripts/ui/screens/event_screen.gd:298
+#: scripts/ui/screens/reward_screen.gd:84
+msgid "Tomar carta"
+msgstr "Take card"
+
+#: scripts/ui/screens/favor_screen.gd:60
+msgid "Favor de las Musas"
+msgstr "Favor of the Muses"
+
+#: scripts/ui/screens/favor_screen.gd:104
+msgid "Rechazar los favores"
+msgstr "Decline the favors"
+
+#: scripts/ui/screens/favor_screen.gd:5
+msgid "BENDICIÓN DEL ACTO"
+msgstr "ACT BLESSING"
+
+#: scripts/ui/screens/favor_screen.gd:5
+msgid "PACTO"
+msgstr "PACT"
+
+#: scripts/ui/screens/favor_screen.gd:5
+msgid "REGALO"
+msgstr "GIFT"
+
+#: scripts/ui/screens/favor_screen.gd:11
+msgid "La Dama de las Mareas"
+msgstr "The Lady of the Tides"
+
+#: scripts/ui/screens/favor_screen.gd:11
+msgid "«Los abismos recuerdan a quien los cruza. Toma mi favor, viajera.»"
+msgstr "“The depths remember those who cross them. Take my favor, traveler.”"
+
+#: scripts/ui/screens/favor_screen.gd:12
+msgid "El Ciervo Antiguo"
+msgstr "The Ancient Stag"
+
+#: scripts/ui/screens/favor_screen.gd:12
+msgid "«El bosque da y el bosque cobra. Elige lo que estés dispuesta a pagar.»"
+msgstr "“The forest gives and the forest takes. Choose what you're willing to pay.”"
+
+#: scripts/ui/screens/favor_screen.gd:13
+msgid "La Reina Dorada"
+msgstr "The Golden Queen"
+
+#: scripts/ui/screens/favor_screen.gd:13
+msgid "«Una bendición antes del trono. No la desperdicies.»"
+msgstr "“A blessing before the throne. Don't waste it.”"
+
+#: scripts/ui/screens/favor_screen.gd:14
+msgid "El Ángel Caído"
+msgstr "The Fallen Angel"
+
+#: scripts/ui/screens/favor_screen.gd:14
+msgid "«Caí por elegir. Te ofrezco lo mismo: elige, y paga.»"
+msgstr "“I fell for choosing. I offer you the same: choose, and pay.”"
+
+#: scripts/ui/screens/favor_screen.gd:15
+msgid "El Demonio Cortés"
+msgstr "The Courteous Demon"
+
+#: scripts/ui/screens/favor_screen.gd:15
+msgid "«Un trato justo, querida. Yo pongo el poder; tú, el precio.»"
+msgstr "“A fair deal, my dear. I bring the power; you bring the price.”"
+
+#: scripts/ui/screens/favor_screen.gd:16
+msgid "El Ente de la Luna Violeta"
+msgstr "The Being of the Violet Moon"
+
+#: scripts/ui/screens/favor_screen.gd:16
+msgid "«Sueño con quienes aún no han caído. Acepta mi velo.»"
+msgstr "“I dream of those who have not yet fallen. Accept my veil.”"
+
+#: scripts/ui/screens/gallery_screen.gd:24
+msgid "Galería de la Aguja"
+msgstr "Gallery of the Spire"
+
+#: scripts/ui/screens/gallery_screen.gd:26
+msgid "La historia del mundo se revela con tus hazañas · %d/%d desbloqueadas"
+msgstr "The world's story unfolds through your deeds · %d/%d unlocked"
+
+#: scripts/ui/screens/gallery_screen.gd:31
+msgid "Ver el final"
+msgstr "Watch the ending"
+
+#: scripts/ui/screens/gallery_screen.gd:117
+msgid "Capítulo %d"
+msgstr "Chapter %d"
+
+#: scripts/ui/screens/gallery_screen.gd:176
+msgid "Capítulo %d de %d"
+msgstr "Chapter %d of %d"
+
+#: scripts/ui/screens/gallery_screen.gd:183
+msgid "◀ Anterior"
+msgstr "◀ Previous"
+
+#: scripts/ui/screens/history_screen.gd:27
+msgid "%d partidas empezadas · %d victorias · %d derrotas · %d enemigos derrotados"
+msgstr "%d runs started · %d victories · %d defeats · %d enemies defeated"
+
+#: scripts/ui/screens/history_screen.gd:44
+msgid "Por musa"
+msgstr "By muse"
+
+#: scripts/ui/screens/history_screen.gd:46
+msgid "Cartas más jugadas"
+msgstr "Most played cards"
+
+#: scripts/ui/screens/history_screen.gd:56
+msgid "Últimas partidas"
+msgstr "Recent runs"
+
+#: scripts/ui/screens/history_screen.gd:66
+msgid "Todavía no has terminado ninguna partida.\nCuando ganes o caigas, aparecerá aquí."
+msgstr "You haven't finished a run yet.\nWhen you win or fall, it will show up here."
+
+#: scripts/ui/screens/history_screen.gd:107
+msgid "Musa"
+msgstr "Muse"
+
+#: scripts/ui/screens/history_screen.gd:107
+msgid "Partidas"
+msgstr "Runs"
+
+#: scripts/ui/screens/history_screen.gd:107
+msgid "Victorias"
+msgstr "Wins"
+
+#: scripts/ui/screens/history_screen.gd:107
+msgid "Pesadilla"
+msgstr "Nightmare"
+
+#: scripts/ui/screens/history_screen.gd:107
+msgid "Mejor piso"
+msgstr "Best floor"
+
+#: scripts/ui/screens/history_screen.gd:140
+msgid "Juega algunas partidas para ver tus cartas favoritas (sin contar las iniciales)."
+msgstr "Play a few runs to see your favorite cards (starter cards excluded)."
+
+#: scripts/ui/screens/history_screen.gd:158
+msgid "Hoy (%s): [b]%s[/b] con el modificador [b][color=#caa5ff]%s[/color][/b]."
+msgstr "Today (%s): [b]%s[/b] with the [b][color=#caa5ff]%s[/color][/b] modifier."
+
+#: scripts/ui/screens/history_screen.gd:160
+msgid "Aún no lo has intentado."
+msgstr "You haven't tried it yet."
+
+#: scripts/ui/screens/history_screen.gd:162
+msgid "Intentos: %d · %s"
+msgstr "Attempts: %d · %s"
+
+#: scripts/ui/screens/history_screen.gd:162
+msgid "[color=#8bf0a4]¡Superado![/color]"
+msgstr "[color=#8bf0a4]Beaten![/color]"
+
+#: scripts/ui/screens/history_screen.gd:162
+msgid "Mejor piso: %d"
+msgstr "Best floor: %d"
+
+#: scripts/ui/screens/history_screen.gd:171
+msgid "Retos superados en los últimos 30 días: %d · racha %d (mejor %d)"
+msgstr "Challenges beaten in the last 30 days: %d · streak %d (best %d)"
+
+#: scripts/ui/screens/history_screen.gd:217
+msgid "[color=#8bf0a4][b]Victoria[/b][/color]"
+msgstr "[color=#8bf0a4][b]Victory[/b][/color]"
+
+#: scripts/ui/screens/history_screen.gd:219
+msgid "[color=#ff7b85][b]Rendición[/b][/color] en %s"
+msgstr "[color=#ff7b85][b]Gave up[/b][/color] in %s"
+
+#: scripts/ui/screens/history_screen.gd:221
+msgid "[color=#ff7b85][b]Derrota[/b][/color] en %s ante %s"
+msgstr "[color=#ff7b85][b]Defeat[/b][/color] in %s to %s"
+
+#: scripts/ui/screens/history_screen.gd:223
+msgid "[color=#ff7b85][b]Derrota[/b][/color] en %s"
+msgstr "[color=#ff7b85][b]Defeat[/b][/color] in %s"
+
+#: scripts/ui/screens/history_screen.gd:228
+msgid "fácil"
+msgstr "easy"
+
+#: scripts/ui/screens/history_screen.gd:230
+msgid "reto %s"
+msgstr "challenge %s"
+
+#: scripts/ui/screens/history_screen.gd:231
+msgid "%s · piso %d · %s%s"
+msgstr "%s · floor %d · %s%s"
+
+#: scripts/ui/screens/history_screen.gd:240
+msgid "{d}/{m}/{y} {h}:{min}"
+msgstr "{m}/{d}/{y} {h}:{min}"
+
+#: scripts/ui/screens/history_screen.gd:245
+msgid "Combates ganados: %d · Enemigos derrotados: %d · Turnos: %d · PV máx.: %d"
+msgstr "Fights won: %d · Enemies defeated: %d · Turns: %d · Max HP: %d"
+
+#: scripts/ui/screens/history_screen.gd:247
+msgid "Modificador del reto: [color=#caa5ff]%s[/color] — %s"
+msgstr "Challenge modifier: [color=#caa5ff]%s[/color] — %s"
+
+#: scripts/ui/screens/history_screen.gd:248
+msgid "Semilla: [b]%d[/b] [i](copiada al portapapeles)[/i]"
+msgstr "Seed: [b]%d[/b] [i](copied to clipboard)[/i]"
+
+#: scripts/ui/screens/history_screen.gd:254
+msgid "[b][color=#f0cf7a]Reliquias[/color][/b]\n%s"
+msgstr "[b][color=#f0cf7a]Relics[/color][/b]\n%s"
+
+#: scripts/ui/screens/history_screen.gd:254
+msgid "Ninguna"
+msgstr "None"
+
+#: scripts/ui/screens/history_screen.gd:260
+msgid "[b][color=#f0cf7a]Cartas más jugadas[/color][/b]\n%s"
+msgstr "[b][color=#f0cf7a]Most played cards[/color][/b]\n%s"
+
+#: scripts/ui/screens/history_screen.gd:273
+msgid "[b][color=#f0cf7a]Mazo (%d carta)[/color][/b]\n%s"
+msgid_plural "[b][color=#f0cf7a]Mazo (%d cartas)[/color][/b]\n%s"
+msgstr[0] "[b][color=#f0cf7a]Deck (%d card)[/color][/b]\n%s"
+msgstr[1] "[b][color=#f0cf7a]Deck (%d cards)[/color][/b]\n%s"
+
+#: scripts/ui/screens/history_screen.gd:274
+msgid "Detalle de la partida"
+msgstr "Run details"
+
+#: scripts/ui/screens/map_screen.gd:88
+msgid "Inicio del ascenso"
+msgstr "Start of the climb"
+
+#: scripts/ui/screens/map_screen.gd:117
+msgid "Arrastra o usa la rueda / stick derecho / flechas para ver el camino"
+msgstr "Drag or use the wheel / right stick / arrows to see the path"
+
+#: scripts/ui/screens/map_screen.gd:128
+msgid "Aquí"
+msgstr "Here"
+
+#: scripts/ui/screens/map_screen.gd:137
+msgid "Mando · X: centrar\nStick der.: desplazar\nR3: inspeccionar"
+msgstr "Gamepad · X: center\nRight stick: scroll\nR3: inspect"
+
+#: scripts/ui/screens/map_screen.gd:222
+msgid "PV: %d–%d"
+msgstr "HP: %d–%d"
+
+#: scripts/ui/screens/map_screen.gd:8
+msgid "Combate"
+msgstr "Fight"
+
+#: scripts/ui/screens/map_screen.gd:8
+msgid "Élite"
+msgstr "Elite"
+
+#: scripts/ui/screens/map_screen.gd:8
+msgid "Evento"
+msgstr "Event"
+
+#: scripts/ui/screens/map_screen.gd:8
+msgid "Tienda"
+msgstr "Shop"
+
+#: scripts/ui/screens/map_screen.gd:8
+#: scripts/ui/screens/rest_screen.gd:14
+msgid "Hoguera"
+msgstr "Campfire"
+
+#: scripts/ui/screens/map_screen.gd:8
+msgid "Jefe"
+msgstr "Boss"
+
+#: scripts/ui/screens/map_screen.gd:10
+msgid "Un combate normal. Premio: oro, carta y a veces una poción."
+msgstr "A regular fight. Reward: gold, a card and sometimes a potion."
+
+#: scripts/ui/screens/map_screen.gd:11
+msgid "Un enemigo poderoso. Premio: una reliquia y mejores cartas."
+msgstr "A powerful enemy. Reward: a relic and better cards."
+
+#: scripts/ui/screens/map_screen.gd:12
+msgid "Algo inesperado: puede ser bueno... o no."
+msgstr "Something unexpected: it might be good... or not."
+
+#: scripts/ui/screens/map_screen.gd:13
+msgid "Compra cartas, reliquias y pociones. También puedes eliminar cartas."
+msgstr "Buy cards, relics and potions. You can also remove cards."
+
+#: scripts/ui/screens/map_screen.gd:14
+msgid "Descansa para curarte o mejora una carta."
+msgstr "Rest to heal or upgrade a card."
+
+#: scripts/ui/screens/map_screen.gd:15
+msgid "El guardián de la zona. ¡Prepárate!"
+msgstr "The guardian of the zone. Get ready!"
+
+#: scripts/ui/screens/rest_screen.gd:17
+msgid "Una pausa junto al fuego. Elige una opción:"
+msgstr "A moment by the fire. Choose one:"
+
+#: scripts/ui/screens/rest_screen.gd:30
+msgid "PV %d ➜ %d"
+msgstr "HP %d ➜ %d"
+
+#: scripts/ui/screens/rest_screen.gd:30
+msgid "PV %d (ya al máximo)"
+msgstr "HP %d (already full)"
+
+#: scripts/ui/screens/rest_screen.gd:33
+msgid "Descansar"
+msgstr "Rest"
+
+#: scripts/ui/screens/rest_screen.gd:33
+msgid "Recuperas %d PV (%d%%)."
+msgstr "Heal %d HP (%d%%)."
+
+#: scripts/ui/screens/rest_screen.gd:38
+msgid "Recuperas %d PV."
+msgstr "You heal %d HP."
+
+#: scripts/ui/screens/rest_screen.gd:38
+msgid "Ya tenías la vida al máximo."
+msgstr "Your health was already full."
+
+#: scripts/ui/screens/rest_screen.gd:46
+msgid "[b][color=#f0cf7a]%s[/color][/b]\nEl tiempo no corre para ti: no puedes descansar."
+msgstr "[b][color=#f0cf7a]%s[/color][/b]\nTime stands still for you: you can't rest."
+
+#: scripts/ui/screens/rest_screen.gd:47
+msgid "Mejora una carta de tu mazo."
+msgstr "Upgrade a card in your deck."
+
+#: scripts/ui/screens/rest_screen.gd:53
+msgid "Elige una carta para mejorar"
+msgstr "Choose a card to upgrade"
+
+#: scripts/ui/screens/rest_screen.gd:53
+msgid "Pasa el ratón (o el foco) por una carta para ver al lado cómo queda mejorada."
+msgstr "Hover (or focus) a card to see its upgraded version beside it."
+
+#: scripts/ui/screens/rest_screen.gd:61
+msgid "¡Carta mejorada!"
+msgstr "Card upgraded!"
+
+#: scripts/ui/screens/rest_screen.gd:68
+msgid "Seguir el camino"
+msgstr "Continue on the path"
+
+#: scripts/ui/screens/reward_screen.gd:27
+msgid "%d de oro"
+msgstr "%d gold"
+
+#: scripts/ui/screens/reward_screen.gd:33
+#: scripts/ui/screens/shop_screen.gd:304
+msgid "Tienes todas las pociones llenas."
+msgstr "All your potion slots are full."
+
+#: scripts/ui/screens/reward_screen.gd:41
+msgid "Elige una reliquia de jefe\n[font_size=16][color=#a79fc0]Obtienes una de tres.[/color][/font_size]"
+msgstr "Choose a boss relic\n[font_size=16][color=#a79fc0]You get one of three.[/color][/font_size]"
+
+#: scripts/ui/screens/reward_screen.gd:44
+msgid "Reliquia de jefe"
+msgstr "Boss relic"
+
+#: scripts/ui/screens/reward_screen.gd:77
+msgid "Añadir una carta a tu mazo\n[font_size=16][color=#a79fc0]Elige 1 de 3.[/color][/font_size]"
+msgstr "Add a card to your deck\n[font_size=16][color=#a79fc0]Choose 1 of 3.[/color][/font_size]"
+
+#: scripts/ui/screens/reward_screen.gd:84
+msgid "Elige una carta"
+msgstr "Choose a card"
+
+#: scripts/ui/screens/reward_screen.gd:92
+msgid "¿Seguro que quieres continuar sin elegir una carta?"
+msgstr "Are you sure you want to continue without taking a card?"
+
+#: scripts/ui/screens/reward_screen.gd:95
+msgid "Elige una reliquia de jefe primero."
+msgstr "Choose a boss relic first."
+
+#: scripts/ui/screens/select_screen.gd:117
+msgid "Comenzar"
+msgstr "Begin"
+
+#: scripts/ui/screens/select_screen.gd:233
+msgid "%d PV"
+msgstr "%d HP"
+
+#: scripts/ui/screens/select_screen.gd:252
+msgid "Próximamente"
+msgstr "Coming soon"
+
+#: scripts/ui/screens/select_screen.gd:257
+msgid "Esta musa aún no está disponible."
+msgstr "This muse isn't available yet."
+
+#: scripts/ui/screens/select_screen.gd:289
+msgid "Pesadilla: apagada"
+msgstr "Nightmare: off"
+
+#: scripts/ui/screens/select_screen.gd:302
+msgid "Nv.%d"
+msgstr "Lv.%d"
+
+#: scripts/ui/screens/select_screen.gd:302
+msgid "(y los niveles anteriores)"
+msgstr "(and all lower levels)"
+
+#: scripts/ui/screens/select_screen.gd:302
+msgid "Nivel disponible para %s: hasta %d."
+msgstr "Levels available for %s: up to %d."
+
+#: scripts/ui/screens/select_screen.gd:308
+msgid "Termina el juego con %s para desbloquear su Pesadilla"
+msgstr "Beat the game with %s to unlock her Nightmare"
+
+#: scripts/ui/screens/select_screen.gd:323
+#: scripts/ui/screens/select_screen.gd:331
+msgid "Modo fácil"
+msgstr "Easy mode"
+
+#: scripts/ui/screens/select_screen.gd:331
+msgid "Más vida, enemigos más débiles y puedes deshacer la última carta jugada. No se combina con la Pesadilla."
+msgstr "More health, weaker enemies and you can undo the last card played. Can't be combined with Nightmare."
+
+#: scripts/ui/screens/select_screen.gd:339
+#: scripts/ui/screens/select_screen.gd:344
+msgid "Semilla"
+msgstr "Seed"
+
+#: scripts/ui/screens/select_screen.gd:339
+msgid "Escribe un número o una palabra para repetir los mismos mapas (por ejemplo, la semilla de una partida de un amigo). Déjalo vacío para una partida aleatoria."
+msgstr "Type a number or a word to replay the same maps (for example, the seed from a friend's run). Leave it empty for a random run."
+
+#: scripts/ui/screens/select_screen.gd:339
+#: scripts/ui/screens/select_screen.gd:376
+msgid "aleatoria"
+msgstr "random"
+
+#: scripts/ui/screens/select_screen.gd:344
+msgid "La misma semilla genera los mismos mapas en los tres actos."
+msgstr "The same seed generates the same maps in all three acts."
+
+#: scripts/ui/screens/select_screen.gd:379
+msgid "Semilla: %s"
+msgstr "Seed: %s"
+
+#: scripts/ui/screens/shop_screen.gd:93
+msgid "La Tienda del Mercader · tienes %d de oro"
+msgstr "The Merchant's Shop · you have %d gold"
+
+#: scripts/ui/screens/shop_screen.gd:113
+msgid "Cartas neutrales"
+msgstr "Neutral cards"
+
+#: scripts/ui/screens/shop_screen.gd:117
+msgid "Pociones"
+msgstr "Potions"
+
+#: scripts/ui/screens/shop_screen.gd:119
+msgid "Salir de la tienda ➜"
+msgstr "Leave the shop ➜"
+
+#: scripts/ui/screens/shop_screen.gd:193
+#: scripts/ui/screens/shop_screen.gd:215
+#: scripts/ui/screens/shop_screen.gd:301
+msgid "No tienes suficiente oro."
+msgstr "You don't have enough gold."
+
+#: scripts/ui/screens/shop_screen.gd:195
+#: scripts/ui/screens/shop_screen.gd:307
+msgid "¿Comprar [b][color=#f0cf7a]%s[/color][/b] por %d de oro?"
+msgstr "Buy [b][color=#f0cf7a]%s[/color][/b] for %d gold?"
+
+#: scripts/ui/screens/shop_screen.gd:209
+msgid "[b][color=#f0cf7a]Eliminar una carta[/color][/b]\nQuita una carta de tu mazo para hacerlo más fuerte."
+msgstr "[b][color=#f0cf7a]Remove a card[/color][/b]\nTake a card out of your deck to make it stronger."
+
+#: scripts/ui/screens/shop_screen.gd:217
+msgid "Elige una carta para eliminar"
+msgstr "Choose a card to remove"
+
+#: scripts/ui/screens/shop_screen.gd:217
+msgid "Eliminar"
+msgstr "Remove"
+
+#: scripts/ui/screens/shop_screen.gd:228
+msgid "Servicio"
+msgstr "Service"
+
+#: scripts/ui/screens/title_screen.gd:60
+msgid "MUSAS MÁGICAS DEL VERSO"
+msgstr "MAGICAL MUSES OF THE VERSE"
+
+#: scripts/ui/screens/title_screen.gd:83
+msgid "Continuar"
+msgstr "Continue"
+
+#: scripts/ui/screens/title_screen.gd:89
+msgid "No se pudo cargar la partida."
+msgstr "The saved run couldn't be loaded."
+
+#: scripts/ui/screens/title_screen.gd:90
+msgid "Nueva partida"
+msgstr "New run"
+
+#: scripts/ui/screens/title_screen.gd:96
+msgid "racha %d"
+msgstr "streak %d"
+
+#: scripts/ui/screens/title_screen.gd:99
+msgid "Galería  %d/%d"
+msgstr "Gallery  %d/%d"
+
+#: scripts/ui/screens/title_screen.gd:102
+msgid "Salir"
+msgstr "Quit"
+
+#: scripts/ui/screens/title_screen.gd:106
+msgid "Modo Pesadilla disponible (hasta nivel %d con %s)"
+msgstr "Nightmare mode available (up to level %d with %s)"

@@ -3,8 +3,7 @@ extends Control
 ## Reto diario con histórico: calendario mensual (musa de cada día y resultado), racha, código para
 ## compartir y revancha de días pasados (cuenta en el calendario, no en la racha ni en los logros).
 
-const MONTHS := ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-const WD := ["L", "M", "X", "J", "V", "S", "D"]
+const MONTHS := ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]   # loc
 const STATE_COL := {"win": Color("#f0cf7a"), "late": Color("#8bf0a4"), "tried": Color("#ff7b85"), "none": Color("#3a3355"), "future": Color("#241f36")}
 
 static var sel := ""        # día elegido (AAAA-MM-DD)
@@ -21,15 +20,15 @@ static func start(key: String) -> void:
 	var m: Dictionary = DB.characters[inf.char]
 	var res := Meta.daily_result(key)
 	var late := key != Daily.key_today()
-	var t: String = "[b][color=#f0cf7a]Reto del %s[/color][/b]\n\nMusa: [b]%s[/b], %s\nModificador: [b][color=#caa5ff]%s[/color][/b] — %s\n[font_size=18]Mismos mapas y la misma semilla para todo el mundo. Sin Pesadilla ni modo fácil.[/font_size]" % [
+	var t: String = Loc.t("[b][color=#f0cf7a]Reto del %s[/color][/b]\n\nMusa: [b]%s[/b], %s\nModificador: [b][color=#caa5ff]%s[/color][/b] — %s\n[font_size=18]Mismos mapas y la misma semilla para todo el mundo. Sin Pesadilla ni modo fácil.[/font_size]") % [
 		_date(key), m.name, m.role, Daily.mod_name(inf.mod), Daily.mod_desc(inf.mod)]
 	if late:
-		t += "\n[font_size=18][color=#8bf0a4]Día pasado: cuenta en tu calendario, pero no en la racha ni en los logros.[/color][/font_size]"
+		t += "\n" + Loc.t("[font_size=18][color=#8bf0a4]Día pasado: cuenta en tu calendario, pero no en la racha ni en los logros.[/color][/font_size]")
 	if not res.is_empty():
-		t += "\n[font_size=18]Intentos: %d · %s[/font_size]" % [res.get("tries", 0), "¡ya lo has superado!" if res.get("win", false) else "mejor piso %d" % res.get("floor", 0)]
+		t += "\n" + Loc.t("[font_size=18]Intentos: %d · %s[/font_size]") % [res.get("tries", 0), Loc.t("¡ya lo has superado!") if res.get("win", false) else Loc.t("mejor piso %d") % res.get("floor", 0)]
 	if Meta.has_save():
-		t += "\n[font_size=18][color=#ff7b85]Se perderá la partida guardada.[/color][/font_size]"
-	if not await Dlg.confirm(t, "Empezar", "Ahora no"):
+		t += "\n" + Loc.t("[font_size=18][color=#ff7b85]Se perderá la partida guardada.[/color][/font_size]")
+	if not await Dlg.confirm(t, Loc.t("Empezar"), Loc.t("Ahora no")):
 		return
 	var G := Daily.new_run(key)
 	Meta.run = G
@@ -40,7 +39,11 @@ static func start(key: String) -> void:
 
 static func _date(key: String) -> String:
 	var p := key.split("-")
-	return "%d de %s de %s" % [int(p[2]), MONTHS[int(p[1]) - 1].to_lower(), p[0]] if p.size() == 3 else key
+	if p.size() != 3:
+		return key
+	# {m}: mes en minúscula (es: «20 de noviembre de 2026»); {M}: con mayúscula (en: «November 20, 2026»)
+	var mo := Loc.t(MONTHS[int(p[1]) - 1])
+	return Loc.t("{d} de {m} de {y}").format({"d": int(p[2]), "m": mo.to_lower(), "M": mo, "y": p[0]})
 
 
 func _ready() -> void:
@@ -56,11 +59,11 @@ func _ready() -> void:
 	for k in d.keys():
 		if d[k] is Dictionary and d[k].get("win", false):
 			wins += 1
-	var head := Medal.chrome(self, "ev_poza_lunar", "Reto diario",
-		"La misma musa, semilla y modificador para todo el mundo cada día · %d reto%s superado%s" % [wins, "" if wins == 1 else "s", "" if wins == 1 else "s"])
+	var head := Medal.chrome(self, "ev_poza_lunar", tr("Reto diario"),
+		tr_n("La misma musa, semilla y modificador para todo el mundo cada día · %d reto superado", "La misma musa, semilla y modificador para todo el mundo cada día · %d retos superados", wins) % wins)
 	var sk := _streak_box(stk)
 	head.add_child(sk)
-	var back := UIK.button("← Volver", "small")
+	var back := UIK.button(tr("← Volver"), "small")
 	back.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	back.pressed.connect(on_escape)
 	head.add_child(back)
@@ -97,10 +100,10 @@ func _streak_box(stk: Dictionary) -> Control:
 	row.add_child(Icons.rect("ui", "burn", 30))
 	var v := VBoxContainer.new()
 	v.add_theme_constant_override("separation", -2)
-	v.add_child(UIK.label("Racha: %d día%s" % [stk.cur, "" if stk.cur == 1 else "s"], 17, Color.WHITE, "bold"))
-	v.add_child(UIK.label("Mejor: %d" % maxi(int(stk.best), int(Meta.data.s.get("dailyStreakBest", 0))), 13, UIK.DIM))
+	v.add_child(UIK.label(tr_n("Racha: %d día", "Racha: %d días", stk.cur) % stk.cur, 17, Color.WHITE, "bold"))
+	v.add_child(UIK.label(tr("Mejor: %d") % maxi(int(stk.best), int(Meta.data.s.get("dailyStreakBest", 0))), 13, UIK.DIM))
 	row.add_child(v)
-	UIK.tip(p, "Días seguidos superando el reto [b]el mismo día[/b]. Las revanchas de días pasados no cuentan.")
+	UIK.tip(p, tr("Días seguidos superando el reto [b]el mismo día[/b]. Las revanchas de días pasados no cuentan."))
 	return p
 
 
@@ -129,7 +132,7 @@ func _render_calendar() -> void:
 	nx.disabled = ym >= cur_ym
 	pv.pressed.connect(func(): ym = Daily.shift_month(ym, -1); _render())
 	nx.pressed.connect(func(): ym = Daily.shift_month(ym, 1); _render())
-	var ml := UIK.label("%s %d" % [MONTHS[ym.y - 1], ym.x], 28, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
+	var ml := UIK.label("%s %d" % [tr(MONTHS[ym.y - 1]), ym.x], 28, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
 	ml.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	nav.add_child(pv)
 	nav.add_child(ml)
@@ -141,7 +144,7 @@ func _render_calendar() -> void:
 	grid.add_theme_constant_override("h_separation", 6)
 	grid.add_theme_constant_override("v_separation", 6)
 	_cal.add_child(grid)
-	for w in WD:
+	for w in tr("L M X J V S D").split(" "):   # iniciales de lunes a domingo
 		var l := UIK.label(w, 15, UIK.DIM, "bold", HORIZONTAL_ALIGNMENT_CENTER)
 		l.custom_minimum_size = Vector2(78, 20)
 		grid.add_child(l)
@@ -159,7 +162,7 @@ func _render_calendar() -> void:
 	leg.position = Vector2(20, 560)
 	leg.add_theme_constant_override("separation", 16)
 	_cal.add_child(leg)
-	for s in [["win", "Superado"], ["late", "Superado otro día"], ["tried", "Intentado"]]:
+	for s in [["win", tr("Superado")], ["late", tr("Superado otro día")], ["tried", tr("Intentado")]]:
 		var dot := Panel.new()
 		dot.custom_minimum_size = Vector2(14, 14)
 		dot.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -198,9 +201,13 @@ func _day_cell(k: String, st: String) -> Button:
 	ic.position = Vector2(38, 30)
 	b.add_child(ic)
 	if k == today:
-		var hl := UIK.label("HOY", 11, UIK.GOLD, "bold")
-		hl.position = Vector2(46, 4)
+		var hl := UIK.label(tr("HOY"), 11, UIK.GOLD, "bold")
 		b.add_child(hl)
+		# arriba a la derecha, entre el número del día (hasta x≈28) y el borde (78 − 4): «TODAY» es más ancho que
+		# «HOY» y al 115/130 % se salía de la casilla
+		UIK.fit_title(hl, 46, 8)
+		var hw := hl.get_theme_font("font").get_string_size(hl.text, HORIZONTAL_ALIGNMENT_LEFT, -1, hl.get_theme_font_size("font_size")).x
+		hl.position = Vector2(minf(46, 74 - ceilf(hw)), 4)   # en español sigue en x=46, como antes
 	UIK.tip(b, "[b]%s[/b]\n%s · %s" % [_date(k), DB.characters[inf.char].name, Daily.mod_name(inf.mod)])
 	b.pressed.connect(func(): sel = k; _render())
 	return b
@@ -231,7 +238,7 @@ func _render_side() -> void:
 	sh.position = art.position
 	sh.size = art.size
 	card.add_child(sh)
-	var dl := UIK.label(("Hoy · " if sel == today else "") + _date(sel), 18, UIK.GOLD, "bold")
+	var dl := UIK.label((tr("Hoy · %s") % _date(sel)) if sel == today else _date(sel), 18, UIK.GOLD, "bold")
 	UIK.outlined(dl, 4)
 	dl.position = Vector2(22, 16)
 	card.add_child(dl)
@@ -249,27 +256,27 @@ func _render_side() -> void:
 	v.add_child(mod)
 	var rt: String
 	match st:
-		"win": rt = "[color=#f0cf7a]Superado[/color] en %d intento%s" % [int(res.get("tries", 1)), "" if int(res.get("tries", 1)) == 1 else "s"]
-		"late": rt = "[color=#8bf0a4]Superado fuera de plazo[/color] · %d intento%s" % [int(res.get("tries", 1)), "" if int(res.get("tries", 1)) == 1 else "s"]
-		"tried": rt = "[color=#ff7b85]Sin superar[/color] · mejor piso %d en %d intento%s" % [int(res.get("floor", 0)), int(res.get("tries", 1)), "" if int(res.get("tries", 1)) == 1 else "s"]
-		_: rt = "[color=#a79fc0]Aún no lo has intentado[/color]"
+		"win": rt = tr_n("[color=#f0cf7a]Superado[/color] en %d intento", "[color=#f0cf7a]Superado[/color] en %d intentos", int(res.get("tries", 1))) % int(res.get("tries", 1))
+		"late": rt = tr_n("[color=#8bf0a4]Superado fuera de plazo[/color] · %d intento", "[color=#8bf0a4]Superado fuera de plazo[/color] · %d intentos", int(res.get("tries", 1))) % int(res.get("tries", 1))
+		"tried": rt = tr_n("[color=#ff7b85]Sin superar[/color] · mejor piso %d en %d intento", "[color=#ff7b85]Sin superar[/color] · mejor piso %d en %d intentos", int(res.get("tries", 1))) % [int(res.get("floor", 0)), int(res.get("tries", 1))]
+		_: rt = tr("[color=#a79fc0]Aún no lo has intentado[/color]")
 	v.add_child(UIK.rich(rt, 17))
-	v.add_child(UIK.label("Semilla %d" % int(inf.seed), 14, UIK.DIM))
+	v.add_child(UIK.label(tr("Semilla %d") % int(inf.seed), 14, UIK.DIM))
 	var sp := Control.new()
 	sp.custom_minimum_size = Vector2(0, 8)
 	v.add_child(sp)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 10)
 	v.add_child(row)
-	var play_t := "Jugar el reto de hoy" if sel == today else ("Revancha de este día" if st != "none" else "Jugar este día")
+	var play_t := tr("Jugar el reto de hoy") if sel == today else (tr("Revancha de este día") if st != "none" else tr("Jugar este día"))
 	var play := UIK.button(play_t, "green", 20)
 	play.pressed.connect(func(): DailyScreen.start(sel))
 	row.add_child(play)
-	var cp := UIK.button("Copiar reto", "", 20)
+	var cp := UIK.button(tr("Copiar reto"), "", 20)
 	cp.pressed.connect(func():
 		DisplayServer.clipboard_set(Daily.share_text(sel, res))
-		Main.I.toast("Reto copiado: compártelo y comparad resultados"))
-	UIK.tip(cp, "Copia el día, la musa, el modificador, la semilla y tu resultado.")
+		Main.I.toast(tr("Reto copiado: compártelo y comparad resultados")))
+	UIK.tip(cp, tr("Copia el día, la musa, el modificador, la semilla y tu resultado."))
 	row.add_child(cp)
 	# con el texto al 130 % «Revancha de este día» + «Copiar reto» pasan de los 506 px de la columna y la ensanchan
 	# fuera de la tarjeta: ambos botones bajan de fuente a la par hasta caber (no se apilan: no hay alto de sobra)
@@ -281,7 +288,7 @@ func _render_side() -> void:
 			b.add_theme_font_size_override("font_size", fs)
 			b.set_meta("fit_base", fs)
 	if sel != today:
-		var note := UIK.label("Los días pasados cuentan en el calendario, no en la racha ni en los logros.", 13, UIK.DIM)
+		var note := UIK.label(tr("Los días pasados cuentan en el calendario, no en la racha ni en los logros."), 13, UIK.DIM)
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		note.custom_minimum_size = Vector2(500, 0)
 		v.add_child(note)

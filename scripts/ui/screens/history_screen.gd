@@ -19,16 +19,16 @@ func _ready() -> void:
 	add_child(head)
 	var hv := VBoxContainer.new()
 	hv.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	var title := UIK.label("Historial", 34, UIK.GOLD, "title")
+	var title := UIK.label(tr("Historial"), 34, UIK.GOLD, "title")
 	hv.add_child(title)
 	var s: Dictionary = Meta.data.s
 	var wins: int = s.get("wins", 0)
 	var runs: int = s.get("runs", 0)
-	var sub := UIK.label("%d partidas empezadas · %d victorias · %d derrotas · %d enemigos derrotados" % [runs, wins, s.get("deaths", 0), s.get("kills", 0)], 17, UIK.DIM)
+	var sub := UIK.label(tr("%d partidas empezadas · %d victorias · %d derrotas · %d enemigos derrotados") % [runs, wins, s.get("deaths", 0), s.get("kills", 0)], 17, UIK.DIM)
 	hv.add_child(sub)
 	head.add_child(hv)
 	fit_head(title, sub, HEAD_MAX_H)
-	_back = UIK.button("← Volver", "small")
+	_back = UIK.button(tr("← Volver"), "small")
 	_back.pressed.connect(func(): Nav.title())
 	head.add_child(_back)
 	# columna izquierda: musas, cartas favoritas y retos diarios
@@ -41,11 +41,11 @@ func _ready() -> void:
 	left.add_theme_constant_override("separation", 10)
 	left.custom_minimum_size = Vector2(580, 0)
 	left_sc.add_child(left)
-	left.add_child(_section("Por musa"))
+	left.add_child(_section(tr("Por musa")))
 	left.add_child(_muse_table())
-	left.add_child(_section("Cartas más jugadas"))
+	left.add_child(_section(tr("Cartas más jugadas")))
 	left.add_child(_top_cards())
-	left.add_child(_section("Reto diario"))
+	left.add_child(_section(tr("Reto diario")))
 	left.add_child(_daily_box())
 	# columna derecha: últimas partidas
 	var right := VBoxContainer.new()
@@ -53,7 +53,7 @@ func _ready() -> void:
 	right.size = Vector2(600, 610)
 	right.add_theme_constant_override("separation", 8)
 	add_child(right)
-	right.add_child(_section("Últimas partidas"))
+	right.add_child(_section(tr("Últimas partidas")))
 	var sc := ScrollContainer.new()
 	sc.custom_minimum_size = Vector2(600, 565)
 	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -63,7 +63,7 @@ func _ready() -> void:
 	list.custom_minimum_size = Vector2(580, 0)
 	sc.add_child(list)
 	if hist.is_empty():
-		var e := UIK.label("Todavía no has terminado ninguna partida.\nCuando ganes o caigas, aparecerá aquí.", 18, UIK.DIM)
+		var e := UIK.label(tr("Todavía no has terminado ninguna partida.\nCuando ganes o caigas, aparecerá aquí."), 18, UIK.DIM)
 		list.add_child(e)
 	for h in hist:
 		list.add_child(_run_row(h))
@@ -104,7 +104,7 @@ func _muse_table() -> Control:
 	grid.columns = 6
 	grid.add_theme_constant_override("h_separation", 18)
 	grid.add_theme_constant_override("v_separation", 6)
-	for t in ["Musa", "Partidas", "Victorias", "%", "Pesadilla", "Mejor piso"]:
+	for t in [tr("Musa"), tr("Partidas"), tr("Victorias"), "%", tr("Pesadilla"), tr("Mejor piso")]:
 		grid.add_child(UIK.label(t, 15, UIK.DIM, "bold"))
 	var s: Dictionary = Meta.data.s
 	for id in DB.playable():
@@ -137,7 +137,7 @@ func _top_cards() -> Control:
 	var ids: Array = cp.keys().filter(func(id): return DB.cards.has(id) and DB.cards[id].rarity in ["common", "uncommon", "rare"])
 	ids.sort_custom(func(a, b): return cp[a] > cp[b])
 	if ids.is_empty():
-		return UIK.label("Juega algunas partidas para ver tus cartas favoritas (sin contar las iniciales).", 16, UIK.DIM)
+		return UIK.label(tr("Juega algunas partidas para ver tus cartas favoritas (sin contar las iniciales)."), 16, UIK.DIM)
 	var grid := GridContainer.new()
 	grid.columns = 2
 	grid.add_theme_constant_override("h_separation", 30)
@@ -155,11 +155,11 @@ func _daily_box() -> Control:
 	var key := Daily.key_today()
 	var inf := Daily.info(key)
 	var res := Meta.daily_result(key)
-	var t: String = "Hoy (%s): [b]%s[/b] con el modificador [b][color=#caa5ff]%s[/color][/b]." % [key, DB.characters[inf.char].name, Daily.mod_name(inf.mod)]
+	var t: String = tr("Hoy (%s): [b]%s[/b] con el modificador [b][color=#caa5ff]%s[/color][/b].") % [key, DB.characters[inf.char].name, Daily.mod_name(inf.mod)]
 	if res.is_empty():
-		t += "\nAún no lo has intentado."
+		t += "\n" + tr("Aún no lo has intentado.")
 	else:
-		t += "\nIntentos: %d · %s" % [res.get("tries", 0), "[color=#8bf0a4]¡Superado![/color]" if res.get("win", false) else "Mejor piso: %d" % res.get("floor", 0)]
+		t += "\n" + tr("Intentos: %d · %s") % [res.get("tries", 0), tr("[color=#8bf0a4]¡Superado![/color]") if res.get("win", false) else tr("Mejor piso: %d") % res.get("floor", 0)]
 	var won_days := 0
 	var d = Meta.data.get("daily", {})
 	var since := Daily.shift(key, -29)   # el histórico guarda más de un año: aquí solo el último mes
@@ -168,7 +168,7 @@ func _daily_box() -> Control:
 			if str(k) >= since and d[k] is Dictionary and d[k].get("win", false):
 				won_days += 1
 	var stk := Meta.daily_streak()
-	t += "\nRetos superados en los últimos 30 días: %d · racha %d (mejor %d)" % [won_days, stk.cur, maxi(int(stk.best), int(Meta.data.s.get("dailyStreakBest", 0)))]
+	t += "\n" + tr("Retos superados en los últimos 30 días: %d · racha %d (mejor %d)") % [won_days, stk.cur, maxi(int(stk.best), int(Meta.data.s.get("dailyStreakBest", 0)))]
 	var r := UIK.rich(t, 16)
 	r.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	r.custom_minimum_size = Vector2(570, 0)
@@ -214,21 +214,21 @@ func _row_text(h: Dictionary) -> String:
 	var act: int = clampi(int(h.get("act", 1)), 1, 3)
 	var res: String
 	if h.get("win", false):
-		res = "[color=#8bf0a4][b]Victoria[/b][/color]"
+		res = tr("[color=#8bf0a4][b]Victoria[/b][/color]")
 	elif h.get("surrender", false):
-		res = "[color=#ff7b85][b]Rendición[/b][/color] en %s" % DB.acts[act - 1].name
+		res = tr("[color=#ff7b85][b]Rendición[/b][/color] en %s") % DB.acts[act - 1].name
+	elif str(h.get("by", "")) != "":
+		res = tr("[color=#ff7b85][b]Derrota[/b][/color] en %s ante %s") % [DB.acts[act - 1].name, h.by]
 	else:
-		res = "[color=#ff7b85][b]Derrota[/b][/color] en %s" % DB.acts[act - 1].name
-		if str(h.get("by", "")) != "":
-			res += " ante %s" % h.by
+		res = tr("[color=#ff7b85][b]Derrota[/b][/color] en %s") % DB.acts[act - 1].name
 	var tags := []
 	if int(h.get("nm", 0)) > 0:
-		tags.append("Pesadilla %d" % h.nm)
+		tags.append(tr("Pesadilla %d") % h.nm)
 	if h.get("easy", false):
-		tags.append("fácil")
+		tags.append(tr("fácil"))
 	if str(h.get("daily", "")) != "":
-		tags.append("reto %s" % h.daily)
-	var line2: String = "%s · piso %d · %s%s" % [mname, int(h.get("floor", 0)), _date(int(h.get("t", 0))), (" · " + ", ".join(tags)) if not tags.is_empty() else ""]
+		tags.append(tr("reto %s") % h.daily)
+	var line2: String = tr("%s · piso %d · %s%s") % [mname, int(h.get("floor", 0)), _date(int(h.get("t", 0))), (" · " + ", ".join(tags)) if not tags.is_empty() else ""]
 	return "%s\n[font_size=14][color=#a79fc0]%s[/color][/font_size]" % [res, line2]
 
 
@@ -237,27 +237,27 @@ static func _date(t: int) -> String:
 		return ""
 	var bias: int = int(Time.get_time_zone_from_system().get("bias", 0)) * 60
 	var d := Time.get_datetime_dict_from_unix_time(t + bias)
-	return "%02d/%02d/%04d %02d:%02d" % [d.day, d.month, d.year, d.hour, d.minute]
+	return Loc.t("{d}/{m}/{y} {h}:{min}").format({"d": "%02d" % d.day, "m": "%02d" % d.month, "y": "%04d" % d.year, "h": "%02d" % d.hour, "min": "%02d" % d.minute})
 
 
 func _show_detail(h: Dictionary) -> void:
 	var t := _row_text(h).replace("[font_size=14]", "").replace("[/font_size]", "") + "\n\n"
-	t += "Combates ganados: %d · Enemigos derrotados: %d · Turnos: %d · PV máx.: %d\n" % [int(h.get("fights", 0)), int(h.get("kills", 0)), int(h.get("turns", 0)), int(h.get("maxHp", 0))]
+	t += tr("Combates ganados: %d · Enemigos derrotados: %d · Turnos: %d · PV máx.: %d") % [int(h.get("fights", 0)), int(h.get("kills", 0)), int(h.get("turns", 0)), int(h.get("maxHp", 0))] + "\n"
 	if str(h.get("mod", "")) != "":
-		t += "Modificador del reto: [color=#caa5ff]%s[/color] — %s\n" % [Daily.mod_name(h.mod), Daily.mod_desc(h.mod)]
-	t += "Semilla: [b]%d[/b] [i](copiada al portapapeles)[/i]\n\n" % int(h.get("seed", 0))
+		t += tr("Modificador del reto: [color=#caa5ff]%s[/color] — %s") % [Daily.mod_name(h.mod), Daily.mod_desc(h.mod)] + "\n"
+	t += tr("Semilla: [b]%d[/b] [i](copiada al portapapeles)[/i]") % int(h.get("seed", 0)) + "\n\n"
 	DisplayServer.clipboard_set(str(int(h.get("seed", 0))))
 	var rel := []
 	for id in h.get("relics", []):
 		if DB.relics.has(id):
 			rel.append("%s %s" % [Icons.bb("relic", id, 22), DB.relics[id].n])
-	t += "[b][color=#f0cf7a]Reliquias[/color][/b]\n%s\n\n" % (" · ".join(rel) if not rel.is_empty() else "Ninguna")
+	t += tr("[b][color=#f0cf7a]Reliquias[/color][/b]\n%s") % (" · ".join(rel) if not rel.is_empty() else tr("Ninguna")) + "\n\n"
 	var top := []
 	for pair in h.get("top", []):
 		if DB.cards.has(pair[0]):
 			top.append("%s ×%d" % [DB.cards[pair[0]].name, pair[1]])
 	if not top.is_empty():
-		t += "[b][color=#f0cf7a]Cartas más jugadas[/color][/b]\n%s\n\n" % " · ".join(top)
+		t += tr("[b][color=#f0cf7a]Cartas más jugadas[/color][/b]\n%s") % " · ".join(top) + "\n\n"
 	# mazo agrupado
 	var counts := {}
 	for k in h.get("deck", []):
@@ -270,5 +270,5 @@ func _show_detail(h: Dictionary) -> void:
 		if not DB.cards.has(base):
 			continue
 		deck.append("%s%s%s" % [DB.cards[base].name, "+" if k.ends_with("+") else "", (" ×%d" % counts[k]) if counts[k] > 1 else ""])
-	t += "[b][color=#f0cf7a]Mazo (%d cartas)[/color][/b]\n%s" % [h.get("deck", []).size(), ", ".join(deck)]
-	await Dlg.message("Detalle de la partida", t, "Cerrar", 820)
+	t += tr_n("[b][color=#f0cf7a]Mazo (%d carta)[/color][/b]\n%s", "[b][color=#f0cf7a]Mazo (%d cartas)[/color][/b]\n%s", h.get("deck", []).size()) % [h.get("deck", []).size(), ", ".join(deck)]
+	await Dlg.message(tr("Detalle de la partida"), t, tr("Cerrar"), 820)

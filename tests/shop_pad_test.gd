@@ -95,7 +95,7 @@ func _walk(n: Node) -> Array:
 
 func leave_btn() -> Button:
 	for n in _walk(Main.I.screen):
-		if n is Button and (n as Button).text.begins_with("Salir de la tienda"):
+		if n is Button and (n as Button).text == tr("Salir de la tienda ➜"):
 			return n
 	return null
 
@@ -133,7 +133,7 @@ func sfx_mute_ms() -> int:
 
 func is_cancel_text(t: String) -> bool:
 	var s := t.to_lower()
-	return s.contains("no") or s.contains("cancel") or s.contains("atrás") or s.contains("volver")
+	return s.contains("no") or s.contains("cancel") or s.contains("atrás") or s.contains("volver") or s.contains("back")
 
 
 func _ready() -> void:

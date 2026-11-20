@@ -18,19 +18,19 @@ func _ready() -> void:
 	_card_taken = rew.cards.is_empty()
 	_boss_taken = rew.bossRelics == null
 	var col := UIK.center_col(self, 12)
-	var t := UIK.label("¡Victoria!", 46, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
+	var t := UIK.label(tr("¡Victoria!"), 46, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(t, 10)
 	col.add_child(t)
 	_list = VBoxContainer.new()
 	_list.add_theme_constant_override("separation", 10)
 	col.add_child(_list)
-	_item("ui:gold", "%d de oro" % rew.gold, func(): Eng.gain_gold(G, rew.gold); Sfx.play("coin"))
+	_item("ui:gold", tr("%d de oro") % rew.gold, func(): Eng.gain_gold(G, rew.gold); Sfx.play("coin"))
 	if rew.potion != null:
 		var p: Dictionary = DB.potions[rew.potion]
 		_item("potion:" + rew.potion, "%s\n[font_size=16][color=#a79fc0]%s[/color][/font_size]" % [p.n, p.d], func():
 			var i: int = G.potions.find(null)
 			if i < 0:
-				Main.I.toast("Tienes todas las pociones llenas.")
+				Main.I.toast(tr("Tienes todas las pociones llenas."))
 				return false
 			G.potions[i] = rew.potion
 			Sfx.play("potion"))
@@ -38,10 +38,10 @@ func _ready() -> void:
 		var r: Dictionary = DB.relics[rew.relic]
 		_item("relic:" + rew.relic, "%s\n[font_size=16][color=#a79fc0]%s[/color][/font_size]" % [r.n, r.d], func(): Eng.add_relic(G, rew.relic); Sfx.play("buff"))
 	if rew.bossRelics != null:
-		_item("node:boss", "Elige una reliquia de jefe\n[font_size=16][color=#a79fc0]Obtienes una de tres.[/color][/font_size]", func():
+		_item("node:boss", tr("Elige una reliquia de jefe\n[font_size=16][color=#a79fc0]Obtienes una de tres.[/color][/font_size]"), func():
 			var o := Dlg._overlay()
 			var v := Dlg._center_col(o)
-			v.add_child(Dlg._title("Reliquia de jefe"))
+			v.add_child(Dlg._title(tr("Reliquia de jefe")))
 			var row := Dlg._row(14)
 			var first_b: Button = null
 			for id in rew.bossRelics:
@@ -74,25 +74,25 @@ func _ready() -> void:
 				return true
 			return false)
 	if not rew.cards.is_empty():
-		_item("ui:deck", "Añadir una carta a tu mazo\n[font_size=16][color=#a79fc0]Elige 1 de 3.[/color][/font_size]", func():
+		_item("ui:deck", tr("Añadir una carta a tu mazo\n[font_size=16][color=#a79fc0]Elige 1 de 3.[/color][/font_size]"), func():
 			var cards := []
 			for id in rew.cards:
 				var shown := Eng.make_card(G, id)
 				if Eng.has_relic(G, "huevo") and Eng.can_upgrade(shown):
 					shown.up = true
 				cards.append(shown)
-			var pick: Array = await Dlg.pick_cards({"title": "Elige una carta", "sub": "Se añadirá a tu mazo.", "cards": cards, "n": 1, "cancel": "Saltar", "big": true, "confirmLabel": "Tomar carta"})
+			var pick: Array = await Dlg.pick_cards({"title": tr("Elige una carta"), "sub": tr("Se añadirá a tu mazo."), "cards": cards, "n": 1, "cancel": tr("Saltar"), "big": true, "confirmLabel": tr("Tomar carta")})
 			if pick.is_empty():
 				return false
 			Eng.gain_card(G, pick[0].id)
 			_card_taken = true
 			Sfx.play("buff"))
-	_done_btn = UIK.button("Continuar ➜", "big")
+	_done_btn = UIK.button(tr("Continuar ➜"), "big")
 	_done_btn.pressed.connect(func():
-		if not _card_taken and not await Dlg.confirm("¿Seguro que quieres continuar sin elegir una carta?"):
+		if not _card_taken and not await Dlg.confirm(tr("¿Seguro que quieres continuar sin elegir una carta?")):
 			return
 		if not _boss_taken:
-			Main.I.toast("Elige una reliquia de jefe primero.")
+			Main.I.toast(tr("Elige una reliquia de jefe primero."))
 			return
 		Nav.node_done(tier == "boss"))
 	_done_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER

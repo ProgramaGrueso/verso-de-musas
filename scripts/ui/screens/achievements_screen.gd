@@ -9,17 +9,17 @@ func _ready() -> void:
 	Sfx.music("menu", 1, TitleScreen.last_char if TitleScreen.last_char != "" else "zafiro")
 	var got := Progress.ach_count(Meta.data)
 	var total := Progress.achievements().size()
-	var head := Medal.chrome(self, "ev_templo_sol", "Logros y Maestría",
-		"%d de %d logros · %d de %d desbloqueos de contenido" % [got, total, Progress.unlocked_groups(Meta.data).size(), Progress.groups().size()])
+	var head := Medal.chrome(self, "ev_templo_sol", tr("Logros y Maestría"),
+		tr("%d de %d logros · %d de %d desbloqueos de contenido") % [got, total, Progress.unlocked_groups(Meta.data).size(), Progress.groups().size()])
 	var first: Button = null
-	for t in [["ach", "Logros"], ["mastery", "Maestría"], ["unl", "Desbloqueos"]]:
+	for t in [["ach", tr("Logros")], ["mastery", tr("Maestría")], ["unl", tr("Desbloqueos")]]:
 		var b := Medal.tab_button(t[1], tab == t[0])
 		var id: String = t[0]
 		b.pressed.connect(func(): Nav.achievements(id))
 		head.add_child(b)
 		if tab == t[0]:
 			first = b
-	var back := UIK.button("← Volver", "small")
+	var back := UIK.button(tr("← Volver"), "small")
 	back.pressed.connect(on_escape)
 	head.add_child(back)
 	var sc := ScrollContainer.new()
@@ -99,7 +99,7 @@ func _ach_tile(a: Dictionary) -> Control:
 	if got:
 		var ts := int(Meta.data.ach[a.id])
 		var ds := Time.get_date_string_from_unix_time(ts).split("-") if ts > 0 else []
-		col.add_child(UIK.label("Conseguido el %s/%s/%s" % [ds[2], ds[1], ds[0]] if ds.size() == 3 else "Conseguido", 14, UIK.GOLD))
+		col.add_child(UIK.label(tr("Conseguido el {d}/{m}/{y}").format({"d": ds[2], "m": ds[1], "y": ds[0]}) if ds.size() == 3 else tr("Conseguido"), 14, UIK.GOLD))
 	else:
 		var t := Progress.target(a)
 		if t > 1:
@@ -124,7 +124,7 @@ func _mastery() -> Control:
 	var names := []
 	for r in rk:
 		names.append("[color=%s]%s[/color] %d" % [r.c, r.n, int(r.t)])
-	var info := UIK.rich("Cada victoria suma puntos de Maestría a su musa: 1 por ganar, +1 en Pesadilla 4 o más y +1 en Pesadilla 8 o más (el modo fácil no suma).\nRangos: " + " · ".join(names), 16, UIK.DIM)
+	var info := UIK.rich(tr("Cada victoria suma puntos de Maestría a su musa: 1 por ganar, +1 en Pesadilla 4 o más y +1 en Pesadilla 8 o más (el modo fácil no suma).\nRangos: %s") % " · ".join(names), 16, UIK.DIM)
 	info.custom_minimum_size = Vector2(1180, 0)
 	v.add_child(info)
 	var grid := GridContainer.new()
@@ -181,7 +181,7 @@ func _muse_card(c: String) -> Control:
 	UIK.outlined(nl, 5)
 	UIK.fit_title(nl, 350, 18)
 	v.add_child(nl)
-	var rl := UIK.label(Progress.rank_name(r) if r >= 0 else "Sin rango todavía", 20, Progress.rank_color(r), "title")
+	var rl := UIK.label(Progress.rank_name(r) if r >= 0 else tr("Sin rango todavía"), 20, Progress.rank_color(r), "title")
 	UIK.outlined(rl, 4)
 	UIK.fit_title(rl, 350, 14)
 	v.add_child(rl)
@@ -191,16 +191,16 @@ func _muse_card(c: String) -> Control:
 		var pip := Panel.new()
 		pip.custom_minimum_size = Vector2(44, 8)
 		pip.add_theme_stylebox_override("panel", UIK.stylebox(Color(rk[i].c) if i <= r else Color(0.1, 0.08, 0.16, 0.9), Color(rk[i].c, 0.7), 1, 4, 0))
-		UIK.tip(pip, "[b][color=%s]%s[/color][/b]\n%d puntos" % [rk[i].c, rk[i].n, int(rk[i].t)])
+		UIK.tip(pip, "[b][color=%s]%s[/color][/b]\n" % [rk[i].c, rk[i].n] + tr_n("%d punto", "%d puntos", int(rk[i].t)) % int(rk[i].t))
 		pips.add_child(pip)
 	v.add_child(pips)
 	var wins := int(Meta.data.s.get("win_" + c, 0))
 	var nx := r + 1
-	var t := "%d punto%s · %d victoria%s" % [pts, "" if pts == 1 else "s", wins, "" if wins == 1 else "s"]
+	var t := tr_n("%d punto", "%d puntos", pts) % pts + " · " + tr_n("%d victoria", "%d victorias", wins) % wins
 	if nx < rk.size():
-		t += " · faltan %d para %s" % [int(rk[nx].t) - pts, rk[nx].n]
+		t += " · " + tr("faltan %d para %s") % [int(rk[nx].t) - pts, rk[nx].n]
 	else:
-		t += " · rango máximo"
+		t += " · " + tr("rango máximo")
 	var tl := UIK.label(t, 15, Color("#e4dcf5"))
 	UIK.outlined(tl, 3)
 	tl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART   # «… · faltan N para <rango>» pasa de 356 px al 130 %
@@ -214,9 +214,9 @@ func _unlocks() -> Control:
 	var v := VBoxContainer.new()
 	v.add_theme_constant_override("separation", 10)
 	v.custom_minimum_size = Vector2(1200, 0)
-	var msg := "Las cartas y reliquias nuevas entran en el botín, las tiendas y los eventos al alcanzar cada hito (desde la partida siguiente). El reto diario siempre usa todo el contenido."
+	var msg := tr("Las cartas y reliquias nuevas entran en el botín, las tiendas y los eventos al alcanzar cada hito (desde la partida siguiente). El reto diario siempre usa todo el contenido.")
 	if not DB.extra:
-		msg = "Contenido ampliado desactivado: no hay nada bloqueado."
+		msg = tr("Contenido ampliado desactivado: no hay nada bloqueado.")
 	var info := UIK.label(msg, 16, UIK.DIM)
 	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info.custom_minimum_size = Vector2(1180, 0)
@@ -260,7 +260,7 @@ func _group_tile(g: Dictionary, ok: bool) -> Control:
 	t.custom_minimum_size = Vector2(470, 0)
 	col.add_child(t)
 	if ok:
-		col.add_child(UIK.label("Disponible", 14, UIK.GREEN, "bold"))
+		col.add_child(UIK.label(tr("Disponible"), 14, UIK.GREEN, "bold"))
 	else:
 		var ch := UIK.label(str(g.ch), 14, UIK.DIM)
 		ch.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

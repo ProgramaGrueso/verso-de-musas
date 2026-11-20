@@ -171,10 +171,10 @@ func _ready() -> void:
 	# ---------- F) _lethal_tip no revienta (regresión del ternario dentro del % de formato) ----------
 	cs2.busy = true
 	var tip: String = cs2._lethal_tip()
-	_check("F.1 _lethal_tip devuelve el aviso sin romperse", tip.contains("Muerte segura") and tip.contains("Bloqueo"), tip.substr(0, 40))
+	_check("F.1 _lethal_tip devuelve el aviso sin romperse", (tip.contains("Muerte segura") or tip.contains("Certain death")) and (tip.contains("Bloqueo") or tip.contains("Block")), tip.substr(0, 40))
 	Eng.add_relic(G, "pluma")
 	var tip2: String = cs2._lethal_tip()
-	_check("F.2 _lethal_tip con la Pluma de Fénix", tip2.contains("Pluma de Fénix"), "aviso ampliado")
+	_check("F.2 _lethal_tip con la Pluma de Fénix", tip2.contains(str(DB.relics.get("pluma", {}).get("n", "Pluma de Fénix"))), "aviso ampliado")
 	print("RESULTADO: %d ok, %d fallan" % [ok, fail])
 	get_tree().quit(1 if fail > 0 else 0)
 

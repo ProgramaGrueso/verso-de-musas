@@ -90,7 +90,7 @@ func _wait_result(es: EventScreen, id: String) -> bool:
 			return false
 		var btns: Array = es._opts.get_children()
 		if btns.size() == 1 and (btns[0] as Button).text == "" and EventScreen._banner_text(btns[0]) != null \
-				and (EventScreen._banner_text(btns[0]) as RichTextLabel).text.contains("Continuar"):
+				and (EventScreen._banner_text(btns[0]) as RichTextLabel).text.contains(tr("Continuar ➜")):
 			for k in 4:
 				await get_tree().process_frame
 			return true
@@ -152,7 +152,7 @@ func _measure(es: EventScreen, id: String, tag: String) -> void:
 			btns.append(c)
 	_check(btns.size() >= 1, "%s: sin opciones" % where)
 	if tag.begins_with("resultado"):
-		_check(btns.size() == 1 and (EventScreen._banner_text(btns[0]) as RichTextLabel).text.contains("Continuar"),
+		_check(btns.size() == 1 and (EventScreen._banner_text(btns[0]) as RichTextLabel).text.contains(tr("Continuar ➜")),
 			"%s: la vista de resultado debe mostrar solo «Continuar ➜»" % where)
 	for b: Button in btns:
 		var r := EventScreen._banner_text(b)

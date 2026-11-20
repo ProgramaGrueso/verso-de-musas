@@ -11,10 +11,10 @@ func _ready() -> void:
 	var rp: float = Eng.nmods(G).rest
 	var heal := ceili(G.maxHp * rp)
 	var col := UIK.center_col(self, 16)
-	var t := UIK.label("Hoguera", 48, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
+	var t := UIK.label(tr("Hoguera"), 48, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(t, 10)
 	col.add_child(t)
-	var sub := UIK.label("Una pausa junto al fuego. Elige una opción:", 22, Color("#dddddd"), "sans", HORIZONTAL_ALIGNMENT_CENTER)
+	var sub := UIK.label(tr("Una pausa junto al fuego. Elige una opción:"), 22, Color("#dddddd"), "sans", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(sub, 5)
 	col.add_child(sub)
 	var row := HBoxContainer.new()
@@ -27,15 +27,15 @@ func _ready() -> void:
 	var ref := {}
 	# vida antes ➜ después (Fase 2.3): se ve qué deja el descanso, no solo cuánto cura en teoría
 	var hp_after: int = mini(G.maxHp, G.hp + heal)
-	var hp_note := "PV %d ➜ %d" % [G.hp, hp_after] if hp_after > G.hp else "PV %d (ya al máximo)" % G.hp
+	var hp_note := tr("PV %d ➜ %d") % [G.hp, hp_after] if hp_after > G.hp else tr("PV %d (ya al máximo)") % G.hp   # « ➜ » parte la nota (_note_row): la traducción debe conservarla
 	if Eng.has_relic(G, "reloj_roto"):
 		hp_note = ""   # no se puede descansar: no se promete una curación
-	var b1 := _big_opt("ui:bed", "Descansar", "Recuperas %d PV (%d%%)." % [heal, int(rp * 100 + 0.5)], hp_note)
+	var b1 := _big_opt("ui:bed", tr("Descansar"), tr("Recuperas %d PV (%d%%).") % [heal, int(rp * 100 + 0.5)], hp_note)
 	b1.pressed.connect(func():
 		Sfx.play("heal")
 		var gained: int = mini(G.maxHp, G.hp + heal) - G.hp
 		G.hp += gained
-		Main.I.toast("Recuperas %d PV." % gained if gained > 0 else "Ya tenías la vida al máximo.")
+		Main.I.toast(tr("Recuperas %d PV.") % gained if gained > 0 else tr("Ya tenías la vida al máximo."))
 		b1.disabled = true
 		ref.b2.disabled = true
 		await get_tree().create_timer(0.5).timeout
@@ -43,14 +43,14 @@ func _ready() -> void:
 	row.add_child(b1)
 	if Eng.has_relic(G, "reloj_roto"):
 		b1.disabled = true
-		UIK.tip(b1, "[b][color=#f0cf7a]Reloj Detenido[/color][/b]\nEl tiempo no corre para ti: no puedes descansar.")
-	var b2 := _big_opt("ui:anvil", "Mejorar", "Mejora una carta de tu mazo.")
+		UIK.tip(b1, tr("[b][color=#f0cf7a]%s[/color][/b]\nEl tiempo no corre para ti: no puedes descansar.") % str(DB.relics.get("reloj_roto", {}).get("n", "")))
+	var b2 := _big_opt("ui:anvil", tr("Mejorar"), tr("Mejora una carta de tu mazo."))
 	b2.disabled = not G.deck.any(func(c): return Eng.can_upgrade(c))
 	b2.pressed.connect(func():
 		var cands: Array = G.deck.filter(func(c): return Eng.can_upgrade(c))
 		ref.b1.disabled = true
 		ref.b2.disabled = true
-		var pick: Array = await Dlg.pick_cards({"title": "Elige una carta para mejorar", "sub": "Pasa el ratón (o el foco) por una carta para ver al lado cómo queda mejorada.", "upgradePreview": true, "cards": cands, "n": 1, "cancel": "Cancelar", "confirmLabel": "Mejorar"})
+		var pick: Array = await Dlg.pick_cards({"title": tr("Elige una carta para mejorar"), "sub": tr("Pasa el ratón (o el foco) por una carta para ver al lado cómo queda mejorada."), "upgradePreview": true, "cards": cands, "n": 1, "cancel": tr("Cancelar"), "confirmLabel": tr("Mejorar")})
 		if pick.is_empty():
 			ref.b1.disabled = Eng.has_relic(G, "reloj_roto")
 			ref.b2.disabled = not G.deck.any(func(c): return Eng.can_upgrade(c))
@@ -58,14 +58,14 @@ func _ready() -> void:
 		var c = G.deck.filter(func(x): return x.uid == pick[0].uid)[0]
 		c.up = true
 		Sfx.play("buff")
-		await Dlg.view_cards("¡Carta mejorada!", [c])
+		await Dlg.view_cards(tr("¡Carta mejorada!"), [c])
 		done.call())
 	row.add_child(b2)
 	ref.b1 = b1
 	ref.b2 = b2
 	if b1.disabled and b2.disabled:
 		# Reloj Detenido y nada que mejorar: que nunca se quede atascada aquí
-		var skip := UIK.button("Seguir el camino", "big")
+		var skip := UIK.button(tr("Seguir el camino"), "big")
 		skip.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		skip.pressed.connect(func(): done.call())
 		col.add_child(skip)

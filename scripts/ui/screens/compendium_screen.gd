@@ -6,7 +6,7 @@ extends Control
 const CW := 148.0
 const RAR := {"starter": 0, "common": 1, "uncommon": 2, "rare": 3, "special": 4}
 const REL_RAR := ["start", "common", "uncommon", "rare", "boss"]
-const REL_NAME := {"start": "Iniciales", "common": "Comunes", "uncommon": "Poco comunes", "rare": "Raras", "boss": "De jefe"}
+const REL_NAME := {"start": "Iniciales", "common": "Comunes", "uncommon": "Poco comunes", "rare": "Raras", "boss": "De jefe"}   # loc
 
 static var tab := ""   # se recuerda entre visitas: musa, "neutral" o "relics"
 var from_run := false
@@ -17,9 +17,9 @@ func _ready() -> void:
 	if tab == "":
 		tab = DB.playable()[0]
 	var lk := Progress.locked_ids(Meta.data)
-	var head := Medal.chrome(self, "ev_biblioteca", "Compendio",
-		"Cartas y reliquias del Verso · %d bloqueadas por descubrir" % lk.size() if not lk.is_empty() else "Cartas y reliquias del Verso · todo desbloqueado")
-	var back := UIK.button("← Volver", "small")
+	var head := Medal.chrome(self, "ev_biblioteca", tr("Compendio"),
+		tr("Cartas y reliquias del Verso · %d bloqueadas por descubrir") % lk.size() if not lk.is_empty() else tr("Cartas y reliquias del Verso · todo desbloqueado"))
+	var back := UIK.button(tr("← Volver"), "small")
 	back.pressed.connect(on_escape)
 	head.add_child(back)
 	var tabs := HBoxContainer.new()
@@ -32,7 +32,7 @@ func _ready() -> void:
 		ids.append("neutral")
 	ids.append("relics")
 	for id in ids:
-		var name: String = DB.characters[id].name if DB.characters.has(id) else ("Neutrales" if id == "neutral" else "Reliquias")
+		var name: String = DB.characters[id].name if DB.characters.has(id) else (tr("Neutrales") if id == "neutral" else tr("Reliquias"))
 		var b := Medal.tab_button(name, tab == id)
 		b.pressed.connect(func(): tab = id; Nav.compendium(from_run))
 		tabs.add_child(b)
@@ -92,7 +92,7 @@ func _cards(ids: Array) -> Control:
 			_lock_overlay(v, CW, CW * 1.42)
 			var g := Progress.lock_group(id)
 			cell.add_child(_caption(str(g.ch), CW, Color("#caa5ff")))
-			UIK.tip(v, "[b]Bloqueada[/b]\n%s\n[color=#a79fc0]Progreso: %d / %d[/color]" % [g.ch, mini(int(g.t), Progress.value(Meta.data, g.v)), int(g.t)])
+			UIK.tip(v, tr("[b]Bloqueada[/b]\n%s\n[color=#a79fc0]Progreso: %d / %d[/color]") % [g.ch, mini(int(g.t), Progress.value(Meta.data, g.v)), int(g.t)])
 		grid.add_child(cell)
 	return grid
 
@@ -109,7 +109,7 @@ func _relics() -> Control:
 		if ids.is_empty():
 			continue
 		ids.sort_custom(func(a, b): return str(DB.relics[a].n) < str(DB.relics[b].n))
-		v.add_child(UIK.label("%s · %d" % [REL_NAME[r], ids.size()], 22, UIK.GOLD, "title"))
+		v.add_child(UIK.label("%s · %d" % [tr(REL_NAME[r]), ids.size()], 22, UIK.GOLD, "title"))
 		var grid := GridContainer.new()
 		grid.columns = 3
 		grid.add_theme_constant_override("h_separation", 10)
@@ -149,7 +149,7 @@ func _relic_tile(id: String) -> Control:
 		ic.modulate = Color(0.35, 0.33, 0.45)
 		_lock_overlay(ic, 60, 46)
 		var g := Progress.lock_group(id)
-		var ch := UIK.label("Bloqueada · " + str(g.ch), 13, Color("#caa5ff"))
+		var ch := UIK.label(tr("Bloqueada · %s") % str(g.ch), 13, Color("#caa5ff"))
 		ch.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		ch.custom_minimum_size = Vector2(290, 0)
 		col.add_child(ch)

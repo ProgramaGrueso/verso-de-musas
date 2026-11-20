@@ -171,7 +171,7 @@ func pad_to(dir: int, pred: Callable, tries: int = 8) -> bool:
 
 func is_cancel(t: String) -> bool:
 	var s := t.to_lower()
-	return s.begins_with("no") or s.contains("cancel") or s.contains("saltar") or s.contains("atrás") or s.contains("volver")
+	return s.begins_with("no") or s.contains("cancel") or s.contains("saltar") or s.contains("atrás") or s.contains("volver") or s.contains("back") or s.contains("skip")
 
 
 ## Resuelve con el mando el diálogo de arriba: elige la carta enfocada (A), baja hasta el botón afirmativo y A;
@@ -254,7 +254,7 @@ func t_reward(G, tier: String) -> void:
 	await wait(0.2)
 	# saltar la carta con B dentro del diálogo devuelve el foco al premio (que sigue disponible)
 	for it in enabled_items(rs):
-		if (it.get_meta("r") as RichTextLabel).get_parsed_text().begins_with("Añadir una carta"):
+		if (it.get_meta("r") as RichTextLabel).get_parsed_text().begins_with(tr("Añadir una carta a tu mazo\n[font_size=16][color=#a79fc0]Elige 1 de 3.[/color][/font_size]").split("\n")[0]):
 			it.grab_focus()
 			await wait(0.1)
 			await tap(JOY_BUTTON_A)
@@ -318,7 +318,7 @@ func t_rest(G) -> void:
 	await pause_cycle("hoguera")
 	var up_btn: Button = null
 	for n in Main.I.screen.find_children("*", "Label", true, false):
-		if (n as Label).text == "Mejorar" and n.get_parent().get_parent() is Button:
+		if (n as Label).text == tr("Mejorar") and n.get_parent().get_parent() is Button:
 			up_btn = n.get_parent().get_parent()
 	var up_ok := await pad_to(JOY_BUTTON_DPAD_RIGHT, func(c): return c == up_btn, 3)
 	check(up_ok, "hoguera: el D-Pad llega a «Mejorar»")
@@ -382,7 +382,7 @@ func t_events(G) -> void:
 			if Main.I.screen != es or not is_instance_valid(es):
 				break
 			var cur: Array = es._opts.get_children().filter(func(c): return not c.is_queued_for_deletion())
-			if cur.size() == 1 and EventScreen._banner_text(cur[0]).get_parsed_text().contains("Continuar"):
+			if cur.size() == 1 and EventScreen._banner_text(cur[0]).get_parsed_text().contains(tr("Continuar ➜")):
 				got = true
 				break
 		if overlays() > 0:
@@ -408,7 +408,7 @@ func t_favor(G) -> void:
 	var fs := Main.I.screen
 	var skip: Button = null
 	for n in fs.find_children("*", "Button", true, false):
-		if (n as Button).text.begins_with("Rechazar"):
+		if (n as Button).text == tr("Rechazar los favores"):
 			skip = n
 	var reached := await pad_to(JOY_BUTTON_DPAD_DOWN, func(c): return c == skip, 3)
 	check(reached, "favor: el D-Pad llega a «Rechazar los favores»")

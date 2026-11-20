@@ -6,21 +6,21 @@ static var I: Main
 
 const TOP_H := 128.0   # alto de la barra superior (retrato, vida, oro, pociones y reliquias)
 
-## Teclas remapeables (Opciones ▸ Controles): [acción, nombre, tecla por defecto]. Las pantallas siguen
+## Teclas remapeables (Opciones ▸ Controles): [acción, nombre (en español; se traduce al mostrarlo), tecla por defecto]. Las pantallas siguen
 ## escuchando la tecla por defecto; `_input` traduce la tecla elegida por el jugador a la de defecto (y se traga
 ## la de defecto si ya no es de nadie), así que combate/mapa no necesitan saber nada del remapeo.
 const KEY_ACTIONS := [
-	["ver_mazo", "Ver tu mazo", KEY_M],
-	["ayuda", "Ayuda", KEY_H],
-	["terminar_turno", "Terminar turno", KEY_E],
-	["pocion_1", "Poción del hueco 1", KEY_Q],
-	["pocion_2", "Poción del hueco 2", KEY_W],
-	["pocion_3", "Poción del hueco 3", KEY_R],
-	["pocion_4", "Poción del hueco 4", KEY_T],
-	["robo", "Mazo de robo", KEY_D],
-	["descarte", "Descarte", KEY_S],
-	["agotadas", "Agotadas", KEY_X],
-	["deshacer", "Deshacer la última carta", KEY_Z],
+	["ver_mazo", "Ver tu mazo", KEY_M],   # loc
+	["ayuda", "Ayuda", KEY_H],   # loc
+	["terminar_turno", "Terminar turno", KEY_E],   # loc
+	["pocion_1", "Poción del hueco 1", KEY_Q],   # loc
+	["pocion_2", "Poción del hueco 2", KEY_W],   # loc
+	["pocion_3", "Poción del hueco 3", KEY_R],   # loc
+	["pocion_4", "Poción del hueco 4", KEY_T],   # loc
+	["robo", "Mazo de robo", KEY_D],   # loc
+	["descarte", "Descarte", KEY_S],   # loc
+	["agotadas", "Agotadas", KEY_X],   # loc
+	["deshacer", "Deshacer la última carta", KEY_Z],   # loc
 ]
 ## No se pueden asignar: navegación, confirmar/cancelar, 1–9 (elegir carta), F1, F11 y modificadores.
 const KEYS_RESERVED := [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_TAB, KEY_ENTER, KEY_KP_ENTER, KEY_SPACE,
@@ -137,7 +137,7 @@ func _insp_start() -> void:
 	_insp_collect(root, l)
 	if l.is_empty():
 		Sfx.play("error")
-		toast("No hay nada que inspeccionar aquí.")
+		toast(tr("No hay nada que inspeccionar aquí."))
 		return
 	# el primero: el más cercano al centro de la pantalla
 	var best := 0
@@ -154,7 +154,7 @@ func _insp_start() -> void:
 	_insp_scr = current
 	_insp_stop_input_state()
 	_insp_show(best)
-	toast("Inspeccionar: D-Pad / Stick mover · B o R3 salir")
+	toast(tr("Inspeccionar: D-Pad / Stick mover · B o R3 salir"))
 
 
 func _insp_stop_input_state() -> void:
@@ -424,7 +424,7 @@ func open_deck_dialog() -> void:
 		dv.close(null)
 		return
 	var had_focus := get_viewport().gui_get_focus_owner() != null
-	await Dlg.view_cards("Tu mazo", _sorted_deck(), null, true)
+	await Dlg.view_cards(tr("Tu mazo"), _sorted_deck(), null, true)
 	if not had_focus or not is_inside_tree():
 		return
 	await get_tree().process_frame
@@ -495,7 +495,7 @@ static func key_name(id: String) -> String:
 ## Asigna `k` a la acción `id`. Si otra acción ya la usaba, se intercambian. Devuelve "" o el motivo del rechazo.
 static func set_key(id: String, k: int) -> String:
 	if k in KEYS_RESERVED or k == KEY_NONE:
-		return "La tecla %s está reservada." % OS.get_keycode_string(k)
+		return Loc.t("La tecla %s está reservada.") % OS.get_keycode_string(k)
 	var old := key_of(id)
 	var m := {}
 	for a in KEY_ACTIONS:
@@ -558,6 +558,49 @@ func _remap_key(ev: InputEventKey) -> bool:
 	return true
 
 
+# ---------- Idioma (Fase 5) ----------
+## Pantallas que se pueden rehacer al cambiar de idioma sin perder nada (no tiran dados al construirse).
+## Combate, tienda, evento, recompensa, hoguera y favor repetirían el reparto o la tirada: esas se ven en el
+## idioma nuevo desde la siguiente sala.
+const RELOC_SCREENS := ["title", "map", "select", "gallery", "history", "achievements", "compendium", "daily"]
+
+
+## El idioma cambió en Opciones (ya cerrado): rehace la barra superior, el menú de pausa si estaba debajo y la
+## pantalla actual si es de las que se pueden rehacer.
+func relocalize() -> void:
+	var idx := top.get_index()
+	remove_child(top)
+	top.queue_free()
+	_tb_relics_key = "-"
+	_build_top()
+	move_child(top, idx)
+	var reopen_pause := false
+	for ov in overlay_host.get_children():
+		if ov is Dlg.Overlay and ov.get_meta("pause", false) and not ov._closed:
+			ov.close(null)
+			reopen_pause = true
+	var open_left := 0
+	for ov in overlay_host.get_children():
+		if ov is Dlg.Overlay and not ov._closed:
+			open_left += 1
+	if open_left == 0 and current in RELOC_SCREENS and screen != null:
+		match current:
+			"title": Nav.title()
+			"map": Nav.map()
+			"select": Nav.select()
+			"gallery": Nav.gallery(bool(screen.get("from_run")))
+			"history": Nav.history()
+			"achievements": Nav.achievements(str(screen.get("tab")))
+			"compendium": Nav.compendium(bool(screen.get("from_run")))
+			"daily": Nav.daily()
+	else:
+		update_top()
+		if Meta.run != null:
+			toast(tr("El idioma se aplicará del todo desde la siguiente sala."))
+	if reopen_pause:
+		Dlg.pause_menu()
+
+
 # ---------- Pantallas ----------
 func set_screen(node: Control, name: String) -> void:
 	Tip.hide_all()
@@ -602,9 +645,9 @@ func update_top() -> void:
 	var who_tip: String = "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [DB.characters[G.char].name, DB.characters[G.char].role]
 	var perm := Eng.perm_text(G)
 	if perm != "":
-		who_tip += "\n[color=#8bf0a4]Bendiciones permanentes: %s.[/color]" % perm
+		who_tip += "\n[color=#8bf0a4]%s[/color]" % (tr("Bendiciones permanentes: %s.") % perm)
 	if G.get("daily", "") != "":
-		who_tip += "\n[color=#caa5ff]Reto diario %s: %s[/color]" % [G.daily, Daily.mod_name(G.get("dailyMod", ""))]
+		who_tip += "\n[color=#caa5ff]%s[/color]" % (tr("Reto diario %s: %s") % [G.daily, Daily.mod_name(G.get("dailyMod", ""))])
 	UIK.tip(pic, who_tip)
 	_tb_who.add_child(pic)
 	_tb_hp.text = "%d/%d" % [G.hp, G.maxHp]
@@ -628,7 +671,7 @@ func update_top() -> void:
 			if l is Label:
 				(l as Label).size = Vector2(44, 44)
 				(l as Label).vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			UIK.tip(l, "[b][color=#f0cf7a]%s[/color][/b]\n%s\n[i][color=#a79fc0]Clic o A (con R3): ficha y origen.[/color][/i]" % [r.n, r.d])
+			UIK.tip(l, "[b][color=#f0cf7a]%s[/color][/b]\n%s\n[i][color=#a79fc0]%s[/color][/i]" % [r.n, r.d, tr("Clic o A (con R3): ficha y origen.")])
 			l.set_meta("relic_id", id)
 			var rid: String = id
 			l.gui_input.connect(func(ev: InputEvent):
@@ -660,11 +703,11 @@ func update_top() -> void:
 			b.add_theme_constant_override("icon_max_width", 40)
 			for c in ["icon_hover_color", "icon_pressed_color", "icon_focus_color", "icon_normal_color"]:
 				b.add_theme_color_override(c, Color.WHITE)
-			UIK.tip(b, "[b][color=#f0cf7a]%s[/color][/b]\n%s\n[i]Haz clic para usarla en combate.[/i]" % [p.n, p.d])
-			b.pressed.connect(func(): if on_potion.is_valid(): on_potion.call(slot) else: toast("Solo puedes usar pociones en combate."))
+			UIK.tip(b, "[b][color=#f0cf7a]%s[/color][/b]\n%s\n[i]%s[/i]" % [p.n, p.d, tr("Haz clic para usarla en combate.")])
+			b.pressed.connect(func(): if on_potion.is_valid(): on_potion.call(slot) else: toast(tr("Solo puedes usar pociones en combate.")))
 		else:
 			b.modulate = Color(1, 1, 1, 0.55)
-			UIK.tip(b, "[b][color=#f0cf7a]Hueco de poción[/color][/b]\nAquí se guardan las pociones.")
+			UIK.tip(b, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [tr("Hueco de poción"), tr("Aquí se guardan las pociones.")])
 		for st in ["normal", "hover", "pressed", "disabled", "focus"]:
 			b.add_theme_stylebox_override(st, sb)
 		_tb_potions.add_child(b)
@@ -746,9 +789,9 @@ func _build_top() -> void:
 	right.add_theme_constant_override("separation", 8)
 	right.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	top.add_child(right)
-	right.add_child(_icon_btn("help", 58, "[b][color=#f0cf7a]Cómo jugar[/color][/b]", func(): Dlg.help()))
-	right.add_child(_icon_btn("menu", 58, "[b][color=#f0cf7a]Pausa[/color][/b]\nGuardar y salir, rendirse (Esc)", func(): Dlg.pause_menu()))
-	var deck_b := _icon_btn("deck", 64, "[b][color=#f0cf7a]Tu mazo[/color][/b]\nMira todas tus cartas.", func(): open_deck_dialog())
+	right.add_child(_icon_btn("help", 58, "[b][color=#f0cf7a]%s[/color][/b]" % tr("Cómo jugar"), func(): Dlg.help()))
+	right.add_child(_icon_btn("menu", 58, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [tr("Pausa"), tr("Guardar y salir, rendirse (Esc)")], func(): Dlg.pause_menu()))
+	var deck_b := _icon_btn("deck", 64, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [tr("Tu mazo"), tr("Mira todas tus cartas.")], func(): open_deck_dialog())
 	_tb_deck_n = UIK.label("0", 20, Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_CENTER)
 	_tb_deck_n.size = Vector2(30, 26)
 	_tb_deck_n.position = Vector2(32, 34)
@@ -761,7 +804,7 @@ func _build_top() -> void:
 	deck_b.add_child(badge)
 	deck_b.add_child(_tb_deck_n)
 	right.add_child(deck_b)
-	right.add_child(_icon_btn("gear", 58, "[b][color=#f0cf7a]Opciones[/color][/b]\nVolumen y controles.", func(): Dlg.options()))
+	right.add_child(_icon_btn("gear", 58, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [tr("Opciones"), tr("Volumen, idioma y controles.")], func(): Dlg.options()))
 	_tb_act = UIK.label("", 15, Color("#cfc7e6"), "bold", HORIZONTAL_ALIGNMENT_RIGHT)
 	_tb_act.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 	_tb_act.offset_left = -420
@@ -835,7 +878,7 @@ func pulse_relic(id: String) -> void:
 		var ic: Control = Icons.rect("relic", id, 24)
 		ic.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		hb.add_child(ic)
-	var lb := UIK.rich("[b][color=#f0cf7a]%s[/color][/b] [color=#bfb6d6]¡se activa![/color]" % r.n, 14)
+	var lb := UIK.rich("[b][color=#f0cf7a]%s[/color][/b] [color=#bfb6d6]%s[/color]" % [r.n, tr("¡se activa!")], 14)
 	lb.autowrap_mode = TextServer.AUTOWRAP_OFF
 	lb.fit_content = true
 	lb.custom_minimum_size = Vector2(0, 0)   # el chip mide su texto (crece hasta 420 px) en vez de cortar el nombre

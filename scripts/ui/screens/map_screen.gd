@@ -5,14 +5,14 @@ extends Control
 const MAP_H := 2480
 const ROW_GAP := 250.0
 const NODE_COL := {"combat": Color("#7f6ab8"), "elite": Color("#d8404c"), "event": Color("#4fa3c7"), "shop": Color("#e0b84a"), "rest": Color("#e08a3c"), "boss": Color("#ff5a6a")}
-const NODE_NAME := {"combat": "Combate", "elite": "Élite", "event": "Evento", "shop": "Tienda", "rest": "Hoguera", "boss": "Jefe"}
+const NODE_NAME := {"combat": "Combate", "elite": "Élite", "event": "Evento", "shop": "Tienda", "rest": "Hoguera", "boss": "Jefe"}   # loc
 const NODE_DESC := {
-	"combat": "Un combate normal. Premio: oro, carta y a veces una poción.",
-	"elite": "Un enemigo poderoso. Premio: una reliquia y mejores cartas.",
-	"event": "Algo inesperado: puede ser bueno... o no.",
-	"shop": "Compra cartas, reliquias y pociones. También puedes eliminar cartas.",
-	"rest": "Descansa para curarte o mejora una carta.",
-	"boss": "El guardián de la zona. ¡Prepárate!",
+	"combat": "Un combate normal. Premio: oro, carta y a veces una poción.",   # loc
+	"elite": "Un enemigo poderoso. Premio: una reliquia y mejores cartas.",   # loc
+	"event": "Algo inesperado: puede ser bueno... o no.",   # loc
+	"shop": "Compra cartas, reliquias y pociones. También puedes eliminar cartas.",   # loc
+	"rest": "Descansa para curarte o mejora una carta.",   # loc
+	"boss": "El guardián de la zona. ¡Prepárate!",   # loc
 }
 
 var announce := false
@@ -85,7 +85,7 @@ func _ready() -> void:
 	paths.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	inner.add_child(paths)
 	# inicio
-	var st := UIK.label("Inicio del ascenso", 20, UIK.GOLD, "bold", HORIZONTAL_ALIGNMENT_CENTER)
+	var st := UIK.label(tr("Inicio del ascenso"), 20, UIK.GOLD, "bold", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(st, 6)
 	st.position = Vector2(440, MAP_H - 70)
 	st.size = Vector2(400, 30)
@@ -109,12 +109,12 @@ func _ready() -> void:
 	head.position = Vector2(0, 54)
 	head.size = Vector2(1280, 60)
 	head.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var t1 := UIK.label("%s: %s%s" % [act.sub, act.name, (" · Pesadilla %d" % G.nm) if G.get("nm", 0) else ""], 32, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
+	var t1 := UIK.label("%s: %s%s" % [act.sub, act.name, (" · " + tr("Pesadilla %d") % G.nm) if G.get("nm", 0) else ""], 32, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
 	t1.custom_minimum_size = Vector2(1240, 0)
 	t1.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	UIK.outlined(t1, 8)
 	head.add_child(t1)
-	var t2 := UIK.label("Arrastra o usa la rueda / stick derecho / flechas para ver el camino", 15, Color("#d9d2ee"), "sans", HORIZONTAL_ALIGNMENT_CENTER)
+	var t2 := UIK.label(tr("Arrastra o usa la rueda / stick derecho / flechas para ver el camino"), 15, Color("#d9d2ee"), "sans", HORIZONTAL_ALIGNMENT_CENTER)
 	t2.custom_minimum_size = Vector2(1240, 0)
 	UIK.outlined(t2, 5)
 	head.add_child(t2)
@@ -125,7 +125,7 @@ func _ready() -> void:
 	nav.size = Vector2(64, 0)
 	nav.mouse_filter = Control.MOUSE_FILTER_PASS
 	nav.add_theme_constant_override("separation", 8)
-	for spec in [["▲", -380], ["Aquí", 0], ["▼", 380]]:
+	for spec in [["▲", -380], [tr("Aquí"), 0], ["▼", 380]]:
 		var b := UIK.button(spec[0], "small", 18)
 		b.custom_minimum_size = Vector2(64, 0)
 		b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -134,7 +134,9 @@ func _ready() -> void:
 		b.pressed.connect(func(): _scroll_by(d) if d != 0 else _focus(true))
 		nav.add_child(b)
 	add_child(nav)
-	var gh := UIK.label("Mando · X: centrar\nStick der.: desplazar\nR3: inspeccionar", 13, UIK.DIM)
+	# «Here» al 130 % mide más de 64 px: la columna se pega al borde derecho sin salirse (en español sigue en 1206)
+	nav.position.x = minf(1206.0, 1274.0 - nav.get_combined_minimum_size().x)
+	var gh := UIK.label(tr("Mando · X: centrar\nStick der.: desplazar\nR3: inspeccionar"), 13, UIK.DIM)
 	gh.position = Vector2(940, 410)
 	gh.size = Vector2(336, 60)   # ancho para la línea más larga: no se sale ni se recorta
 	gh.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -146,7 +148,7 @@ func _ready() -> void:
 	var leg := VBoxContainer.new()
 	leg.position = Vector2(14, 520)
 	for k in NODE_NAME.keys():
-		var l := Icons.with_text("mapnode", k, NODE_NAME[k], 28, 16, Color.WHITE, "node")
+		var l := Icons.with_text("mapnode", k, tr(NODE_NAME[k]), 28, 16, Color.WHITE, "node")
 		UIK.outlined(l.get_node("Text"), 5)
 		leg.add_child(l)
 	add_child(leg)
@@ -214,12 +216,12 @@ func _add_node(inner: Control, n: Dictionary) -> void:
 		tw.tween_property(b, "scale", Vector2.ONE, 0.7).set_trans(Tween.TRANS_SINE)
 		b.pressed.connect(func(): Nav.enter_node(n))
 	b.mouse_filter = Control.MOUSE_FILTER_STOP
-	var node_name: String = NODE_NAME[n.type]
-	var node_desc: String = NODE_DESC[n.type]
+	var node_name: String = tr(NODE_NAME[n.type])
+	var node_desc: String = tr(NODE_DESC[n.type])
 	if big:
 		var bid := RunGen.boss_id(G)
 		node_name = DB.enemies[bid].name
-		node_desc = "El guardián de la zona. ¡Prepárate!\nPV: %d–%d" % [DB.enemies[bid].hp[0], DB.enemies[bid].hp[1]]
+		node_desc = tr(NODE_DESC.boss) + "\n" + tr("PV: %d–%d") % [DB.enemies[bid].hp[0], DB.enemies[bid].hp[1]]
 	UIK.tip(b, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [node_name, node_desc])
 	inner.add_child(b)
 	if big:

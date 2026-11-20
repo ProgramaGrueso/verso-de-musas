@@ -73,7 +73,7 @@ func _ready() -> void:
 			_text.text = "[center]%s[/center]" % EventsLogic.md(res)
 			for c in _opts.get_children():
 				c.queue_free()
-			var cb := _banner("Continuar ➜", "")
+			var cb := _banner(tr("Continuar ➜"), "")
 			cb.pressed.connect(func(): Nav.node_done(false))
 			_opts.add_child(cb)
 			# el resultado suele ser corto: las opciones nuevas caben sin más ajustes
@@ -256,15 +256,16 @@ static func _banner(title: String, hint: String) -> Button:
 
 ## Colorea cifras de oro (dorado) y de PV (rojo si se pierden, verde si se ganan).
 static func _tint(h: String) -> String:
-	var good := h.begins_with("Recuperas") or h.begins_with("+")
+	# ES y EN (content_en.po: «N gold», «N Max HP», «N HP»; curar empieza por «Heal»/«Recover»)
+	var good := h.begins_with("Recuperas") or h.begins_with("+") or h.begins_with("Heal") or h.begins_with("Recover")
 	var rx := RegEx.new()
-	rx.compile("(\\d+ ?%?)( de oro| PV máx\\.| PV)")
+	rx.compile("(\\d+ ?%?)( de oro| PV máx\\.| PV| gold| Max HP| HP)")
 	var out := ""
 	var last := 0
 	for m in rx.search_all(h):
 		out += h.substr(last, m.get_start() - last)
 		var unit: String = m.get_string(2)
-		var col := "#f0cf7a" if unit.contains("oro") else ("#8bf0a4" if (good or unit.contains("máx")) else "#ff7b85")
+		var col := "#f0cf7a" if (unit.contains("oro") or unit.contains("gold")) else ("#8bf0a4" if (good or unit.contains("máx") or unit.contains("Max")) else "#ff7b85")
 		out += "[color=%s]%s%s[/color]" % [col, m.get_string(1), unit]
 		last = m.get_end()
 	return out + h.substr(last)
@@ -279,7 +280,7 @@ class EvCtx extends RefCounted:
 		var cards: Array = G.deck.filter(filter)
 		if auto:
 			return cards.slice(0, n)
-		return await Dlg.pick_cards({"title": title, "upgradePreview": upgrade_preview, "cards": cards, "n": n, "cancel": "Cancelar"})
+		return await Dlg.pick_cards({"title": title, "upgradePreview": upgrade_preview, "cards": cards, "n": n, "cancel": tr("Cancelar")})
 
 	## Elegir 1 carta nueva entre `ids` (no están en el mazo). Devuelve [] si se salta.
 	func choose_new(title: String, ids: Array) -> Array:
@@ -294,4 +295,4 @@ class EvCtx extends RefCounted:
 			if Eng.has_relic(G, "huevo") and Eng.can_upgrade(c):
 				c.up = true
 			cards.append(c)
-		return await Dlg.pick_cards({"title": title, "sub": "Se añadirá a tu mazo.", "cards": cards, "n": 1, "cancel": "Saltar", "big": true, "confirmLabel": "Tomar carta"})
+		return await Dlg.pick_cards({"title": title, "sub": tr("Se añadirá a tu mazo."), "cards": cards, "n": 1, "cancel": tr("Saltar"), "big": true, "confirmLabel": tr("Tomar carta")})

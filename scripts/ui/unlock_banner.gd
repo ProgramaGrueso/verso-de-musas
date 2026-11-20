@@ -18,11 +18,11 @@ func _ready() -> void:
 
 
 func _on_lore(l: Dictionary) -> void:
-	show_banner(Medal.disc("lore:" + str(l.id), 64, true), "Nueva imagen en la Galería", str(l.title), UIK.GOLD)
+	show_banner(Medal.disc("lore:" + str(l.id), 64, true), tr("Nueva imagen en la Galería"), str(l.title), UIK.GOLD)
 
 
 func _on_ach(a: Dictionary) -> void:
-	show_banner(Medal.make(a, 64, true), "Logro desbloqueado", str(a.n), UIK.GOLD, str(a.d))
+	show_banner(Medal.make(a, 64, true), tr("Logro desbloqueado"), str(a.n), UIK.GOLD, str(a.d))
 
 
 func _on_content(g: Dictionary) -> void:
@@ -32,7 +32,7 @@ func _on_content(g: Dictionary) -> void:
 		art = Medal.disc("muse:" + str(ic[1]), 64, true, Color(DB.characters[ic[1]].glow))
 	else:
 		art = Icons.frame(ic[0], ic[1], 64)
-	show_banner(art, "Nuevo contenido · desde la próxima partida", _cap(Progress.group_text(g)), UIK.GREEN)
+	show_banner(art, tr("Nuevo contenido · desde la próxima partida"), _cap(Progress.group_text(g)), UIK.GREEN)
 
 
 static func _cap(t: String) -> String:

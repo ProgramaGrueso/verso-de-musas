@@ -85,7 +85,7 @@ func check(name: String, root: Node) -> void:
 
 func first_focus(name: String, want: String) -> void:
 	var f := focus()
-	expect(f != null and str(f.get("text")).begins_with(want), "[%s] foco inicial en «%s» (está en %s)" % [name, want, ftext(f)])
+	expect(f != null and str(f.get("text")).begins_with(tr(want)), "[%s] foco inicial en «%s» (está en %s)" % [name, want, ftext(f)])
 
 
 func b_goes_to(name: String, screen_name: String) -> void:
@@ -202,10 +202,10 @@ func _ready() -> void:
 ## Desde el avatar elegido: ↓ y luego → por la fila de abajo, comprobando cada parada.
 func _walk_bottom(ss: SelectScreen, name: String, stops: Array) -> void:
 	await tap(JOY_BUTTON_DPAD_DOWN)
-	expect(focus() != null and str(focus().get("text")).begins_with(stops[0]), "[%s] ↓ desde el avatar va a «%s» (está en %s)" % [name, stops[0], ftext(focus())])
+	expect(focus() != null and str(focus().get("text")).begins_with(tr(stops[0])), "[%s] ↓ desde el avatar va a «%s» (está en %s)" % [name, stops[0], ftext(focus())])
 	for i in range(1, stops.size()):
 		await tap(JOY_BUTTON_DPAD_RIGHT)
-		expect(focus() != null and str(focus().get("text")).begins_with(stops[i]), "[%s] → llega a «%s» (está en %s)" % [name, stops[i], ftext(focus())])
+		expect(focus() != null and str(focus().get("text")).begins_with(tr(stops[i])), "[%s] → llega a «%s» (está en %s)" % [name, stops[i], ftext(focus())])
 	await tap(JOY_BUTTON_DPAD_UP)
 	expect(focus() == ss._avatars[ss.pick], "[%s] ↑ desde la fila de abajo vuelve al avatar elegido (está en %s)" % [name, ftext(focus())])
 

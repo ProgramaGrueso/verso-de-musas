@@ -90,7 +90,7 @@ func _render() -> void:
 	Main.I.update_top()
 	for c in _root.get_children():
 		c.queue_free()
-	var t := UIK.label("La Tienda del Mercader · tienes %d de oro" % G.gold, 32, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
+	var t := UIK.label(tr("La Tienda del Mercader · tienes %d de oro") % G.gold, 32, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(t, 8)
 	_root.add_child(t)
 	var cards := HBoxContainer.new()
@@ -110,13 +110,13 @@ func _render() -> void:
 			nrow.add_child(_card_item(it, 112.0))
 		var nv := VBoxContainer.new()
 		nv.add_theme_constant_override("separation", 6)
-		nv.add_child(UIK.label("Cartas neutrales", 18, UIK.GOLD, "bold", HORIZONTAL_ALIGNMENT_CENTER))
+		nv.add_child(UIK.label(tr("Cartas neutrales"), 18, UIK.GOLD, "bold", HORIZONTAL_ALIGNMENT_CENTER))
 		nv.add_child(nrow)
 		mid.add_child(_box_wrap(nv))
-	mid.add_child(_box("Reliquias", _items(_shop.relics, "relic")))
-	mid.add_child(_box("Pociones", _items(_shop.potions, "potion")))
+	mid.add_child(_box(tr("Reliquias"), _items(_shop.relics, "relic")))
+	mid.add_child(_box(tr("Pociones"), _items(_shop.potions, "potion")))
 	_render_service(mid)
-	var leave := UIK.button("Salir de la tienda ➜", "big")
+	var leave := UIK.button(tr("Salir de la tienda ➜"), "big")
 	leave.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	leave.pressed.connect(func(): Nav.node_done(false))
 	_root.add_child(leave)
@@ -190,9 +190,9 @@ func _card_item(it: Dictionary, w: float) -> Control:
 		cv.pressed.connect(func(_v):
 			if G.gold < item.price:
 				Sfx.play("error")
-				Main.I.toast("No tienes suficiente oro.")
+				Main.I.toast(tr("No tienes suficiente oro."))
 				return
-			if await Dlg.confirm("¿Comprar [b][color=#f0cf7a]%s[/color][/b] por %d de oro?" % [DB.cards[item.id].name, item.price]):
+			if await Dlg.confirm(tr("¿Comprar [b][color=#f0cf7a]%s[/color][/b] por %d de oro?") % [DB.cards[item.id].name, item.price]):
 				G.gold -= item.price
 				item.sold = true
 				Eng.gain_card(G, item.id)
@@ -206,15 +206,15 @@ func _card_item(it: Dictionary, w: float) -> Control:
 func _render_service(mid: Control) -> void:
 	var G = Meta.run
 	var rm: Dictionary = _shop.remove
-	var rb := _mini("ui:burn", "[b][color=#f0cf7a]Eliminar una carta[/color][/b]\nQuita una carta de tu mazo para hacerlo más fuerte.")
+	var rb := _mini("ui:burn", tr("[b][color=#f0cf7a]Eliminar una carta[/color][/b]\nQuita una carta de tu mazo para hacerlo más fuerte."))
 	if rm.used:
 		rb.disabled = true
 	rb.pressed.connect(func():
 		if G.gold < rm.price:
 			Sfx.play("error")
-			Main.I.toast("No tienes suficiente oro.")
+			Main.I.toast(tr("No tienes suficiente oro."))
 			return
-		var pick: Array = await Dlg.pick_cards({"title": "Elige una carta para eliminar", "cards": G.deck.duplicate(), "n": 1, "cancel": "Cancelar", "confirmLabel": "Eliminar"})
+		var pick: Array = await Dlg.pick_cards({"title": tr("Elige una carta para eliminar"), "cards": G.deck.duplicate(), "n": 1, "cancel": tr("Cancelar"), "confirmLabel": tr("Eliminar")})
 		if pick.is_empty():
 			return
 		G.deck = G.deck.filter(func(c): return c.uid != pick[0].uid)
@@ -225,7 +225,7 @@ func _render_service(mid: Control) -> void:
 		_after_purchase())
 	var sv := VBoxContainer.new()
 	sv.add_theme_constant_override("separation", 6)
-	sv.add_child(UIK.label("Servicio", 18, UIK.GOLD, "bold", HORIZONTAL_ALIGNMENT_CENTER))
+	sv.add_child(UIK.label(tr("Servicio"), 18, UIK.GOLD, "bold", HORIZONTAL_ALIGNMENT_CENTER))
 	sv.add_child(rb)
 	sv.add_child(_price_tag(rm.price, G.gold))
 	mid.add_child(_box_wrap(sv))
@@ -298,13 +298,13 @@ func _items(list: Array, kind: String) -> Array:
 		b.pressed.connect(func():
 			if G.gold < item.price:
 				Sfx.play("error")
-				Main.I.toast("No tienes suficiente oro.")
+				Main.I.toast(tr("No tienes suficiente oro."))
 				return
 			if kind == "potion" and not G.potions.has(null):
-				Main.I.toast("Tienes todas las pociones llenas.")
+				Main.I.toast(tr("Tienes todas las pociones llenas."))
 				return
 			var extra := "\n[font_size=16]%s[/font_size]" % info.d if kind == "relic" else ""
-			if await Dlg.confirm("¿Comprar [b][color=#f0cf7a]%s[/color][/b] por %d de oro?%s" % [info.n, item.price, extra]):
+			if await Dlg.confirm(tr("¿Comprar [b][color=#f0cf7a]%s[/color][/b] por %d de oro?") % [info.n, item.price] + extra):
 				G.gold -= item.price
 				item.sold = true
 				if kind == "relic":

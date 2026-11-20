@@ -21,7 +21,8 @@ extends Node
 ## Uso (con ventana mide también 1600×900; sin ventana solo la geometría lógica de 1280×720):
 ##   godot --path . res://tests/ui_layout_test.tscn
 ##   godot --headless --path . res://tests/ui_layout_test.tscn
-## Opciones tras `--`:  scale 1.3 · window 1600x900 · only <parte de la etiqueta> · shots DIR · verbose
+## Opciones tras `--`:  scale 1.3 · window 1600x900 · only <parte de la etiqueta> · shots DIR · verbose · lang en
+##   (`lang en` mide la interfaz en inglés; también vale `VDM_LANG=en godot …`)
 ##   godot --path . res://tests/ui_layout_test.tscn -- scale 1.3 only select shots /tmp/capturas
 
 const TOL := 2.0
@@ -78,7 +79,11 @@ func _ready() -> void:
 				i += 1
 			"verbose":
 				verbose = true
+			"lang":
+				Loc.set_lang(args[i + 1], {})   # solo esta ejecución: no toca los ajustes guardados
+				i += 1
 		i += 1
+	print("Idioma: %s" % Loc.lang())
 	if DisplayServer.get_name() == "headless" and windows.size() > 1:
 		windows = [Vector2i(1280, 720)]
 		print("(sin ventana: solo la geometría lógica de 1280×720; 1600×900 se mide con ventana)")

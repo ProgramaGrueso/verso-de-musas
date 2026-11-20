@@ -330,34 +330,34 @@ func _rebuild_intent(C) -> void:
 			var hl := UIK.label("×%d" % hits, 18, Color("#ffffdd"), "bold")
 			UIK.outlined(hl, 5)
 			row.add_child(hl)
-		tips.append("Atacará por %d%s." % [d, (" (%d veces)" % hits) if hits > 1 else ""])
+		tips.append(tr("Atacará por %d (%d veces).") % [d, hits] if hits > 1 else tr("Atacará por %d.") % d)
 		parts += 1
 	if it.get("block", 0):
 		row.add_child(_intent_icon("block"))
-		tips.append("Ganará %d de Bloqueo." % it.block)
+		tips.append(tr("Ganará %d de Bloqueo.") % it.block)
 		parts += 1
 	if it.get("selfStr", 0) or it.get("thorns", 0):
 		row.add_child(_intent_icon("buff"))
-		tips.append(("Ganará %d de Fuerza." % it.selfStr) if it.get("selfStr", 0) else ("Ganará %d de Espinas." % it.thorns))
+		tips.append((tr("Ganará %d de Fuerza.") % it.selfStr) if it.get("selfStr", 0) else (tr("Ganará %d de Espinas.") % it.thorns))
 		parts += 1
 	if it.has("apply"):
 		row.add_child(_intent_icon("debuff"))
 		var ap := []
 		for k in it.apply.keys():
 			ap.append("%d %s" % [it.apply[k], Eng.st_name(k)])
-		tips.append("Te aplicará: " + ", ".join(ap) + ".")
+		tips.append(tr("Te aplicará: %s.") % ", ".join(ap))
 		parts += 1
 	if it.has("add"):
 		row.add_child(_intent_icon("curse"))
-		tips.append("Añadirá %d %s a tu mazo." % [it.add.n, DB.cards[it.add.id].name])
+		tips.append(tr("Añadirá %d %s a tu mazo.") % [it.add.n, DB.cards[it.add.id].name])
 		parts += 1
 	if it.get("heal", 0) or it.get("healAll", 0):
 		row.add_child(_intent_icon("heal"))
-		tips.append("Curará.")
+		tips.append(tr("Curará."))
 		parts += 1
 	if it.has("summon"):
 		row.add_child(_intent_icon("summon"))
-		tips.append("Invocará aliados.")
+		tips.append(tr("Invocará aliados."))
 		parts += 1
 	if parts == 0:
 		row.add_child(_intent_icon("unknown"))
@@ -387,9 +387,9 @@ func tip_text() -> String:
 	if e.hp <= 0 or dying:
 		return ""
 	var col := "#ff9aa0" if e.def.tier == "boss" else ("#ffcf80" if e.def.tier == "elite" else "#f0cf7a")
-	var t := "[b][color=%s]%s[/color][/b]\n[color=#d8d2e6]PV %d/%d%s[/color]" % [col, e.name, e.hp, e.maxHp, ("  ·  Bloqueo %d" % e.block) if e.block > 0 else ""]
+	var t := "[b][color=%s]%s[/color][/b]\n[color=#d8d2e6]%s%s[/color]" % [col, e.name, tr("PV %d/%d") % [e.hp, e.maxHp], ("  ·  " + tr("Bloqueo %d") % e.block) if e.block > 0 else ""]
 	if e.intent != null and _intent_txt != "":
-		t += "\n[color=#ffb0b6]Intención[/color] · " + _intent_txt
+		t += "\n[color=#ffb0b6]%s[/color] · %s" % [tr("Intención"), _intent_txt]
 	var good := []
 	var bad := []
 	for k in e.status.keys():
@@ -400,11 +400,11 @@ func tip_text() -> String:
 		var line := "%s [b]%s %d[/b] · %s" % [ic, Eng.st_name(k), v, Eng.st_desc(k, v)]
 		(bad if Eng.st_neg(k, v) else good).append(line)
 	if not good.is_empty():
-		t += "\n\n[color=#7ef0a0]Mejoras[/color]\n" + "\n".join(good)
+		t += "\n\n[color=#7ef0a0]%s[/color]\n" % tr("Mejoras") + "\n".join(good)
 	if not bad.is_empty():
-		t += "\n\n[color=#ff8a94]Penalizaciones[/color]\n" + "\n".join(bad)
+		t += "\n\n[color=#ff8a94]%s[/color]\n" % tr("Penalizaciones") + "\n".join(bad)
 	if good.is_empty() and bad.is_empty():
-		t += "\n[color=#9a94ad]Sin mejoras ni penalizaciones.[/color]"
+		t += "\n[color=#9a94ad]%s[/color]" % tr("Sin mejoras ni penalizaciones.")
 	return t
 
 

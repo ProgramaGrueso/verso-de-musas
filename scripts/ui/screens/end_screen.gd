@@ -35,23 +35,36 @@ func _ready() -> void:
 	if victory:
 		Sfx.music("victory")
 		Sfx.play("win")
-		title = UIK.label("¡VICTORIA!", 74, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
+		title = UIK.label(tr("¡VICTORIA!"), 74, UIK.GOLD, "title", HORIZONTAL_ALIGNMENT_CENTER)
 		var rel := ""
 		for r in G.relics:
 			rel += (Icons.bb("relic", r, 28) if Icons.has("relic", r) else DB.relics[r].i) + " "
-		var nm_txt := "\n¡Has superado la Pesadilla 10! Nada más puede detenerte." if G.get("nm", 0) >= 10 else "\n[b][color=#caa5ff]Pesadilla %d desbloqueada[/color][/b]: enemigos más duros te esperan." % mini(10, G.get("nm", 0) + 1)
-		sum = "%s ha conquistado la torre y derrotado a %s.\nCombates ganados: %d · Enemigos derrotados: %d · Turnos: %d\nReliquias: %s · Cartas en el mazo: %d%s%s%s" % [
-			name, _boss_name(), st.fights, st.kills, st.turns, rel, G.deck.size(), "\n[i](Modo fácil)[/i]" if G.easy else "", ("\nPesadilla %d" % G.nm) if G.get("nm", 0) else "", nm_txt]
+		var nm_txt := tr("¡Has superado la Pesadilla 10! Nada más puede detenerte.") if G.get("nm", 0) >= 10 else tr("[b][color=#caa5ff]Pesadilla %d desbloqueada[/color][/b]: enemigos más duros te esperan.") % mini(10, G.get("nm", 0) + 1)
+		sum = tr("%s ha conquistado la torre y derrotado a %s.") % [name, _boss_name()]
+		sum += "\n" + tr("Combates ganados: %d · Enemigos derrotados: %d · Turnos: %d") % [st.fights, st.kills, st.turns]
+		sum += "\n" + tr("Reliquias: %s · Cartas en el mazo: %d") % [rel, G.deck.size()]
+		if G.easy:
+			sum += "\n" + tr("[i](Modo fácil)[/i]")
+		if G.get("nm", 0):
+			sum += "\n" + tr("Pesadilla %d") % G.nm
+		sum += "\n" + nm_txt
 	else:
 		Meta.add("deaths")
 		Meta.clear_save()
 		Sfx.music("menu")
-		title = UIK.label("Derrota", 74, UIK.RED, "title", HORIZONTAL_ALIGNMENT_CENTER)
+		title = UIK.label(tr("Derrota"), 74, UIK.RED, "title", HORIZONTAL_ALIGNMENT_CENTER)
 		var by: String = G.get("deathBy", "")
 		if G.get("surrender", false):
 			by = ""
-		sum = "%s cayó en %s%s (piso %d).\nCombates ganados: %d · Enemigos derrotados: %d · Turnos: %d" % [name, DB.acts[G.act - 1].name, (" ante " + by) if by != "" else "", G.floor, st.fights, st.kills, st.turns]
-	sum += "\n[font_size=18][color=#a79fc0]Semilla: %d%s[/color][/font_size]" % [G.seed, ("  ·  Reto diario %s (%s)" % [G.daily, Daily.mod_name(G.get("dailyMod", ""))]) if G.get("daily", "") != "" else ""]
+		if by != "":
+			sum = tr("%s cayó en %s ante %s (piso %d).") % [name, DB.acts[G.act - 1].name, by, G.floor]
+		else:
+			sum = tr("%s cayó en %s (piso %d).") % [name, DB.acts[G.act - 1].name, G.floor]
+		sum += "\n" + tr("Combates ganados: %d · Enemigos derrotados: %d · Turnos: %d") % [st.fights, st.kills, st.turns]
+	var seed_t := tr("Semilla: %d") % G.seed
+	if G.get("daily", "") != "":
+		seed_t += "  ·  " + tr("Reto diario %s (%s)") % [G.daily, Daily.mod_name(G.get("dailyMod", ""))]
+	sum += "\n[font_size=18][color=#a79fc0]%s[/color][/font_size]" % seed_t
 	UIK.outlined(title, 12)
 	col.add_child(title)
 	var r := UIK.rich("[center]%s[/center]" % sum, 24)
@@ -66,17 +79,17 @@ func _ready() -> void:
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	col.add_child(row)
 	var bk := "" if victory else "big"   # con Galería son cuatro botones: tamaño normal para que quepan
-	var a := UIK.button("Jugar de nuevo" if victory else "Intentarlo de nuevo", bk + " green")
+	var a := UIK.button(tr("Jugar de nuevo") if victory else tr("Intentarlo de nuevo"), bk + " green")
 	a.pressed.connect(func(): Nav.select())
 	row.add_child(a)
 	if victory:
-		var c := UIK.button("Galería", bk)
+		var c := UIK.button(tr("Galería"), bk)
 		c.pressed.connect(func(): Nav.gallery())
 		row.add_child(c)
-	var hb := UIK.button("Historial", bk)
+	var hb := UIK.button(tr("Historial"), bk)
 	hb.pressed.connect(func(): Meta.run = null; Nav.history())
 	row.add_child(hb)
-	var b := UIK.button("Menú principal", bk)
+	var b := UIK.button(tr("Menú principal"), bk)
 	b.pressed.connect(func(): Meta.run = null; Nav.title())
 	row.add_child(b)
 	# Fase 3: revancha con la misma semilla, resumen para compartir y logros
@@ -84,17 +97,17 @@ func _ready() -> void:
 	row2.add_theme_constant_override("separation", 12)
 	row2.alignment = BoxContainer.ALIGNMENT_CENTER
 	col.add_child(row2)
-	var rv := UIK.button("Revancha", "small")
-	UIK.tip(rv, "Repite la partida con la misma musa, semilla y Pesadilla (el reto diario repite su día).")
+	var rv := UIK.button(tr("Revancha"), "small")
+	UIK.tip(rv, tr("Repite la partida con la misma musa, semilla y Pesadilla (el reto diario repite su día)."))
 	rv.pressed.connect(func(): Nav.rematch(G))
 	row2.add_child(rv)
-	var cp := UIK.button("Copiar resumen", "small")
-	UIK.tip(cp, "Copia la musa, la semilla y el resultado para compartirlos.")
+	var cp := UIK.button(tr("Copiar resumen"), "small")
+	UIK.tip(cp, tr("Copia la musa, la semilla y el resultado para compartirlos."))
 	cp.pressed.connect(func():
 		DisplayServer.clipboard_set(Progress.share_text(G, victory))
-		Main.I.toast("Resumen copiado: ¡reta a alguien con tu semilla!"))
+		Main.I.toast(tr("Resumen copiado: ¡reta a alguien con tu semilla!")))
 	row2.add_child(cp)
-	var lg := UIK.button("Logros  %d/%d" % [Progress.ach_count(Meta.data), Progress.achievements().size()], "small")
+	var lg := UIK.button(tr("Logros  %d/%d") % [Progress.ach_count(Meta.data), Progress.achievements().size()], "small")
 	lg.pressed.connect(func(): Meta.run = null; Nav.achievements())
 	row2.add_child(lg)
 	a.grab_focus.call_deferred()
@@ -135,7 +148,7 @@ func _earned() -> Control:
 	var mastery := ""
 	if victory and not G.easy:
 		var r := Progress.mastery_rank(Meta.data, G.char)
-		mastery = "Maestría de %s: [b][color=%s]%s[/color][/b] (%d puntos, +%d)" % [DB.characters[G.char].name, Progress.rank_color(r).to_html(false), Progress.rank_name(r),
+		mastery = tr("Maestría de %s: [b][color=%s]%s[/color][/b] (%d puntos, +%d)") % [DB.characters[G.char].name, Progress.rank_color(r).to_html(false), Progress.rank_name(r),
 			Progress.mastery_points(Meta.data, G.char), Progress.mastery_gain(int(G.get("nm", 0)), false)]
 	if ach.is_empty() and unl.is_empty() and mastery == "":
 		return null
@@ -160,15 +173,16 @@ func _earned() -> Control:
 					var ic := Progress.group_icon(g)
 					var w: Control = Medal.disc("muse:" + str(ic[1]), 52, true, UIK.GREEN) if ic[0] == "muse" else Icons.frame(ic[0], ic[1], 52)
 					w.mouse_filter = Control.MOUSE_FILTER_PASS
-					UIK.tip(w, "[b][color=#8bf0a4]Nuevo contenido[/color][/b]\n%s" % UnlockBanner._cap(Progress.group_text(g)))
+					UIK.tip(w, tr("[b][color=#8bf0a4]Nuevo contenido[/color][/b]\n%s") % UnlockBanner._cap(Progress.group_text(g)))
 					row.add_child(w)
 		v.add_child(row)
 		var parts := []
 		if not ach.is_empty():
-			parts.append("%d logro%s nuevo%s" % [ach.size(), "" if ach.size() == 1 else "s", "" if ach.size() == 1 else "s"])
+			parts.append(tr_n("%d logro nuevo", "%d logros nuevos", ach.size()) % ach.size())
 		if not unl.is_empty():
-			parts.append("%d desbloqueo%s de contenido" % [unl.size(), "" if unl.size() == 1 else "s"])
-		v.add_child(UIK.rich("[center][color=#f0cf7a]%s[/color] en esta partida[/center]" % " y ".join(parts), 17))
+			parts.append(tr_n("%d desbloqueo de contenido", "%d desbloqueos de contenido", unl.size()) % unl.size())
+		var got: String = parts[0] if parts.size() == 1 else tr("%s y %s") % [parts[0], parts[1]]
+		v.add_child(UIK.rich("[center]%s[/center]" % (tr("[color=#f0cf7a]%s[/color] en esta partida") % got), 17))
 	if mastery != "":
 		v.add_child(UIK.rich("[center]%s[/center]" % mastery, 17))
 	for c in v.get_children():
@@ -179,4 +193,4 @@ func _earned() -> Control:
 
 func _boss_name() -> String:
 	var bid := RunGen.boss_id(G)
-	return DB.enemies[bid].name if DB.enemies.has(bid) else "la Reina de la Colmena"
+	return DB.enemies[bid].name if DB.enemies.has(bid) else tr("la Reina de la Colmena")

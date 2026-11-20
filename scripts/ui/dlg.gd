@@ -216,7 +216,11 @@ static func _card_grid(cards: Array, C, w: float, on_press: Callable = Callable(
 
 
 # ---------- Confirmar / mensaje ----------
-static func confirm(text: String, yes: String = "Sí", no: String = "No") -> bool:
+static func confirm(text: String, yes: String = "", no: String = "") -> bool:
+	if yes == "":
+		yes = Loc.t("Sí")
+	if no == "":
+		no = Loc.t("No")
 	var o := _overlay()
 	o.cancel_result = false
 	var v := _center_col(o, 20)
@@ -238,7 +242,9 @@ static func confirm(text: String, yes: String = "Sí", no: String = "No") -> boo
 	return await o.done
 
 
-static func message(title: String, bbcode: String, btn: String = "Entendido", width: int = 760) -> void:
+static func message(title: String, bbcode: String, btn: String = "", width: int = 760) -> void:
+	if btn == "":
+		btn = Loc.t("Entendido")
 	var o := _overlay()
 	var v := _center_col(o)
 	var p := UIK.panel(30)
@@ -288,8 +294,8 @@ static func text_input(title: String, sub: String = "", initial: String = "", pl
 	le.add_theme_font_override("font", UIK.font("bold"))
 	le.add_theme_font_size_override("font_size", 24)
 	col.add_child(le)
-	var y := UIK.button("Aceptar", "green")
-	var n := UIK.button("Cancelar", "red")
+	var y := UIK.button(Loc.t("Aceptar"), "green")
+	var n := UIK.button(Loc.t("Cancelar"), "red")
 	y.pressed.connect(func(): o.close(le.text))
 	n.pressed.connect(func(): o.close(null))
 	le.text_submitted.connect(func(t: String): o.close(t))
@@ -302,7 +308,7 @@ static func text_input(title: String, sub: String = "", initial: String = "", pl
 
 
 # ---------- Reliquias (Fase 2.3: clic / A en una reliquia) ----------
-const RELIC_RARITY := {"start": "Inicial", "common": "Común", "uncommon": "Poco común", "rare": "Rara", "boss": "De jefe"}
+const RELIC_RARITY := {"start": "Inicial", "common": "Común", "uncommon": "Poco común", "rare": "Rara", "boss": "De jefe"}   # loc
 
 
 ## De dónde sale una reliquia: rareza, en qué salas aparece y si es exclusiva de una musa.
@@ -315,13 +321,13 @@ static func relic_origin(id: String) -> String:
 		for ch in DB.characters.keys():
 			if DB.characters[ch].get("startRelic", "") == id:
 				who = DB.characters[ch].name
-		parts.append("Reliquia inicial" + (" de %s" % who if who != "" else ""))
+		parts.append(Loc.t("Reliquia inicial de %s") % who if who != "" else Loc.t("Reliquia inicial"))
 	elif rar == "boss":
-		parts.append("De jefe · se elige al vencer a un jefe")
+		parts.append(Loc.t("De jefe · se elige al vencer a un jefe"))
 	else:
-		parts.append("%s · élites, eventos y tiendas" % RELIC_RARITY.get(rar, rar.capitalize()))
+		parts.append(Loc.t("%s · élites, eventos y tiendas") % (Loc.t(RELIC_RARITY[rar]) if RELIC_RARITY.has(rar) else rar.capitalize()))
 	if r.has("char") and DB.characters.has(r.char) and rar != "start":
-		parts.append("Exclusiva de %s" % DB.characters[r.char].name)
+		parts.append(Loc.t("Exclusiva de %s") % DB.characters[r.char].name)
 	return " · ".join(parts)
 
 
@@ -358,7 +364,7 @@ static func relic_info(id: String) -> void:
 	d.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	d.custom_minimum_size = Vector2(520, 0)
 	col.add_child(d)
-	var b := UIK.button("Cerrar")
+	var b := UIK.button(Loc.t("Cerrar"))
 	b.pressed.connect(func(): o.close(null))
 	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	col.add_child(b)
@@ -379,9 +385,9 @@ static func view_cards(title: String, cards: Array, C = null, deck: bool = false
 	o.set_meta("deck_view", deck)
 	var v := _center_col(o, 12)
 	v.add_child(_title(title))
-	var b := UIK.button("Cerrar")
+	var b := UIK.button(Loc.t("Cerrar"))
 	if cards.is_empty():
-		v.add_child(UIK.label("No hay cartas aquí.", 22, UIK.DIM, "sans", HORIZONTAL_ALIGNMENT_CENTER))
+		v.add_child(UIK.label(Loc.t("No hay cartas aquí."), 22, UIK.DIM, "sans", HORIZONTAL_ALIGNMENT_CENTER))
 	elif cards.size() < FILTER_MIN:
 		v.add_child(_card_grid(cards, C, 158.0))
 	else:
@@ -405,7 +411,7 @@ static func view_cards(title: String, cards: Array, C = null, deck: bool = false
 
 const FILTER_MIN := 6          # con menos cartas no hace falta filtrar
 const FILTER_GRID_H := 436.0   # alto de la rejilla con barra de filtros (cabe en 720 con título y botón)
-const FILTER_TYPES := [["attack", "Ataque"], ["skill", "Habilidad"], ["power", "Poder"], ["other", "Otras"]]
+const FILTER_TYPES := [["attack", "Ataque"], ["skill", "Habilidad"], ["power", "Poder"], ["other", "Otras"]]   # loc
 const FILTER_COSTS := [["0", "0"], ["1", "1"], ["2", "2"], ["3", "3+"], ["X", "X"], ["-", "—"]]
 
 
@@ -446,7 +452,7 @@ static func _refill(holder: Control, cards: Array, C) -> void:
 	var g: Control
 	if shown.is_empty():
 		g = CenterContainer.new()
-		g.add_child(UIK.label("Ninguna carta con este filtro.", 22, UIK.DIM, "sans", HORIZONTAL_ALIGNMENT_CENTER))
+		g.add_child(UIK.label(Loc.t("Ninguna carta con este filtro."), 22, UIK.DIM, "sans", HORIZONTAL_ALIGNMENT_CENTER))
 	else:
 		g = _card_grid(shown, C, 158.0, Callable(), FILTER_GRID_H)
 	g.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -492,7 +498,7 @@ static func _filter_bar(cards: Array, C, holder: Control) -> Control:
 			sync.call())
 		chips[key] = chip
 		row.add_child(chip)
-	add_chip.call("all", "Todas %d" % cards.size(), func(f: Dictionary):
+	add_chip.call("all", Loc.t("Todas %d") % cards.size(), func(f: Dictionary):
 		f.type = ""; f.cost = ""; f.up = false)
 	var tcount := {}
 	var ccount := {}
@@ -507,9 +513,9 @@ static func _filter_bar(cards: Array, C, holder: Control) -> Control:
 	for pair in FILTER_TYPES:
 		var key: String = pair[0]
 		if tcount.get(key, 0) > 0:
-			add_chip.call("t:" + key, "%s %d" % [pair[1], tcount[key]], func(f: Dictionary):
+			add_chip.call("t:" + key, "%s %d" % [Loc.t(pair[1]), tcount[key]], func(f: Dictionary):
 				f.type = "" if f.type == key else key)
-	var cl := UIK.label("Coste", 16, UIK.DIM, "bold")
+	var cl := UIK.label(Loc.t("Coste"), 16, UIK.DIM, "bold")
 	cl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	row.add_child(cl)
 	for pair in FILTER_COSTS:
@@ -518,7 +524,7 @@ static func _filter_bar(cards: Array, C, holder: Control) -> Control:
 			add_chip.call("c:" + key, pair[1], func(f: Dictionary):
 				f.cost = "" if f.cost == key else key)
 	if ups > 0:
-		add_chip.call("up", "Mejoradas %d" % ups, func(f: Dictionary):
+		add_chip.call("up", Loc.t("Mejoradas %d") % ups, func(f: Dictionary):
 			f.up = not f.up)
 	var cnt := UIK.label("%d / %d" % [cards.size(), cards.size()], 16, UIK.DIM, "bold")
 	cnt.name = "FilterCount"
@@ -541,11 +547,12 @@ static func pick_cards(opts: Dictionary) -> Array:
 	var n: int = opts.get("n", 1)
 	var sel: Array = []
 	var views := {}
-	var ok := UIK.button(opts.get("confirmLabel", "Confirmar"), "green")
+	var ok_label: String = opts.get("confirmLabel", Loc.t("Confirmar"))
+	var ok := UIK.button(ok_label, "green")
 	ok.disabled = true
 	var upd := func():
 		ok.disabled = sel.size() != n
-		ok.text = opts.get("confirmLabel", "Confirmar") + ((" (%d/%d)" % [sel.size(), n]) if n > 1 else "")
+		ok.text = ok_label + ((" (%d/%d)" % [sel.size(), n]) if n > 1 else "")
 	var w: float = 230.0 if opts.get("big", false) else 158.0
 	var on_press := func(cv: CardView):
 		Sfx.play("select")
@@ -634,16 +641,18 @@ static func upgrade_note(inst: Dictionary, C = null) -> String:
 	var b := Eng.card_def(up_inst)
 	var parts := []
 	if a.cost != b.cost:
-		parts.append("Coste %s ➜ %s" % [str(a.cost), str(b.cost)])
+		parts.append(Loc.t("Coste %s ➜ %s") % [str(a.cost), str(b.cost)])
 	var la = CardText.lines(a, C).lines.map(_strip)
 	var lb = CardText.lines(b, C).lines.map(_strip)
 	for l in lb:
 		if not (l in la):
 			parts.append(l)
+	# palabras clave tal como las escribe CardText en el idioma activo (msgid del contenido, content_en.po)
+	var kws := [Loc.t("Agotar"), Loc.t("Retener"), Loc.t("Innata")]
 	for l in la:
-		if not (l in lb) and (l.contains("Agotar") or l.contains("Retener") or l.contains("Innata")):
-			parts.append("Pierde: " + l)
-	return " · ".join(parts) if not parts.is_empty() else "Mejora los valores de la carta."
+		if not (l in lb) and (l.contains(kws[0]) or l.contains(kws[1]) or l.contains(kws[2])):
+			parts.append(Loc.t("Pierde: %s") % l)
+	return " · ".join(parts) if not parts.is_empty() else Loc.t("Mejora los valores de la carta.")
 
 
 ## Rejilla más estrecha cuando hay vista previa de mejora, y el hueco donde se pinta (cabe la carta de 200 px,
@@ -664,7 +673,7 @@ static func _upgrade_peek(slot: Control, view: CardView, C) -> Control:
 	box.z_index = 200
 	var col := VBoxContainer.new()
 	col.add_theme_constant_override("separation", 6)
-	col.add_child(UIK.label("Mejorada ➜", 18, Color("#8dff9d"), "bold", HORIZONTAL_ALIGNMENT_CENTER))
+	col.add_child(UIK.label(Loc.t("Mejorada ➜"), 18, Color("#8dff9d"), "bold", HORIZONTAL_ALIGNMENT_CENTER))
 	var cc := CenterContainer.new()
 	cc.add_child(CardView.create(up_inst, C, 200.0, false))
 	col.add_child(cc)
@@ -693,12 +702,12 @@ static func upgrade_compare(inst: Dictionary, C = null) -> bool:
 	var o := _overlay()
 	o.cancel_result = false
 	var v := _center_col(o, 14)
-	v.add_child(_title("¿Mejorar esta carta?"))
+	v.add_child(_title(Loc.t("¿Mejorar esta carta?")))
 	var row := _row(36)
 	var up_inst := inst.duplicate()
 	up_inst.up = true
 	var note := upgrade_note(inst, C)
-	for pair in [["Ahora", inst], ["Mejorada", up_inst]]:
+	for pair in [[Loc.t("Ahora"), inst], [Loc.t("Mejorada"), up_inst]]:
 		var col := VBoxContainer.new()
 		col.add_theme_constant_override("separation", 8)
 		col.add_child(UIK.label(pair[0], 22, UIK.DIM, "sans", HORIZONTAL_ALIGNMENT_CENTER))
@@ -711,11 +720,11 @@ static func upgrade_compare(inst: Dictionary, C = null) -> bool:
 			nl.custom_minimum_size = Vector2(300, 0)
 			col.add_child(nl)
 		row.add_child(col)
-		if pair[0] == "Ahora":
+		if pair[1] == inst:
 			row.add_child(UIK.label("➜", 72, UIK.GOLD, "bold"))
 	v.add_child(row)
-	var yes := UIK.button("Mejorar", "green")
-	var no := UIK.button("Cancelar", "red")
+	var yes := UIK.button(Loc.t("Mejorar"), "green")
+	var no := UIK.button(Loc.t("Cancelar"), "red")
 	yes.pressed.connect(func(): o.close(true))
 	no.pressed.connect(func(): o.close(false))
 	v.add_child(UIK.button_row([yes, no], 16))
@@ -766,7 +775,9 @@ static func options() -> void:
 	var scale0 := UIK.text_scale
 	_options_fill(o, "Cerrar")
 	await o.done
-	if not is_equal_approx(scale0, UIK.text_scale) and Main.I != null and Main.I.current == "title" \
+	if o.get_meta("lang_changed", false) and Main.I != null:
+		Main.I.relocalize()   # idioma nuevo: barra superior, pausa y la pantalla (si se puede rehacer sin perder nada)
+	elif not is_equal_approx(scale0, UIK.text_scale) and Main.I != null and Main.I.current == "title" \
 			and Main.I.overlay_host.get_child_count() <= 1:
 		Nav.title()   # la portada se rehace con el texto nuevo (las demás pantallas, al abrirse)
 
@@ -782,18 +793,35 @@ static func _options_fill(o: Overlay, focus_name: String) -> void:
 	var p := UIK.panel(30)
 	var col := VBoxContainer.new()
 	col.add_theme_constant_override("separation", 12)
-	col.add_child(_title("Opciones", 32))
-	col.add_child(_slider_row("Música", Meta.settings.music, func(x): Meta.settings.music = x; Sfx.apply_music_volume(); Meta.save_settings(), "music"))
-	var sfx_row := _slider_row("Sonidos", Meta.settings.sfx, func(x): Meta.settings.sfx = x; Meta.save_settings(), "sound")
+	col.add_child(_title(Loc.t("Opciones"), 32))
+	col.add_child(_slider_row(Loc.t("Música"), Meta.settings.music, func(x): Meta.settings.music = x; Sfx.apply_music_volume(); Meta.save_settings(), "music"))
+	var sfx_row := _slider_row(Loc.t("Sonidos"), Meta.settings.sfx, func(x): Meta.settings.sfx = x; Meta.save_settings(), "sound")
 	(sfx_row.get_child(2) as HSlider).drag_ended.connect(func(_c): Sfx.play("hit"))
 	col.add_child(sfx_row)
-	col.add_child(_toggle_row("Jugar carta", Meta.settings.confirm, "Elegir y confirmar (más seguro)", "Un solo clic", func(x): Meta.settings.confirm = x; Meta.save_settings(), "hand"))
-	col.add_child(_toggle_row("Animaciones", Meta.settings.fast, "Rápidas", "Normales", func(x): Meta.settings.fast = x; Meta.save_settings(), "speed"))
-	var calm_row := _toggle_row("Reducir movimiento", Meta.settings.get("calm", false), "Sí (sin sacudidas ni partículas)", "No", func(x): Meta.settings.calm = x; Meta.save_settings(), "moon")
-	UIK.tip(calm_row.get_child(2), "[b][color=#f0cf7a]Reducir movimiento[/color][/b]\nApaga las sacudidas de pantalla, el hitstop de los golpes, los anillos y las partículas. Los colores y los sonidos se mantienen.")
+	col.add_child(_toggle_row(Loc.t("Jugar carta"), Meta.settings.confirm, Loc.t("Elegir y confirmar (más seguro)"), Loc.t("Un solo clic"), func(x): Meta.settings.confirm = x; Meta.save_settings(), "hand"))
+	col.add_child(_toggle_row(Loc.t("Animaciones"), Meta.settings.fast, Loc.t("Rápidas"), Loc.t("Normales"), func(x): Meta.settings.fast = x; Meta.save_settings(), "speed"))
+	var calm_row := _toggle_row(Loc.t("Reducir movimiento"), Meta.settings.get("calm", false), Loc.t("Sí (sin sacudidas ni partículas)"), Loc.t("No"), func(x): Meta.settings.calm = x; Meta.save_settings(), "moon")
+	UIK.tip(calm_row.get_child(2), "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [Loc.t("Reducir movimiento"), Loc.t("Apaga las sacudidas de pantalla, el hitstop de los golpes, los anillos y las partículas. Los colores y los sonidos se mantienen.")])
 	col.add_child(calm_row)
+	# idioma (Fase 5): cada idioma se nombra en su propia lengua; el panel se rehace al momento y, al cerrar
+	# Opciones, Main.relocalize rehace la pantalla y la barra superior
+	var lr := _opt_head(Loc.t("Idioma"), "menu")
+	lr.name = "LangRow"
+	for pair in Loc.LANGS:
+		var code: String = pair[0]
+		var lb := UIK.button(pair[1], "small green" if code == Loc.lang() else "small")
+		lb.name = "Lang_" + code
+		lb.pressed.connect(func():
+			if code == Loc.lang():
+				return
+			Loc.set_lang(code, Meta.settings)
+			Meta.save_settings()
+			o.set_meta("lang_changed", true)
+			_options_fill(o, "Lang_" + code))
+		lr.add_child(lb)
+	col.add_child(lr)
 	# tamaño del texto: 100 / 115 / 130 %
-	var scr := _opt_head("Tamaño del texto", "help")
+	var scr := _opt_head(Loc.t("Tamaño del texto"), "help")
 	for i in UIK.TEXT_SCALES.size():
 		var sc: float = UIK.TEXT_SCALES[i]
 		var on := is_equal_approx(sc, UIK.text_scale)
@@ -807,22 +835,22 @@ static func _options_fill(o: Overlay, focus_name: String) -> void:
 			UIK.text_scale = sc
 			_options_fill(o, "Scale_%d" % i))
 		scr.add_child(sb)
-	UIK.tip(scr.get_child(1), "[b][color=#f0cf7a]Tamaño del texto[/color][/b]\nAgranda las letras de menús, diálogos, cartas y ayudas. Se aplica a cada pantalla al abrirla.")
+	UIK.tip(scr.get_child(1), "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [Loc.t("Tamaño del texto"), Loc.t("Agranda las letras de menús, diálogos, cartas y ayudas. Se aplica a cada pantalla al abrirla.")])
 	col.add_child(scr)
-	var kr := _opt_head("Controles", "gear")
-	var kb := UIK.button("Teclado…", "small")
+	var kr := _opt_head(Loc.t("Controles"), "gear")
+	var kb := UIK.button(Loc.t("Teclado…"), "small")
 	kb.name = "Controls"
 	kb.pressed.connect(func(): await controls())
 	kr.add_child(kb)
-	var kl := UIK.label("Cambia las teclas de las acciones", 16, UIK.DIM)
+	var kl := UIK.label(Loc.t("Cambia las teclas de las acciones"), 16, UIK.DIM)
 	kl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	kr.add_child(kl)
 	col.add_child(kr)
-	var mr := UIK.button("Reiniciar música")
+	var mr := UIK.button(Loc.t("Reiniciar música"))
 	mr.pressed.connect(func(): Sfx.restart_music())
-	var fs := UIK.button("Pantalla completa")
+	var fs := UIK.button(Loc.t("Pantalla completa"))
 	fs.pressed.connect(func(): Main.I._toggle_fullscreen())
-	var cl := UIK.button("Cerrar")
+	var cl := UIK.button(Loc.t("Cerrar"))
 	cl.name = "Cerrar"
 	cl.pressed.connect(func(): o.close(null))
 	col.add_child(UIK.button_row([mr, fs, cl], 14))
@@ -877,8 +905,8 @@ static func controls() -> void:
 	var p := UIK.panel(26)
 	var col := VBoxContainer.new()
 	col.add_theme_constant_override("separation", 10)
-	col.add_child(_title("Controles · teclado", 30))
-	var sub := UIK.label("Pulsa una acción y después la tecla nueva (Esc cancela). Si esa tecla ya era de otra acción, se intercambian. Las flechas, Enter, Espacio, Esc, 1–9, F1 y F11 son fijas; el mando no cambia.", 16, UIK.DIM, "sans", HORIZONTAL_ALIGNMENT_CENTER)
+	col.add_child(_title(Loc.t("Controles · teclado"), 30))
+	var sub := UIK.label(Loc.t("Pulsa una acción y después la tecla nueva (Esc cancela). Si esa tecla ya era de otra acción, se intercambian. Las flechas, Enter, Espacio, Esc, 1–9, F1 y F11 son fijas; el mando no cambia."), 16, UIK.DIM, "sans", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.wrap(sub, 760, 16)
 	col.add_child(sub)
 	var grid := GridContainer.new()
@@ -893,7 +921,7 @@ static func controls() -> void:
 			btns[id].text = Main.key_name(id)
 	for a in Main.KEY_ACTIONS:
 		var id: String = a[0]
-		var l := UIK.label(a[1], 18, UIK.TEXT)
+		var l := UIK.label(Loc.t(a[1]), 18, UIK.TEXT)
 		l.custom_minimum_size = Vector2(230, 0)
 		l.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		grid.add_child(l)
@@ -903,8 +931,8 @@ static func controls() -> void:
 		b.pressed.connect(func():
 			if catcher.waiting:
 				return
-			b.text = "Pulsa…"
-			msg.text = "Pulsa la tecla nueva para «%s» (Esc cancela)." % a[1]
+			b.text = Loc.t("Pulsa…")
+			msg.text = Loc.t("Pulsa la tecla nueva para «%s» (Esc cancela).") % Loc.t(a[1])
 			catcher.arm()
 			var k: int = await catcher.caught
 			if not is_instance_valid(b):
@@ -913,7 +941,7 @@ static func controls() -> void:
 				msg.text = ""
 			else:
 				var err := Main.set_key(id, k)
-				msg.text = err if err != "" else "«%s»: %s" % [a[1], OS.get_keycode_string(k)]
+				msg.text = err if err != "" else "«%s»: %s" % [Loc.t(a[1]), OS.get_keycode_string(k)]
 				Sfx.play("error" if err != "" else "click")
 			refresh.call()
 			b.grab_focus())
@@ -921,13 +949,13 @@ static func controls() -> void:
 		grid.add_child(b)
 	col.add_child(grid)
 	col.add_child(msg)
-	var rs := UIK.button("Restablecer")
+	var rs := UIK.button(Loc.t("Restablecer"))
 	rs.name = "Reset"
 	rs.pressed.connect(func():
 		Main.reset_keys()
 		refresh.call()
-		msg.text = "Teclas por defecto.")
-	var cl := UIK.button("Cerrar")
+		msg.text = Loc.t("Teclas por defecto."))
+	var cl := UIK.button(Loc.t("Cerrar"))
 	cl.pressed.connect(func(): o.close(null))
 	col.add_child(UIK.button_row([rs, cl], 14))
 	p.add_child(col)
@@ -936,6 +964,7 @@ static func controls() -> void:
 	await o.done
 
 
+# loc
 const HELP := """[b][color=#f0cf7a]Objetivo[/color][/b]
 Sube la torre superando 3 zonas. Elige tu camino en el mapa, derrota enemigos y jefes, y mejora tu mazo de cartas.
 
@@ -975,7 +1004,7 @@ static func help_text() -> String:
 	var keys := {}
 	for a in Main.KEY_ACTIONS:
 		keys[a[0]] = Main.key_name(a[0])
-	return HELP.format(keys)
+	return Loc.t(HELP).format(keys)
 
 
 static func help() -> void:
@@ -983,7 +1012,7 @@ static func help() -> void:
 	for pair in [["⚔️", "intent:attack"], ["🛡️", "intent:block"], ["⬇️", "intent:debuff"], ["⬆️", "intent:buff"], ["⚡", "ui:energy"], ["🔥", "node:rest"], ["💰", "ui:gold"]]:
 		var kv: PackedStringArray = pair[1].split(":")
 		h = h.replace(pair[0], Icons.bb(kv[0], kv[1], 20))
-	await message("Cómo jugar", h, "¡A jugar!", 820)
+	await message(Loc.t("Cómo jugar"), h, Loc.t("¡A jugar!"), 820)
 
 
 static func pause_menu() -> void:
@@ -991,12 +1020,13 @@ static func pause_menu() -> void:
 	if G == null or not (Main.I.current in ["map", "combat", "reward", "shop", "rest", "event"]):
 		return
 	var o := _overlay()
+	o.set_meta("pause", true)
 	var v := _center_col(o)
 	var p := UIK.panel(30)
 	var col := VBoxContainer.new()
 	col.add_theme_constant_override("separation", 12)
 	col.custom_minimum_size = Vector2(340, 0)
-	col.add_child(_title("Pausa", 32))
+	col.add_child(_title(Loc.t("Pausa"), 32))
 	var first_b: Button = null
 	var firsts := []   # las lambdas capturan por valor: se acumula en un array
 	var add := func(t: String, kind: String, fn: Callable) -> Button:
@@ -1005,33 +1035,33 @@ static func pause_menu() -> void:
 		col.add_child(b)
 		firsts.append(b)
 		return b
-	add.call("Seguir jugando", "green", func(): o.close(null))
-	add.call("Opciones", "", func(): Dlg.options())
-	add.call("Cómo jugar", "", func(): Dlg.help())
-	add.call("Guardar y salir", "", func():
-		var where := "Tu partida está guardada en este punto del mapa." if Main.I.current == "map" else "Tu partida se guarda al inicio de esta sala, y la sala se repetirá al continuar."
-		if not await confirm("¿Guardar y salir al menú?\n[font_size=18]%s[/font_size]" % where, "Guardar y salir", "Cancelar"):
+	add.call(Loc.t("Seguir jugando"), "green", func(): o.close(null))
+	add.call(Loc.t("Opciones"), "", func(): Dlg.options())
+	add.call(Loc.t("Cómo jugar"), "", func(): Dlg.help())
+	add.call(Loc.t("Guardar y salir"), "", func():
+		var where := Loc.t("Tu partida está guardada en este punto del mapa.") if Main.I.current == "map" else Loc.t("Tu partida se guarda al inicio de esta sala, y la sala se repetirá al continuar.")
+		if not await confirm("%s\n[font_size=18]%s[/font_size]" % [Loc.t("¿Guardar y salir al menú?"), where], Loc.t("Guardar y salir"), Loc.t("Cancelar")):
 			return
 		o.close(null)
 		Nav.leave_run()
 		Meta.run = null
 		Nav.title()
-		Main.I.toast("Partida guardada. Puedes continuar desde el menú."))
-	add.call("Rendirse", "red", func():
-		if not await confirm("¿Seguro que quieres rendirte?\n[font_size=18]La partida terminará como una derrota.[/font_size]", "Rendirme", "Seguir luchando"):
+		Main.I.toast(Loc.t("Partida guardada. Puedes continuar desde el menú.")))
+	add.call(Loc.t("Rendirse"), "red", func():
+		if not await confirm("%s\n[font_size=18]%s[/font_size]" % [Loc.t("¿Seguro que quieres rendirte?"), Loc.t("La partida terminará como una derrota.")], Loc.t("Rendirme"), Loc.t("Seguir luchando")):
 			return
 		o.close(null)
 		Nav.leave_run()
 		G["surrender"] = true
 		Nav.game_over())
 	var seed_row := _row(10)
-	var sl := UIK.label("Semilla: %d" % G.seed, 16, UIK.DIM)
+	var sl := UIK.label(Loc.t("Semilla: %d") % G.seed, 16, UIK.DIM)
 	sl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	seed_row.add_child(sl)
-	var cp := UIK.button("Copiar", "small")
+	var cp := UIK.button(Loc.t("Copiar"), "small")
 	cp.pressed.connect(func():
 		DisplayServer.clipboard_set(str(G.seed))
-		Main.I.toast("Semilla copiada: %d" % G.seed))
+		Main.I.toast(Loc.t("Semilla copiada: %d") % G.seed))
 	seed_row.add_child(cp)
 	col.add_child(seed_row)
 	p.add_child(col)

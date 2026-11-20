@@ -49,7 +49,7 @@ func _ready() -> void:
 	col.add_theme_constant_override("separation", 8 if compact else 16)
 	add_child(col)
 	var logo_fs := (68 if save else 74) if compact else 86
-	var logo := UIK.label("VERSO\nDE MUSAS", logo_fs, UIK.GOLD, "title")
+	var logo := UIK.label("VERSO\nDE MUSAS", logo_fs, UIK.GOLD, "title")   # noloc: marca (logo), igual en todos los idiomas
 	logo.add_theme_constant_override("line_spacing", -14)
 	logo.add_theme_color_override("font_shadow_color", Color(glow, 0.8))
 	logo.add_theme_constant_override("shadow_offset_x", 0)
@@ -57,7 +57,7 @@ func _ready() -> void:
 	UIK.outlined(logo, 8, Color(0.1, 0.05, 0.0))
 	logo.set_meta("logo", true)
 	col.add_child(logo)
-	var sub := UIK.label("MUSAS MÁGICAS DEL VERSO", 19, Color.WHITE, "bold")
+	var sub := UIK.label(tr("MUSAS MÁGICAS DEL VERSO"), 19, Color.WHITE, "bold")
 	UIK.outlined(sub, 5)
 	col.add_child(sub)
 	var menu := VBoxContainer.new()
@@ -80,30 +80,30 @@ func _ready() -> void:
 		return b
 	var first: Button = null
 	if save:
-		first = add.call("Continuar", "big green", func():
+		first = add.call(tr("Continuar"), "big green", func():
 			var g = Meta.load_run()
 			if g != null:
 				Meta.run = g
 				Nav.map()
 			else:
-				Main.I.toast("No se pudo cargar la partida."))
-	var nueva: Button = add.call("Nueva partida", "" if save else "big", func(): Nav.select())
+				Main.I.toast(tr("No se pudo cargar la partida.")))
+	var nueva: Button = add.call(tr("Nueva partida"), "" if save else "big", func(): Nav.select())
 	if first == null:
 		first = nueva
 	var dkey := Daily.key_today()
 	var dres := Meta.daily_result(dkey)
 	var stk := Meta.daily_streak()
-	add.call("Reto diario" + ("  ✔" if dres.get("win", false) else "") + ("  · racha %d" % stk.cur if stk.cur > 1 else ""), "", func(): Nav.daily())
-	add.call("Logros  %d/%d" % [Progress.ach_count(Meta.data), Progress.achievements().size()], "", func(): Nav.achievements())
-	add.call("Historial", "", func(): Nav.history())
-	add.call("Galería  %d/%d" % [Meta.data.gal.size(), DB.lore.size()], "", func(): Nav.gallery())
-	add.call("Cómo jugar", "", func(): Dlg.help())
-	add.call("Opciones", "", func(): Dlg.options())
-	add.call("Salir", "", func(): get_tree().quit())
+	add.call(tr("Reto diario") + ("  ✔" if dres.get("win", false) else "") + (("  · " + tr("racha %d") % stk.cur) if stk.cur > 1 else ""), "", func(): Nav.daily())
+	add.call(tr("Logros  %d/%d") % [Progress.ach_count(Meta.data), Progress.achievements().size()], "", func(): Nav.achievements())
+	add.call(tr("Historial"), "", func(): Nav.history())
+	add.call(tr("Galería  %d/%d") % [Meta.data.gal.size(), DB.lore.size()], "", func(): Nav.gallery())
+	add.call(tr("Cómo jugar"), "", func(): Dlg.help())
+	add.call(tr("Opciones"), "", func(): Dlg.options())
+	add.call(tr("Salir"), "", func(): get_tree().quit())
 	var cred_bottom := 690.0   # pie de la firma de la musa (sube si hay aviso de Pesadilla debajo)
 	if Meta.nm_unlocked(ch) > 0:
 		cred_bottom = 662.0
-		var nml := UIK.label("Modo Pesadilla disponible (hasta nivel %d con %s)" % [Meta.nm_unlocked(ch), m.name], 16, Color("#caa5ff"), "bold")
+		var nml := UIK.label(tr("Modo Pesadilla disponible (hasta nivel %d con %s)") % [Meta.nm_unlocked(ch), m.name], 16, Color("#caa5ff"), "bold")
 		nml.position = Vector2(COL_W + 86, 666)   # a la derecha del menú: deja libre la fila de abajo
 		add_child(nml)
 	var cred := VBoxContainer.new()

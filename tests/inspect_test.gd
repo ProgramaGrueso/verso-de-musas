@@ -125,7 +125,7 @@ func test_relic(G) -> void:
 		var org = find_named(o, "Origin")
 		var desc = find_named(o, "Desc")
 		print("  origen: ", org.get_parsed_text() if org != null else "-")
-		check(org != null and org.get_parsed_text().contains("Reliquia inicial de"), "reliquia: la ficha dice su origen")
+		check(org != null and org.get_parsed_text().contains(tr("Reliquia inicial de %s").replace("%s", "").strip_edges()), "reliquia: la ficha dice su origen")
 		check(desc != null and desc.get_parsed_text().strip_edges() != "", "reliquia: la ficha dice su efecto")
 		var fb := focus()
 		check(fb is Button and o.is_ancestor_of(fb), "reliquia: el foco está en el botón de la ficha")
@@ -236,7 +236,7 @@ func test_filters(G) -> void:
 	var vr := get_viewport().get_visible_rect()
 	var close_b: Button = null
 	for n in _walk(o):
-		if n is Button and (n as Button).text == "Cerrar":
+		if n is Button and (n as Button).text == tr("Cerrar"):
 			close_b = n
 	check(close_b != null and vr.encloses(close_b.get_global_rect()), "filtros: el botón Cerrar cabe en pantalla")
 	check(vr.encloses((bar as Control).get_global_rect()), "filtros: la barra cabe en pantalla (%s)" % (bar as Control).get_global_rect())
@@ -337,7 +337,7 @@ func test_rest(G) -> void:
 	Nav.rest()
 	await wait(0.6)
 	var note = find_named(Main.I.screen, "Note")
-	var want := "PV %d ➜ %d" % [30, mini(80, 30 + heal)]
+	var want := tr("PV %d ➜ %d") % [30, mini(80, 30 + heal)]
 	check(note != null and note.get_meta("text", "") == want, "hoguera: muestra «%s» (%s)" % [want, note.get_meta("text", "") if note != null else "-"])
 	var b1: Button = note.get_parent().get_parent() if note != null else null
 	if b1 != null:
@@ -349,12 +349,12 @@ func test_rest(G) -> void:
 	Nav.rest()
 	await wait(0.6)
 	note = find_named(Main.I.screen, "Note")
-	check(note != null and note.get_meta("text", "") == "PV 79 ➜ 80", "hoguera: no promete más del máximo (%s)" % (note.get_meta("text", "") if note != null else "-"))
+	check(note != null and note.get_meta("text", "") == tr("PV %d ➜ %d") % [79, 80], "hoguera: no promete más del máximo (%s)" % (note.get_meta("text", "") if note != null else "-"))
 	G.hp = 80
 	Nav.rest()
 	await wait(0.6)
 	note = find_named(Main.I.screen, "Note")
-	check(note != null and note.get_meta("text", "").contains("máximo"), "hoguera: con la vida llena lo dice (%s)" % (note.get_meta("text", "") if note != null else "-"))
+	check(note != null and note.get_meta("text", "") == tr("PV %d (ya al máximo)") % G.hp, "hoguera: con la vida llena lo dice (%s)" % (note.get_meta("text", "") if note != null else "-"))
 	if note != null:
 		var nr := (note as Control).get_global_rect()
 		var br := (note.get_parent().get_parent() as Control).get_global_rect()

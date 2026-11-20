@@ -106,7 +106,7 @@ func _ready() -> void:
 	bot.resized.connect(_place_rows)
 	_nm_box.minimum_size_changed.connect(_place_rows.call_deferred)
 	_panel.minimum_size_changed.connect(_place_rows.call_deferred)
-	var back := UIK.button("← Volver")
+	var back := UIK.button(tr("← Volver"))
 	back.pressed.connect(func(): Nav.title())
 	bot.add_child(back)
 	_mid = HBoxContainer.new()
@@ -114,7 +114,7 @@ func _ready() -> void:
 	_mid.alignment = BoxContainer.ALIGNMENT_CENTER
 	_mid.add_theme_constant_override("separation", 14)
 	bot.add_child(_mid)
-	_go = UIK.button("Comenzar", "big green")
+	_go = UIK.button(tr("Comenzar"), "big green")
 	_go.pressed.connect(_start)
 	bot.add_child(_go)
 	# la fila de abajo nunca se sale de la pantalla: lo que no cabe se parte o se encoge
@@ -230,7 +230,7 @@ func _render(animate: bool) -> void:
 		nm_l.add_theme_constant_override("shadow_offset_y", 0)
 		UIK.outlined(nm_l, 10, Color(0, 0, 0, 0.7))
 		_panel.add_child(nm_l)
-		var stats := UIK.rich("%s %d PV      %s 99" % [Icons.bb("ui", "hp", 24), m.hp, Icons.bb("ui", "gold", 24)], 20, Color("#ffd8da"))
+		var stats := UIK.rich("%s %s      %s 99" % [Icons.bb("ui", "hp", 24), tr("%d PV") % m.hp, Icons.bb("ui", "gold", 24)], 20, Color("#ffd8da"))
 		stats.fit_content = true
 		_panel.add_child(stats)
 		var pc := PanelContainer.new()
@@ -249,12 +249,12 @@ func _render(animate: bool) -> void:
 		rr.custom_minimum_size = Vector2(600, 0)
 		_panel.add_child(rr)
 	else:
-		_panel.add_child(UIK.label("Próximamente", 20, UIK.GOLD))
+		_panel.add_child(UIK.label(tr("Próximamente"), 20, UIK.GOLD))
 		var nm2 := UIK.label(m.name, 92, Color.WHITE, "title")
 		nm2.add_theme_font_size_override("font_size", 92)
 		nm2.custom_minimum_size = Vector2(520, 0)
 		_panel.add_child(nm2)
-		_panel.add_child(UIK.label("Esta musa aún no está disponible.", 18, Color("#ece6ff")))
+		_panel.add_child(UIK.label(tr("Esta musa aún no está disponible."), 18, Color("#ece6ff")))
 	_go.disabled = not m.implemented
 	for id in _avatars.keys():
 		var b: Button = _avatars[id]
@@ -286,7 +286,7 @@ func _render_nm() -> void:
 		st.add_theme_constant_override("separation", 10)
 		var dn := UIK.button("◀", "small")
 		var up := UIK.button("▶", "small")
-		var lab := UIK.label("Pesadilla %d" % nm if nm > 0 else "Pesadilla: apagada", 20, Color("#caa5ff"), "bold")
+		var lab := UIK.label(tr("Pesadilla %d") % nm if nm > 0 else tr("Pesadilla: apagada"), 20, Color("#caa5ff"), "bold")
 		dn.pressed.connect(func(): nm = maxi(0, nm - 1); _render_nm(); _render_toggle())
 		up.pressed.connect(func(): nm = mini(nm_max, nm + 1); _render_nm(); _render_toggle())
 		st.add_child(dn)
@@ -299,13 +299,13 @@ func _render_nm() -> void:
 		up.focus_neighbor_left = dn.get_path()
 		for x in [dn, up]:
 			(x as Control).focus_neighbor_bottom = _avatars[pick].get_path()
-		var fx := ("[b]Nv.%d[/b] %s%s" % [nm, DB.nm_texts[nm], " [i](y los niveles anteriores)[/i]" if nm > 1 else ""]) if nm > 0 else "Nivel disponible para %s: hasta %d." % [m.name, nm_max]
+		var fx := ("[b]%s[/b] %s%s" % [tr("Nv.%d") % nm, DB.nm_texts[nm], (" [i]%s[/i]" % tr("(y los niveles anteriores)")) if nm > 1 else ""]) if nm > 0 else tr("Nivel disponible para %s: hasta %d.") % [m.name, nm_max]
 		var r := UIK.rich(fx, 17, Color("#ece6ff"))
 		r.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		r.custom_minimum_size = Vector2(640, 0)
 		_nm_box.add_child(r)
 	else:
-		var no_nm := UIK.label("Termina el juego con %s para desbloquear su Pesadilla" % m.name, 16, UIK.DIM)
+		var no_nm := UIK.label(tr("Termina el juego con %s para desbloquear su Pesadilla") % m.name, 16, UIK.DIM)
 		no_nm.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		no_nm.custom_minimum_size = Vector2(640, 0)
 		_nm_box.add_child(no_nm)
@@ -320,7 +320,7 @@ func _render_toggle() -> void:
 		_mid.remove_child(c)
 		c.queue_free()
 	var cb := CheckButton.new()
-	cb.text = "Modo fácil"
+	cb.text = tr("Modo fácil")
 	cb.button_pressed = easy and nm == 0
 	cb.disabled = nm > 0
 	cb.add_theme_font_override("font", UIK.font("bold"))
@@ -328,7 +328,7 @@ func _render_toggle() -> void:
 	if cb.disabled:
 		cb.focus_mode = Control.FOCUS_NONE   # con Pesadilla no se puede activar: el mando no se para en él
 	cb.toggled.connect(func(p): easy = p; Meta.settings.easy = p; Meta.save_settings(); Sfx.play("select"))
-	UIK.tip(cb, "[b][color=#f0cf7a]Modo fácil[/color][/b]\nMás vida, enemigos más débiles y puedes deshacer la última carta jugada. No se combina con la Pesadilla.")
+	UIK.tip(cb, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [tr("Modo fácil"), tr("Más vida, enemigos más débiles y puedes deshacer la última carta jugada. No se combina con la Pesadilla.")])
 	_mid.add_child(cb)
 	var sd := UIK.button(_seed_label(), "small")
 	sd.set_meta("fit_base", 16)
@@ -336,12 +336,12 @@ func _render_toggle() -> void:
 		sd.set_meta("fit_base", _sd_fs)
 		sd.add_theme_font_size_override("font_size", _sd_fs)
 	sd.pressed.connect(func():
-		var t = await Dlg.text_input("Semilla", "Escribe un número o una palabra para repetir los mismos mapas (por ejemplo, la semilla de una partida de un amigo). Déjalo vacío para una partida aleatoria.", seed_txt, "aleatoria")
+		var t = await Dlg.text_input(tr("Semilla"), tr("Escribe un número o una palabra para repetir los mismos mapas (por ejemplo, la semilla de una partida de un amigo). Déjalo vacío para una partida aleatoria."), seed_txt, tr("aleatoria"))
 		if t != null:
 			seed_txt = str(t).strip_edges()
 			_render_toggle()
 			_sd.grab_focus.call_deferred())   # el botón viejo (al que el diálogo devolvería el foco) ya no existe
-	UIK.tip(sd, "[b][color=#f0cf7a]Semilla[/color][/b]\nLa misma semilla genera los mismos mapas en los tres actos.")
+	UIK.tip(sd, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [tr("Semilla"), tr("La misma semilla genera los mismos mapas en los tres actos.")])
 	_mid.add_child(sd)
 	_cb = cb
 	_sd = sd
@@ -373,10 +373,10 @@ func _refocus_in(box: Control, text: String) -> void:
 ## Texto del botón de semilla: una semilla escrita a mano puede ser larga; se recorta para que el botón siga
 ## siendo «small» y quepa junto a «Modo fácil» y «Comenzar».
 func _seed_label() -> String:
-	var s := seed_txt if seed_txt != "" else "aleatoria"
+	var s := seed_txt if seed_txt != "" else tr("aleatoria")
 	if s.length() > _seed_max:
 		s = s.left(_seed_max - 2) + "…"
-	return "Semilla: " + s
+	return tr("Semilla: %s") % s
 
 
 ## Fila inferior para el mando: avatares ↓ Volver ↔ Modo fácil ↔ Semilla ↔ Comenzar (en ese orden; antes
