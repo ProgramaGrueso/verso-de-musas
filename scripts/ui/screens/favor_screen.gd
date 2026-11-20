@@ -64,20 +64,20 @@ func _ready() -> void:
 	add_child(title)
 	var who := UIK.label(ent.name, 24, ent.color, "title", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(who, 6)
-	who.position = Vector2(0, 280)
+	who.position = Vector2(0, 270)
 	who.size = Vector2(1280, 34)
 	who.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	add_child(who)
 	var line := UIK.label(ent.line, 20, Color("#e8e4f4"), "sans", HORIZONTAL_ALIGNMENT_CENTER)
 	UIK.outlined(line, 5)
-	line.position = Vector2(140, 318)
+	line.position = Vector2(140, 306)
 	line.size = Vector2(1000, 44)   # dos líneas: las frases largas se parten, no se salen
 	line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	add_child(line)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 20)
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	row.position = Vector2(50, 394)
+	row.position = Vector2(50, 368)   # 368 + 280 = 648: deja sitio debajo a «Rechazar los favores»
 	row.size = Vector2(1180, 280)
 	add_child(row)
 	var opts := Favors.offer(G, ei)
@@ -95,11 +95,20 @@ func _ready() -> void:
 		btns.append(b)
 		row.add_child(b)
 	var skip := UIK.button("Rechazar los favores", "", 18)
-	skip.position = Vector2(640 - 150, 680)   # centrado y con su alto natural (texto + márgenes)
 	skip.custom_minimum_size = Vector2(300, 0)
-	skip.size = skip.get_combined_minimum_size()
 	skip.pressed.connect(func(): Nav.map(true))
 	add_child(skip)
+	# centrado y con su alto natural (texto + márgenes, medido ya en el árbol), siempre dentro de los 720 px
+	# con 10 de margen; si el autoajuste de UIK le cambia el alto, se recoloca
+	var place := func():
+		var sz := skip.get_combined_minimum_size()
+		if skip.size != sz:
+			skip.size = sz
+		var pos := Vector2(640.0 - sz.x / 2.0, 720.0 - sz.y - 10.0)
+		if skip.position != pos:
+			skip.position = pos
+	place.call()
+	skip.minimum_size_changed.connect(place)
 	if not btns.is_empty():
 		btns[0].grab_focus.call_deferred()
 	UIK.fade_in(self, 0.3)

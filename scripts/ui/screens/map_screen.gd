@@ -156,6 +156,9 @@ func _ready() -> void:
 			var next_btn = _avail_btns[(i + 1) % _avail_btns.size()]
 			_avail_btns[i].focus_neighbor_left = prev_btn.get_path()
 			_avail_btns[i].focus_neighbor_right = next_btn.get_path()
+			# arriba/abajo desplazan el mapa (ver _input): el foco no salta a otra sala
+			_avail_btns[i].focus_neighbor_top = _avail_btns[i].get_path()
+			_avail_btns[i].focus_neighbor_bottom = _avail_btns[i].get_path()
 	if announce:
 		Main.I.toast("%s: %s" % [act.sub, act.name])
 	UIK.fade_in(self, 0.3)
@@ -179,7 +182,8 @@ func _add_node(inner: Control, n: Dictionary) -> void:
 	b.add_theme_constant_override("icon_max_width", int(sz * 0.74))
 	for k in ["disabled", "hover", "pressed", "focus"]:
 		b.add_theme_color_override("icon_%s_color" % k, Color.WHITE)
-	b.focus_mode = Control.FOCUS_ALL
+	# con mando solo se enfocan las salas elegibles: el resto informa con el ratón o con R3 (inspeccionar)
+	b.focus_mode = Control.FOCUS_ALL if can else Control.FOCUS_NONE
 	var tc: Color = NODE_COL[n.type]
 	var fill := Color(tc.darkened(0.78), 0.96)
 	var ring := Color("#ffe08a") if can else (Color("#58b868") if n.visited else Color(tc, 0.55))

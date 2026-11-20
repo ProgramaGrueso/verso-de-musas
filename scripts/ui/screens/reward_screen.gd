@@ -154,13 +154,31 @@ func _item(icon: String, bb: String, fn: Callable) -> void:
 		if res != false:
 			b.disabled = true
 			b.modulate = Color(1, 1, 1, 0.6)
-			var found_next := false
-			for c in _list.get_children():
-				if c is Button and not c.disabled:
-					c.grab_focus.call_deferred()
-					found_next = true
-					break
-			if not found_next and _done_btn != null:
-				_done_btn.grab_focus.call_deferred()
+			_after_take(b)
 		Main.I.update_top())
 	_list.add_child(b)
+
+
+## Tras tomar un premio: el foco pasa al siguiente disponible (o a «Continuar») y el tomado deja de ser enfocable.
+## Se espera al fotograma siguiente: si el premio abrió un diálogo, al cerrarse éste devuelve el foco (diferido)
+## al premio ya tomado y restaura su focus_mode; hacerlo antes dejaría el mando sobre un botón deshabilitado.
+func _after_take(b: Button) -> void:
+	# el diálogo que se cierra sigue colgado de overlay_host hasta liberarse (fin de fotograma, tras su foco diferido)
+	for i in 30:
+		await get_tree().process_frame
+		if not is_inside_tree():
+			return
+		if Main.I.overlay_host.get_child_count() == 0:
+			break
+	await get_tree().process_frame
+	if not is_inside_tree():
+		return
+	if is_instance_valid(b):
+		b.focus_mode = Control.FOCUS_NONE
+	var next: Control = _done_btn
+	for c in _list.get_children():
+		if c is Button and not c.disabled and c.focus_mode != Control.FOCUS_NONE:
+			next = c
+			break
+	if next != null and is_instance_valid(next) and next.is_visible_in_tree() and Main.I.overlay_host.get_child_count() == 0:
+		next.grab_focus()

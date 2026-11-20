@@ -130,9 +130,18 @@ func setup(p_e: Dictionary, k: float) -> void:
 	block_badge.add_child(block_lbl)
 	add_child(block_badge)
 	name_lbl = UIK.label(e.name, 15, Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_CENTER)
-	name_lbl.position = Vector2(0, by + 24)
-	name_lbl.size = Vector2(w, 22)
 	UIK.outlined(name_lbl, 5)
+	# nombres largos («Contramaestre Espectral» con 3 enemigos): la fuente baja antes de fijar el tamaño,
+	# así la etiqueta no crece por encima del ancho de la vista (el contorno también ocupa)
+	UIK.fit_title(name_lbl, w - 10.0, 11)
+	# anclada a lo ancho de la vista: si su mínimo cambia al entrar en el árbol, Godot la recoloca a partir
+	# de las anclas (no se queda con un ancho mayor que la vista, como pasaba con size fijo)
+	name_lbl.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	name_lbl.offset_left = 0
+	name_lbl.offset_right = 0
+	name_lbl.offset_top = by + 24
+	name_lbl.offset_bottom = by + 46
+	name_lbl.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	if e.def.tier == "boss":
 		name_lbl.add_theme_color_override("font_color", Color("#ff9aa0"))
 	elif e.def.tier == "elite":

@@ -380,8 +380,12 @@ func _build_player() -> void:
 	osty_hp.position = Vector2(0, 92)
 	osty_box.add_child(osty_hp)
 	osty_pow = UIK.label("", 14, Color("#e3d1ff"), "bold", HORIZONTAL_ALIGNMENT_CENTER)
-	osty_pow.position = Vector2(-10, 110)
-	osty_pow.size = Vector2(110, 20)
+	# dentro de la caja de Osty (90×150): hasta 2 líneas bajo su barra; si no caben, la fuente baja (fit_label)
+	osty_pow.position = Vector2(0, 110)
+	osty_pow.size = Vector2(90, 40)
+	osty_pow.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	osty_pow.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS   # el alto no crece: nunca se sale
+	osty_pow.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	UIK.outlined(osty_pow, 4)
 	osty_box.add_child(osty_pow)
 	UIK.tip(osty_img, func(): return "[b][color=#f0cf7a]Osty[/color][/b]\n%s\nPV %d/%d · Poder %d" % [DB.glos["Osty"], C.osty.hp, C.osty.max, C.osty.pow] if C.has("osty") and C.osty != null else "")
@@ -1134,7 +1138,10 @@ func _update_osty() -> void:
 		return
 	var o: Dictionary = C.osty
 	osty_hp.set_values(o.hp, o.max)
-	osty_pow.text = ("Poder %d" % o.pow) if o.hp > 0 else "Caído · vuelve en tu turno"
+	var pow_txt: String = ("Poder %d" % o.pow) if o.hp > 0 else "Caído · vuelve en tu turno"
+	if osty_pow.text != pow_txt:
+		osty_pow.text = pow_txt
+		UIK.fit_label(osty_pow, 11)
 	osty_img.modulate = Color.WHITE if o.hp > 0 else Color(0.35, 0.35, 0.35)
 
 
@@ -1190,8 +1197,17 @@ func _orb_slot(i: int) -> Panel:
 	var ic := Icons.rect("orb", "ola", 44)
 	ic.visible = false
 	p.add_child(ic)
-	var vl := UIK.label("", 13, Color.WHITE, "bold")
-	vl.position = Vector2(30, 28)
+	var vl := UIK.label("", 13, Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_RIGHT)
+	# esquina inferior derecha DENTRO del hueco de 44 px (también con 2 cifras): anclada abajo a la derecha y
+	# creciendo hacia arriba/izquierda, así su alto mínimo (fuente + contorno) nunca la saca del hueco
+	vl.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	vl.offset_left = -41
+	vl.offset_top = -22
+	vl.offset_right = -3
+	vl.offset_bottom = -2
+	vl.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	vl.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	vl.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
 	UIK.outlined(vl, 4)
 	vl.visible = false
 	p.add_child(vl)
