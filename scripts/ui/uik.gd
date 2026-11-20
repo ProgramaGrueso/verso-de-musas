@@ -12,6 +12,15 @@ const GREEN := Color("#8bf0a4")
 
 static var _fonts := {}
 static var _watch := {}   # id -> [texto, tamaño]: último estado visto por el vigilante de los botones
+## Escala del texto (Opciones ▸ Tamaño del texto): multiplica el tamaño de `label`, `rich` y `button`.
+## La fija Main al arrancar y al cambiarla; se aplica a lo que se construye desde ese momento.
+static var text_scale := 1.0
+const TEXT_SCALES := [1.0, 1.15, 1.3]
+
+
+## Tamaño de letra con la escala del texto aplicada.
+static func ts(size: int) -> int:
+	return size if is_equal_approx(text_scale, 1.0) else int(round(size * text_scale))
 
 
 static func font(kind: String = "sans") -> Font:
@@ -31,7 +40,10 @@ static func font(kind: String = "sans") -> Font:
 			base = load("res://assets/fonts/NotoSans-Regular.ttf")
 	var fv := FontVariation.new()
 	fv.base_font = base
-	fv.fallbacks = [emoji]
+	# DejaVu Sans: flechas y símbolos (➜ → ← ↓ ▲ ▼ ✦ ↔ ↶) que Noto Sans y Cinzel no traen y salían como
+	# recuadro de glifo ausente. Va detrás del emoji: solo se usa para lo que ninguno de los dos tiene.
+	var sym: Font = load("res://assets/fonts/DejaVuSans.ttf") if ResourceLoader.exists("res://assets/fonts/DejaVuSans.ttf") else null
+	fv.fallbacks = [emoji, sym] if sym != null else [emoji]
 	_fonts[kind] = fv
 	return fv
 
@@ -53,7 +65,7 @@ static func label(text: String = "", size: int = 20, color: Color = TEXT, kind: 
 	var l := Label.new()
 	l.text = text
 	l.add_theme_font_override("font", font(kind))
-	l.add_theme_font_size_override("font_size", size)
+	l.add_theme_font_size_override("font_size", ts(size))
 	l.add_theme_color_override("font_color", color)
 	l.horizontal_alignment = align
 	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -74,8 +86,8 @@ static func rich(bbcode: String, size: int = 18, color: Color = TEXT, kind: Stri
 	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	r.add_theme_font_override("normal_font", font(kind))
 	r.add_theme_font_override("bold_font", font("bold"))
-	r.add_theme_font_size_override("normal_font_size", size)
-	r.add_theme_font_size_override("bold_font_size", size)
+	r.add_theme_font_size_override("normal_font_size", ts(size))
+	r.add_theme_font_size_override("bold_font_size", ts(size))
 	r.add_theme_color_override("default_color", color)
 	r.text = bbcode
 	return r
@@ -103,7 +115,7 @@ static func button(text: String, kind: String = "", size: int = 24) -> Button:
 		fs = 30; padx = 40; pady = 16
 	elif kind.contains("small"):
 		fs = 16; padx = 14; pady = 6
-	b.add_theme_font_size_override("font_size", fs)
+	b.add_theme_font_size_override("font_size", ts(fs))
 	b.add_theme_color_override("font_color", fc)
 	b.add_theme_color_override("font_hover_color", Color.WHITE)
 	b.add_theme_color_override("font_pressed_color", Color.WHITE)

@@ -6,6 +6,31 @@ static var I: Main
 
 const TOP_H := 128.0   # alto de la barra superior (retrato, vida, oro, pociones y reliquias)
 
+## Teclas remapeables (Opciones ▸ Controles): [acción, nombre, tecla por defecto]. Las pantallas siguen
+## escuchando la tecla por defecto; `_input` traduce la tecla elegida por el jugador a la de defecto (y se traga
+## la de defecto si ya no es de nadie), así que combate/mapa no necesitan saber nada del remapeo.
+const KEY_ACTIONS := [
+	["ver_mazo", "Ver tu mazo", KEY_M],
+	["ayuda", "Ayuda", KEY_H],
+	["terminar_turno", "Terminar turno", KEY_E],
+	["pocion_1", "Poción del hueco 1", KEY_Q],
+	["pocion_2", "Poción del hueco 2", KEY_W],
+	["pocion_3", "Poción del hueco 3", KEY_R],
+	["pocion_4", "Poción del hueco 4", KEY_T],
+	["robo", "Mazo de robo", KEY_D],
+	["descarte", "Descarte", KEY_S],
+	["agotadas", "Agotadas", KEY_X],
+	["deshacer", "Deshacer la última carta", KEY_Z],
+]
+## No se pueden asignar: navegación, confirmar/cancelar, 1–9 (elegir carta), F1, F11 y modificadores.
+const KEYS_RESERVED := [KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_TAB, KEY_ENTER, KEY_KP_ENTER, KEY_SPACE,
+	KEY_ESCAPE, KEY_F1, KEY_F11, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9,
+	KEY_SHIFT, KEY_CTRL, KEY_ALT, KEY_META, KEY_CAPSLOCK, KEY_NUMLOCK, KEY_BACKSPACE, KEY_UNKNOWN]
+## Tope del tamaño del texto al construir ciertas pantallas: el HUD del combate es de geometría fija (insignias de
+## pila, enemigos, orbes) y los eventos a 130 % no caben en su columna (event_layout_test pasa a 115 %).
+const SCREEN_MAX_TEXT_SCALE := {"combat": 1.0, "event": 1.15}
+var _key_tr := {}   # tecla pulsada -> tecla por defecto que se inyecta (0 = se traga)
+
 var screen_host: Control
 var overlay_host: Control
 var top: Control
@@ -30,6 +55,8 @@ var _full_btn: Button
 
 func _ready() -> void:
 	I = self
+	UIK.text_scale = float(Meta.settings.get("text_scale", 1.0))
+	rebuild_keymap()
 	for k in ["sans", "bold", "title"]:   # precarga fuentes (evita tirón en la primera pantalla)
 		UIK.font(k)
 	UIK.full_rect(self)
@@ -192,7 +219,14 @@ func _insp_input(ev: InputEvent) -> bool:
 				_insp_move(Vector2.UP)
 			JOY_BUTTON_DPAD_DOWN:
 				_insp_move(Vector2.DOWN)
-			JOY_BUTTON_B, JOY_BUTTON_A, JOY_BUTTON_RIGHT_STICK, JOY_BUTTON_START, JOY_BUTTON_BACK:
+			JOY_BUTTON_A:
+				# A sobre una reliquia abre su ficha (Fase 2.3); sobre lo demás, sale como antes
+				var cur = _insp_list[_insp_idx] if _insp_idx < _insp_list.size() else null
+				var rid: String = cur.get_meta("relic_id", "") if cur != null and is_instance_valid(cur) else ""
+				_insp_end()
+				if rid != "":
+					Dlg.relic_info(rid)
+			JOY_BUTTON_B, JOY_BUTTON_RIGHT_STICK, JOY_BUTTON_START, JOY_BUTTON_BACK:
 				_insp_end()
 		return true
 	if ev is InputEventJoypadMotion:
@@ -254,6 +288,9 @@ func _exit_tree() -> void:
 
 
 func _input(ev: InputEvent) -> void:
+	if ev is InputEventKey and _remap_key(ev):
+		get_viewport().set_input_as_handled()
+		return
 	if _insp_on:
 		if _insp_input(ev):
 			get_viewport().set_input_as_handled()
@@ -274,6 +311,9 @@ func _input(ev: InputEvent) -> void:
 
 func _handle_joypad_button(btn: int) -> bool:
 	if overlay_host.get_child_count() > 0:
+		if btn == JOY_BUTTON_BACK and can_open_deck():
+			open_deck_dialog()   # Back / View: el mazo también sobre un diálogo (o lo cierra si ya es el mazo)
+			return true
 		if btn in [JOY_BUTTON_B, JOY_BUTTON_BACK]:
 			var top_overlay = overlay_host.get_child(overlay_host.get_child_count() - 1)
 			if top_overlay is Dlg.Overlay and top_overlay.allow_esc:
@@ -291,7 +331,7 @@ func _handle_joypad_button(btn: int) -> bool:
 			Dlg.pause_menu()
 			return true
 	elif btn == JOY_BUTTON_BACK:
-		if Meta.run != null and current in ["map", "combat", "reward", "shop", "rest", "event"]:
+		if can_open_deck():
 			open_deck_dialog()
 			return true
 
@@ -358,16 +398,65 @@ func _handle_joypad_motion(axis: int, value: float) -> bool:
 	return false
 
 
+## Salas donde el mazo se consulta con M, Back/View o el botón de la barra (Fase 2.3: también sobre un
+## diálogo abierto, p. ej. al elegir carta en la recompensa, la hoguera o un evento).
+const DECK_ROOMS := ["map", "combat", "reward", "shop", "rest", "event", "favor"]
+
+
+func can_open_deck() -> bool:
+	return Meta.run != null and current in DECK_ROOMS and top.visible
+
+
+func _deck_overlay() -> Node:
+	var n := overlay_host.get_child_count()
+	if n > 0 and overlay_host.get_child(n - 1).get_meta("deck_view", false):
+		return overlay_host.get_child(n - 1)
+	return null
+
+
+## Abre el mazo (o lo cierra si ya está arriba). Al cerrarse, el foco vuelve a donde estaba; si el control
+## que lo tenía ya no existe (la sala se rehízo debajo), pasa al primero enfocable de lo que quede arriba.
 func open_deck_dialog() -> void:
-	if Meta.run != null:
-		Dlg.view_cards("Tu mazo", _sorted_deck())
+	if Meta.run == null:
+		return
+	var dv := _deck_overlay()
+	if dv != null:
+		dv.close(null)
+		return
+	var had_focus := get_viewport().gui_get_focus_owner() != null
+	await Dlg.view_cards("Tu mazo", _sorted_deck(), null, true)
+	if not had_focus or not is_inside_tree():
+		return
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if get_viewport().gui_get_focus_owner() == null:
+		var root: Node = screen
+		if overlay_host.get_child_count() > 0:
+			root = overlay_host.get_child(overlay_host.get_child_count() - 1)
+		var f := _first_focusable(root)
+		if f != null:
+			f.grab_focus()
+
+
+func _first_focusable(n: Node) -> Control:
+	if n == null:
+		return null
+	if n is Control:
+		var c := n as Control
+		if c.focus_mode != Control.FOCUS_NONE and c.is_visible_in_tree() and not c.is_queued_for_deletion() and not (c is BaseButton and (c as BaseButton).disabled):
+			return c
+	for ch in n.get_children():
+		var f := _first_focusable(ch)
+		if f != null:
+			return f
+	return null
 
 
 func _unhandled_key_input(ev: InputEvent) -> void:
 	if ev is InputEventKey and ev.pressed and not ev.echo:
 		if ev.keycode == KEY_F11:
 			_toggle_fullscreen()
-		elif ev.keycode == KEY_M and overlay_host.get_child_count() == 0 and Meta.run != null and current in ["map", "combat", "reward", "shop", "rest", "event"]:
+		elif ev.keycode == KEY_M and can_open_deck():
 			open_deck_dialog()
 		elif ev.keycode in [KEY_H, KEY_F1] and overlay_host.get_child_count() == 0 and not (current in ["select"]):
 			Dlg.help()
@@ -383,6 +472,92 @@ func _toggle_fullscreen() -> void:
 	w.mode = Window.MODE_WINDOWED if w.mode == Window.MODE_FULLSCREEN else Window.MODE_FULLSCREEN
 
 
+# ---------- Remapeo de teclas ----------
+static func key_default(id: String) -> int:
+	for a in KEY_ACTIONS:
+		if a[0] == id:
+			return a[2]
+	return KEY_NONE
+
+
+## Tecla que usa ahora la acción `id` (la elegida en Opciones o la de defecto).
+static func key_of(id: String) -> int:
+	var m = Meta.settings.get("keys", {})
+	if m is Dictionary and m.has(id):
+		return int(m[id])
+	return key_default(id)
+
+
+static func key_name(id: String) -> String:
+	return OS.get_keycode_string(key_of(id))
+
+
+## Asigna `k` a la acción `id`. Si otra acción ya la usaba, se intercambian. Devuelve "" o el motivo del rechazo.
+static func set_key(id: String, k: int) -> String:
+	if k in KEYS_RESERVED or k == KEY_NONE:
+		return "La tecla %s está reservada." % OS.get_keycode_string(k)
+	var old := key_of(id)
+	var m := {}
+	for a in KEY_ACTIONS:
+		m[a[0]] = key_of(a[0])
+	for a in KEY_ACTIONS:
+		if a[0] != id and m[a[0]] == k:
+			m[a[0]] = old
+	m[id] = k
+	var store := {}
+	for a in KEY_ACTIONS:
+		if m[a[0]] != a[2]:
+			store[a[0]] = m[a[0]]
+	Meta.settings.keys = store
+	Meta.save_settings()
+	if I != null:
+		I.rebuild_keymap()
+	return ""
+
+
+static func reset_keys() -> void:
+	Meta.settings.keys = {}
+	Meta.save_settings()
+	if I != null:
+		I.rebuild_keymap()
+
+
+func rebuild_keymap() -> void:
+	_key_tr.clear()
+	var used := {}
+	for a in KEY_ACTIONS:
+		var k := key_of(a[0])
+		used[k] = true
+		if k != a[2]:
+			_key_tr[k] = a[2]
+	for a in KEY_ACTIONS:
+		if key_of(a[0]) != a[2] and not used.has(a[2]):
+			_key_tr[a[2]] = KEY_NONE   # la tecla de defecto ya no es de nadie: no debe disparar su acción vieja
+
+
+## Traduce la tecla del jugador a la de defecto. Devuelve true si el evento original se consume.
+func _remap_key(ev: InputEventKey) -> bool:
+	if _key_tr.is_empty() or ev.has_meta("remapped") or not _key_tr.has(ev.keycode):
+		return false
+	if ev.ctrl_pressed or ev.alt_pressed or ev.meta_pressed:
+		return false
+	var fo := get_viewport().gui_get_focus_owner()
+	if fo is LineEdit or fo is TextEdit:
+		return false   # escribiendo (semilla…): las letras son letras
+	if overlay_host.get_child_count() > 0 and overlay_host.get_child(overlay_host.get_child_count() - 1).has_meta("controls"):
+		return false   # en Opciones ▸ Controles se captura la tecla tal cual
+	var to: int = _key_tr[ev.keycode]
+	if to != KEY_NONE:
+		var e2 := ev.duplicate() as InputEventKey
+		e2.keycode = to
+		e2.physical_keycode = to
+		e2.key_label = to
+		e2.unicode = 0
+		e2.set_meta("remapped", true)
+		Input.parse_input_event(e2)
+	return true
+
+
 # ---------- Pantallas ----------
 func set_screen(node: Control, name: String) -> void:
 	Tip.hide_all()
@@ -394,7 +569,12 @@ func set_screen(node: Control, name: String) -> void:
 	screen = node
 	current = name
 	UIK.full_rect(node)
+	# la pantalla se construye con el tope de SCREEN_MAX_TEXT_SCALE; lo que se abre después (diálogos, tooltips,
+	# cartas, que se ajustan solas) sigue el tamaño elegido
+	var ts := UIK.text_scale
+	UIK.text_scale = minf(ts, SCREEN_MAX_TEXT_SCALE.get(name, ts))
 	screen_host.add_child(node)
+	UIK.text_scale = ts
 	update_top()
 
 
@@ -448,8 +628,14 @@ func update_top() -> void:
 			if l is Label:
 				(l as Label).size = Vector2(44, 44)
 				(l as Label).vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			UIK.tip(l, "[b][color=#f0cf7a]%s[/color][/b]\n%s" % [r.n, r.d])
+			UIK.tip(l, "[b][color=#f0cf7a]%s[/color][/b]\n%s\n[i][color=#a79fc0]Clic o A (con R3): ficha y origen.[/color][/i]" % [r.n, r.d])
 			l.set_meta("relic_id", id)
+			var rid: String = id
+			l.gui_input.connect(func(ev: InputEvent):
+				if ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT:
+					l.accept_event()
+					Tip.hide_all()
+					Dlg.relic_info(rid))
 			_tb_relics.add_child(l)
 	# pociones
 	for c in _tb_potions.get_children():
@@ -562,7 +748,7 @@ func _build_top() -> void:
 	top.add_child(right)
 	right.add_child(_icon_btn("help", 58, "[b][color=#f0cf7a]Cómo jugar[/color][/b]", func(): Dlg.help()))
 	right.add_child(_icon_btn("menu", 58, "[b][color=#f0cf7a]Pausa[/color][/b]\nGuardar y salir, rendirse (Esc)", func(): Dlg.pause_menu()))
-	var deck_b := _icon_btn("deck", 64, "[b][color=#f0cf7a]Tu mazo[/color][/b]\nMira todas tus cartas.", func(): Dlg.view_cards("Tu mazo", _sorted_deck()))
+	var deck_b := _icon_btn("deck", 64, "[b][color=#f0cf7a]Tu mazo[/color][/b]\nMira todas tus cartas.", func(): open_deck_dialog())
 	_tb_deck_n = UIK.label("0", 20, Color.WHITE, "bold", HORIZONTAL_ALIGNMENT_CENTER)
 	_tb_deck_n.size = Vector2(30, 26)
 	_tb_deck_n.position = Vector2(32, 34)

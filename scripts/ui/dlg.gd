@@ -7,6 +7,7 @@ class Overlay extends Control:
 	signal done(result)
 	var cancel_result = null
 	var allow_esc := true
+	var lock_below := false   # también apaga el foco de los diálogos de debajo (el mazo abierto sobre otro)
 	var _closed := false
 	var _prev_focus: Control = null
 	var _locked: Array = []   # [control, focus_mode] de lo que queda detrás mientras este diálogo está abierto
@@ -17,6 +18,19 @@ class Overlay extends Control:
 			_prev_focus = vp.gui_get_focus_owner()
 		if Main.I != null:
 			_lock_behind(Main.I)
+			if lock_below:
+				# el mazo abierto sobre otro diálogo: lo de ese diálogo tampoco recibe el foco mientras tanto
+				for ov in Main.I.overlay_host.get_children():
+					if ov != self and ov is Overlay:
+						_lock_all(ov)
+
+	## Como _lock_behind, pero bajando también dentro de los diálogos de debajo (solo para lock_below).
+	func _lock_all(n: Node) -> void:
+		if n is Control and (n as Control).focus_mode != Control.FOCUS_NONE:
+			_locked.append([n, (n as Control).focus_mode])
+			(n as Control).focus_mode = Control.FOCUS_NONE
+		for ch in n.get_children():
+			_lock_all(ch)
 
 	## Modal para el mando: lo de detrás no puede recibir foco (si no, el D-Pad se cuela bajo el diálogo).
 	## No se baja dentro de otro Overlay: un diálogo exterior no apaga los focos del interior (cada uno
@@ -49,32 +63,41 @@ class Overlay extends Control:
 		# suele reconstruir o cambiar de pantalla en ese mismo momento
 		var fallback := _focusable_below(self) if result == null else null
 		done.emit(result)
+		# quien esperaba este diálogo puede haber abierto ya el siguiente al recibir `done` (hoguera: elegir ➜
+		# comparar ➜ «¡Carta mejorada!»). Lo de detrás sigue bloqueado: se le pasa al diálogo nuevo, que lo
+		# devolverá al cerrarse, en vez de reactivarlo debajo de él.
+		var heir := _live_overlay_above()
 		for pair in _locked:
 			var c: Control = pair[0]
 			# solo se toca lo que este diálogo apagó (y sigue apagado: si otro modal u otro código ya lo
 			# reactivó —la pantalla que se reconstruyó mientras estaba abierto— se respeta su valor nuevo)
 			if is_instance_valid(c) and not c.is_queued_for_deletion() and c.focus_mode == Control.FOCUS_NONE:
-				c.focus_mode = pair[1]
+				if heir != null and not heir.is_ancestor_of(c):
+					heir._locked.append(pair)
+				else:
+					c.focus_mode = pair[1]
 		_locked.clear()
-		# devuelve el foco a lo que lo tenía antes (si no, el mando se queda sin foco al cerrar un diálogo)
+		# devuelve el foco a lo que lo tenía antes (si no, el mando se queda sin foco al cerrar un diálogo).
+		# Se pide un fotograma después y solo si no hay otro diálogo encima que no lo contenga.
 		var pf := _prev_focus
 		if pf != null and is_instance_valid(pf) and not pf.is_queued_for_deletion() and pf.focus_mode != Control.FOCUS_NONE:
-			pf.grab_focus.call_deferred()
+			Dlg._focus_later(pf)
 		elif result == null and fallback != null:
 			# descartado sin resultado (ESC/B, o un diálogo que solo informa): el mando se queda en el botón
 			# del modal. Se pide al final del fotograma, y solo si ese botón sigue vivo y visible.
-			_reclaim_focus(fallback)
+			Dlg._focus_later(fallback)
 		queue_free()
 
-	## De forma diferida, y comprobando antes: nunca se pide el foco a un control liberado o en cola de borrado.
-	func _reclaim_focus(c: Control) -> void:
-		_await_focus(c)
-
-
-	func _await_focus(c: Control) -> void:
-		await get_tree().process_frame
-		if c != null and is_instance_valid(c) and not c.is_queued_for_deletion() and c.is_inside_tree() and c.is_visible_in_tree() and c.focus_mode != Control.FOCUS_NONE:
-			c.grab_focus()
+	## El diálogo abierto (y no cerrándose) más alto por encima de éste, o null.
+	func _live_overlay_above() -> Overlay:
+		var host := get_parent()
+		if host == null:
+			return null
+		for i in range(host.get_child_count() - 1, get_index(), -1):
+			var ov := host.get_child(i)
+			if ov is Overlay and not (ov as Overlay)._closed and not ov.is_queued_for_deletion():
+				return ov
+		return null
 
 	## Primer control que puede recibir foco dentro de `n`, sin bajar a diálogos anidados.
 	func _focusable_below(n: Node) -> Control:
@@ -100,8 +123,31 @@ class Overlay extends Control:
 			close(cancel_result)
 
 
-static func _overlay() -> Overlay:
+## Da el foco a `c` un fotograma después, si sigue vivo, visible y enfocable, y si no hay un diálogo abierto
+## encima que no lo contenga (un cierre encadenado no le roba el foco al diálogo que se acaba de abrir).
+static func _focus_later(c: Control) -> void:
+	if Main.I == null or not Main.I.is_inside_tree():
+		return
+	await Main.I.get_tree().process_frame
+	if c == null or not is_instance_valid(c) or c.is_queued_for_deletion() or not c.is_inside_tree():
+		return
+	if not c.is_visible_in_tree() or c.focus_mode == Control.FOCUS_NONE:
+		return
+	if Main.I == null:
+		return
+	var host: Control = Main.I.overlay_host
+	for i in range(host.get_child_count() - 1, -1, -1):
+		var ov := host.get_child(i)
+		if ov is Overlay and not (ov as Overlay)._closed and not ov.is_queued_for_deletion():
+			if not ov.is_ancestor_of(c):
+				return
+			break
+	c.grab_focus()
+
+
+static func _overlay(lock_below: bool = false) -> Overlay:
 	var o := Overlay.new()
+	o.lock_below = lock_below
 	Main.I.overlay_host.add_child(o)
 	Tip.hide_all()
 	return o
@@ -139,7 +185,7 @@ static func _row(sep: int = 14) -> HBoxContainer:
 	return r
 
 
-static func _card_grid(cards: Array, C, w: float, on_press: Callable = Callable()) -> Control:
+static func _card_grid(cards: Array, C, w: float, on_press: Callable = Callable(), max_h: float = 500.0) -> Control:
 	var cols := maxi(1, int(1160.0 / (w + 14.0)))
 	var rows := ceili(float(cards.size()) / cols)
 	var cw := w
@@ -154,12 +200,12 @@ static func _card_grid(cards: Array, C, w: float, on_press: Callable = Callable(
 		if on_press.is_valid():
 			v.pressed.connect(on_press)
 		grid.add_child(v)
-	if content_h <= 500:
+	if content_h <= max_h:
 		var cc := CenterContainer.new()
 		cc.add_child(grid)
 		return cc
 	var sc := ScrollContainer.new()
-	sc.custom_minimum_size = Vector2(1200, 500)
+	sc.custom_minimum_size = Vector2(1200, max_h)
 	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	var m := MarginContainer.new()
 	m.add_theme_constant_override("margin_left", 20)
@@ -255,21 +301,232 @@ static func text_input(title: String, sub: String = "", initial: String = "", pl
 	return await o.done
 
 
-# ---------- Cartas ----------
-static func view_cards(title: String, cards: Array, C = null) -> void:
-	var o := _overlay()
-	var v := _center_col(o, 12)
-	v.add_child(_title(title))
-	if cards.is_empty():
-		v.add_child(UIK.label("No hay cartas aquí.", 22, UIK.DIM, "sans", HORIZONTAL_ALIGNMENT_CENTER))
+# ---------- Reliquias (Fase 2.3: clic / A en una reliquia) ----------
+const RELIC_RARITY := {"start": "Inicial", "common": "Común", "uncommon": "Poco común", "rare": "Rara", "boss": "De jefe"}
+
+
+## De dónde sale una reliquia: rareza, en qué salas aparece y si es exclusiva de una musa.
+static func relic_origin(id: String) -> String:
+	var r: Dictionary = DB.relics[id]
+	var rar: String = r.get("rarity", "")
+	var parts := []
+	if rar == "start":
+		var who := ""
+		for ch in DB.characters.keys():
+			if DB.characters[ch].get("startRelic", "") == id:
+				who = DB.characters[ch].name
+		parts.append("Reliquia inicial" + (" de %s" % who if who != "" else ""))
+	elif rar == "boss":
+		parts.append("De jefe · se elige al vencer a un jefe")
 	else:
-		v.add_child(_card_grid(cards, C, 158.0))
+		parts.append("%s · élites, eventos y tiendas" % RELIC_RARITY.get(rar, rar.capitalize()))
+	if r.has("char") and DB.characters.has(r.char) and rar != "start":
+		parts.append("Exclusiva de %s" % DB.characters[r.char].name)
+	return " · ".join(parts)
+
+
+## Ficha de una reliquia: icono grande, nombre, origen y efecto. Se cierra con el botón, Esc o B.
+static func relic_info(id: String) -> void:
+	if not DB.relics.has(id) or Main.I == null:
+		return
+	var host: Control = Main.I.overlay_host
+	if host.get_child_count() > 0 and host.get_child(host.get_child_count() - 1).get_meta("relic_info", "") == id:
+		return   # ya está abierta (doble clic)
+	var r: Dictionary = DB.relics[id]
+	var o := _overlay()
+	o.set_meta("relic_info", id)
+	var v := _center_col(o)
+	var p := UIK.panel(30)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 12)
+	col.custom_minimum_size = Vector2(520, 0)
+	var ic: Control
+	if Icons.has("relic", id):
+		ic = Icons.frame("relic", id, 112, UIK.GOLD, true)
+	else:
+		ic = UIK.label(r.get("i", "?"), 72, Color.WHITE, "sans", HORIZONTAL_ALIGNMENT_CENTER)
+	ic.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	col.add_child(ic)
+	col.add_child(_title(r.n, 32))
+	var org := UIK.rich("[center][color=#a79fc0]%s[/color][/center]" % relic_origin(id), 17)
+	org.name = "Origin"
+	org.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	org.custom_minimum_size = Vector2(520, 0)
+	col.add_child(org)
+	var d := UIK.rich("[center]%s[/center]" % r.d, 22)
+	d.name = "Desc"
+	d.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	d.custom_minimum_size = Vector2(520, 0)
+	col.add_child(d)
 	var b := UIK.button("Cerrar")
 	b.pressed.connect(func(): o.close(null))
 	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	v.add_child(b)
+	col.add_child(b)
+	p.add_child(col)
+	v.add_child(p)
+	Sfx.play("relic", 0.5)
 	b.grab_focus.call_deferred()
 	await o.done
+
+
+# ---------- Cartas ----------
+## Mazo, robo, descarte, agotadas... Con FILTER_MIN cartas o más sale una barra de filtros (tipo, coste y
+## mejoradas) que rehace la rejilla sin mover el foco del mando.
+## deck = true: es «Tu mazo» (M / Back / botón de la barra); puede abrirse sobre otro diálogo y lo bloquea.
+static func view_cards(title: String, cards: Array, C = null, deck: bool = false) -> void:
+	var o := _overlay(deck)
+	o.set_meta("view_cards", true)
+	o.set_meta("deck_view", deck)
+	var v := _center_col(o, 12)
+	v.add_child(_title(title))
+	var b := UIK.button("Cerrar")
+	if cards.is_empty():
+		v.add_child(UIK.label("No hay cartas aquí.", 22, UIK.DIM, "sans", HORIZONTAL_ALIGNMENT_CENTER))
+	elif cards.size() < FILTER_MIN:
+		v.add_child(_card_grid(cards, C, 158.0))
+	else:
+		# rejilla de alto fijo: al filtrar, la barra y el botón no saltan de sitio
+		var holder := Control.new()
+		holder.name = "CardsHolder"
+		holder.custom_minimum_size = Vector2(1200, FILTER_GRID_H)
+		var bar := _filter_bar(cards, C, holder)
+		v.add_child(bar)
+		v.add_child(holder)
+		_refill(holder, cards, C)
+	b.pressed.connect(func(): o.close(null))
+	b.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	v.add_child(b)
+	var first: Control = b
+	if cards.size() >= FILTER_MIN:
+		first = v.find_child("Chip_all", true, false)
+	first.grab_focus.call_deferred()
+	await o.done
+
+
+const FILTER_MIN := 6          # con menos cartas no hace falta filtrar
+const FILTER_GRID_H := 436.0   # alto de la rejilla con barra de filtros (cabe en 720 con título y botón)
+const FILTER_TYPES := [["attack", "Ataque"], ["skill", "Habilidad"], ["power", "Poder"], ["other", "Otras"]]
+const FILTER_COSTS := [["0", "0"], ["1", "1"], ["2", "2"], ["3", "3+"], ["X", "X"], ["-", "—"]]
+
+
+static func _type_key(inst: Dictionary) -> String:
+	var t: String = Eng.card_def(inst).type
+	return t if t in ["attack", "skill", "power"] else "other"
+
+
+static func _cost_key(inst: Dictionary, C) -> String:
+	var d := Eng.card_def(inst)
+	if Eng.is_x(d.cost):
+		return "X"
+	var c: int = Eng.eff_cost(C, d) if (C != null and C is Dictionary and not C.is_empty()) else d.cost
+	if c < 0 or d.flags.get("unplayable", false):
+		return "-"
+	return str(mini(c, 3))
+
+
+## Cartas que pasan el filtro {type, cost, up} ("" = sin filtro).
+static func filter_cards(cards: Array, C, f: Dictionary) -> Array:
+	return cards.filter(func(inst):
+		if f.get("type", "") != "" and _type_key(inst) != f.type:
+			return false
+		if f.get("cost", "") != "" and _cost_key(inst, C) != f.cost:
+			return false
+		if f.get("up", false) and not inst.get("up", false):
+			return false
+		return true)
+
+
+static func _refill(holder: Control, cards: Array, C) -> void:
+	for ch in holder.get_children():
+		holder.remove_child(ch)
+		ch.queue_free()
+	var f: Dictionary = holder.get_meta("filter", {})
+	var shown := filter_cards(cards, C, f)
+	holder.set_meta("shown", shown.size())
+	var g: Control
+	if shown.is_empty():
+		g = CenterContainer.new()
+		g.add_child(UIK.label("Ninguna carta con este filtro.", 22, UIK.DIM, "sans", HORIZONTAL_ALIGNMENT_CENTER))
+	else:
+		g = _card_grid(shown, C, 158.0, Callable(), FILTER_GRID_H)
+	g.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	holder.add_child(g)
+	var cnt = holder.get_meta("count_lbl", null)
+	if cnt != null and is_instance_valid(cnt):
+		(cnt as Label).text = "%d / %d" % [shown.size(), cards.size()]
+
+
+static func _chip_mark(chip: Button, on: bool) -> void:
+	if not chip.has_meta("sb_normal"):
+		chip.set_meta("sb_normal", chip.get_theme_stylebox("normal"))
+	var sb: StyleBox = chip.get_theme_stylebox("hover") if on else chip.get_meta("sb_normal")
+	chip.add_theme_stylebox_override("normal", sb)
+	chip.add_theme_color_override("font_color", Color.WHITE if on else UIK.GOLD)
+	chip.set_meta("on", on)
+
+
+static func _filter_bar(cards: Array, C, holder: Control) -> Control:
+	var row := _row(8)
+	row.name = "FilterBar"
+	holder.set_meta("filter", {"type": "", "cost": "", "up": false})
+	var chips := {}
+	var sync := func():
+		var f: Dictionary = holder.get_meta("filter")
+		for k in chips.keys():
+			var on := false
+			if k == "all":
+				on = f.type == "" and f.cost == "" and not f.up
+			elif k == "up":
+				on = f.up
+			elif k.begins_with("t:"):
+				on = f.type == k.substr(2)
+			elif k.begins_with("c:"):
+				on = f.cost == k.substr(2)
+			_chip_mark(chips[k], on)
+	var add_chip := func(key: String, text: String, fn: Callable) -> void:
+		var chip := UIK.button(text, "small")
+		chip.name = "Chip_" + key.replace(":", "_")
+		chip.pressed.connect(func():
+			fn.call(holder.get_meta("filter"))
+			_refill(holder, cards, C)
+			sync.call())
+		chips[key] = chip
+		row.add_child(chip)
+	add_chip.call("all", "Todas %d" % cards.size(), func(f: Dictionary):
+		f.type = ""; f.cost = ""; f.up = false)
+	var tcount := {}
+	var ccount := {}
+	var ups := 0
+	for inst in cards:
+		var tk := _type_key(inst)
+		tcount[tk] = tcount.get(tk, 0) + 1
+		var ck := _cost_key(inst, C)
+		ccount[ck] = ccount.get(ck, 0) + 1
+		if inst.get("up", false):
+			ups += 1
+	for pair in FILTER_TYPES:
+		var key: String = pair[0]
+		if tcount.get(key, 0) > 0:
+			add_chip.call("t:" + key, "%s %d" % [pair[1], tcount[key]], func(f: Dictionary):
+				f.type = "" if f.type == key else key)
+	var cl := UIK.label("Coste", 16, UIK.DIM, "bold")
+	cl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	row.add_child(cl)
+	for pair in FILTER_COSTS:
+		var key: String = pair[0]
+		if ccount.get(key, 0) > 0:
+			add_chip.call("c:" + key, pair[1], func(f: Dictionary):
+				f.cost = "" if f.cost == key else key)
+	if ups > 0:
+		add_chip.call("up", "Mejoradas %d" % ups, func(f: Dictionary):
+			f.up = not f.up)
+	var cnt := UIK.label("%d / %d" % [cards.size(), cards.size()], 16, UIK.DIM, "bold")
+	cnt.name = "FilterCount"
+	cnt.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	row.add_child(cnt)
+	holder.set_meta("count_lbl", cnt)
+	sync.call()
+	return row
 
 
 ## opts: title, sub, cards, n, cancel (texto o ""), big, confirmLabel, upgradePreview, C
@@ -476,7 +733,7 @@ static func _toggle_row(label: String, on: bool, text_on: String, text_off: Stri
 	cb.button_pressed = on
 	cb.text = text_on if on else text_off
 	cb.add_theme_font_override("font", UIK.font())
-	cb.add_theme_font_size_override("font_size", 18)
+	cb.add_theme_font_size_override("font_size", UIK.ts(18))
 	cb.toggled.connect(func(p): cb.text = text_on if p else text_off; on_change.call(p))
 	r.add_child(cb)
 	return r
@@ -484,10 +741,26 @@ static func _toggle_row(label: String, on: bool, text_on: String, text_off: Stri
 
 static func options() -> void:
 	var o := _overlay()
+	o.set_meta("options", true)
+	var scale0 := UIK.text_scale
+	_options_fill(o, "Cerrar")
+	await o.done
+	if not is_equal_approx(scale0, UIK.text_scale) and Main.I != null and Main.I.current == "title" \
+			and Main.I.overlay_host.get_child_count() <= 1:
+		Nav.title()   # la portada se rehace con el texto nuevo (las demás pantallas, al abrirse)
+
+
+## Contenido de Opciones. Se rehace entero al cambiar el tamaño del texto, para verlo al momento.
+static func _options_fill(o: Overlay, focus_name: String) -> void:
+	for ch in o.get_children():
+		if ch.has_meta("options_body"):
+			o.remove_child(ch)
+			ch.queue_free()
 	var v := _center_col(o)
+	v.get_parent().set_meta("options_body", true)
 	var p := UIK.panel(30)
 	var col := VBoxContainer.new()
-	col.add_theme_constant_override("separation", 14)
+	col.add_theme_constant_override("separation", 12)
 	col.add_child(_title("Opciones", 32))
 	col.add_child(_slider_row("Música", Meta.settings.music, func(x): Meta.settings.music = x; Sfx.apply_music_volume(); Meta.save_settings(), "music"))
 	var sfx_row := _slider_row("Sonidos", Meta.settings.sfx, func(x): Meta.settings.sfx = x; Meta.save_settings(), "sound")
@@ -498,16 +771,147 @@ static func options() -> void:
 	var calm_row := _toggle_row("Reducir movimiento", Meta.settings.get("calm", false), "Sí (sin sacudidas ni partículas)", "No", func(x): Meta.settings.calm = x; Meta.save_settings(), "moon")
 	UIK.tip(calm_row.get_child(2), "[b][color=#f0cf7a]Reducir movimiento[/color][/b]\nApaga las sacudidas de pantalla, el hitstop de los golpes, los anillos y las partículas. Los colores y los sonidos se mantienen.")
 	col.add_child(calm_row)
+	# tamaño del texto: 100 / 115 / 130 %
+	var scr := _opt_head("Tamaño del texto", "help")
+	for i in UIK.TEXT_SCALES.size():
+		var sc: float = UIK.TEXT_SCALES[i]
+		var on := is_equal_approx(sc, UIK.text_scale)
+		var sb := UIK.button("%d %%" % int(round(sc * 100)), "small green" if on else "small")
+		sb.name = "Scale_%d" % i
+		sb.pressed.connect(func():
+			if is_equal_approx(sc, UIK.text_scale):
+				return
+			Meta.settings.text_scale = sc
+			Meta.save_settings()
+			UIK.text_scale = sc
+			_options_fill(o, "Scale_%d" % i))
+		scr.add_child(sb)
+	UIK.tip(scr.get_child(1), "[b][color=#f0cf7a]Tamaño del texto[/color][/b]\nAgranda las letras de menús, diálogos, cartas y ayudas. Se aplica a cada pantalla al abrirla.")
+	col.add_child(scr)
+	var kr := _opt_head("Controles", "gear")
+	var kb := UIK.button("Teclado…", "small")
+	kb.name = "Controls"
+	kb.pressed.connect(func(): await controls())
+	kr.add_child(kb)
+	var kl := UIK.label("Cambia las teclas de las acciones", 16, UIK.DIM)
+	kl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	kr.add_child(kl)
+	col.add_child(kr)
 	var mr := UIK.button("Reiniciar música")
 	mr.pressed.connect(func(): Sfx.restart_music())
 	var fs := UIK.button("Pantalla completa")
 	fs.pressed.connect(func(): Main.I._toggle_fullscreen())
 	var cl := UIK.button("Cerrar")
+	cl.name = "Cerrar"
 	cl.pressed.connect(func(): o.close(null))
 	col.add_child(UIK.button_row([mr, fs, cl], 14))
 	p.add_child(col)
 	v.add_child(p)
-	cl.grab_focus.call_deferred()
+	var f: Control = col.find_child(focus_name, true, false)
+	(f if f != null else cl).grab_focus.call_deferred()
+
+
+## Cabecera de una fila de Opciones (icono + nombre con el mismo ancho que las demás).
+static func _opt_head(label: String, icon_id: String) -> HBoxContainer:
+	var r := HBoxContainer.new()
+	r.add_theme_constant_override("separation", 16)
+	r.add_child(Icons.frame("ui", icon_id, 46, UIK.GOLD, true))
+	var l := UIK.label(label, 22, UIK.TEXT, "bold")
+	l.custom_minimum_size = Vector2(190, 0)
+	l.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	r.add_child(l)
+	return r
+
+
+## Captura la siguiente tecla para Opciones ▸ Controles (va antes que el resto: Esc no cierra el diálogo).
+class KeyCatcher extends Node:
+	signal caught(keycode: int)   # KEY_NONE = cancelado (Esc o B del mando)
+	var waiting := false
+	var _armed_frame := 0
+
+	func arm() -> void:
+		waiting = true
+		_armed_frame = Engine.get_process_frames()
+
+	func _input(ev: InputEvent) -> void:
+		if not waiting or Engine.get_process_frames() == _armed_frame:
+			return
+		if ev is InputEventKey and ev.pressed and not ev.echo:
+			get_viewport().set_input_as_handled()
+			waiting = false
+			caught.emit(KEY_NONE if ev.keycode == KEY_ESCAPE else int(ev.keycode))
+		elif ev is InputEventJoypadButton and ev.pressed and ev.button_index == JOY_BUTTON_B:
+			get_viewport().set_input_as_handled()
+			waiting = false
+			caught.emit(KEY_NONE)
+
+
+## Opciones ▸ Controles: una tecla por acción; pulsa la acción y luego la tecla nueva.
+static func controls() -> void:
+	var o := _overlay()
+	o.set_meta("controls", true)
+	var catcher := KeyCatcher.new()
+	o.add_child(catcher)
+	var v := _center_col(o)
+	var p := UIK.panel(26)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 10)
+	col.add_child(_title("Controles · teclado", 30))
+	var sub := UIK.label("Pulsa una acción y después la tecla nueva (Esc cancela). Si esa tecla ya era de otra acción, se intercambian. Las flechas, Enter, Espacio, Esc, 1–9, F1 y F11 son fijas; el mando no cambia.", 16, UIK.DIM, "sans", HORIZONTAL_ALIGNMENT_CENTER)
+	UIK.wrap(sub, 760, 16)
+	col.add_child(sub)
+	var grid := GridContainer.new()
+	grid.columns = 4
+	grid.add_theme_constant_override("h_separation", 14)
+	grid.add_theme_constant_override("v_separation", 8)
+	var btns := {}
+	var msg := UIK.label("", 18, UIK.GOLD, "bold", HORIZONTAL_ALIGNMENT_CENTER)
+	msg.name = "Msg"
+	var refresh := func():
+		for id in btns:
+			btns[id].text = Main.key_name(id)
+	for a in Main.KEY_ACTIONS:
+		var id: String = a[0]
+		var l := UIK.label(a[1], 18, UIK.TEXT)
+		l.custom_minimum_size = Vector2(230, 0)
+		l.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		grid.add_child(l)
+		var b := UIK.button(Main.key_name(id), "small")
+		b.name = "Key_" + id
+		b.custom_minimum_size = Vector2(110, 0)
+		b.pressed.connect(func():
+			if catcher.waiting:
+				return
+			b.text = "Pulsa…"
+			msg.text = "Pulsa la tecla nueva para «%s» (Esc cancela)." % a[1]
+			catcher.arm()
+			var k: int = await catcher.caught
+			if not is_instance_valid(b):
+				return
+			if k == KEY_NONE:
+				msg.text = ""
+			else:
+				var err := Main.set_key(id, k)
+				msg.text = err if err != "" else "«%s»: %s" % [a[1], OS.get_keycode_string(k)]
+				Sfx.play("error" if err != "" else "click")
+			refresh.call()
+			b.grab_focus())
+		btns[id] = b
+		grid.add_child(b)
+	col.add_child(grid)
+	col.add_child(msg)
+	var rs := UIK.button("Restablecer")
+	rs.name = "Reset"
+	rs.pressed.connect(func():
+		Main.reset_keys()
+		refresh.call()
+		msg.text = "Teclas por defecto.")
+	var cl := UIK.button("Cerrar")
+	cl.pressed.connect(func(): o.close(null))
+	col.add_child(UIK.button_row([rs, cl], 14))
+	p.add_child(col)
+	v.add_child(p)
+	btns[Main.KEY_ACTIONS[0][0]].grab_focus.call_deferred()
 	await o.done
 
 
@@ -522,13 +926,13 @@ Sube la torre superando 3 zonas. Elige tu camino en el mapa, derrota enemigos y 
 • Pulsa Terminar turno cuando acabes. El Bloqueo 🛡️ te protege del daño solo durante un turno.
 
 [b][color=#f0cf7a]Teclado[/color][/b]
-← → eligen carta · ↑ ↓ cambian de enemigo · Enter o Espacio juegan · E termina el turno · Esc cancela. También 1–9 para elegir una carta.
-Q / W / R / T: usar la poción del hueco 1 / 2 / 3 / 4 · D: mazo de robo · S: descarte · X: agotadas · Z: deshacer la última carta (modo fácil).
-M: ver tu mazo · H o F1: esta ayuda · F11: pantalla completa.
+← → eligen carta · ↑ ↓ cambian de enemigo · Enter o Espacio juegan · {terminar_turno} termina el turno · Esc cancela. También 1–9 para elegir una carta.
+{pocion_1} / {pocion_2} / {pocion_3} / {pocion_4}: usar la poción del hueco 1 / 2 / 3 / 4 · {robo}: mazo de robo · {descarte}: descarte · {agotadas}: agotadas · {deshacer}: deshacer la última carta (modo fácil).
+{ver_mazo}: ver tu mazo · {ayuda} o F1: esta ayuda · F11: pantalla completa. Las teclas se cambian en Opciones ▸ Controles.
 
 [b][color=#f0cf7a]Mando (Xbox / Gamepad)[/color][/b]
 Stick izquierdo / D-Pad: navegar cartas y menús · LB / RB: pasar cartas · A: jugar / confirmar · B: cancelar / volver · Y: terminar turno · X: mazo de robo · LT: poción · RT: descarte · Back / View: ver mazo · Start: menú de pausa.
-R3 (clic del stick derecho): inspeccionar estados, intenciones, reliquias y pociones (D-Pad mueve · B sale) · Stick derecho: desplazar listas largas.
+R3 (clic del stick derecho): inspeccionar estados, intenciones, reliquias y pociones (D-Pad mueve · A abre la ficha de una reliquia · B sale) · Stick derecho: desplazar listas largas.
 
 [b][color=#f0cf7a]Tus personajes[/color][/b]
 • [color=#ff8a93]Zafiro[/color]: Fuerza, Bloqueo y fuego. Sacrifica vida para golpear más fuerte.
@@ -539,14 +943,22 @@ R3 (clic del stick derecho): inspeccionar estados, intenciones, reliquias y poci
 • [color=#9cc9ff]Selene[/color]: canaliza orbes de agua (Ola, Bruma, Abismo, Perla) que actúan cada turno y se evocan.
 
 [b][color=#f0cf7a]Consejos[/color][/b]
-• Pasa el ratón sobre cualquier estado, reliquia o carta para ver qué hace.
+• Pasa el ratón sobre cualquier estado, reliquia o carta para ver qué hace. Haz clic en una reliquia para ver su ficha.
 • Descansa 🔥 cuando tu vida esté baja. Las tiendas 💰 permiten eliminar cartas malas.
 • Si pierdes, ¡vuelve a intentarlo! Cada partida es distinta. El modo fácil da más vida, enemigos más débiles y permite deshacer la última carta.
 • Cada partida tiene una semilla: escríbela al elegir musa para repetir los mismos mapas, o juega el Reto diario, igual para todo el mundo."""
 
 
+## Ayuda con las teclas que el jugador tiene asignadas (Opciones ▸ Controles).
+static func help_text() -> String:
+	var keys := {}
+	for a in Main.KEY_ACTIONS:
+		keys[a[0]] = Main.key_name(a[0])
+	return HELP.format(keys)
+
+
 static func help() -> void:
-	var h := HELP
+	var h := help_text()
 	for pair in [["⚔️", "intent:attack"], ["🛡️", "intent:block"], ["⬇️", "intent:debuff"], ["⬆️", "intent:buff"], ["⚡", "ui:energy"], ["🔥", "node:rest"], ["💰", "ui:gold"]]:
 		var kv: PackedStringArray = pair[1].split(":")
 		h = h.replace(pair[0], Icons.bb(kv[0], kv[1], 20))
