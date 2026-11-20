@@ -151,14 +151,20 @@ func _build_sounds() -> void:
 
 
 func play(name: String, vol_scale: float = 1.0) -> void:
+	var _pt := UIK.prof_t()
 	if not _sounds.has(name) or Meta.settings.sfx <= 0.0:
+		UIK.prof_add("Sfx.play", _pt)
 		return
 	if Time.get_ticks_msec() < _stop_until:
+		UIK.prof_add("Sfx.play", _pt)
 		return
+	var _ptk := UIK.prof_t()
 	var p := _take_player()
+	UIK.prof_add("Sfx._take_player", _ptk)
 	p.stream = _sounds[name]
 	p.volume_db = linear_to_db(clampf(Meta.settings.sfx * vol_scale * 0.9, 0.001, 2.0))
 	p.play()
+	UIK.prof_add("Sfx.play", _pt)
 
 
 ## Reproductor libre del fondo común. En ráfaga (Irene repitiendo Engranaje encadena ~20 efectos en medio

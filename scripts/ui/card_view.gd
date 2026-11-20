@@ -36,6 +36,12 @@ var _num: Label
 var _text_sig := ""   # firma de lo que hay pintado en el texto/coste (para no repintar en vano)
 var _fit_busy := false   # ajuste de texto en vuelo (se coalescen los repintados que caen en ese fotograma)
 var _fit_again := false
+var _fit_for := ""        # texto para el que ya se ajustó el cuerpo (mismo texto = no se vuelve a medir)
+var _style_key := {}      # panel -> clave del último estilo puesto (poner otro StyleBox notifica cambio de tema y
+                          # vuelve a maquetar las etiquetas hijas: solo se cambia si el estilo es otro)
+## Ajuste del cuerpo ya medido: «texto|ancho|alto|lo|hi» -> tamaño de fuente. El resultado solo depende de eso
+## (las fuentes son fijas), y la mano repite mucho las mismas cartas: así no se crea la sonda otra vez.
+static var _fit_cache := {}
 ## Época de repintado: el tablero de combate la sube cuando avanzan los efectos de las cartas (un estado, daño,
 ## energía); las cartas que no se vuelven a subir (ni el hover cambia) solo repintan entonces, no en cada mano.
 static var card_refresh_epoch := 0
@@ -71,6 +77,7 @@ func _grad(stops: Array) -> GradientTexture2D:
 
 
 func _build() -> void:
+	var _pt := UIK.prof_t()
 	var d := Eng.card_def(inst)
 	custom_minimum_size = Vector2(w, w * 1.42)
 	size = custom_minimum_size
@@ -95,20 +102,23 @@ func _build() -> void:
 	art_bg.size = Vector2(w, art_h)
 	art_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	clip.add_child(art_bg)
-	_ph = UIK.label(CardText.TYPE_EMO[d.type], int(56 * s), Color(1, 1, 1, 0.85), "sans", HORIZONTAL_ALIGNMENT_CENTER)
-	_ph.size = Vector2(w, art_h)
-	_ph.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	clip.add_child(_ph)
+	var key: String = d.img if d.has("img") else "card_" + d.id
+	var t := UIK.tex("res://assets/cards/%s.webp" % key)
+	# marcador de posición (emoji del tipo) SOLO si la carta no tiene arte: antes se creaba siempre y se ocultaba,
+	# y maquetar una etiqueta de emoji de 56 px cuesta ~4-8 ms (fuente de color de reserva): era casi todo el
+	# coste de crear una carta y el tirón de cada reparto (2 cartas por fotograma)
+	if t == null:
+		_ph = UIK.label(CardText.TYPE_EMO[d.type], int(56 * s), Color(1, 1, 1, 0.85), "sans", HORIZONTAL_ALIGNMENT_CENTER)
+		_ph.size = Vector2(w, art_h)
+		_ph.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		clip.add_child(_ph)
 	_art = TextureRect.new()
 	_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	_art.size = Vector2(w, art_h)
 	_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var key: String = d.img if d.has("img") else "card_" + d.id
-	var t := UIK.tex("res://assets/cards/%s.webp" % key)
 	if t != null:
 		_art.texture = t
-		_ph.visible = false
 	clip.add_child(_art)
 	var shade := TextureRect.new()
 	shade.texture = _grad([[0.0, Color(0, 0, 0, 0.53)], [0.3, Color(0, 0, 0, 0)], [0.7, Color(0, 0, 0, 0)], [1.0, Color(0, 0, 0, 0.67)]])
@@ -194,6 +204,7 @@ func _build() -> void:
 	if show_tip:
 		UIK.tip(self, func(): return CardText.glossary_tip(_kws))
 	refresh(C)
+	UIK.prof_add("CardView._build", _pt)
 
 
 func refresh(p_C = null) -> void:
@@ -207,6 +218,7 @@ func refresh(p_C = null) -> void:
 ## (dos por jugada) reconstruía el RichTextLabel y los estilos de las 5-10 cartas: con los golpes encadenados
 ## de Irene eran decenas de re-rasterizaciones de texto por turno y el fotograma de ~10-20 ms al llenar la mano.
 func set_text_once(p_C = null) -> void:
+	var _pt := UIK.prof_t()
 	if p_C != null:
 		C = p_C
 	var d: Dictionary = Eng.card_def(inst)
@@ -219,26 +231,43 @@ func set_text_once(p_C = null) -> void:
 		cost = int(d.cost)
 	var sig := "%s|%d|%d|%d" % [d.name, cost, energy, card_refresh_epoch]
 	if sig == _text_sig:
+		UIK.prof_add("CardView.set_text_once", _pt)
 		return
 	_text_sig = sig
 	_refresh_text(d, cost)
+	UIK.prof_add("CardView.set_text_once", _pt)
 
 
 ## Pinta texto, nombre, tipo y coste con un coste ya calculado.
 func _refresh_text(d: Dictionary, cost: int) -> void:
+	var _pt := UIK.prof_t()
 	var res := CardText.lines(d, C)
 	_kws = res.kws
-	_txt.text = "[center]" + "\n".join(res.lines) + "[/center]"
-	# en cartas estrechas (tienda: 142 y 112 px) el texto baja hasta 9 px sin salirse de la caja de texto
-	var tfs := maxi((8 if w < 130.0 else 9), int(13 * s))   # en cartas de 112 px, 8 px de cuerpo
-	_txt.add_theme_font_size_override("normal_font_size", tfs)
-	_txt.add_theme_font_size_override("bold_font_size", tfs)
+	var body: String = "[center]" + "\n".join(res.lines) + "[/center]"
+	# mismo texto ya ajustado: no se toca (antes se volvía a poner el tamaño base y se re-medía, y cada cambio de
+	# tamaño de fuente re-maquetaba el RichTextLabel dos veces por repintado aunque no cambiara nada)
+	var same_body := body == _txt.text and body == _fit_for and not _fit_busy
+	var fit_known := 0
+	if not same_body:
+		_txt.text = body
+		# texto ya medido antes en una caja igual (la carta ya está maquetada): se pone su tamaño directamente
+		fit_known = int(_fit_cache.get(_fit_key(body), 0)) if _fit_for != "" and not _fit_busy else 0
+		if fit_known > 0:
+			_set_body_fs(fit_known)
+			_fit_for = body
+		else:
+			# en cartas estrechas (tienda: 142 y 112 px) el texto baja hasta 9 px sin salirse de la caja de texto
+			_set_body_fs(maxi(_fit_lo(), int(13 * s)))   # en cartas de 112 px, 8 px de cuerpo
 	if _name.text != d.name:
 		_name.text = d.name
 		_fit_name()
-	_name.add_theme_color_override("font_color", Color("#8dff9d") if inst.up else Color("#f1ecff"))
+	var name_col := Color("#8dff9d") if inst.up else Color("#f1ecff")
+	if not _name.has_theme_color_override("font_color") or _name.get_theme_color("font_color") != name_col:
+		_name.add_theme_color_override("font_color", name_col)
 	_type_lbl.text = CardText.TYPE_ES[d.type].to_upper()
-	_type_band.add_theme_stylebox_override("panel", UIK.stylebox(Color(TYPE_COL[d.type]), Color(0, 0, 0, 0), 0, 0, 0))
+	if _style_key.get(_type_band) != d.type:
+		_style_key[_type_band] = d.type
+		_type_band.add_theme_stylebox_override("panel", UIK.stylebox(Color(TYPE_COL[d.type]), Color(0, 0, 0, 0), 0, 0, 0))
 	var cost_txt: String
 	if Eng.is_x(d.cost):
 		cost_txt = "X"
@@ -248,17 +277,27 @@ func _refresh_text(d: Dictionary, cost: int) -> void:
 		cost_txt = str(cost)
 	if _cost.text != cost_txt:
 		_cost.text = cost_txt
-	_set_cost_style(false)
+	# el estilo del coste lo fija set_state (en combate se llama justo después); fuera de combate afford es true
+	# (= el estilo «se puede pagar» que se ponía aquí siempre). Con el estado vigente no hay un cambio de ida y
+	# vuelta del StyleBox (y de la etiqueta del coste) en cada repintado de una carta que no puedes pagar.
+	_set_cost_style(_unaffordable())
 	_apply_frame()
 	_num.text = str(num_key) if num_key > 0 else ""
-	_fit_text.call_deferred()
+	if not same_body and fit_known == 0:
+		_fit_text.call_deferred()
+	UIK.prof_add("CardView._refresh_text", _pt)
 
 
 func _apply_frame(focused: bool = false) -> void:
 	var d := Eng.card_def(inst)
 	var rc := Color(RAR_COL.get(d.rarity, "#9a94ad"))
+	var hot: bool = selected or focused or has_focus()
+	var key := "hot" if hot else str(rc)
+	if _style_key.get(_frame) == key:
+		return
+	_style_key[_frame] = key
 	var fs: StyleBoxFlat
-	if selected or focused or has_focus():
+	if hot:
 		fs = UIK.stylebox(Color(0, 0, 0, 0), Color.WHITE, int(5 * s), int(10 * s), 0)
 	else:
 		fs = UIK.stylebox(Color(0, 0, 0, 0), rc, int(3 * s), int(10 * s), 0)
@@ -290,8 +329,10 @@ func _on_focus_exited() -> void:
 
 
 func set_selected(on: bool) -> void:
+	var _pt := UIK.prof_t()
 	selected = on
 	_apply_frame()
+	UIK.prof_add("CardView.set_selected", _pt)
 
 
 func _fit_name() -> void:
@@ -324,6 +365,9 @@ func _name_fits(f: Font, fs: int, avail: float) -> bool:
 
 
 func _set_cost_style(unaffordable: bool) -> void:
+	if _style_key.get(_cost_bg) == unaffordable:
+		return
+	_style_key[_cost_bg] = unaffordable
 	var col := Color("#d97d0f") if not unaffordable else Color("#b01010")
 	_cost_bg.add_theme_stylebox_override("panel", UIK.stylebox(col, Color("#fff3c4"), int(3 * s), int(19 * s), 0))
 
@@ -341,54 +385,87 @@ func _fit_text() -> void:
 	_fit_busy = true
 	await get_tree().process_frame
 	while is_instance_valid(_txt):
+		var _pt := UIK.prof_t()
 		_fit_again = false
 		var avail := _txt_box.size.y
-		var lo := 8 if w < 130.0 else 9
+		var lo := _fit_lo()
 		var hi := maxi(lo, int(13 * s))
-		var probe := RichTextLabel.new()
-		probe.bbcode_enabled = true
-		probe.fit_content = true
-		probe.scroll_active = false
-		probe.autowrap_mode = _txt.autowrap_mode
-		probe.clip_contents = true
-		probe.size = Vector2(_txt.size.x, 0.0)
-		probe.add_theme_font_override("normal_font", _txt.get_theme_font("normal_font"))
-		probe.add_theme_font_override("bold_font", _txt.get_theme_font("bold_font"))
-		probe.add_theme_font_size_override("normal_font_size", hi)
-		probe.add_theme_font_size_override("bold_font_size", hi)
-		probe.text = _txt.text
-		add_child(probe)
-		var fits := func(fs: int) -> bool:
-			probe.add_theme_font_size_override("normal_font_size", fs)
-			probe.add_theme_font_size_override("bold_font_size", fs)
-			return probe.get_content_height() <= avail
-		var fs := lo
-		if fits.call(hi):
-			fs = hi
-		else:
-			var a := lo
-			var b := hi
-			while b - a > 1:   # bisección: ~4 medidas en vez de hasta 6 fotogramas
-				var m := (a + b) / 2
-				if fits.call(m):
-					a = m
-				else:
-					b = m
-			fs = a
-		probe.queue_free()
-		_txt.add_theme_font_size_override("normal_font_size", fs)
-		_txt.add_theme_font_size_override("bold_font_size", fs)
+		var ck := _fit_key(_txt.text)
+		var fs := int(_fit_cache.get(ck, 0))
+		if fs == 0:
+			var probe := RichTextLabel.new()
+			probe.bbcode_enabled = true
+			probe.fit_content = true
+			probe.scroll_active = false
+			probe.autowrap_mode = _txt.autowrap_mode
+			probe.clip_contents = true
+			probe.size = Vector2(_txt.size.x, 0.0)
+			probe.add_theme_font_override("normal_font", _txt.get_theme_font("normal_font"))
+			probe.add_theme_font_override("bold_font", _txt.get_theme_font("bold_font"))
+			probe.add_theme_font_size_override("normal_font_size", hi)
+			probe.add_theme_font_size_override("bold_font_size", hi)
+			probe.text = _txt.text
+			add_child(probe)
+			var fits := func(sz: int) -> bool:
+				probe.add_theme_font_size_override("normal_font_size", sz)
+				probe.add_theme_font_size_override("bold_font_size", sz)
+				return probe.get_content_height() <= avail
+			fs = lo
+			if fits.call(hi):
+				fs = hi
+			else:
+				var a := lo
+				var b := hi
+				while b - a > 1:   # bisección: ~4 medidas en vez de hasta 6 fotogramas
+					var m := (a + b) / 2
+					if fits.call(m):
+						a = m
+					else:
+						b = m
+				fs = a
+			probe.queue_free()
+			if _fit_cache.size() > 4000:
+				_fit_cache.clear()
+			_fit_cache[ck] = fs
+		_set_body_fs(fs)
+		_fit_for = _txt.text
+		UIK.prof_add("CardView._fit_text", _pt)
 		if not _fit_again:
 			break
 		await get_tree().process_frame
 	_fit_busy = false
 
 
+func _fit_lo() -> int:
+	return 8 if w < 130.0 else 9
+
+
+## Clave del ajuste del cuerpo: el resultado depende solo del texto y de la caja (las fuentes son fijas).
+func _fit_key(body: String) -> String:
+	return "%s|%.1f|%.1f|%d|%d" % [body, _txt.size.x, _txt_box.size.y, _fit_lo(), maxi(_fit_lo(), int(13 * s))]
+
+
+## Tamaño del cuerpo (solo si cambia: cada override nuevo vuelve a maquetar el RichTextLabel).
+func _set_body_fs(fs: int) -> void:
+	if not _txt.has_theme_font_size_override("normal_font_size") or _txt.get_theme_font_size("normal_font_size") != fs:
+		_txt.add_theme_font_size_override("normal_font_size", fs)
+	if not _txt.has_theme_font_size_override("bold_font_size") or _txt.get_theme_font_size("bold_font_size") != fs:
+		_txt.add_theme_font_size_override("bold_font_size", fs)
+
+
 func set_state(p_playable: bool, p_afford: bool) -> void:
+	var _pt := UIK.prof_t()
 	playable = p_playable
 	afford = p_afford
 	_dim.visible = not playable
-	_set_cost_style(not afford and not Eng.is_x(Eng.card_def(inst).cost) and Eng.card_def(inst).cost >= 0)
+	_set_cost_style(_unaffordable())
+	UIK.prof_add("CardView.set_state", _pt)
+
+
+## Coste en rojo: no te llega la energía (las de coste X y las injugables «–» nunca).
+func _unaffordable() -> bool:
+	var d := Eng.card_def(inst)
+	return not afford and not Eng.is_x(d.cost) and d.cost >= 0
 
 
 func _gui_input(ev: InputEvent) -> void:

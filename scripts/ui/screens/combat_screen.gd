@@ -95,6 +95,7 @@ var _shake_tw: Tween
 var _flash: ColorRect
 var _flash_tw: Tween
 var _undo := {}               # modo fácil: estado antes de la última carta jugada
+var _pl_status_sig := "#"     # firma de las fichas de estado de la jugadora pintadas (EnemyView.status_sig)
 
 
 func _ready() -> void:
@@ -224,6 +225,7 @@ var _bg_base := Vector2.ZERO
 ## Se apaga solo cuando no hay nada que mover (combate en reposo sin FX): no hay que recorrer
 ## la escena entera con un _process por fotograma cuando la musa está quieta en idle.
 func _process(_dt: float) -> void:
+	var _pt := UIK.prof_t()
 	if _bg_img != null and not Juice.calm():
 		var m := get_viewport().get_mouse_position()
 		var off := Vector2((m.x - 640.0) / 640.0, (m.y - 360.0) / 360.0) * Vector2(-14, -6)
@@ -237,6 +239,7 @@ func _process(_dt: float) -> void:
 		_step_chain(it)
 	if _chains.is_empty() and _pop_live == 0 and _stop_until == 0 and Time.get_ticks_msec() >= _hold_until:
 		set_process(false)
+	UIK.prof_add("CS._process", _pt)
 
 
 ## Vuelve a encender el reloj del combate (lo llaman los popups y los hitstops).
@@ -529,6 +532,7 @@ func _player_center() -> Vector2:
 ## Las etiquetas y sus AtlasTexture de halo se reciclan (antes: una etiqueta + textura de halo nuevas por cifra),
 ## la cadena se anima desde el _process del combate y el conjunto tiene tope (POP_MAX) por objetivo y en pantalla.
 func _popup(pos: Vector2, text: String, kind: String) -> void:
+	var _pt := UIK.prof_t()
 	var colors := {"dmg": Color.WHITE, "hurt": Color("#ff4d5a"), "blk": Color("#8ccbff"), "heal": Color("#7ef0a0"), "poison": Color("#b6f05a"), "txt": UIK.GOLD}
 	var size := {"dmg": 44, "hurt": 44, "blk": 36, "heal": 44, "poison": 40, "txt": 28}
 	var fs: int = size[kind]
@@ -545,6 +549,7 @@ func _popup(pos: Vector2, text: String, kind: String) -> void:
 	s.t = now + POP_GAP
 	_pop_slots[key] = s
 	if _pop_live >= POP_MAX or fx_layer.get_child_count() >= _fx_cap:
+		UIK.prof_add("CS._popup", _pt)
 		return
 	_pop_seq += 1
 	s.ids[idx] = _pop_seq
@@ -562,15 +567,18 @@ func _popup(pos: Vector2, text: String, kind: String) -> void:
 	var chain := {"l": l, "key": key, "id": _pop_seq, "t": now, "y0": l.position.y, "punch": 1.45 if fs >= 56 else 1.25}
 	_chains.append(chain)
 	_wake()
+	UIK.prof_add("CS._popup", _pt)
 
 
 func _burst(pos: Vector2, color: Color = Color("#ffd98a"), count: int = 24, rise: bool = false) -> void:
+	var _pt := UIK.prof_t()
 	if Juice.calm() or fx_layer.get_child_count() >= _fx_cap or _burst_live >= BURST_MAX:
+		UIK.prof_add("CS._burst", _pt)
 		return
 
 	_burst_live += 1
 	var p := UIK.embers(color, count)
-	p.texture = halo_tex()   # UIK.embers fabrica una Image 16x16 + ImageTexture por cada emisión
+	p.texture = halo_tex()   # la misma brasa que UIK.ember_tex() (ambas en caché); se deja el halo del combate por coherencia con las cifras
 	p.position = pos
 	p.emission_shape = CPUParticles2D.EMISSION_SHAPE_SPHERE
 	p.emission_sphere_radius = 14.0
@@ -590,6 +598,7 @@ func _burst(pos: Vector2, color: Color = Color("#ffd98a"), count: int = 24, rise
 	p.finished.connect(func():
 		_burst_live = maxi(0, _burst_live - 1)
 		p.queue_free())
+	UIK.prof_add("CS._burst", _pt)
 
 
 ## Etiqueta del número flotante: reuse del reciclaje o una nueva (con su halo ya cacheado a nivel de clase).
@@ -674,6 +683,7 @@ static func halo_tex() -> ImageTexture:
 
 ## Rótulo de turno: banda oscura con filos de color que se abre, texto que entra y subtítulo opcional.
 func _banner(text: String, red: bool = false, sub: String = "", hold: float = 0.7) -> void:
+	var _pt := UIK.prof_t()
 	var accent := Color("#ff7078") if red else UIK.GOLD
 	var band_col := Color("#2a0610", 0.86) if red else Color("#0c161d", 0.84)
 	var h := Control.new()
@@ -724,6 +734,7 @@ func _banner(text: String, red: bool = false, sub: String = "", hold: float = 0.
 		tw.tween_interval(hold + 0.15)
 		tw.tween_property(h, "modulate:a", 0.0, 0.3)
 		tw.tween_callback(h.queue_free)
+		UIK.prof_add("CS._banner", _pt)
 		return
 	band.scale = Vector2(1.0, 0.05)
 	b.position.x = -80
@@ -739,6 +750,7 @@ func _banner(text: String, red: bool = false, sub: String = "", hold: float = 0.
 	tw.parallel().tween_property(b, "position:x", 80.0, 0.28).set_ease(Tween.EASE_IN)
 	tw.parallel().tween_property(band, "scale", Vector2(1.0, 0.05), 0.28).set_ease(Tween.EASE_IN)
 	tw.tween_callback(h.queue_free)
+	UIK.prof_add("CS._banner", _pt)
 
 
 func _set_banner_fs(fs: float, b: Label) -> void:
@@ -793,10 +805,13 @@ func _exit_tree() -> void:
 
 # ============================== eventos del motor ==============================
 func _fx(type: String, d: Dictionary) -> void:
+	var _pt := UIK.prof_t()
 	if type == "relic":   # puede llegar en start_combat (antes de asignar C)
 		Main.I.pulse_relic.call_deferred(d.id)
+		UIK.prof_add("CS._fx", _pt)
 		return
 	if C.is_empty():
+		UIK.prof_add("CS._fx", _pt)
 		return
 	match type:
 		"bossPhase":   # el jefe entra en fase 2: banda grande + sacudida corta (sin ella en «reducir movimiento»)
@@ -813,6 +828,7 @@ func _fx(type: String, d: Dictionary) -> void:
 		"enemyHit":
 			var ev := _enemy_view(d.e)
 			if ev == null:
+				UIK.prof_add("CS._fx", _pt)
 				return
 			if d.get("poison", false):
 				_popup(ev.body_center(), "-%d" % d.amt, "poison")
@@ -882,6 +898,7 @@ func _fx(type: String, d: Dictionary) -> void:
 			_popup(_player_center(), "+%d PV máx." % d.n, "heal")
 		"status":
 			if not DB.st.has(d.k):
+				UIK.prof_add("CS._fx", _pt)
 				return
 			var is_p: bool = is_same(d.who, C.pl)
 			var pos: Vector2 = _player_center() if is_p else (_enemy_view(d.who).body_center() if _enemy_view(d.who) else Vector2(900, 400))
@@ -934,6 +951,7 @@ func _fx(type: String, d: Dictionary) -> void:
 			Main.I.toast("Tu mano está llena.")
 	# las cartas (los números escritos en su texto) se repintan solo cuando algo cambia lo que muestran
 	CardView.card_refresh_epoch += 1
+	UIK.prof_add("CS._fx", _pt)
 
 
 ## Centro del hueco de orbe i en pantalla (la barra de orbes vive en la arena).
@@ -1047,7 +1065,9 @@ func _enemy_phase_look(on: bool) -> void:
 
 # ============================== render ==============================
 func _render_all(first: bool = false) -> void:
+	var _pt := UIK.prof_t()
 	if C.is_empty():
+		UIK.prof_add("CS._render_all", _pt)
 		return
 	_update_player()
 	_update_enemies(first)
@@ -1057,21 +1077,29 @@ func _render_all(first: bool = false) -> void:
 	_sync_hand()
 	Main.I.update_top()
 	_update_tip()
+	UIK.prof_add("CS._render_all", _pt)
 
 
 func _update_player() -> void:
+	var _pt := UIK.prof_t()
 	player_hp.set_values(G.hp, G.maxHp)
 	player_block.visible = C.pl.block > 0
 	player_block_lbl.text = str(C.pl.block)
-	for c in player_status.get_children():
-		c.queue_free()
-	for k in C.pl.status.keys():
-		var v: int = C.pl.status[k]
-		if v != 0 and DB.st.has(k):
-			player_status.add_child(EnemyView.status_chip(k, v))
+	# las fichas de estado solo se rehacen si cambió algún estado (antes: liberar y crear todas en cada repintado,
+	# con su panel, icono, etiqueta y tooltip; y el tooltip abierto se cerraba solo al jugar una carta)
+	var st_sig := EnemyView.status_sig(C.pl.status)
+	if st_sig != _pl_status_sig:
+		_pl_status_sig = st_sig
+		for c in player_status.get_children():
+			c.queue_free()
+		for k in C.pl.status.keys():
+			var v: int = C.pl.status[k]
+			if v != 0 and DB.st.has(k):
+				player_status.add_child(EnemyView.status_chip(k, v))
 	var low: bool = float(G.hp) / G.maxHp <= 0.3 and G.hp > 0
 	vignette.visible = low
 	_update_incoming()
+	UIK.prof_add("CS._update_player", _pt)
 
 
 ## Vista previa: daño total anunciado por los enemigos y cuánto llegaría a tus PV con el Bloqueo actual.
@@ -1229,6 +1257,7 @@ func _orb_tip(i: int) -> String:
 
 
 func _update_enemies(first: bool) -> void:
+	var _pt := UIK.prof_t()
 	var n := 0
 	for e in C.enemies:
 		var v := _enemy_view(e)
@@ -1253,6 +1282,7 @@ func _update_enemies(first: bool) -> void:
 		var ok: bool = pending != null and e.hp > 0
 		v.set_target_ok(ok)
 	_layout_enemies()
+	UIK.prof_add("CS._update_enemies", _pt)
 
 
 func _layout_enemies() -> void:
@@ -1272,7 +1302,9 @@ func _layout_enemies() -> void:
 
 
 func _update_hud() -> void:
+	var _pt := UIK.prof_t()
 	if C.is_empty():
+		UIK.prof_add("CS._update_hud", _pt)
 		return
 	var etxt := "%d/%d" % [C.energy, C.maxEnergy]
 	if energy_lbl.text != etxt:
@@ -1304,6 +1336,7 @@ func _update_hud() -> void:
 		(end_btn.get_meta("glow_tw") as Tween).kill()
 		end_btn.remove_meta("glow_tw")
 		end_btn.modulate = Color.WHITE
+	UIK.prof_add("CS._update_hud", _pt)
 
 
 func _update_tip() -> void:
@@ -1324,7 +1357,9 @@ func _update_tip() -> void:
 
 # ============================== mano ==============================
 func _sync_hand(at_idle: bool = false) -> void:
+	var _pt := UIK.prof_t()
 	if C.is_empty():
+		UIK.prof_add("CS._sync_hand", _pt)
 		return
 	_sync_pending = false
 	# retira las que ya no están
@@ -1383,6 +1418,7 @@ func _sync_hand(at_idle: bool = false) -> void:
 		_layout_hand(true)
 	if _sync_pending:
 		_sync_hand_next_frame()
+	UIK.prof_add("CS._sync_hand", _pt)
 
 
 ## Termina de repartir las cartas nuevas en el frame siguiente (sin acumular esperas).
@@ -1430,7 +1466,9 @@ func _card_target(i: int, n: int, v: CardView) -> Dictionary:
 ## (crear un Tween de 4 propiedades por carta y por repintado era el coste de fondo de la mano: 3,7 ms cada dos
 ## fotogramas con Irene, y las cartas ya asentadas se re-encolaban en cada refresco sin moverlas).
 func _layout_hand(animate: bool) -> void:
+	var _pt := UIK.prof_t()
 	if C.is_empty():
+		UIK.prof_add("CS._layout_hand", _pt)
 		return
 	var n: int = C.hand.size()
 	for i in n:
@@ -1463,6 +1501,7 @@ func _layout_hand(animate: bool) -> void:
 		tw.tween_property(v, "scale", Vector2(t.scale, t.scale), ttl).set_delay(delay)
 		tw.tween_property(v, "modulate:a", 1.0, 0.15).set_delay(delay)
 		v.set_meta("lay_tw", tw)
+	UIK.prof_add("CS._layout_hand", _pt)
 
 
 func _on_card_hover(v: CardView, on: bool) -> void:

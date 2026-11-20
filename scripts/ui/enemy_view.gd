@@ -42,6 +42,8 @@ var _intent_txt := ""   ## resumen de la intención (para el tooltip del cuerpo)
 var _phase2 := false    ## retrato de fase 2 ya aplicado (Fase 4)
 var _intent_row: HBoxContainer   ## fila de la intención, creada una vez y rehacida solo si cambia su contenido
 var _intent_sig := ""
+var _status_sig := "#"   ## firma de las fichas de estado pintadas («#» = ninguna pintada aún)
+var _phase2_path := ""   ## retrato de fase 2 pedido en segundo plano al montar la vista (jefes)
 
 
 func setup(p_e: Dictionary, k: float) -> void:
@@ -156,6 +158,22 @@ func setup(p_e: Dictionary, k: float) -> void:
 	status_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(status_box)
 	_start_idle()
+	# retrato de fase 2 de los jefes: se carga en segundo plano ya (antes, load() en el golpe que abre la fase 2:
+	# ~4 ms de lectura y subida de textura en el mismo fotograma del rótulo y la sacudida)
+	var p2 := "res://assets/enemies/%s_fase2.webp" % e.id
+	if e.def.tier == "boss" and ResourceLoader.exists(p2) \
+			and ResourceLoader.load_threaded_request(p2) == OK:
+		_phase2_path = p2
+
+
+func _exit_tree() -> void:
+	# la carga en segundo plano que no llegó a usarse se recoge (si no, el cargador la retiene hasta salir);
+	# si aún está en curso (combate muy corto), load_threaded_get espera a que termine
+	if _phase2_path != "":
+		var st := ResourceLoader.load_threaded_get_status(_phase2_path)
+		if st == ResourceLoader.THREAD_LOAD_LOADED or st == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			ResourceLoader.load_threaded_get(_phase2_path)
+		_phase2_path = ""
 
 
 static func _block_style() -> StyleBoxFlat:
@@ -195,6 +213,7 @@ func body_center() -> Vector2:
 
 
 func refresh(C) -> void:
+	var _pt := UIK.prof_t()
 	if e.hp > 0:
 		_check_phase2()
 		_rebuild_intent(C)
@@ -206,15 +225,23 @@ func refresh(C) -> void:
 			c.queue_free()
 		for c in status_box.get_children():
 			c.queue_free()
+		_status_sig = "#"
 		block_badge.visible = false
 	hp_bar.set_values(e.hp, e.maxHp)
+	UIK.prof_add("EnemyView.refresh", _pt)
 
 
 ## Fase 4 · al entrar en fase 2 usa el retrato <id>_fase2.webp si existe; si no, conserva el original.
 func _check_phase2() -> void:
 	if _phase2 or int(e.get("phase", 1)) < 2 or not (img is TextureRect):
 		return
-	var tex := UIK.tex("res://assets/enemies/%s_fase2.webp" % e.id)
+	var tex: Texture2D = null
+	if _phase2_path != "":
+		# pedido al montar la vista: ya está cargado (si no, espera aquí lo que le falte, como hacía load)
+		tex = ResourceLoader.load_threaded_get(_phase2_path) as Texture2D
+		_phase2_path = ""
+	else:
+		tex = UIK.tex("res://assets/enemies/%s_fase2.webp" % e.id)
 	if tex == null:
 		return
 	_phase2 = true
@@ -222,6 +249,13 @@ func _check_phase2() -> void:
 
 
 func _rebuild_status() -> void:
+	var _pt := UIK.prof_t()
+	# solo se rehacen si cambió algún estado (cada ficha es panel + icono + etiqueta + tooltip)
+	var sig := status_sig(e.status)
+	if sig == _status_sig:
+		UIK.prof_add("EnemyView._rebuild_status", _pt)
+		return
+	_status_sig = sig
 	for c in status_box.get_children():
 		c.queue_free()
 	for k in e.status.keys():
@@ -229,6 +263,17 @@ func _rebuild_status() -> void:
 		if v == 0 or not DB.st.has(k):
 			continue
 		status_box.add_child(status_chip(k, v))
+	UIK.prof_add("EnemyView._rebuild_status", _pt)
+
+
+## Firma de lo que pintan las fichas de estado (las que se ven: valor distinto de 0 y estado conocido, en orden).
+static func status_sig(st: Dictionary) -> String:
+	var parts := PackedStringArray()
+	for k in st.keys():
+		var v: int = st[k]
+		if v != 0 and DB.st.has(k):
+			parts.append("%s:%d" % [k, v])
+	return ",".join(parts)
 
 
 static func status_chip(k: String, v: int) -> Control:
@@ -249,9 +294,11 @@ static func status_chip(k: String, v: int) -> Control:
 
 
 func _rebuild_intent(C) -> void:
+	var _pt := UIK.prof_t()
 	var it = e.intent
 	if it == null:
 		_clear_intent()
+		UIK.prof_add("EnemyView._rebuild_intent", _pt)
 		return
 	# firma barata de lo que se pinta: si no cambió, no se reconstruye nada. Mientras la fase del jugador
 	# lo golpea, el motor refresca la intención en cada golpe (p. ej. al romper el Cañonazo la deja
@@ -261,6 +308,7 @@ func _rebuild_intent(C) -> void:
 	var sig := "%s|%d|%s|%s|%s|%s|%s|%s|%s" % [it.name, dmg, it.get("hits", 1), it.get("block", 0), it.get("selfStr", 0),
 		it.get("thorns", 0), str(it.get("apply", "")), str(it.get("add", "")), it.get("heal", 0) + it.get("healAll", 0) + (1 if it.has("summon") else 0)]
 	if _intent_row != null and is_instance_valid(_intent_row) and _intent_row.get_parent() == intent_box and sig == _intent_sig:
+		UIK.prof_add("EnemyView._rebuild_intent", _pt)
 		return
 	_intent_sig = sig
 	_clear_intent()
@@ -323,6 +371,7 @@ func _rebuild_intent(C) -> void:
 	var tw := row.create_tween().set_loops()
 	tw.tween_property(row, "position:y", -7.0, 0.9).set_trans(Tween.TRANS_SINE)
 	tw.tween_property(row, "position:y", 0.0, 0.9).set_trans(Tween.TRANS_SINE)
+	UIK.prof_add("EnemyView._rebuild_intent", _pt)
 
 
 ## Quita la fila de la intención (mata también su tween de flotación al liberarla).
