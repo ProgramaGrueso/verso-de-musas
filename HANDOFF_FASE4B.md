@@ -1,8 +1,13 @@
 # HANDOFF · Fase 4B · Élites nuevos y eventos raros (2026-11-19, cortado por plazo)
 
-## Estado
-- **No se editó ningún archivo del proyecto.** Árbol intacto y consistente: `run_traces` = 350 ok, 0 fallan (17:58).
-- Solo hubo lectura y diseño. ROADMAP sin marcar (la casilla de élites/eventos sigue abierta).
+## Estado (actualizado 2026-11-19 tarde)
+- **IMPLEMENTADO y commiteado** (`13e7d0e`): los 3 élites (`spectralbosun`, `rootwarden`+2 Brotes, `royalbeetle`)
+  y 3 eventos raros con `"once": true` (`campana_bruma`, `corazon_hueco`, `cera_memoria`) vía `G.onceEvents`
+  + filtro en `RunGen.event_ok`. El sorteo pasó a pesos reales (`weight`) sin cambiar el reparto de las musas.
+- Mecánicas: Cañón Rompible (`brk`, cuenta también lo absorbido por Bloqueo; `_brk_check`), Escudo de Raíces
+  (mitad de daño con Brotes vivos, estado `rootShield` sincronizado), Coraza (`shellCap`).
+- Medido `balance.gd -- 100 0`: global 36,2 %; bosun 10,5 %, rootwarden 12,7 %, **royalbeetle 18,6 % (alto, por ajustar)**.
+- `events_test` 143.302 ok/0 (incluye las mecánicas de los tres élites y los eventos únicos).
 
 ## Hallazgos (para no releer)
 - El arte del enemigo se carga por id: `res://assets/enemies/<id>.webp` (`scripts/ui/enemy_view.gd:48`); si falta, sale sin imagen.
