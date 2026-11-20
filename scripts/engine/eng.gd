@@ -78,6 +78,8 @@ static func st_desc(k: String, n: int) -> String:
 	var t: String = DB.st[k].d
 	if k == "strength" and n > 0:
 		t = DB.tl("Tus ataques infligen {n} de daño extra.")   # el dato dice «menos» (Fuerza negativa)
+	if k == "precision":
+		n = gear_bonus(n)   # bonus real (solo DB.extra), no el número de cargas
 	return t.replace("{n}", str(n))
 
 static func st_neg(k: String, n: int) -> bool:

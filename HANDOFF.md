@@ -41,8 +41,8 @@ godot --headless --path . --script tests/balance.gd -- 1000 0  # balance (VDM_AR
 5. Confirmar: el tooltip de una ficha de estado ya no se cierra al jugar una carta que no cambia estados; el tooltip de controles bajos va encima; Pozo de Vida +18 (o 25 vía `pozo.hp` en el generador).
 
 ## Lo que FALTA (por valor)
-1. **Muerte/historial en otro idioma**: `deathBy` guarda el nombre del enemigo, no el id (`scripts/core/meta.gd`). Guardar el id y traducir al mostrar.
-2. **Balance**: Engranajes (Irene, 63 %) y Luz (Aurora, 61 %) algo sobre 60 % (exige tocar Precisión/Resplandor en el motor); Hivemind ~2 % de derrotas (cambiar patrón); cartas extremas listadas en `HANDOFF_AGENTE_E.md`.
+1. ~~Muerte/historial en otro idioma~~ HECHO (`ad54dc4`): `deathBy` guarda ids, `DB.death_by_text` traduce al mostrar.
+2. **Balance** (2026-11-20, `6dd5a58`, `d96ba9d`): Hivemind 3,2→5,3 % de derrotas (ciclo de 6, Golpe 28); Engranajes 63→55 % y Luz 61→59 % (`gear_bonus`/`glow_cut` en `eng.gd`, solo `DB.extra`). Resta: cartas extremas de `HANDOFF_AGENTE_E.md`; Lia|cuchillas (34,6 %) es el arquetipo más justo.
 3. **HUD de combate al 130 %**: `Main.SCREEN_MAX_TEXT_SCALE = {"combat": 1.0}`; rehacer `combat_screen`/`enemy_view` para escalar.
 4. **Idioma en caliente** en combate/tienda/evento/recompensa/hoguera/favor: se aplica en la siguiente sala (con aviso); rehacerlas repetiría el reparto.
 5. **Origen de la reliquia** (la ficha lo deduce de la rareza; guardar el real exige tocar `engine/`); cartas retiradas ya no salen en el Compendio.

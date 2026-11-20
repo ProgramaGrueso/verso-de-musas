@@ -3379,8 +3379,8 @@ msgid "Los ataques de Osty golpean a TODOS los enemigos."
 msgstr "Osty's attacks hit ALL enemies."
 
 #: data/states.json st/glow/d
-msgid "Al atacar, recibe {n} de daño y su ataque inflige 3 menos. Baja 1 por turno."
-msgstr "When it attacks, it takes {n} damage and its attack deals 3 less. Drops by 1 each turn."
+msgid "Al atacar, recibe {n} de daño y su ataque inflige menos (2 con 1 de Resplandor, 3 con 2 o más). Baja 1 por turno."
+msgstr "When it attacks, it takes {n} damage and its attack deals less (2 with 1 Glow, 3 with 2 or more). Drops by 1 each turn."
 
 #: data/states.json st/heat/d
 msgid "Tienes {n} de Calor. Las cartas de remate lo consumen para golpear más fuerte."
@@ -3541,8 +3541,8 @@ msgid "Si no la juegas este turno, se agota."
 msgstr "If you don't play it this turn, it is Exhausted."
 
 #: data/states.json glos/Resplandor
-msgid "Cuando el enemigo ataca, recibe daño igual a su Resplandor y su ataque inflige 3 menos. Baja 1 por turno."
-msgstr "When the enemy attacks, it takes damage equal to its Glow and its attack deals 3 less. Drops by 1 each turn."
+msgid "Cuando el enemigo ataca, recibe daño igual a su Resplandor y su ataque inflige menos (2 con 1 de Resplandor, 3 con 2 o más). Baja 1 por turno."
+msgstr "When the enemy attacks, it takes damage equal to its Glow and its attack deals less (2 with 1 Glow, 3 with 2 or more). Drops by 1 each turn."
 
 #: data/states.json glos/Calor
 msgid "Se acumula con las cartas de Danza. Las cartas de remate lo consumen para golpear más fuerte."
