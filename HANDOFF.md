@@ -66,3 +66,11 @@ tools/build_linux.sh [release|debug]
 - Ningún texto se sale de su caja (`UIK.fit_*`, vigila `ui_layout_test` en es y en, 100/115/130 %).
 - Un dueño por archivo con agentes en paralelo. Nunca `git checkout/restore` desde un agente.
 - Tests con `ulimit -c 0`, `timeout` y `XDG_DATA_HOME` temporal. ComfyUI solo con `comfy-start`.
+
+## Pendiente para otra sesión (anotado 2026-11-20)
+- **Tamaño del export Linux (520 MB de .pck, ~566 MB total).** `tools/build_linux.sh release` ya funciona de punta a punta (plantillas 4.7.2 instaladas). Medido por Haiku: assets/ pesa 105 MB crudos (webp 57 MB, ogg 40 MB, png 30 MB) pero .godot/imported tiene 862 MB de .ctex (BPTC con mipmaps): un webp de 1,6 MB (`zafiro_idle`) da un .ctex de 18,7 MB; los sprites *_idle/_die/_attack_heavy/_hurt/_cast de las 4 musas pesan 12-13 MB cada uno. El preset ya excluye gen/tests/tools/*.md.
+  - Experimento propuesto (Sonnet, en copia del proyecto): sprites sin mipmaps y/o compresión con pérdida o menor resolución en el import; medir el .pck y comparar capturas antes/después (regla: premium, sin degradar el arte). Estimación sin medir: 150-250 MB.
+  - Opcional: recomprimir los .ogg de música (~15-20 MB menos).
+- **Carta de Irene de coste 3 con «texto basura»** que Juan vio jugando: no reproducida; Obra Maestra, Perpetuum Mobile y Autómata Colosal generan texto correcto en ES/EN. Falta nombre/captura/idioma.
+- **Hecho hoy:** perfil real reiniciado (copia en ~/automation/backups/verso-perfil-2026-11-20), plantillas Linux instaladas, precio decidido (10 USD, 5 USD el primer mes).
+
