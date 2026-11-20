@@ -84,3 +84,9 @@ Juan jugó el normal y lo sintió en ~10/100. Solo con `DB.extra` (trazas intact
 - **La calibración final depende de que Juan pruebe a mano** (un humano gana mucho más que el bot). Si aún es fácil, subir `NM_BASE` (hp/dmg) o eliteStr/bossStr y regenerar.
 - UI pendiente (no tocada): el selector de Pesadilla (`select_screen.gd:302`) muestra `DB.nm_texts[nm]` y «(y los niveles anteriores)»; con 1 ranura de poción y PV máx. menores conviene comprobar a mano la barra de pociones.
 - `tests/nm_test.gd` ahora admite 1-3 cambios por paso y comprueba las claves nuevas.
+
+## Validación a mano (Juan, 2026-11-20)
+- Partida normal (nm0) con la musa de las orbes: «más difícil», ganó con 1 PV. Parte de la dificultad vino de su propia elección de evento (renunciar a curarse en hogueras por un bono) y llegó al jefe golpeado, con el aviso de muerte segura encendido. Base nuevo (PV ×1,04, daño ×1,05, élites +10 % PV) validado en una partida.
+- **Siguiente prueba:** una partida normal «limpia» (sin riesgos opcionales) con otra musa (Zafiro es la más débil en bots) y una con Irene. Si sigue cómoda, subir `NM_BASE` o Fuerza de élites/jefes en `tools/make_content_w2.py` y regenerar. Mirar también la barra de pociones con 1-2 ranuras (nm5+) y confirmar que el lag de la mano con muchas cartas desapareció (arreglo `9602edb`, medido solo en headless).
+- Tests de foco (`focus_audit_test`, `focus_reach`) dependen de esperas por tiempo: dan falsas alarmas con la máquina cargada. Correrlos con la máquina libre y, si se puede, hacerlos robustos.
+
