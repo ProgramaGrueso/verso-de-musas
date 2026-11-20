@@ -924,6 +924,9 @@ func _fx(type: String, d: Dictionary) -> void:
 			Main.I.toast(tr("Se baraja tu descarte…"))
 		"ostyAttack":
 			_play_sfx("hit")
+			# el daño de Osty llega solo al terminar el turno: se señala de dónde viene
+			_popup(osty_box.global_position + Vector2(45, 20), tr("Osty ataca"), "txt")
+			_ring(osty_box.global_position + Vector2(45, 40), Color("#caa5ff"), 12.0, 60.0, 0.35, 5.0)
 		"orbChannel":
 			_play_sfx("orbChannel")
 			_update_orbs()

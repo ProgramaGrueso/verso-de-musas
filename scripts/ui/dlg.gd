@@ -68,6 +68,8 @@ class Overlay extends Control:
 		# devolverá al cerrarse, en vez de reactivarlo debajo de él.
 		var heir := _live_overlay_above()
 		for pair in _locked:
+			if not is_instance_valid(pair[0]):
+				continue   # la pantalla de detrás ya se liberó (rendirse / guardar y salir): sin esto close() abortaba y el diálogo quedaba colgado
 			var c: Control = pair[0]
 			# solo se toca lo que este diálogo apagó (y sigue apagado: si otro modal u otro código ya lo
 			# reactivó —la pantalla que se reconstruyó mientras estaba abierto— se respeta su valor nuevo)

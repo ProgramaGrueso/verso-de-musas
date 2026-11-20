@@ -699,6 +699,10 @@ msgstr "Osty is down: it will come back on its own at the start of your next tur
 msgid "Osty regresa"
 msgstr "Osty returns"
 
+#: scripts/ui/screens/combat_screen.gd:926
+msgid "Osty ataca"
+msgstr "Osty attacks"
+
 #: scripts/ui/screens/combat_screen.gd:951
 msgid "Tu mano está llena."
 msgstr "Your hand is full."
