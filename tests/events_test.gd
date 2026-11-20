@@ -172,12 +172,13 @@ func _elite_mechanics() -> void:
 	root.block = 0
 	hp2 = root.hp
 	ok(Eng.deal_to_enemy(C2, root, 20) == 20 and root.hp == hp2 - 20, "Guardiana: sin Brotes no recibe daño completo")
-	# Escarabajo: cada golpe pierde como máximo 10 PV; los golpes pequeños no se reducen.
+	# Escarabajo: cada golpe pierde como máximo shellCap PV (dato de make_content_w2.py); los pequeños no se reducen.
 	var G3 := Eng.new_run("zafiro", {"seed": 53})
 	var C3 := Eng.start_combat(G3, ["royalbeetle"], {"tier": "elite"})
 	var beetle: Dictionary = C3.enemies[0]
+	var cap := int(beetle.def.get("shellCap", 0))
 	beetle.block = 0
-	ok(Eng.get_s(beetle, "carapace") == 10, "Escarabajo: Coraza no está visible")
-	ok(Eng.deal_to_enemy(C3, beetle, 25) == 10, "Escarabajo: un golpe grande supera el límite")
+	ok(cap >= 8 and Eng.get_s(beetle, "carapace") == cap, "Escarabajo: Coraza no está visible")
+	ok(Eng.deal_to_enemy(C3, beetle, 25) == cap, "Escarabajo: un golpe grande supera el límite")
 	beetle.block = 0
 	ok(Eng.deal_to_enemy(C3, beetle, 6) == 6, "Escarabajo: Coraza altera los golpes pequeños")

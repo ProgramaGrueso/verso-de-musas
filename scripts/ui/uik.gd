@@ -175,9 +175,12 @@ const WATCH_EVERY := 3            # se vigila cada 3 fotogramas (~20 veces por s
 ## Vigilante único: lo llama `_process` de Main cada fotograma; cada WATCH_EVERY fotogramas mira solo los botones
 ## cuyo texto o tamaño ha cambiado (una comparación de dos valores por botón: barato incluso con cientos).
 static func watch_tick() -> void:
+	if prof_on:
+		_prof_frame()
 	_watch_tick += 1
 	if _watch_tick % WATCH_EVERY != 0:
 		return
+	var t_prof := prof_t()
 	var keep := []
 	for w in _watched:
 		var b = w.get_ref()
@@ -189,6 +192,53 @@ static func watch_tick() -> void:
 		if b.is_inside_tree() and b.is_visible_in_tree():
 			_watch_fit(b)
 	_watched = keep
+	prof_add("UIK.watch_tick", t_prof)
+
+
+# ---------- Perfil por fotograma (SOLO depuración; apagado por defecto) ----------
+## Se enciende con la variable de entorno `VDM_PROF=1` o con `-- --prof` al lanzar Godot; con él apagado,
+## prof_t() devuelve 0 y prof_add() sale en la primera línea (una comparación de un bool estático).
+## Uso en cualquier función sospechosa:  `var t := UIK.prof_t()` … `UIK.prof_add("Clase.func", t)`.
+## Cada fotograma (al entrar en watch_tick, que Main llama desde _process) se cierra el anterior: si su tiempo
+## de pared superó `VDM_PROF_MS` (por defecto 9 ms) se imprime el desglose «etiqueta ms×llamadas».
+static var prof_on: bool = OS.get_environment("VDM_PROF") == "1" or "--prof" in OS.get_cmdline_user_args()
+static var prof_ms: float = float(OS.get_environment("VDM_PROF_MS")) if OS.get_environment("VDM_PROF_MS") != "" else 9.0
+static var _prof := {}        # etiqueta -> [µs acumulados, llamadas] del fotograma en curso
+static var _prof_last := 0    # µs del cierre del fotograma anterior
+
+
+static func prof_t() -> int:
+	return Time.get_ticks_usec() if prof_on else 0
+
+
+static func prof_add(tag: String, t0: int) -> void:
+	if not prof_on or t0 == 0:
+		return
+	var dt := Time.get_ticks_usec() - t0
+	var s = _prof.get(tag)
+	if s == null:
+		_prof[tag] = [dt, 1]
+	else:
+		s[0] += dt
+		s[1] += 1
+
+
+static func _prof_frame() -> void:
+	var now := Time.get_ticks_usec()
+	if _prof_last > 0:
+		var wall := (now - _prof_last) / 1000.0
+		if wall >= prof_ms:
+			var parts := PackedStringArray()
+			var tags := _prof.keys()
+			tags.sort_custom(func(a, b): return _prof[a][0] > _prof[b][0])
+			var marked := 0
+			for k in tags:
+				marked += int(_prof[k][0])
+				parts.append("%s %.2f ms×%d" % [k, _prof[k][0] / 1000.0, _prof[k][1]])
+			print("[prof] fotograma %d · %.2f ms de pared · %.2f ms marcados · %s" % [Engine.get_process_frames(), wall,
+				marked / 1000.0, ", ".join(parts) if parts.size() > 0 else "(sin marcas)"])
+	_prof_last = now
+	_prof.clear()
 
 
 
@@ -566,15 +616,25 @@ static func center_col(parent: Control, sep: int = 16) -> VBoxContainer:
 	return v
 
 
+## Textura de la brasa (punto blanco con caída suave), fabricada una sola vez y compartida por todos
+## los emisores: antes cada llamada a embers() creaba su propia Image 16x16 + ImageTexture.
+static var _ember_tex: ImageTexture = null
+
+static func ember_tex() -> ImageTexture:
+	if _ember_tex == null:
+		var img := Image.create(16, 16, false, Image.FORMAT_RGBA8)
+		for x in 16:
+			for y in 16:
+				var d := Vector2(x - 7.5, y - 7.5).length() / 8.0
+				img.set_pixel(x, y, Color(1, 1, 1, clampf(1.0 - d, 0.0, 1.0) ** 1.5))
+		_ember_tex = ImageTexture.create_from_image(img)
+	return _ember_tex
+
+
 ## Chispas flotantes (brasas) de un color; se usan en título y selección.
 static func embers(color: Color, count: int = 40) -> CPUParticles2D:
 	var p := CPUParticles2D.new()
-	var img := Image.create(16, 16, false, Image.FORMAT_RGBA8)
-	for x in 16:
-		for y in 16:
-			var d := Vector2(x - 7.5, y - 7.5).length() / 8.0
-			img.set_pixel(x, y, Color(1, 1, 1, clampf(1.0 - d, 0.0, 1.0) ** 1.5))
-	p.texture = ImageTexture.create_from_image(img)
+	p.texture = ember_tex()
 	p.amount = count
 	p.lifetime = 9.0
 	p.preprocess = 9.0
