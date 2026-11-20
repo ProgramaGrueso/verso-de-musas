@@ -1434,15 +1434,8 @@ func _layout_hand(animate: bool) -> void:
 			if old is Tween and old.is_valid():
 				old.kill()
 		var delay := float(i) * 0.06 if spawned else 0.0
-		var ttl := 0.2 if animate else 0.01
-		if spawned:
-			# La carta acaba de entrar (a=0) y su entrada va por su propio tween (crece desde 0.4 abajo).
-			# Volver a animar opacity en paralelo la dejaba a medias: el reparto de la mano multiplicado por
-			# cada repintado de una jugada de Irene la re-teleportaba al inicio y la desvanecía medio turno
-			# (y cada fase combinaba fade + posición/escala/rotación = decenas de nodos de "juice" por carta).
-			v.set_meta("lay_to", Vector4.INF)   # la primera colocación animada la hace el alta (abajo)
-			continue
-		if not animate:
+		var ttl := 0.2 if (animate or spawned) else 0.01
+		if not animate and not spawned:
 			# sin animación: directo, sin tween
 			v.position = t.pos
 			v.rotation = t.rot
