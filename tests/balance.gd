@@ -10,6 +10,44 @@ extends SceneTree
 ##          godot --headless --path . --script tests/balance.gd -- 40 0 all 1 base   (sin la oleada 2)
 ## Escribe el resumen en user://balance.json y una línea por partida en user://balance_runs.json
 ## (musa, semilla, acto, piso, causa de muerte, mazo y reliquias): así se comparan fases con el mismo criterio.
+##
+## Fase 4 (poda del pool y arquetipos). Variables de entorno opcionales (sin ellas el bot juega igual que antes):
+##   VDM_EXPLORE=p  en cada recompensa, con probabilidad p elige al azar entre las cartas ofrecidas y «saltar».
+##                  Con p=1 la columna «Δcoger» (victorias si la cogió − si se la ofrecieron y no) mide el valor
+##                  causal de cada carta sin el sesgo de la heurística de rareza.
+##   VDM_ARCH=1     el bot se compromete con uno de los 2 arquetipos de su musa (alterna A/B por partida) y lo
+##                  prioriza en recompensas y tienda: da el % de victorias de cada arquetipo forzado.
+##   VDM_CARDS=1    imprime la tabla completa de cartas (si no, solo el resumen por arquetipo).
+## balance.json incluye siempre "cards" (oferta/elección/Δ por musa|carta) y "arch" (victorias por arquetipo).
+
+## Arquetipos por musa (ids sin el prefijo de la musa). Cartas «núcleo» de cada plan: las usa VDM_ARCH para
+## priorizar y la clasificación del mazo final (≥3 cartas de un plan y más que del otro → ese arquetipo).
+const ARCH := {
+	"zafiro": {
+		"fuerza": ["inflame", "flex", "warcry", "heavy", "quake", "guillotine", "limit", "demon", "old_blood"],
+		"coraza": ["shrug", "flamebarrier", "metal", "entrench", "barricade", "slam", "shatter", "living_wall", "ember_armor", "shoulder"],
+	},
+	"lia": {
+		"veneno": ["poison", "noxious", "catalyst", "corrosive", "bane", "tox", "toxic_dew", "paralysis", "plague"],
+		"cuchillas": ["blade", "storm", "accuracy", "cuts", "hidden_knife", "steel_burst", "shadow_agile", "blade_dance", "eviscerate", "blade_waltz"],
+	},
+	"claudia": {
+		"osty": ["double", "legion", "might", "charge", "reviv", "army", "necro", "moon", "osty_claw", "twin_bite", "skeletal_guard", "blood_ritual", "bone_throne"],
+		"agotar": ["omen", "pyre", "minor_harvest", "harvest", "dance", "embrace", "abyss", "coven", "violet_eclipse"],
+	},
+	"aurora": {
+		"calor": ["warmth", "fan_slash", "climax", "pyramid", "supernova", "ember_petal", "flame_spin", "dawn_dance", "golden_eclipse", "sun_hymn"],
+		"luz": ["dazzle", "scorch", "cascade", "gilded_veil", "perpetual_noon", "incandescence", "blinding_gleam", "mirage", "refraction_wall", "burning_mirror", "prism", "corona", "veil"],
+	},
+	"irene": {
+		"engranajes": ["cog_slap", "pendulum", "porcelain", "stitch", "oil", "whirr", "music_box", "automaton", "gearstorm", "masterwork", "precision", "maestro", "loose_gear", "reinforced_spring", "pendulum_blow", "clockwork_chain", "clock_tower", "colossal_automaton", "fine_clockwork"],
+		"descarga": ["chime", "release", "spring_discharge", "tictac", "clock_heart", "overwind", "masterkey", "overdrive", "quick_wind", "spring", "clockwork", "perpetuum"],
+	},
+	"selene": {
+		"evocar": ["undertow", "depthcharge", "abyss", "abyssal_echo", "multitide", "maremoto", "colossal_wave", "ripple", "frost", "stray_drop"],
+		"marea": ["surge", "tsunami", "pearl_whirl", "deluge", "conch", "silver_current", "resonance", "high_tide", "undercurrent", "pearl_crown", "loop", "endless_tide", "tidepool", "pearl", "shining_conch"],
+	},
+}
 
 var rng := RandomNumberGenerator.new()
 var out := {}          # char -> {runs, wins, floors, acts}
@@ -20,6 +58,15 @@ var runs_log: Array = []  # volcado por partida
 var relic_runs := {}   # reliquia -> {n, wins}
 var turn_cap_hits := 0
 var deck_avg := {}     # char -> [cartas, partidas]
+# --- Fase 4: datos de elección de cartas y arquetipos ---
+var card_st := {}      # "musa|carta" -> {off, pick, offW, pickW}: ofrecida / cogida en recompensas (y victorias)
+var deck_st := {}      # "musa|carta" -> {n, wins}: presente en el mazo final
+var arch_st := {}      # "musa|arquetipo" -> {n, wins, cards}: plan forzado (VDM_ARCH) o mazo final clasificado
+var arch_ids := {}     # musa -> arquetipo -> [ids completos]
+var run_offers: Array = []   # [carta, cogida] de la partida en curso
+var explore := 0.0
+var arch_mode := false
+var cur_plan := ""
 
 
 func _init() -> void:
@@ -29,6 +76,12 @@ func _init() -> void:
 	var args := OS.get_cmdline_user_args()
 	DB.extra = not (args.size() > 4 and args[4] == "base")   # «base»: sin el contenido de la oleada 2
 	DB.load_all()
+	explore = float(OS.get_environment("VDM_EXPLORE")) if OS.get_environment("VDM_EXPLORE") != "" else 0.0
+	arch_mode = OS.get_environment("VDM_ARCH") == "1"
+	for ch in ARCH.keys():
+		arch_ids[ch] = {}
+		for a in ARCH[ch].keys():
+			arch_ids[ch][a] = ARCH[ch][a].map(func(x): return "%s_%s" % [ch, x]).filter(func(x): return DB.cards.has(x))
 	var n_runs: int = int(args[0]) if args.size() > 0 else 40
 	var nm_arg: String = args[1] if args.size() > 1 else "0"
 	var only: String = args[2] if args.size() > 2 and args[2] != "all" else ""
@@ -86,6 +139,11 @@ func _sweep(chars: Array, n_runs: int, t0: int) -> void:
 func _play_run(ch: String, nm: int, seed_v: int) -> void:
 	var G := Eng.new_run(ch, {"seed": seed_v, "nm": nm})
 	G["seeded"] = true
+	run_offers = []
+	cur_plan = ""
+	if arch_mode and arch_ids.has(ch):
+		var plans: Array = arch_ids[ch].keys()
+		cur_plan = plans[int(out[ch].runs) % plans.size()]
 	G.map = RunGen.gen_map_game(G)
 	_favor(G)
 	var won := false
@@ -141,6 +199,56 @@ func _play_run(ch: String, nm: int, seed_v: int) -> void:
 		relic_runs[r].n += 1
 		if won:
 			relic_runs[r].wins += 1
+	_card_stats(ch, G, won)
+
+
+## Acumula oferta/elección por carta, presencia en el mazo final y victorias por arquetipo.
+func _card_stats(ch: String, G, won: bool) -> void:
+	var w := 1 if won else 0
+	for of in run_offers:
+		var k: String = "%s|%s" % [ch, of[0]]
+		if not card_st.has(k):
+			card_st[k] = {"off": 0, "pick": 0, "offW": 0, "pickW": 0}
+		var cs: Dictionary = card_st[k]
+		cs.off += 1
+		cs.offW += w
+		if of[1]:
+			cs.pick += 1
+			cs.pickW += w
+	var seen := {}
+	for c in G.deck:
+		if seen.has(c.id) or DB.cards[c.id].rarity in ["starter", "special"] or DB.cards[c.id].type in ["status", "curse"]:
+			continue
+		seen[c.id] = true
+		var k2: String = "%s|%s" % [ch, c.id]
+		if not deck_st.has(k2):
+			deck_st[k2] = {"n": 0, "wins": 0}
+		deck_st[k2].n += 1
+		deck_st[k2].wins += w
+	if not arch_ids.has(ch):
+		return
+	var counts := {}
+	for a in arch_ids[ch].keys():
+		counts[a] = 0
+		for c in G.deck:
+			if c.id in arch_ids[ch][a]:
+				counts[a] += 1
+	var label := cur_plan
+	if label == "":
+		label = "mixto"
+		for a in counts.keys():
+			var others := 0
+			for b in counts.keys():
+				if b != a:
+					others = maxi(others, counts[b])
+			if counts[a] >= 3 and counts[a] > others:
+				label = a
+	var ka: String = "%s|%s" % [ch, label]
+	if not arch_st.has(ka):
+		arch_st[ka] = {"n": 0, "wins": 0, "cards": 0}
+	arch_st[ka].n += 1
+	arch_st[ka].wins += w
+	arch_st[ka].cards += counts.get(label, 0)
 
 
 func _favor(G) -> void:
@@ -393,6 +501,9 @@ func _value(C, inst, inc: Dictionary, lv: Array) -> float:
 		s += mini(b, maxi(0, inc.hp) + 1) * pol.block * (2.0 if danger else 1.0) + b * 0.15
 		if G.char == "zafiro" and _has_dmg_block(C):
 			s += b * 0.45   # el Bloqueo también es munición para Embate/Refracción
+	# Refracción (Aurora) «pierde tu Bloqueo»: antes el bot no lo descontaba y la jugaba con el golpe enemigo encima.
+	if f.get("loseBlock", false) and C.pl.block > 0:
+		s -= mini(C.pl.block, maxi(0, inc.hp)) * pol.block
 
 	# --- utilidad ---
 	if f.get("draw", 0):
@@ -465,11 +576,13 @@ func _value(C, inst, inc: Dictionary, lv: Array) -> float:
 	if f.has("ch"):
 		for t in f.ch:
 			s += pol.orb if C.orbs.size() < C.orbMax else 0.6
-	if f.get("evoke", 0):
+	# Evocar sin orbes no hace nada: antes el bot lo puntuaba igual (y jugaba Multimarea/Maremoto en vacío).
+	var orbs_n: int = C.orbs.size() + (f.ch.size() if f.has("ch") else 0)
+	if f.get("evoke", 0) and orbs_n > 0:
 		s += 5.0 * f.evoke
 	if f.get("evokeAll", false):
 		s += 4.5 * C.orbs.size()
-	if f.get("evokeX", false):
+	if f.get("evokeX", false) and orbs_n > 0:
 		s += 4.5 * maxi(1, C.energy)
 	if f.get("summon", 0):
 		s += 1.8 * f.summon * pol.get("osty", 1.0)
@@ -535,8 +648,17 @@ func _take_reward(G, rew: Dictionary) -> void:
 	if rew.bossRelics != null and not rew.bossRelics.is_empty():
 		Eng.add_relic(G, rew.bossRelics[rng.randi() % rew.bossRelics.size()])
 	if G.deck.size() < 28 and not rew.cards.is_empty():
-		var pick: String = _better_card(G, rew.cards)
-		if rng.randf() < 0.85:
+		var pick := ""
+		if explore > 0.0 and rng.randf() < explore:
+			var j: int = rng.randi() % (rew.cards.size() + 1)   # la última opción es «saltar»
+			pick = rew.cards[j] if j < rew.cards.size() else ""
+		else:
+			var best: String = _better_card(G, rew.cards)
+			if rng.randf() < 0.85:
+				pick = best
+		for id in rew.cards:
+			run_offers.append([id, id == pick])
+		if pick != "":
 			Eng.gain_card(G, pick)
 
 
@@ -560,6 +682,10 @@ func _better_card(G, ids: Array) -> String:
 			"claudia": s += 1.5 * fx.get("ostyHit", 0) + 2.0 * fx.get("ostyPow", 0) + 1.0 * fx.get("summon", 0)
 			"lia": s += 1.2 * fx.get("poison", 0) + 2.0 * fx.get("poisonMul", 0) + 3.0 * _yes(fx, "stormOfSteel")
 			"zafiro": s += 1.5 * fx.get("str", 0) + 1.5 * fx.get("dex", 0) + 2.0 * _yes(fx, "dmgBlock") + 3.0 * _yes(fx, "doubleBlock") + 0.15 * fx.get("block", 0)
+		if cur_plan != "":   # VDM_ARCH: el plan pesa más que la rareza; el otro arquetipo resta
+			for a in arch_ids[G.char].keys():
+				if id in arch_ids[G.char][a]:
+					s += 7.0 if a == cur_plan else -2.0
 		if s > best:
 			best = s
 			pick = id
@@ -590,7 +716,8 @@ func _shop(G) -> void:
 			G.gold -= it.price
 			Eng.add_relic(G, it.id)
 	for it in sh.cards:
-		if G.gold >= it.price and DB.cards[it.id].rarity == "rare" and G.deck.size() < 28:
+		var want: bool = DB.cards[it.id].rarity == "rare" or (cur_plan != "" and it.id in arch_ids[G.char][cur_plan])
+		if G.gold >= it.price and want and G.deck.size() < 28:
 			G.gold -= it.price
 			Eng.gain_card(G, it.id)
 
@@ -667,11 +794,15 @@ func _report(nm: int, ms: int) -> void:
 	for k in rk:
 		print("  %-20s %4d  %5.1f%%" % [k, relic_runs[k].n, 100.0 * relic_runs[k].wins / relic_runs[k].n])
 	_relic_uplift()
+	_arch_report()
+	if OS.get_environment("VDM_CARDS") == "1":
+		_card_report()
 	if turn_cap_hits:
 		print("\n(aviso: %d combates llegaron al tope de 60 turnos y se contaron como derrota)" % turn_cap_hits)
 	var f2 := FileAccess.open("user://balance.json", FileAccess.WRITE)
 	if f2:
-		f2.store_string(JSON.stringify({"nm": nm, "chars": out, "fights": fights, "killers": killers, "relics": relic_runs}, " "))
+		f2.store_string(JSON.stringify({"nm": nm, "chars": out, "fights": fights, "killers": killers, "relics": relic_runs,
+			"cards": card_st, "deck": deck_st, "arch": arch_st, "explore": explore, "archMode": arch_mode}, " "))
 		print("\nResumen JSON: ", ProjectSettings.globalize_path("user://balance.json"))
 	var f3 := FileAccess.open("user://balance_runs.json", FileAccess.WRITE)
 	if f3:
@@ -745,3 +876,27 @@ func _easy_vs_hard() -> void:
 					lost += fights[k].hpLost
 			res[name] = [n, float(lost) / maxi(1, n)]
 		print("Acto %d: fáciles %.1f PV (%d combates) · difíciles %.1f PV (%d combates)" % [act, res.easy[1], res.easy[0], res.hard[1], res.hard[0]])
+
+
+## Victorias por arquetipo (plan forzado con VDM_ARCH=1, o mazo final clasificado sin él).
+func _arch_report() -> void:
+	print("\n-- Arquetipos (%s) · partidas · %% victorias · cartas del plan en el mazo --" % ("plan forzado" if arch_mode else "mazo final"))
+	var ks: Array = arch_st.keys()
+	ks.sort()
+	for k in ks:
+		var a: Dictionary = arch_st[k]
+		print("  %-22s %5d  %5.1f%%  %4.1f" % [k, a.n, 100.0 * a.wins / maxi(1, a.n), float(a.cards) / maxi(1, a.n)])
+
+
+## Tabla completa de cartas por musa: ofertas, % de elección, Δcoger y presencia en el mazo final.
+func _card_report() -> void:
+	print("\n-- Cartas (musa|carta · rareza · ofrecida · %% cogida · Δcoger · en mazo · %% vict. con ella) --")
+	var ks: Array = card_st.keys()
+	ks.sort()
+	for k in ks:
+		var c: Dictionary = card_st[k]
+		var id: String = k.split("|")[1]
+		var np: int = c.off - c.pick
+		var d: float = 100.0 * c.pickW / maxi(1, c.pick) - 100.0 * (c.offW - c.pickW) / maxi(1, np)
+		var dk: Dictionary = deck_st.get(k, {"n": 0, "wins": 0})
+		print("  %-34s %-8s %6d %5.1f%% %+6.1f %6d %5.1f%%" % [k, DB.cards[id].rarity, c.off, 100.0 * c.pick / maxi(1, c.off), d, dk.n, 100.0 * dk.wins / maxi(1, dk.n)])

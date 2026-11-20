@@ -3,8 +3,8 @@
  "enemies": {
   "crabking": {
    "hp": [
-    136,
-    140
+    142,
+    146
    ],
    "moves": {
     "roar": {
@@ -94,8 +94,8 @@
   },
   "chainwarden": {
    "hp": [
-    72,
-    76
+    78,
+    82
    ],
    "moves": {
     "chain": {
@@ -125,8 +125,8 @@
   },
   "treant": {
    "hp": [
-    118,
-    122
+    125,
+    129
    ],
    "moves": {
     "slam": {
@@ -139,8 +139,8 @@
   },
   "stag": {
    "hp": [
-    114,
-    118
+    123,
+    127
    ],
    "moves": {
     "gore": {
@@ -153,8 +153,8 @@
   },
   "royalguard": {
    "hp": [
-    146,
-    151
+    153,
+    158
    ],
    "moves": {
     "guard": {
@@ -173,8 +173,8 @@
   },
   "hivemind": {
    "hp": [
-    132,
-    137
+    142,
+    147
    ],
    "moves": {
     "strike": {
@@ -313,8 +313,9 @@
  },
  "cards": {
   "aurora_climax": {
+   "cost": 1,
    "fx": {
-    "heatDmg": 4
+    "heatDmg": 5
    }
   },
   "aurora_supernova": {
@@ -325,6 +326,334 @@
   "aurora_warmth": {
    "fx": {
     "heat": 2
+   }
+  },
+  "irene_release": {
+   "fx": {
+    "windSpend": 5
+   },
+   "up": {
+    "fx": {
+     "windSpend": 6
+    }
+   }
+  },
+  "irene_spring_discharge": {
+   "fx": {
+    "windSpend": 3
+   },
+   "up": {
+    "fx": {
+     "windSpend": 4
+    }
+   }
+  },
+  "irene_colossal_automaton": {
+   "fx": {
+    "dmg": 14,
+    "block": 14
+   },
+   "up": {
+    "fx": {
+     "dmg": 18,
+     "block": 18
+    }
+   }
+  },
+  "irene_overwind": {
+   "fx": {
+    "selfdmg": 1
+   }
+  },
+  "irene_overdrive": {
+   "fx": {
+    "selfdmg": 2
+   }
+  },
+  "irene_clockwork": {
+   "fx": {
+    "pw": {
+     "resorte": 2
+    }
+   },
+   "up": {
+    "fx": {
+     "pw": {
+      "resorte": 3
+     }
+    }
+   }
+  },
+  "irene_masterwork": {
+   "fx": {
+    "dmg": 17
+   },
+   "up": {
+    "fx": {
+     "dmg": 22
+    }
+   }
+  },
+  "irene_clockwork_chain": {
+   "fx": {
+    "dmg": 3
+   },
+   "up": {
+    "fx": {
+     "dmg": 4
+    }
+   }
+  },
+  "irene_tick": {
+   "fx": {
+    "wind": 2
+   },
+   "up": {
+    "fx": {
+     "wind": 3
+    }
+   }
+  },
+  "irene_chime": {
+   "fx": {
+    "windDmg": 3
+   },
+   "up": {
+    "fx": {
+     "windDmg": 4
+    }
+   }
+  },
+  "irene_quick_wind": {
+   "fx": {
+    "selfdmg": 0
+   }
+  },
+  "irene_fine_clockwork": {
+   "fx": {
+    "pw": {
+     "precision": 1
+    }
+   },
+   "up": {
+    "fx": {
+     "pw": {
+      "precision": 2
+     }
+    }
+   }
+  },
+  "irene_loose_gear": {
+   "fx": {
+    "dmg": 3
+   },
+   "up": {
+    "fx": {
+     "dmg": 5
+    }
+   }
+  },
+  "irene_stitch": {
+   "fx": {
+    "dmg": 2
+   },
+   "up": {
+    "fx": {
+     "dmg": 4
+    }
+   }
+  },
+  "irene_tictac": {
+   "fx": {
+    "pw": {
+     "tictac": 4
+    }
+   },
+   "up": {
+    "fx": {
+     "pw": {
+      "tictac": 5
+     }
+    }
+   }
+  },
+  "irene_spring": {
+   "fx": {
+    "block": 6
+   },
+   "up": {
+    "fx": {
+     "block": 8
+    }
+   }
+  },
+  "aurora_ember_petal": {
+   "fx": {
+    "heat": 2
+   },
+   "up": {
+    "fx": {
+     "heat": 3
+    }
+   }
+  },
+  "aurora_flame_spin": {
+   "fx": {
+    "heat": 2
+   }
+  },
+  "aurora_scorch": {
+   "fx": {
+    "glow": 2
+   },
+   "up": {
+    "fx": {
+     "glow": 3
+    }
+   }
+  },
+  "aurora_corona": {
+   "cost": 3,
+   "up": {
+    "cost": 2
+   }
+  },
+  "aurora_golden_eclipse": {
+   "cost": 2
+  },
+  "aurora_dazzle": {
+   "fx": {
+    "glow": 1
+   },
+   "up": {
+    "fx": {
+     "glow": 2
+    }
+   }
+  },
+  "aurora_gilded_veil": {
+   "fx": {
+    "block": 6
+   },
+   "up": {
+    "fx": {
+     "block": 9
+    }
+   }
+  },
+  "aurora_refraction_wall": {
+   "fx": {
+    "block": 14
+   },
+   "up": {
+    "fx": {
+     "block": 19
+    }
+   }
+  },
+  "aurora_fan_slash": {
+   "fx": {
+    "heat": 1
+   }
+  },
+  "lia_eviscerate": {
+   "cost": 2
+  },
+  "lia_blade_waltz": {
+   "cost": 2
+  },
+  "lia_paralysis": {
+   "fx": {
+    "weak": 1
+   },
+   "up": {
+    "fx": {
+     "weak": 2
+    }
+   }
+  },
+  "zafiro_old_blood": {
+   "fx": {
+    "str": 2
+   },
+   "up": {
+    "fx": {
+     "str": 3
+    }
+   }
+  },
+  "zafiro_flex": {
+   "fx": {
+    "tstr": 3
+   },
+   "up": {
+    "fx": {
+     "tstr": 5
+    }
+   }
+  },
+  "claudia_embrace": {
+   "cost": 1,
+   "up": {
+    "cost": 0
+   }
+  },
+  "claudia_pyre": {
+   "fx": {
+    "dmg": 10
+   },
+   "up": {
+    "fx": {
+     "dmg": 13
+    }
+   }
+  },
+  "selene_undertow": {
+   "cost": 0
+  },
+  "selene_depthcharge": {
+   "cost": 1
+  },
+  "selene_maremoto": {
+   "cost": 1,
+   "up": {
+    "cost": 0
+   }
+  },
+  "claudia_omen": {
+   "cost": 0
+  },
+  "neu_second_chance": {
+   "fx": {
+    "heal": 10,
+    "block": 10
+   },
+   "up": {
+    "fx": {
+     "heal": 14,
+     "block": 14
+    }
+   }
+  },
+  "neu_smoke_bomb": {
+   "fx": {
+    "weak": 1
+   },
+   "up": {
+    "fx": {
+     "weak": 2
+    }
+   }
+  },
+  "neu_hunters_mark": {
+   "cost": 0
+  },
+  "neu_scavenge": {
+   "cost": 0
+  },
+  "neu_all_or_nothing": {
+   "fx": {
+    "selfdmg": 1
    }
   }
  },

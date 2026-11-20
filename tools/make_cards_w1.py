@@ -130,6 +130,19 @@ N = [
 ]
 
 
+# Fase 4 (poda del pool, Agente E): cartas retiradas. Se conserva su definición (partidas guardadas, colección) pero
+# ya no salen en recompensas, tienda ni desbloqueos. Medido con tests/balance.gd VDM_EXPLORE=1: Δcoger negativo en
+# las 6 musas (Carga Desesperada −10, Pausa Estratégica −7). Detalle en HANDOFF_AGENTE_E.md.
+RETIRED = {"neu_desperate_charge", "neu_strategic_pause"}
+
+# Fase 4: cartas nuevas para el arquetipo flojo de una musa. Reutilizan arte existente (campo «img» → la vista carga
+# assets/cards/<img>.webp), así que no generan trabajos de arte. id, nombre, tipo, coste, rareza, fx, up, flags, img
+# Probado y descartado (ronda 4): Aurora «Última Ascua» (común, coste 1, 4 de daño + consume Calor +3/carga). Un
+# remate barato que consume TODO el Calor se juega pronto y deja sin carga a Clímax/Supernova: Aurora 40 → 37 %.
+# Formato: "aurora": [("last_ember", "Última Ascua", "attack", 1, "common", {fx}, {up}, {flags}, "card_aurora_ember_petal")]
+FASE4 = {}
+
+
 def main():
     cards, pool, jobs = {}, {}, []
     seed = 31000
@@ -145,16 +158,23 @@ def main():
             if "gear" in flags:
                 cards[full]["gear"] = True
                 cards[full]["flags"] = {k: v for k, v in flags.items() if k != "gear"}
-            pool[ch].append(full)
+            if full not in RETIRED:
+                pool[ch].append(full)
             m = MUSE[ch]
             seed += 1
             jobs.append({"kind": "image", "name": f"card_{full}", "lora": m["lora"], "w": 512, "h": 384, "seed": seed, "strength": m["strength"],
                          "prompt": STYLE + scene + ". " + m["who"] + END})
+    for ch, lst in FASE4.items():
+        for (cid, name, typ, cost, rar, fx, up, flags, img) in lst:
+            full = f"{ch}_{cid}"
+            cards[full] = {"id": full, "name": name, "cls": ch, "type": typ, "rarity": rar, "cost": cost, "fx": fx, "up": up, "flags": flags, "ap": "", "img": img}
+            pool[ch].append(full)
     pool["neutral"] = []
     for (cid, name, typ, cost, rar, fx, up, flags, scene) in N:
         full = f"neu_{cid}"
         cards[full] = {"id": full, "name": name, "cls": "neutral", "type": typ, "rarity": rar, "cost": cost, "fx": fx, "up": up, "flags": flags, "ap": ""}
-        pool["neutral"].append(full)
+        if full not in RETIRED:
+            pool["neutral"].append(full)
         seed += 1
         jobs.append({"kind": "image", "name": f"card_{full}", "lora": "karen_krea2.safetensors", "w": 512, "h": 384, "seed": seed, "strength": 0,
                      "prompt": STYLE_NEUTRAL + scene + "." + END})

@@ -28,7 +28,7 @@ ENEMIES = {
                       "zap": {"name": "Chispazo", "dmg": 3, "hits": 2, "apply": {"weak": 1}}},
             "ai": {"t": "rnd", "keys": ["shock", "coil", "zap"], "w": [3, 2, 2]},
             "ap": "a long electric eel monster coiled in the air, glowing blue lightning running along its slimy dark body, needle teeth, crackling sparks"},
-    "sirena": {"name": "Sirena Abisal", "act": 1, "tier": "elite", "hp": [98, 102], "h": 290,
+    "sirena": {"name": "Sirena Abisal", "act": 1, "tier": "elite", "hp": [106, 110], "h": 290,
                "moves": {"canto": {"name": "Canto Hechizante", "apply": {"weak": 2, "vulnerable": 1}, "block": 10},
                          "garra": {"name": "Garra", "dmg": 19},
                          "marea": {"name": "Resaca", "dmg": 7, "hits": 2},
@@ -57,7 +57,7 @@ ENEMIES = {
                             "maul": {"name": "Zarpazo", "dmg": 6, "hits": 2}},
                   "ai": {"t": "first_alt", "first": "howl", "odd": "bite", "even": "maul"},
                   "ap": "a feral wolf made of thorny brambles and twisted vines, glowing green eyes, thorns instead of fur, snarling with wooden fangs"},
-    "mantis": {"name": "Mantis de Espinas", "act": 2, "tier": "elite", "hp": [108, 112], "h": 300,
+    "mantis": {"name": "Mantis de Espinas", "act": 2, "tier": "elite", "hp": [117, 121], "h": 300,
                "moves": {"camo": {"name": "Camuflaje", "block": 18, "thorns": 3},
                          "scythe": {"name": "Guadañas", "dmg": 10, "hits": 2},
                          "ambush": {"name": "Emboscada", "dmg": 23, "apply": {"vulnerable": 1}},
@@ -87,7 +87,7 @@ ENEMIES = {
                             "rally": {"name": "Reagrupar", "selfStr": 2, "healAll": 6}},
                   "ai": {"t": "cyc", "seq": ["carry", "pierce", "rally", "pierce"]},
                   "ap": "a giant armored worker bee warrior with thick amber chitin plates, carrying a honeycomb shield, sharp mandibles, golden and black"},
-    "hornet": {"name": "Avispón Verdugo", "act": 3, "tier": "elite", "hp": [134, 138], "h": 300,
+    "hornet": {"name": "Avispón Verdugo", "act": 3, "tier": "elite", "hp": [144, 148], "h": 300,
                "moves": {"buzz": {"name": "Zumbido", "selfStr": 2, "block": 14},
                          "sting": {"name": "Doble Aguijón", "dmg": 13, "hits": 2, "apply": {"weak": 1}},
                          "execute": {"name": "Ejecución", "dmg": 42},
@@ -137,7 +137,7 @@ BALANCE = {
     "osty_revives": 1,   # Osty tiene una sola segunda vida por combate (antes revivía cada turno)
     "enemies": {
         # Acto I: el Cangrejo Rey mata el 29% de las veces; se suaviza para que Irene/Zafiro pasen.
-        "crabking": {"hp": [136, 140], "moves": {
+        "crabking": {"hp": [142, 146], "moves": {
             "roar": {"block": 12}, "pincer": {"dmg": 15}, "spin": {"dmg": 5}, "twin": {"dmg": 11}, "shell": {"block": 19}}},
         # Normales que solo salen en los combates difíciles del Acto I.
         "ghostpirate": {"hp": [41, 45], "moves": {"slash": {"dmg": 11}}},
@@ -145,12 +145,14 @@ BALANCE = {
         "rootmother": {"hp": [160, 164], "moves": {"crush": {"dmg": 23}, "harvest": {"dmg": 8, "heal": 12}}},
         "mossgolem": {"hp": [56, 60], "moves": {"smash": {"dmg": 19}}},
         # Élites base: hoy son gratis (0-6%); se suben a la banda 8-12%.
-        "chainwarden": {"hp": [72, 76], "moves": {"chain": {"dmg": 11}, "lash": {"dmg": 6}}},
+        # Fase 4 (Agente E, ronda 5): con el pool podado los élites bajaron a 7 % de derrotas; +8 % PV a los 6 más flojos
+        # (ronda 6: treant y royalguard +5 %).
+        "chainwarden": {"hp": [78, 82], "moves": {"chain": {"dmg": 11}, "lash": {"dmg": 6}}},
         "tentacle": {"hp": [96, 100], "moves": {"whip": {"dmg": 18}, "drain": {"dmg": 11}, "drown": {"dmg": 9}}},
-        "treant": {"hp": [118, 122], "moves": {"slam": {"dmg": 23}, "splinter": {"dmg": 9}}},
-        "stag": {"hp": [114, 118], "moves": {"gore": {"dmg": 22}, "gallop": {"dmg": 13}}},
-        "royalguard": {"hp": [146, 151], "moves": {"guard": {"block": 24}, "thrust": {"dmg": 25}, "sweep": {"dmg": 11}, "charge": {"dmg": 35}}},
-        "hivemind": {"hp": [132, 137], "moves": {"strike": {"dmg": 33}, "mind": {"dmg": 10}, "wave": {"dmg": 5}}},
+        "treant": {"hp": [125, 129], "moves": {"slam": {"dmg": 23}, "splinter": {"dmg": 9}}},
+        "stag": {"hp": [123, 127], "moves": {"gore": {"dmg": 22}, "gallop": {"dmg": 13}}},
+        "royalguard": {"hp": [153, 158], "moves": {"guard": {"block": 24}, "thrust": {"dmg": 25}, "sweep": {"dmg": 11}, "charge": {"dmg": 35}}},
+        "hivemind": {"hp": [142, 147], "moves": {"strike": {"dmg": 33}, "mind": {"dmg": 10}, "wave": {"dmg": 5}}},
         # Normales del Acto III: los «fáciles» cuestan 2,1 PV (objetivo 3-5).
         "crab": {"hp": [36, 40], "moves": {"crush": {"dmg": 13}}},
         "jelly": {"hp": [26, 30]},
@@ -159,7 +161,8 @@ BALANCE = {
     },
     "cards": {
         # Aurora escala sin techo con el Calor; se recorta el remate, no la generación.
-        "aurora_climax": {"fx": {"heatDmg": 4}},
+        # Fase 4 (Agente E): heatDmg 4→5 (ronda 3) y coste 2→1 (ronda 5): el arquetipo Calor se quedaba en 35 %.
+        "aurora_climax": {"cost": 1, "fx": {"heatDmg": 5}},
         "aurora_supernova": {"fx": {"heatMul": 1.35}},
         "aurora_warmth": {"fx": {"heat": 2}},
     },
@@ -241,6 +244,79 @@ for _bid, _ph in BOSS_PHASES.items():
     _cur = BALANCE["enemies"].setdefault(_bid, {})
     _cur.setdefault("moves", {}).update(_ph["moves"])
     _cur["phase2"] = _ph["phase2"]
+
+# Fase 4 · Poda del pool y 2 arquetipos por musa (solo DB.extra). Medido con tests/balance.gd, 4 semillas × 1000
+# partidas por musa: VDM_ARCH=1 fuerza cada arquetipo (plan A/B) y VDM_EXPLORE=1 da el «Δcoger» de cada carta.
+# Detalle y tablas en HANDOFF_AGENTE_E.md. Ojo: si se cambia el coste base y la mejora era {"cost": N}, hay que
+# bajar también la mejora (si no, mejorar no haría nada).
+CARD_TUNING = {
+    # Irene: «descarga» (gastar Cuerda de golpe) 17 % frente a «engranajes» 76 %: un punto de Cuerda vale ~7 de daño
+    # repitiendo un Engranaje y solo 2-3 en los remates.
+    "irene_release": {"fx": {"windSpend": 5}, "up": {"fx": {"windSpend": 6}}},
+    "irene_spring_discharge": {"fx": {"windSpend": 3}, "up": {"fx": {"windSpend": 4}}},
+    "irene_colossal_automaton": {"fx": {"dmg": 14, "block": 14}, "up": {"fx": {"dmg": 18, "block": 18}}},   # ronda 6: 16 → 14
+    # Ronda 2 (descarga 23 %, engranajes 73 %): generadores de Cuerda sin tanto autodaño, Resorte da 2 por turno;
+    # Obra Maestra y Cadena de Relojería (Δ +25 y +19) bajan.
+    "irene_overwind": {"fx": {"selfdmg": 1}},
+    "irene_overdrive": {"fx": {"selfdmg": 2}},
+    "irene_clockwork": {"fx": {"pw": {"resorte": 2}}, "up": {"fx": {"pw": {"resorte": 3}}}},
+    "irene_masterwork": {"fx": {"dmg": 17}, "up": {"fx": {"dmg": 22}}},   # ronda 6: 20 → 17
+    "irene_clockwork_chain": {"fx": {"dmg": 3}, "up": {"fx": {"dmg": 4}}},
+    # Ronda 3 (descarga 28 %, engranajes 70 %): más Cuerda barata; Mecanismo Fino (Δ +11) con Precisión 1.
+    "irene_tick": {"fx": {"wind": 2}, "up": {"fx": {"wind": 3}}},
+    "irene_chime": {"fx": {"windDmg": 3}, "up": {"fx": {"windDmg": 4}}},
+    "irene_quick_wind": {"fx": {"selfdmg": 0}},
+    "irene_fine_clockwork": {"fx": {"pw": {"precision": 1}}, "up": {"fx": {"pw": {"precision": 2}}}},
+    # Ronda 4 (engranajes 69 %): los Engranajes de coste 0 se repiten casi gratis (Δ +8 y +11).
+    "irene_loose_gear": {"fx": {"dmg": 3}, "up": {"fx": {"dmg": 5}}},
+    "irene_stitch": {"fx": {"dmg": 2}, "up": {"fx": {"dmg": 4}}},
+    # Ronda 6 (descarga 35 %, engranajes 65 %): Tic-Tac (daño por Cuerda gastada, Δ +7) 3 → 4; Muelle más Bloqueo.
+    "irene_tictac": {"fx": {"pw": {"tictac": 4}}, "up": {"fx": {"pw": {"tictac": 5}}}},
+    "irene_spring": {"fx": {"block": 6}, "up": {"fx": {"block": 8}}},
+    # Aurora: «calor» 29 % frente a «luz» 64 %. Generadores de Calor más fuertes; Abrasar (Δ +14) con menos Resplandor.
+    "aurora_ember_petal": {"fx": {"heat": 2}, "up": {"fx": {"heat": 3}}},
+    "aurora_flame_spin": {"fx": {"heat": 2}},
+    "aurora_scorch": {"fx": {"glow": 2}, "up": {"fx": {"glow": 3}}},
+    # Ronda 2 (calor 31 %, luz 62 %): Corona (Δ +13; daño = Bloqueo a todos cada turno) cuesta 3; Eclipse Dorado,
+    # el remate de área del Calor, cuesta 2.
+    "aurora_corona": {"cost": 3, "up": {"cost": 2}},
+    "aurora_golden_eclipse": {"cost": 2},
+    # Ronda 3 (calor 35 %, luz 62 %): Deslumbrar (Δ +9) con menos Resplandor; Clímax vuelve a 5 por Calor (arriba).
+    "aurora_dazzle": {"fx": {"glow": 1}, "up": {"fx": {"glow": 2}}},
+    # Ronda 4 (calor 36 %, luz 61 %): Velo Dorado (Δ +8: Bloqueo y Resplandor a todos por 1) con menos Bloqueo.
+    # (La carta nueva Última Ascua empeoró a Aurora y se descartó: ver make_cards_w1.py.)
+    "aurora_gilded_veil": {"fx": {"block": 6}, "up": {"fx": {"block": 9}}},
+    # Ronda 6 (luz 62 %): Muro de Refracción (Δ +7) 16 → 14 de Bloqueo.
+    "aurora_refraction_wall": {"fx": {"block": 14}, "up": {"fx": {"block": 19}}},
+    # Ronda 5: Clímax, el remate principal del Calor, cuesta 1; Tajo de Abanico también genera 1 de Calor.
+    "aurora_fan_slash": {"fx": {"heat": 1}},
+    # Lia: «cuchillas» 29 % frente a «veneno» 46 %. Los multigolpe caros no compensaban; Aguja Paralizante (Δ +19) baja.
+    "lia_eviscerate": {"cost": 2},
+    "lia_blade_waltz": {"cost": 2},
+    "lia_paralysis": {"fx": {"weak": 1}, "up": {"fx": {"weak": 2}}},
+    # Zafiro: «fuerza» 26 % frente a «coraza» 41 %: faltan fuentes de Fuerza baratas.
+    "zafiro_old_blood": {"fx": {"str": 2}, "up": {"fx": {"str": 3}}},
+    "zafiro_flex": {"fx": {"tstr": 3}, "up": {"fx": {"tstr": 5}}},
+    # Claudia: «agotar» 33 % frente a «osty» 43 %. Abrazo Oscuro (Δ −6) más barato; Pira (Δ +16) baja.
+    "claudia_embrace": {"cost": 1, "up": {"cost": 0}},
+    "claudia_pyre": {"fx": {"dmg": 10}, "up": {"fx": {"dmg": 13}}},
+    # Selene (ronda 2): «evocar» 28 % frente a «marea» 50 %. Las cartas de Evocar (Δ −14 a −21) cuestan 1 menos.
+    "selene_undertow": {"cost": 0},
+    "selene_depthcharge": {"cost": 1},
+    "selene_maremoto": {"cost": 1, "up": {"cost": 0}},
+    # Claudia (ronda 3): «agotar» 33 %. Presagio (Δ −5) sin coste.
+    "claudia_omen": {"cost": 0},
+    # Neutrales (ronda 3; Δcoger medio de las 6 musas entre paréntesis). Carga Desesperada (−10) y Pausa Estratégica
+    # (−7) salen del pool en tools/make_cards_w1.py (RETIRADAS). Las dos que dominan bajan; las flojas, más baratas.
+    "neu_second_chance": {"fx": {"heal": 10, "block": 10}, "up": {"fx": {"heal": 14, "block": 14}}},   # +16
+    "neu_smoke_bomb": {"fx": {"weak": 1}, "up": {"fx": {"weak": 2}}},                                 # +12
+    "neu_hunters_mark": {"cost": 0},                                                                   # −5
+    "neu_scavenge": {"cost": 0},                                                                       # −4
+    "neu_all_or_nothing": {"fx": {"selfdmg": 1}},                                                      # −6
+}
+for _cid, _t in CARD_TUNING.items():
+    assert _cid not in BALANCE["cards"], _cid
+    BALANCE["cards"][_cid] = _t
 
 # ------------------------------------------------------------------ reliquias
 RELICS = {
