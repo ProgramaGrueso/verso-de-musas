@@ -168,6 +168,21 @@ static func tln(s: String, plural: String, n: int) -> String:
 	return String(TranslationServer.translate_plural(s, plural, n))
 
 
+## «Cayó ante…»: G.deathBy y el historial (Meta.record_run, clave "by") guardan ids de enemigo separados por
+## comas ("mantis,dockrat") y el nombre se traduce al mostrarlo. Las partidas antiguas guardaban el nombre ya
+## escrito en español: si alguna parte no es un id conocido, se devuelve el texto tal cual.
+static func death_by_text(by: String) -> String:
+	if by == "":
+		return ""
+	var names := []
+	for part in by.split(","):
+		var id := part.strip_edges()
+		if not enemies.has(id):
+			return by
+		names.append(str(enemies[id].name))
+	return ", ".join(names)
+
+
 ## Texto español original de un campo localizado ("orb/ola/n" -> "Ola"); "" si no existe.
 static func es(path: String) -> String:
 	return _loc_src.get(path, "")

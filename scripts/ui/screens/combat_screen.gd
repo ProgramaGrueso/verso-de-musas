@@ -2158,15 +2158,16 @@ func _check_end() -> bool:
 		await _sleep(1.1)
 		_finish_win()
 	else:
-		var names := []
+		# ids, no nombres: el historial se lee luego en el idioma activo (DB.death_by_text)
+		var ids := []
 		for e in C.enemies:
-			if e.hp > 0 and not (e.name in names):
-				names.append(e.name)
-		if names.is_empty():
+			if e.hp > 0 and not (e.id in ids):
+				ids.append(e.id)
+		if ids.is_empty():
 			for e in C.enemies:
-				if not (e.name in names):
-					names.append(e.name)
-		G["deathBy"] = ", ".join(names)
+				if not (e.id in ids):
+					ids.append(e.id)
+		G["deathBy"] = ",".join(ids)
 		_set_lethal(false)
 		_enemy_phase_look(false)
 		_play_sfx("playerDie")

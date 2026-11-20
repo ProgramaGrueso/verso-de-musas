@@ -53,7 +53,7 @@ func _ready() -> void:
 		Meta.clear_save()
 		Sfx.music("menu")
 		title = UIK.label(tr("Derrota"), 74, UIK.RED, "title", HORIZONTAL_ALIGNMENT_CENTER)
-		var by: String = G.get("deathBy", "")
+		var by: String = DB.death_by_text(str(G.get("deathBy", "")))
 		if G.get("surrender", false):
 			by = ""
 		if by != "":

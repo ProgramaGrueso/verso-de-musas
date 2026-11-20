@@ -218,7 +218,7 @@ func _row_text(h: Dictionary) -> String:
 	elif h.get("surrender", false):
 		res = tr("[color=#ff7b85][b]Rendición[/b][/color] en %s") % DB.acts[act - 1].name
 	elif str(h.get("by", "")) != "":
-		res = tr("[color=#ff7b85][b]Derrota[/b][/color] en %s ante %s") % [DB.acts[act - 1].name, h.by]
+		res = tr("[color=#ff7b85][b]Derrota[/b][/color] en %s ante %s") % [DB.acts[act - 1].name, DB.death_by_text(str(h.by))]
 	else:
 		res = tr("[color=#ff7b85][b]Derrota[/b][/color] en %s") % DB.acts[act - 1].name
 	var tags := []

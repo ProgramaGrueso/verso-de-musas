@@ -290,7 +290,7 @@ static func share_text(G, won: bool) -> String:
 	elif G.get("surrender", false):
 		line2 = DB.tl("Rendida en {act} (piso {f})").format({"act": DB.acts[act - 1].name, "f": fl})
 	else:
-		var by := str(G.get("deathBy", ""))
+		var by := DB.death_by_text(str(G.get("deathBy", "")))
 		if by != "":
 			line2 = DB.tl("Cayó en {act} ante {by} (piso {f})").format({"act": DB.acts[act - 1].name, "by": by, "f": fl})
 		else:
