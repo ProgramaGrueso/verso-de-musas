@@ -174,7 +174,7 @@ static func preview_dmg(C, d: Dictionary, target) -> int:
 	if f.get("windSpend", 0):
 		base += f.windSpend * get_s(C.pl, "cuerda")
 	if d.get("gear", false):
-		base += get_s(C.pl, "precision")
+		base += gear_bonus(get_s(C.pl, "precision"))
 	if f.get("heatDmg", 0):
 		base += get_s(C.pl, "heat") * f.heatDmg
 	if d.id == "lia_shiv":
@@ -732,11 +732,21 @@ static func choose_intent(C, e) -> void:
 	e.hist.append(key)
 	e.intent = e.def.moves[key].duplicate()
 
+## Balance (solo DB.extra): con 1 de Resplandor el ataque enemigo pierde 2 (con 2 o más, 3) y la
+## Precisión de Relojero rinde un tercio menos en cifras altas (1→1, 2→2, 3→2, 4→3, 6→4).
+static func glow_cut(glow: int = 9) -> int:
+	return 2 if DB.extra and glow <= 1 else 3
+
+
+static func gear_bonus(p: int) -> int:
+	return p - p / 3 if DB.extra and p > 0 else p
+
+
 static func intent_damage(C, e) -> int:
 	var it = e.intent
 	if it == null or not it.get("dmg", 0):
 		return 0
-	var d := calc_damage(it.dmg - (3 if get_s(e, "glow") else 0), e.status, C.pl.status)
+	var d := calc_damage(it.dmg - (glow_cut(get_s(e, "glow")) if get_s(e, "glow") else 0), e.status, C.pl.status)
 	if C.G.easy:
 		d = maxi(1, floori(d * 0.8))
 	elif C.G.nm:
@@ -1169,7 +1179,7 @@ static func run_fx(C, d: Dictionary, target, X: int, prev_attack: bool) -> void:
 				if f.get("windSpend", 0):
 					base += f.windSpend * wind_now
 				if d.get("gear", false):
-					base += get_s(pl, "precision")
+					base += gear_bonus(get_s(pl, "precision"))
 				if f.get("heatDmg", 0):
 					base += heat * f.heatDmg
 				if f.get("heatMul", 0) and heat:
